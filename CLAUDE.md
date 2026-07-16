@@ -22,8 +22,8 @@ disciplined blue accent, distinctive grotesque type, generous whitespace, and
 - **Type scale (single source of truth):** Use the named utilities generated from `--text-*` tokens in `globals.css`, never arbitrary sizes like `text-[13px]`. Available: `text-eyebrow`, `text-micro`, `text-small`, `text-body`, `text-body-lg`, `text-lead`, `text-card-title`, `text-card-title-lg`, `text-feature`, `text-section-sm`, `text-section`, `text-hero`, `text-hero-sm`. Headings and lead text are fluid via `clamp()`.
 - **Corners are near-square.** `--p-r-md` (3px) for buttons/inputs, `--p-r-lg` (4px) for content blocks. Nothing is pill-shaped.
 - **Surfaces are flat.** Shadow tokens render as `none` / a single hairline — never a glassy drop shadow. Separate content with hairline borders (`border-p-line`, `border-p-line-strong`), not cards or soft background bands. **At most one** subtle `--p-bg-soft` band on the page (the talks section).
-- **Section kickers:** mono, `text-p-ink-3`, a presentational `NN ·` index then the label string. No `// EYEBROW` punctuation, no uppercase, no wide tracking.
-- **Terminal blocks** are driven by the `--term-*` tokens (chrome) and `--term-syntax-*` tokens (line colors), and **track the light/dark theme** — a warm paper code block in light mode, warm near-black in dark. Pass line colors as `var(--term-syntax-*)` references, never raw hex, so they flip with the theme.
+- **Section kickers:** mono, `text-p-ink-3`, the label string only. No `NN ·` index prefixes (numbers are reserved for real sequences like the how-it-works steps), no `// EYEBROW` punctuation, no uppercase, no wide tracking.
+- **Terminal blocks** are driven by the `--term-*` tokens (chrome) and `--term-syntax-*` tokens (line colors), and **track the light/dark theme** — a warm paper code block in light mode, warm near-black in dark. Pass line colors as `var(--term-syntax-*)` references, never raw hex, so they flip with the theme. The chrome is a plain mono title bar — **no macOS traffic-light dots**.
 - **Logo:** Two-pennant SVG in `PortolanLogo`, rendered in a **solid** `--p-primary` fill — no gradient.
 
 ## Layout & Responsiveness
@@ -31,7 +31,7 @@ disciplined blue accent, distinctive grotesque type, generous whitespace, and
 - **Mobile-first, always.** Start from the single-column small-screen layout, then add `sm:` / `md:` / `lg:` breakpoints. Never write a desktop-only layout.
 - **Section padding:** sections use `px-[var(--p-pad-section-x)]` and `py-[var(--p-pad-section-y)]` (fluid `clamp()` tokens). Do not use the fixed `--p-pad-xl` for section padding.
 - **Grids collapse:** multi-column grids start at `grid-cols-1` and step up (for example `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`).
-- **Shared chrome:** the header and footer come from `SiteHeader` and `SiteFooter`. Do not inline `<header>` / `<footer>` markup in pages. The header carries the mobile hamburger drawer.
+- **Shared chrome:** the header and footer come from `SiteHeader` and `SiteFooter`. Do not inline `<header>` / `<footer>` markup in pages. The header carries the mobile hamburger drawer. The header is solid `--p-bg` with a hairline — no frosted `backdrop-blur`. Nav stays minimal (Registry, Docs, GitHub as text links; no same-page table-of-contents anchors). The footer carries the colophon and real links — never dead spans that look like links.
 
 ## Tech Stack
 
@@ -52,6 +52,9 @@ disciplined blue accent, distinctive grotesque type, generous whitespace, and
 - Don't use arbitrary font-size values (`text-[13px]`); use the type scale
 - Don't inline header/footer markup; use `SiteHeader` / `SiteFooter`
 - Don't reintroduce the "AI-y" look: gradient text/fills, gradient or shadowed buttons, glassy drop shadows, rounded bento cards, pill-shaped tags, circular status dots, `// EYEBROW` labels, or soft alternating background bands.
+- Don't reintroduce the second-wave "AI-y" tells removed in the bespoke pass: typewriter/rotating hero headlines, `NN ·` numbered section kickers, numbers on non-sequence card grids, macOS traffic-light dots on terminals, stacked big-number hero stat blocks (live stats render as one mono log-line), or a frosted translucent header.
+- Don't propose or reintroduce the rhumb-line / compass-rose motif in any form — tried repeatedly, explicitly rejected.
+- Don't give every card in a grid identical anatomy (number + title + body + tag); ragged is deliberate.
 
 ## i18n
 

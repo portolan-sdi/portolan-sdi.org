@@ -1,34 +1,26 @@
 {
   "meta": {
     "title": "Portolan, infraestructura de datos espaciales nativa de la nube",
-    "description": "Portolan es una nueva base para compartir datos geoespaciales. Archivos nativos de la nube en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Gracias a los metadatos estructurados y los formatos abiertos, un agente puede leer un catálogo, entenderlo y analizarlo directamente. Abierto, con la IA primero, fácil de implementar, escalable, de bajo costo y soberano."
+    "description": "Portolan es una nueva base para compartir datos geoespaciales. Archivos nativos de la nube en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Gracias a los metadatos estructurados y los formatos abiertos, un agente puede leer un catálogo, entenderlo y analizarlo directamente."
   },
   "nav": {
-    "why": "Por qué",
-    "howItWorks": "Cómo funciona",
-    "tools": "Herramientas",
+    "registry": "Registro",
     "docs": "Docs",
-    "quickstart": "Inicio rápido",
     "homeAria": "Inicio de Portolan",
     "menuAria": "Abrir o cerrar menú",
     "languageAria": "Cambiar idioma"
   },
   "hero": {
     "title": "El futuro de los datos espaciales",
-    "phrases": {
-      "files": "son solo archivos.",
-      "servers": "no necesita servidores.",
-      "agents": "está hecho para agentes.",
-      "scalable": "escala sin límites.",
-      "sovereign": "es totalmente soberano."
-    },
-    "description": "Portolan es una nueva base para compartir datos geoespaciales. Archivos nativos de la nube en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Gracias a los metadatos estructurados y los formatos abiertos, un agente puede leer un catálogo, entenderlo y analizarlo directamente. Abierto, con la IA primero, fácil de implementar, escalable, de bajo costo y soberano.",
+    "titleAccent": "son solo archivos.",
+    "description": "Portolan es una nueva base para compartir datos geoespaciales. Archivos nativos de la nube en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Gracias a los metadatos estructurados y los formatos abiertos, un agente puede leer un catálogo, entenderlo y analizarlo directamente.",
     "quickstart": "Inicio rápido",
     "browseCatalogs": "Explorar catálogos",
     "stats": {
       "catalogs": "catálogos",
       "collections": "colecciones",
-      "features": "entidades"
+      "features": "entidades",
+      "live": "en directo del registro"
     }
   },
   "why": {
@@ -43,18 +35,15 @@
       },
       "aiFirst": {
         "title": "La IA primero",
-        "description": "Las SDI actuales no se construyeron para la IA. Portolan explica a los agentes en archivos de texto sencillos cómo acceder a los datos, sin llamadas a API, y los metadatos estructurados les dicen qué significan. La <link>demo Finland.SDI</link> muestra a un agente respondiendo preguntas sobre una SDI nacional.",
-        "tag": "la IA como ciudadana de primera"
+        "description": "Las SDI actuales no se construyeron para la IA. Portolan explica a los agentes en archivos de texto sencillos cómo acceder a los datos, sin llamadas a API, y los metadatos estructurados les dicen qué significan. La <link>demo Finland.SDI</link> muestra a un agente respondiendo preguntas sobre una SDI nacional."
       },
       "easy": {
         "title": "Fácil de implementar",
-        "description": "Una SDI tradicional necesita bases de datos, servicios y personal especializado, una barrera que la mayoría de las organizaciones no puede superar. Un nodo Portolan son archivos en un bucket. Apunta, convierte, publica.",
-        "tag": "apunta · convierte · publica"
+        "description": "Una SDI tradicional necesita bases de datos, servicios y personal especializado, una barrera que la mayoría de las organizaciones no puede superar. Un nodo Portolan son archivos en un bucket. Apunta, convierte, publica."
       },
       "scalable": {
         "title": "Escala sin límites",
-        "description": "Los agentes recorren conjuntos de datos completos, no consultas sueltas. Sin servidores, el almacenamiento de objetos se encarga de toda la escala, la capa más robusta y probada que ofrece cualquier nube.",
-        "tag": "0 servidores · ∞ solicitudes"
+        "description": "Los agentes recorren conjuntos de datos completos, no consultas sueltas. Sin servidores, el almacenamiento de objetos se encarga de toda la escala, la capa más robusta y probada que ofrece cualquier nube."
       },
       "lowCost": {
         "title": "Bajo costo",
@@ -121,6 +110,7 @@
     "readMore": "Leer más"
   },
   "footer": {
+    "colophon": "El nombre viene de las cartas portulanas del Mediterráneo medieval. Mapas de trabajo, hechos para usarse.",
     "openGovernance": "Gobernanza abierta",
     "license": "Apache-2.0",
     "repo": "portolan-sdi/portolan"

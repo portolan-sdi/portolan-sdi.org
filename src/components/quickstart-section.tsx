@@ -44,7 +44,6 @@ export function QuickstartSection() {
     >
       <div className="max-w-[1240px] mx-auto">
         <SectionHead
-          index="04"
           eyebrow={t("eyebrow")}
           title={t("title")}
           subtitle={t("intro")}

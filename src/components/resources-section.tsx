@@ -27,7 +27,6 @@ export function ResourcesSection() {
     >
       <div className="max-w-[1240px] mx-auto">
         <SectionHead
-          index="05"
           eyebrow={t("eyebrow")}
           title={t("title")}
           subtitle={t("subtitle")}

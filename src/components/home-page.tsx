@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { DitherMap } from "./dither-map";
-import { HeroRotator } from "./hero-rotator";
 import { SiteHeader } from "./site-header";
 import { SiteFooter } from "./site-footer";
 import { QuickstartSection } from "./quickstart-section";
@@ -63,10 +62,6 @@ const whyCardLinks: Record<string, string> = {
   aiFirst: "https://jatorre.github.io/carto-ogc-helsinki/webapp/",
   lowCost: "https://cholmes.github.io/open-geodag-presentation/calculator.html",
 };
-
-// Order matters: the first phrase is the SSR default and the one the headline
-// settles on after the rotation finishes.
-const heroPhraseKeys = ["files", "servers", "agents", "scalable", "sovereign"] as const;
 
 export function HomePage({ catalogs = [] }: HomePageProps) {
   const t = useTranslations();
@@ -210,13 +205,15 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     setSubmitError(null);
   };
 
+  // `tag` is deliberately ragged: only some cards carry a bottom mono tag so
+  // the grid doesn't read as a uniform template.
   const whyCards = [
-    { key: "open", id: "01" },
-    { key: "aiFirst", id: "02" },
-    { key: "easy", id: "03" },
-    { key: "scalable", id: "04" },
-    { key: "lowCost", id: "05" },
-    { key: "sovereign", id: "06" },
+    { key: "open", tag: true },
+    { key: "aiFirst", tag: false },
+    { key: "easy", tag: false },
+    { key: "scalable", tag: false },
+    { key: "lowCost", tag: true },
+    { key: "sovereign", tag: true },
   ] as const;
 
   const howSteps = [
@@ -239,42 +236,34 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           <div className="max-w-[1240px] mx-auto">
             <h1 className="text-hero font-extrabold tracking-[-0.035em] text-balance">
               {t("hero.title")} <br />
-              <HeroRotator phrases={heroPhraseKeys.map((key) => t(`hero.phrases.${key}`))} />
+              <span className="text-p-primary">{t("hero.titleAccent")}</span>
             </h1>
-            <div className="mt-[clamp(2rem,4vw,3rem)] grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-[clamp(2rem,5vw,4.5rem)] lg:items-end">
-              <div>
-                <p className="text-lead leading-relaxed max-w-[56ch]">
-                  {t("hero.description")}
-                </p>
-                <div className="flex gap-6 items-center flex-wrap mt-9">
-                  <Link href="/#quickstart">
-                    <Btn variant="primary" size="lg">
-                      {t("hero.quickstart")} <DirArrow />
-                    </Btn>
-                  </Link>
-                  <a href="https://browser.portolan-sdi.org/">
-                    <Btn variant="ghost" size="lg">
-                      {t("hero.browseCatalogs")} <DirArrow />
-                    </Btn>
-                  </a>
-                </div>
+            <div className="mt-[clamp(2rem,4vw,3rem)]">
+              <p className="text-lead leading-relaxed max-w-[56ch]">
+                {t("hero.description")}
+              </p>
+              <div className="flex gap-6 items-center flex-wrap mt-9">
+                <Link href="/#quickstart">
+                  <Btn variant="primary" size="lg">
+                    {t("hero.quickstart")} <DirArrow />
+                  </Btn>
+                </Link>
+                <a href="https://browser.portolan-sdi.org/">
+                  <Btn variant="ghost" size="lg">
+                    {t("hero.browseCatalogs")} <DirArrow />
+                  </Btn>
+                </a>
               </div>
               {heroStats && (
-                <div className="border-t border-p-line-strong">
+                <p className="mt-10 font-mono text-micro text-p-ink-3">
                   {heroStats.map((stat) => (
-                    <div
-                      key={stat.key}
-                      className="flex items-baseline gap-4 py-4 border-b border-p-line"
-                    >
-                      <span className="text-section font-extrabold tracking-[-0.03em] leading-none">
-                        <Ltr>{stat.value}</Ltr>
-                      </span>
-                      <span className="font-mono text-micro text-p-ink-3 tracking-[0.03em]">
-                        {t(`hero.stats.${stat.key}`)}
-                      </span>
-                    </div>
+                    <span key={stat.key}>
+                      <Ltr>{stat.value}</Ltr> {t(`hero.stats.${stat.key}`)}
+                      {" · "}
+                    </span>
                   ))}
-                </div>
+                  {t("hero.stats.live")}
+                </p>
               )}
             </div>
           </div>
@@ -285,7 +274,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
         <div className="max-w-[1240px] mx-auto">
           <SectionHead
-            index="01"
             eyebrow={t("why.eyebrow")}
             title={t("why.title")}
             subtitle={t("why.subtitle")}
@@ -307,9 +295,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     lg:[&:nth-child(3n+2)]:ps-[clamp(1rem,2.5vw,2.5rem)]
                     lg:[&:nth-child(3n)]:ps-[clamp(1rem,2.5vw,2.5rem)]"
                 >
-                  <span className="font-mono text-eyebrow text-p-primary tracking-[0.04em]">
-                    {card.id}
-                  </span>
                   <h3 className="text-card-title-lg font-bold tracking-[-0.02em]">
                     {t(`why.cards.${card.key}.title`)}
                   </h3>
@@ -330,9 +315,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                         ),
                     })}
                   </p>
-                  <span className="font-mono text-micro text-p-ink-3 mt-1">
-                    {t(`why.cards.${card.key}.tag`)}
-                  </span>
+                  {card.tag && (
+                    <span className="font-mono text-micro text-p-ink-3 mt-1">
+                      {t(`why.cards.${card.key}.tag`)}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
@@ -344,7 +331,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       <section id="how" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
           <SectionHead
-            index="02"
             eyebrow={t("howItWorks.eyebrow")}
             title={t("howItWorks.title")}
             subtitle={t("howItWorks.subtitle")}
@@ -391,7 +377,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       >
         <div className="max-w-[1240px] mx-auto">
           <SectionHead
-            index="03"
             eyebrow={t("toolkit.eyebrow")}
             title={t("toolkit.title")}
             aside={
@@ -475,7 +460,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
           <div className="max-w-[1240px] mx-auto">
             <SectionHead
-              index="06"
               eyebrow={t("registry.eyebrow")}
               title={t("registry.title", { count: catalogs.length })}
               subtitle={t("registry.description")}

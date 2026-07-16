@@ -1,5 +1,4 @@
 export { PortolanLogo } from "./portolan-logo";
-export { RhumbBackdrop } from "./rhumb-backdrop";
 export { DitherMap } from "./dither-map";
 export { MapPreview } from "./map-preview";
 export { LiveCount } from "./live-count";
