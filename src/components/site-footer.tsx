@@ -32,7 +32,7 @@ export function SiteFooter() {
       >
         <PortolanLogo size={24} />
       </Link>
-      <nav className="flex flex-wrap justify-center gap-x-7 gap-y-2 mt-5 text-small text-p-ink">
+      <nav className="flex flex-wrap justify-center gap-x-7 gap-y-2 mt-5 font-mono text-micro text-p-ink">
         {navLinks.map((link) => {
           const label = "label" in link ? link.label : t(`nav.${link.key}`);
           const isExternal = "external" in link && link.external;

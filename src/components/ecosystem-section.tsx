@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { DirArrow, Ltr, SectionHead } from "./ui";
+import { DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 
 // Project and tool names are proper nouns and stay in Latin in every locale,
 // so they live here rather than in the messages files. Group labels are
@@ -34,7 +34,7 @@ export function EcosystemSection() {
         <SectionHead
           eyebrow={t("eyebrow")}
           title={t("title")}
-          subtitle={t("subtitle")}
+          subtitle={t.rich("subtitle", { m: monoChunk })}
         />
         <div className="border-t border-p-line-strong">
           <div className="grid grid-cols-1 sm:grid-cols-[220px_minmax(0,1fr)] gap-x-8 gap-y-1 py-5 border-b border-p-line">

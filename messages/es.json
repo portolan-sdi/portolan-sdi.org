@@ -30,7 +30,7 @@
     "cards": {
       "open": {
         "title": "Abierto",
-        "description": "Todos los formatos son abiertos y todas las herramientas son Apache-2.0. DuckDB, BigQuery y los SIG de escritorio leen los mismos bytes. Si Portolan desapareciera mañana, tus datos seguirían funcionando en todas partes.",
+        "description": "Todos los formatos son abiertos y todas las herramientas son <m>Apache-2.0</m>. DuckDB, BigQuery y los SIG de escritorio leen los mismos bytes. Si Portolan desapareciera mañana, tus datos seguirían funcionando en todas partes.",
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
@@ -67,12 +67,12 @@
       "convert": {
         "id": "01",
         "title": "Convertir",
-        "description": "Convierte shapefiles, GeoTIFF, WFS, GeoPackage y ArcGIS Feature Services en formatos nativos de la nube. Los vectores se vuelven GeoParquet, los rásteres COG y las teselas de mapa PMTiles."
+        "description": "Convierte shapefiles, GeoTIFF, WFS, GeoPackage y ArcGIS Feature Services en formatos nativos de la nube. Los vectores se vuelven <m>GeoParquet</m>, los rásteres <m>COG</m> y las teselas de mapa <m>PMTiles</m>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalogar",
-        "description": "Genera un catálogo basado en STAC que describe cada activo con metadatos estructurados. Cualquier herramienta STAC puede leerlo."
+        "description": "Genera un catálogo basado en <m>STAC</m> que describe cada activo con metadatos estructurados. Cualquier herramienta <m>STAC</m> puede leerlo."
       },
       "publish": {
         "id": "03",
@@ -89,7 +89,7 @@
   "ecosystem": {
     "eyebrow": "Ecosistema",
     "title": "Todo está en GitHub.",
-    "subtitle": "Seis proyectos Portolan, todos Apache-2.0. Los formatos que publican son estándares comunitarios, así que la caja de herramientas ya existe.",
+    "subtitle": "Seis proyectos Portolan, todos <m>Apache-2.0</m>. Los formatos que publican son estándares comunitarios, así que la caja de herramientas ya existe.",
     "groups": {
       "portolan": "Proyectos Portolan",
       "query": "Motores de consulta",
@@ -104,12 +104,12 @@
     "intro": "Empieza por explorar un catálogo publicado. Luego publica el tuyo con la CLI o con un agente.",
     "browse": {
       "title": "Explora un catálogo",
-      "description": "Los catálogos Portolan están publicados en la web. Abre el navegador para explorar conjuntos de datos publicados, o dirige DuckDB a cualquier URL de GeoParquet y consúltala en el momento.",
+      "description": "Los catálogos Portolan están publicados en la web. Abre el navegador para explorar conjuntos de datos publicados, o dirige DuckDB a cualquier URL de <m>GeoParquet</m> y consúltala en el momento.",
       "cta": "Abrir el navegador"
     },
     "cli": {
       "title": "Con la CLI",
-      "description": "Instala portolan-cli y luego init, add, check y push. La CLI convierte tus archivos y genera el catálogo."
+      "description": "Instala <m>portolan-cli</m> y luego <m>init</m>, <m>add</m>, <m>check</m> y <m>push</m>. La CLI convierte tus archivos y genera el catálogo."
     },
     "claude": {
       "title": "Con Claude",

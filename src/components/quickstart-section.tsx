@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Btn, Card, DirArrow, Ltr, SectionHead } from "./ui";
+import { Btn, Card, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 
 export function QuickstartSection() {
   const t = useTranslations("quickstart");
@@ -22,7 +22,9 @@ export function QuickstartSection() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
           <Card className="flex flex-col gap-3">
             <h3 className="text-card-title-lg font-semibold">{t("browse.title")}</h3>
-            <p className="text-body leading-relaxed">{t("browse.description")}</p>
+            <p className="text-body leading-relaxed">
+              {t.rich("browse.description", { m: monoChunk })}
+            </p>
             <a href="https://browser.portolan-sdi.org/" className="mt-auto self-start">
               <Btn variant="secondary" size="sm">
                 {t("browse.cta")} <DirArrow kind="external" />
@@ -31,7 +33,9 @@ export function QuickstartSection() {
           </Card>
           <Card className="flex flex-col gap-3">
             <h3 className="text-card-title-lg font-semibold">{t("cli.title")}</h3>
-            <p className="text-body leading-relaxed">{t("cli.description")}</p>
+            <p className="text-body leading-relaxed">
+              {t.rich("cli.description", { m: monoChunk })}
+            </p>
             <a href="https://cli.portolan-sdi.org/" className={repoLinkClass}>
               <Ltr>portolan-cli</Ltr> <DirArrow kind="external" />
             </a>

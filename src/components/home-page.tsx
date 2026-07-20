@@ -12,7 +12,7 @@ import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
 import { PipelineFigure } from "./pipeline-figure";
-import { Btn, DirArrow, Ltr, SectionHead } from "./ui";
+import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { Catalog } from "@/lib/catalogs";
 import { getValidationTier } from "@/lib/catalogs";
@@ -287,6 +287,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   </h3>
                   <p className="text-body leading-relaxed">
                     {t.rich(`why.cards.${card.key}.description`, {
+                      m: monoChunk,
                       link: (chunks) =>
                         whyCardLinks[card.key] ? (
                           <a
@@ -351,7 +352,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     {t(`howItWorks.steps.${step}.title`)}
                   </h3>
                   <p className="text-body leading-relaxed">
-                    {t(`howItWorks.steps.${step}.description`)}
+                    {t.rich(`howItWorks.steps.${step}.description`, {
+                      m: monoChunk,
+                    })}
                   </p>
                 </div>
               ))}

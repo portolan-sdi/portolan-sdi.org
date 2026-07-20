@@ -30,7 +30,7 @@
     "cards": {
       "open": {
         "title": "Open",
-        "description": "Every format is open and every tool is Apache-2.0. DuckDB, BigQuery, and desktop GIS read the same bytes. If Portolan disappeared tomorrow, your data would still work everywhere.",
+        "description": "Every format is open and every tool is <m>Apache-2.0</m>. DuckDB, BigQuery, and desktop GIS read the same bytes. If Portolan disappeared tomorrow, your data would still work everywhere.",
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
@@ -67,12 +67,12 @@
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Convert shapefiles, GeoTIFFs, WFS, GeoPackage, and ArcGIS Feature Services into cloud-native formats. Vectors become GeoParquet, rasters become COG, and map tiles become PMTiles."
+        "description": "Convert shapefiles, GeoTIFFs, WFS, GeoPackage, and ArcGIS Feature Services into cloud-native formats. Vectors become <m>GeoParquet</m>, rasters become <m>COG</m>, and map tiles become <m>PMTiles</m>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalog",
-        "description": "Generate a STAC-based catalog that describes every asset with structured metadata. Any STAC tool can read it."
+        "description": "Generate a <m>STAC</m>-based catalog that describes every asset with structured metadata. Any <m>STAC</m> tool can read it."
       },
       "publish": {
         "id": "03",
@@ -89,7 +89,7 @@
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "All of it is on GitHub.",
-    "subtitle": "Six Portolan projects, all Apache-2.0. The formats they publish are community standards, so the wider toolbox already exists.",
+    "subtitle": "Six Portolan projects, all <m>Apache-2.0</m>. The formats they publish are community standards, so the wider toolbox already exists.",
     "groups": {
       "portolan": "Portolan projects",
       "query": "Query engines",
@@ -104,12 +104,12 @@
     "intro": "Start by browsing a live catalog. Then publish your own with the CLI or with an agent.",
     "browse": {
       "title": "Browse a catalog",
-      "description": "Portolan catalogs are live on the web. Open the browser to explore published datasets, or point DuckDB at any GeoParquet URL and query it in place.",
+      "description": "Portolan catalogs are live on the web. Open the browser to explore published datasets, or point DuckDB at any <m>GeoParquet</m> URL and query it in place.",
       "cta": "Open the browser"
     },
     "cli": {
       "title": "With the CLI",
-      "description": "Install portolan-cli, then init, add, check, and push. The CLI converts your files and generates the catalog."
+      "description": "Install <m>portolan-cli</m>, then <m>init</m>, <m>add</m>, <m>check</m>, and <m>push</m>. The CLI converts your files and generates the catalog."
     },
     "claude": {
       "title": "With Claude",

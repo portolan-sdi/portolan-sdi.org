@@ -17,6 +17,9 @@ disciplined blue accent, distinctive grotesque type, generous whitespace, and
 **near-black rules instead of cards**. No gradients, no drop shadows, no soft bands.
 
 - **Type:** Hanken Grotesk (sans, Latin text) + JetBrains Mono (code, labels, eyebrows, kickers) + Cairo (all Arabic text). No other fonts in production.
+- **Two type registers.** Mono is the machine register — data, labels, statuses, paths, numbers, annotations, and controls. Sans is the human register — headlines and prose. Keep the split: never set headlines or body paragraphs in mono.
+  - Buttons (`Btn`) are mono, uppercase, letterspaced (`tracking-[0.08em]`, neutralized with `rtl:tracking-normal` — letterspacing breaks Arabic's connected script).
+  - Typeable identifiers inside prose (formats like GeoParquet/COG/STAC/PMTiles, file names, CLI commands, `Apache-2.0`) are wrapped in `<m>…</m>` tags in `messages/*.json` and rendered mono via `t.rich(key, { m: monoChunk })` (`monoChunk` from `./ui`). Product names (Portolan, DuckDB, …) stay sans. Tags must stay identical across all three locales, and any key carrying `<m>` tags must be rendered with `t.rich`, never plain `t()`.
 - **Color tokens:** Use CSS variables from `globals.css`. Never hardcode hex except in SVG and the map canvas.
 - **Palette:** warm cream paper (`--p-bg: #fcfcfa`) and near-black ink (`--p-ink: #16170f`) with a **single blue accent** — `--p-primary: #4163cc` (== `--p-accent`; the old gold is retired).
 - **Light mode only.** Dark mode was removed in July 2026 — there is no `[data-theme]` switch, no `ThemeToggle`, and no dark token block. Do not reintroduce a dark theme or a theme toggle.
