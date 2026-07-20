@@ -17,13 +17,13 @@ disciplined blue accent, distinctive grotesque type, generous whitespace, and
 **hairline rules instead of cards**. No gradients, no drop shadows, no soft bands.
 
 - **Type:** Hanken Grotesk (sans, Latin text) + JetBrains Mono (code, labels, eyebrows, kickers) + Cairo (all Arabic text). No other fonts in production.
-- **Color tokens:** Use CSS variables from `globals.css`. Never hardcode hex except in SVG and fixed-dark terminal/map blocks.
+- **Color tokens:** Use CSS variables from `globals.css`. Never hardcode hex except in SVG and the map canvas.
 - **Palette:** warm cream paper (`--p-bg: #fcfcfa`) and near-black ink (`--p-ink: #16170f`) with a **single blue accent** — `--p-primary: #1b4dd1` (== `--p-accent`; the old gold is retired). Dark mode is a warm-dark editorial palette (`--p-bg: #141410`, accent `#7d97ff`).
 - **Type scale (single source of truth):** Use the named utilities generated from `--text-*` tokens in `globals.css`, never arbitrary sizes like `text-[13px]`. Available: `text-eyebrow`, `text-micro`, `text-small`, `text-body`, `text-body-lg`, `text-lead`, `text-card-title`, `text-card-title-lg`, `text-feature`, `text-section-sm`, `text-section`, `text-hero`, `text-hero-sm`. Headings and lead text are fluid via `clamp()`.
 - **Corners are near-square.** `--p-r-md` (3px) for buttons/inputs, `--p-r-lg` (4px) for content blocks. Nothing is pill-shaped.
 - **Surfaces are flat.** Shadow tokens render as `none` / a single hairline — never a glassy drop shadow. Separate content with hairline borders (`border-p-line`, `border-p-line-strong`), not cards or soft background bands. **At most one** subtle `--p-bg-soft` band on the page (the talks section).
 - **Section kickers:** mono, `text-p-ink-3`, the label string only. No `NN ·` index prefixes (numbers are reserved for real sequences like the how-it-works steps), no `// EYEBROW` punctuation, no uppercase, no wide tracking.
-- **Terminal blocks** are driven by the `--term-*` tokens (chrome) and `--term-syntax-*` tokens (line colors), and **track the light/dark theme** — a warm paper code block in light mode, warm near-black in dark. Pass line colors as `var(--term-syntax-*)` references, never raw hex, so they flip with the theme. The chrome is a plain mono title bar — **no macOS traffic-light dots**.
+- **No terminal mockups.** The fake-terminal blocks (and their `--term-*` tokens) were removed in July 2026 — do not reintroduce terminal/code-session mockups anywhere on the site.
 - **Logo:** Two-pennant SVG in `PortolanLogo`, rendered in a **solid** `--p-primary` fill — no gradient.
 
 ## Layout & Responsiveness
@@ -31,7 +31,7 @@ disciplined blue accent, distinctive grotesque type, generous whitespace, and
 - **Mobile-first, always.** Start from the single-column small-screen layout, then add `sm:` / `md:` / `lg:` breakpoints. Never write a desktop-only layout.
 - **Section padding:** sections use `px-[var(--p-pad-section-x)]` and `py-[var(--p-pad-section-y)]` (fluid `clamp()` tokens). Do not use the fixed `--p-pad-xl` for section padding.
 - **Grids collapse:** multi-column grids start at `grid-cols-1` and step up (for example `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`).
-- **Shared chrome:** the header and footer come from `SiteHeader` and `SiteFooter`. Do not inline `<header>` / `<footer>` markup in pages. The header carries the mobile hamburger drawer. The header is solid `--p-bg` with a hairline — no frosted `backdrop-blur`. Nav stays minimal (Registry, Docs, GitHub as text links; no same-page table-of-contents anchors). The footer carries the colophon and real links — never dead spans that look like links.
+- **Shared chrome:** the header and footer come from `SiteHeader` and `SiteFooter`. Do not inline `<header>` / `<footer>` markup in pages. The header is minimal — logo plus theme/locale controls only, solid `--p-bg` with a hairline, no frosted `backdrop-blur`, no nav links, no hamburger. Site navigation (Registry, Docs, GitHub as text links) lives in the footer. The footer carries no colophon (removed July 2026 — don't reintroduce it) and only real links — never dead spans that look like links.
 
 ## Tech Stack
 

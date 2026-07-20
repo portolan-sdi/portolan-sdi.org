@@ -7,7 +7,6 @@
     "registry": "Registry",
     "docs": "Docs",
     "homeAria": "Portolan home",
-    "menuAria": "Toggle menu",
     "languageAria": "Change language"
   },
   "hero": {
@@ -84,36 +83,12 @@
       }
     }
   },
-  "toolkit": {
-    "eyebrow": "The toolkit",
-    "title": "What exists today.",
-    "allProjects": "All projects",
-    "cli": {
-      "name": "portolan-cli",
-      "title": "The CLI",
-      "version": "v1.0.0a0 · alpha",
-      "description": "Convert, validate, and sync. One command takes a folder of shapefiles to a browsable catalog on S3.",
-      "compatibility": "Works with AWS · GCS · Azure · R2 · MinIO · Source.coop"
-    },
-    "viewer": {
-      "name": "portolan-viewer",
-      "tag": "In design",
-      "title": "Browser-native viewer",
-      "description": "A viewer that reads Portolan catalogs and cloud-native files directly, with no server behind it."
-    },
-    "skills": {
-      "name": "portolan-skills",
-      "tag": "In development",
-      "title": "AI agent skills",
-      "description": "Skills that let Claude, Gemini, and Codex agents publish catalogs and query cloud-native geospatial data."
-    },
-    "readMore": "Read more"
-  },
   "ecosystem": {
     "eyebrow": "Ecosystem",
-    "title": "Tools that already read these files.",
-    "subtitle": "GeoParquet, COG, PMTiles, and STAC are community standards with ecosystems of their own. Nothing below depends on Portolan.",
+    "title": "All of it is on GitHub.",
+    "subtitle": "Six Portolan projects, all Apache-2.0. The formats they publish are community standards, so the wider toolbox already exists.",
     "groups": {
+      "portolan": "Portolan projects",
       "query": "Query engines",
       "gis": "Desktop GIS",
       "libraries": "Libraries",
@@ -121,7 +96,6 @@
     }
   },
   "footer": {
-    "colophon": "Named for the portolan charts of the medieval Mediterranean — working maps, made to be used.",
     "openGovernance": "Open governance",
     "license": "Apache-2.0",
     "repo": "portolan-sdi/portolan"
@@ -240,7 +214,6 @@
     }
   },
   "involved": {
-    "eyebrow": "Who's involved",
     "label": "Supported by"
   }
 }

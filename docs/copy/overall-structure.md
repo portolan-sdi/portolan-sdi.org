@@ -62,12 +62,25 @@ defines what each section must *accomplish* and for whom.
 | 6b | Who's involved (logo strip) | Government adopter | Institutional cover: recognizable organizations stand near this work |
 | 7 | Registry CTA | All | Proof of momentum: others are already doing this |
 
-Added 2026-07-20 (modeled on geoparquet.org):
+Restructured 2026-07-20 (second pass, user-directed):
 
-- **4b — Ecosystem** (after Toolkit): the formats are shared standards
-  with tools Portolan does not own. Extends the no-lock-in argument.
-- **6b — Who's involved** (after Talks): logo strip. Extends the
-  delegated-authority job from the talks to institutions.
+- **Who's involved** moved to directly under the hero as a slim
+  credibility strip ("Supported by" + wordmarks) — institutional cover
+  arrives before the argument, not after.
+- **Toolkit section removed** ("What exists today" judged useless).
+  Its content dissolved: the six repos (portolan-spec, reis,
+  portolan-cli, portolan-registry, portolan-browser, portolan-skills)
+  became the first Ecosystem row; the CLI/skills links moved into the
+  Quickstart cards. Maturity tags and project descriptions dropped.
+- **Ecosystem headline** now "All of it is on GitHub." — it inherits
+  the toolkit's real-and-inspectable job on top of the no-lock-in job.
+- **All terminal mockups removed** (hero/toolkit/quickstart);
+  `Terminal` component and `--term-*` tokens deleted.
+- **Header minimal** (logo + controls); site nav moved to the footer.
+  Footer colophon removed.
+
+Current arc: hero → supported-by strip → why → how it works →
+ecosystem → quickstart → talks → registry.
 
 ## Secondary surfaces (the "Diving Deeper" analog)
 

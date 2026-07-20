@@ -7,7 +7,6 @@
     "registry": "Registro",
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
-    "menuAria": "Abrir o cerrar menú",
     "languageAria": "Cambiar idioma"
   },
   "hero": {
@@ -84,36 +83,12 @@
       }
     }
   },
-  "toolkit": {
-    "eyebrow": "El kit de herramientas",
-    "title": "Lo que existe hoy.",
-    "allProjects": "Todos los proyectos",
-    "cli": {
-      "name": "portolan-cli",
-      "title": "La CLI",
-      "version": "v1.0.0a0 · alpha",
-      "description": "Convierte, valida y sincroniza. Un comando lleva una carpeta de shapefiles a un catálogo navegable en S3.",
-      "compatibility": "Funciona con AWS · GCS · Azure · R2 · MinIO · Source.coop"
-    },
-    "viewer": {
-      "name": "portolan-viewer",
-      "tag": "En diseño",
-      "title": "Visor que se ejecuta en el navegador",
-      "description": "Un visor que lee catálogos Portolan y archivos nativos de la nube directamente, sin servidor detrás."
-    },
-    "skills": {
-      "name": "portolan-skills",
-      "tag": "En desarrollo",
-      "title": "Skills para agentes de IA",
-      "description": "Skills que permiten a los agentes Claude, Gemini y Codex publicar catálogos y consultar datos geoespaciales nativos de la nube."
-    },
-    "readMore": "Leer más"
-  },
   "ecosystem": {
     "eyebrow": "Ecosistema",
-    "title": "Herramientas que ya leen estos archivos.",
-    "subtitle": "GeoParquet, COG, PMTiles y STAC son estándares comunitarios con ecosistemas propios. Nada de lo que sigue depende de Portolan.",
+    "title": "Todo está en GitHub.",
+    "subtitle": "Seis proyectos Portolan, todos Apache-2.0. Los formatos que publican son estándares comunitarios, así que la caja de herramientas ya existe.",
     "groups": {
+      "portolan": "Proyectos Portolan",
       "query": "Motores de consulta",
       "gis": "SIG de escritorio",
       "libraries": "Bibliotecas",
@@ -121,7 +96,6 @@
     }
   },
   "footer": {
-    "colophon": "El nombre viene de las cartas portulanas del Mediterráneo medieval. Mapas de trabajo, hechos para usarse.",
     "openGovernance": "Gobernanza abierta",
     "license": "Apache-2.0",
     "repo": "portolan-sdi/portolan"
@@ -240,7 +214,6 @@
     }
   },
   "involved": {
-    "eyebrow": "Quiénes participan",
     "label": "Con el apoyo de"
   }
 }

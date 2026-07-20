@@ -63,19 +63,6 @@
   --p-pad-section-x: clamp(20px, 5vw, 64px);
   --p-pad-section-y: clamp(56px, 8vw, 104px);
 
-  /* Terminal — theme-aware. Light mode: warm paper code block. */
-  --term-bg: #f7f7f2;
-  --term-header: #eeeee8;
-  --term-border: #e1e1d8;
-  --term-title: #74766a;
-  --term-text: #3d3f33;
-  --term-syntax-text: #3d3f33;
-  --term-syntax-muted: #8a8a7c;
-  --term-syntax-accent: #4163cc;
-  --term-syntax-ok: #2f7d63;
-  --term-dot-red: #ff5f57;
-  --term-dot-yellow: #febc2e;
-  --term-dot-green: #28c840;
 }
 
 [data-theme="dark"] {
@@ -108,17 +95,6 @@
   --p-shadow-sm: none;
   --p-shadow-md: 0 1px 0 var(--p-line);
   --p-shadow-lg: 0 1px 0 var(--p-line);
-
-  /* Terminal — dark mode: warm near-black code block */
-  --term-bg: #16170f;
-  --term-header: #1f1f18;
-  --term-border: #2f2f26;
-  --term-title: #908f80;
-  --term-text: #cbcabd;
-  --term-syntax-text: #cbcabd;
-  --term-syntax-muted: #908f80;
-  --term-syntax-accent: #8b9eee;
-  --term-syntax-ok: #3fcf5f;
 }
 
 @theme inline {
@@ -236,13 +212,13 @@ button {
 }
 
 /* Mono-styled eyebrow labels use the mono token; route them to Cairo on RTL
-   pages too. Real code/terminal blocks carry dir="ltr" and stay monospace. */
+   pages too. Real code blocks carry dir="ltr" and stay monospace. */
 [dir="rtl"] .font-mono {
   font-family: var(--p-arabic);
 }
 
-/* Keep real code/terminal blocks in true monospace even on an RTL page.
-   The Terminal root carries dir="ltr"; this re-assert wins by source order. */
+/* Keep dir="ltr" mono content in true monospace even on an RTL page;
+   this re-assert wins by source order. */
 [dir="ltr"] .font-mono,
 .font-mono[dir="ltr"],
 [dir="ltr"] .font-mono * {

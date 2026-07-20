@@ -7,7 +7,6 @@
     "registry": "السجل",
     "docs": "التوثيق",
     "homeAria": "الصفحة الرئيسية لـ Portolan",
-    "menuAria": "إظهار القائمة",
     "languageAria": "تغيير اللغة"
   },
   "hero": {
@@ -84,36 +83,12 @@
       }
     }
   },
-  "toolkit": {
-    "eyebrow": "حزمة الأدوات",
-    "title": "ما هو موجود اليوم.",
-    "allProjects": "كل المشاريع",
-    "cli": {
-      "name": "portolan-cli",
-      "title": "واجهة سطر الأوامر",
-      "version": "v1.0.0a0 · alpha",
-      "description": "حوّل وتحقّق وزامِن. أمر واحد ينقل مجلد ملفات shapefile إلى كتالوج قابل للتصفّح على S3.",
-      "compatibility": "يعمل مع AWS · GCS · Azure · R2 · MinIO · Source.coop"
-    },
-    "viewer": {
-      "name": "portolan-viewer",
-      "tag": "قيد التصميم",
-      "title": "عارض يعمل داخل المتصفح",
-      "description": "عارض يقرأ كتالوجات Portolan والملفّات المصمّمة للسحابة مباشرة، دون خادم خلفه."
-    },
-    "skills": {
-      "name": "portolan-skills",
-      "tag": "قيد التطوير",
-      "title": "مهارات لوكلاء الذكاء الاصطناعي",
-      "description": "مهارات تتيح لوكلاء Claude وGemini وCodex نشر الكتالوجات والاستعلام عن البيانات الجيومكانية المصمّمة للسحابة."
-    },
-    "readMore": "اقرأ المزيد"
-  },
   "ecosystem": {
     "eyebrow": "المنظومة",
-    "title": "أدوات تقرأ هذه الملفات بالفعل.",
-    "subtitle": "GeoParquet وCOG وPMTiles وSTAC معايير مجتمعية لها منظومات خاصة بها. لا شيء مما يلي يعتمد على Portolan.",
+    "title": "كل شيء متاح على GitHub.",
+    "subtitle": "ستة مشاريع لـ Portolan، كلها برخصة Apache-2.0. الصيغ التي تنشرها معايير مجتمعية، لذا فإن صندوق الأدوات الأوسع موجود بالفعل.",
     "groups": {
+      "portolan": "مشاريع Portolan",
       "query": "محركات الاستعلام",
       "gis": "نظم المعلومات الجغرافية المكتبية",
       "libraries": "مكتبات برمجية",
@@ -121,7 +96,6 @@
     }
   },
   "footer": {
-    "colophon": "الاسم مأخوذ من خرائط البورتولان في البحر الأبيض المتوسط في العصور الوسطى. خرائط عملية صُنعت لتُستخدم.",
     "openGovernance": "حوكمة مفتوحة",
     "license": "Apache-2.0",
     "repo": "portolan-sdi/portolan"
@@ -240,7 +214,6 @@
     }
   },
   "involved": {
-    "eyebrow": "من يشارك",
     "label": "بدعم من"
   }
 }
