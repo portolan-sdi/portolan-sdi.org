@@ -9,6 +9,8 @@ import { SiteHeader } from "./site-header";
 import { SiteFooter } from "./site-footer";
 import { QuickstartSection } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
+import { EcosystemSection } from "./ecosystem-section";
+import { InvolvedSection } from "./involved-section";
 import { Btn, Tag, Card, Terminal, DirArrow, Ltr, SectionHead } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { Catalog } from "@/lib/catalogs";
@@ -449,11 +451,17 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         </div>
       </section>
 
+      {/* Ecosystem — third-party tools that read the same formats */}
+      <EcosystemSection />
+
       {/* Quickstart */}
       <QuickstartSection />
 
       {/* Talks & demos */}
       <ResourcesSection />
+
+      {/* Who's involved — placeholder wordmarks until logo assets land */}
+      <InvolvedSection />
 
       {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (

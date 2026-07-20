@@ -1,0 +1,12 @@
+last_synced_sha: 58d62d01118d6328bc57b04804309a16bc3c6dfd
+last_synced_date: 2026-07-20
+audience:
+  primary: >-
+    Layered model, tie-break order: (1) public-sector data manager —
+    has data and a mandate, no cloud team; cares about cost, sovereignty,
+    no specialist staff. (2) cloud-native geo developer. (3) SDI
+    decision-maker. See overall-structure.md.
+  secondary:
+    - AI-agent builder — wiring agents to data; found Portolan via the AI-ready angle
+  inferred: false
+ask_audience: true
