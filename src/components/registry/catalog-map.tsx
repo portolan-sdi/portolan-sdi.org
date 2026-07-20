@@ -423,7 +423,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
               onClick={() => setInfoOpen((v) => !v)}
               aria-label={t("map.info")}
               aria-expanded={infoOpen}
-              className="shrink-0 flex items-center justify-center w-5 h-5 rounded-full border border-p-line text-p-ink-3 hover:text-p-ink hover:border-p-ink-3 transition-colors text-micro font-mono"
+              className="shrink-0 flex items-center justify-center w-5 h-5 border border-p-line text-p-ink-3 hover:text-p-ink hover:border-p-ink-3 transition-colors text-micro font-mono"
             >
               i
             </button>

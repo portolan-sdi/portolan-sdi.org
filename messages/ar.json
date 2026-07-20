@@ -8,8 +8,7 @@
     "docs": "التوثيق",
     "homeAria": "الصفحة الرئيسية لـ Portolan",
     "languageAria": "تغيير اللغة",
-    "tagline": "دليل ميداني للبنية التحتية للبيانات المكانية السحابية الأصلية.",
-    "taglineMeta": "مفتوح المصدر · حوكمة مفتوحة · مجاني"
+    "tagline": "بنية تحتية سحابية الأصل للبيانات المكانية."
   },
   "hero": {
     "title": "مستقبل البيانات المكانية",
@@ -98,11 +97,6 @@
       "libraries": "مكتبات برمجية",
       "stac": "أدوات STAC"
     }
-  },
-  "footer": {
-    "openGovernance": "حوكمة مفتوحة",
-    "license": "Apache-2.0",
-    "repo": "portolan-sdi/portolan"
   },
   "quickstart": {
     "eyebrow": "البدء السريع",

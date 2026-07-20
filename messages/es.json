@@ -8,8 +8,7 @@
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
-    "tagline": "Un manual de campo para la infraestructura de datos espaciales nativa de la nube.",
-    "taglineMeta": "Código abierto · gobernanza abierta · gratuito"
+    "tagline": "Una infraestructura de datos espaciales nativa de la nube."
   },
   "hero": {
     "title": "El futuro de los datos espaciales",
@@ -98,11 +97,6 @@
       "libraries": "Bibliotecas",
       "stac": "Herramientas STAC"
     }
-  },
-  "footer": {
-    "openGovernance": "Gobernanza abierta",
-    "license": "Apache-2.0",
-    "repo": "portolan-sdi/portolan"
   },
   "quickstart": {
     "eyebrow": "Inicio rápido",

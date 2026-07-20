@@ -8,8 +8,7 @@
     "docs": "Docs",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
-    "tagline": "A field manual for cloud-native spatial data infrastructure.",
-    "taglineMeta": "Open source · openly governed · free"
+    "tagline": "A cloud-native spatial data infrastructure."
   },
   "hero": {
     "title": "The future of spatial data",
@@ -98,11 +97,6 @@
       "libraries": "Libraries",
       "stac": "STAC tooling"
     }
-  },
-  "footer": {
-    "openGovernance": "Open governance",
-    "license": "Apache-2.0",
-    "repo": "portolan-sdi/portolan"
   },
   "quickstart": {
     "eyebrow": "Quickstart",

@@ -42,12 +42,13 @@
     monospace;
   --p-arabic: var(--font-cairo), "Segoe UI", Tahoma, sans-serif;
 
-  /* Radii — near-square editorial */
+  /* Radii — square. Every corner is 90 degrees; the tokens stay so existing
+     rounded-[var(--p-r-*)] utilities resolve to 0. */
   --p-r-xs: 0px;
-  --p-r-sm: 2px;
-  --p-r-md: 3px;
-  --p-r-lg: 4px;
-  --p-r-xl: 6px;
+  --p-r-sm: 0px;
+  --p-r-md: 0px;
+  --p-r-lg: 0px;
+  --p-r-xl: 0px;
 
   /* Spacing */
   --p-pad-xs: 8px;
@@ -141,36 +142,41 @@ body {
   padding: 0;
 }
 
-body {
-  font-family: var(--p-sans);
-  background: var(--p-bg);
-  color: var(--p-ink);
-  -webkit-font-smoothing: antialiased;
-}
+/* Element defaults live in the base layer so Tailwind utilities (which sit in
+   the utilities layer) can override them — unlayered rules would always win
+   over layered utilities regardless of specificity. */
+@layer base {
+  body {
+    font-family: var(--p-sans);
+    background: var(--p-bg);
+    color: var(--p-ink);
+    -webkit-font-smoothing: antialiased;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-family: var(--p-sans);
-  letter-spacing: -0.02em;
-  color: var(--p-ink);
-  font-weight: 600;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--p-sans);
+    letter-spacing: -0.02em;
+    color: var(--p-ink);
+    font-weight: 600;
+  }
 
-p {
-  color: var(--p-ink-2);
-}
+  p {
+    color: var(--p-ink-2);
+  }
 
-a {
-  color: var(--p-primary);
-  text-decoration: none;
-}
+  a {
+    color: var(--p-primary);
+    text-decoration: none;
+  }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
 }
 
 /* Arabic (RTL): the whole page renders in Cairo, which Archivo cannot render.

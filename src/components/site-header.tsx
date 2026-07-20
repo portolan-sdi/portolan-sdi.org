@@ -10,15 +10,14 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-30 border-b border-p-line bg-p-bg">
-      <div className="flex items-center justify-between gap-6 px-[var(--p-pad-section-x)] py-4">
-        <Link href="/" aria-label={t("nav.homeAria")}>
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 px-[var(--p-pad-section-x)] py-4">
+        <Link href="/" aria-label={t("nav.homeAria")} className="justify-self-start">
           <PortolanLogo size={28} />
         </Link>
-        <div className="flex items-center gap-6">
-          <p className="hidden md:block max-w-[360px] font-mono text-micro leading-relaxed text-end text-p-ink">
-            {t("nav.tagline")}
-            <span className="block text-p-ink-3">{t("nav.taglineMeta")}</span>
-          </p>
+        <p className="hidden md:block font-mono text-micro text-center text-p-ink m-0">
+          {t("nav.tagline")}
+        </p>
+        <div className="justify-self-end">
           <LocaleSwitcher />
         </div>
       </div>
