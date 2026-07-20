@@ -7,7 +7,9 @@
     "registry": "Registro",
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
-    "languageAria": "Cambiar idioma"
+    "languageAria": "Cambiar idioma",
+    "tagline": "Un manual de campo para la infraestructura de datos espaciales nativa de la nube.",
+    "taglineMeta": "Código abierto · gobernanza abierta · gratuito"
   },
   "hero": {
     "title": "El futuro de los datos espaciales",
@@ -60,6 +62,8 @@
     "eyebrow": "Cómo funciona",
     "title": "Apunta, convierte, publica.",
     "subtitle": "Un conjunto compartido de formatos abiertos reemplaza al servidor. El almacenamiento en la nube se encarga de la escala. Los navegadores, los motores de consulta y los agentes de IA leen los archivos directamente.",
+    "figCaption": "Fig. 2.1 · El proceso",
+    "figNote": "Un comando por etapa",
     "steps": {
       "convert": {
         "id": "01",

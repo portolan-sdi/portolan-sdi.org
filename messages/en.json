@@ -7,7 +7,9 @@
     "registry": "Registry",
     "docs": "Docs",
     "homeAria": "Portolan home",
-    "languageAria": "Change language"
+    "languageAria": "Change language",
+    "tagline": "A field manual for cloud-native spatial data infrastructure.",
+    "taglineMeta": "Open source · openly governed · free"
   },
   "hero": {
     "title": "The future of spatial data",
@@ -60,6 +62,8 @@
     "eyebrow": "How it works",
     "title": "Point, convert, push.",
     "subtitle": "A shared set of open formats replaces the server. Cloud storage does the scaling. Browsers, query engines, and AI agents read the files directly.",
+    "figCaption": "Fig. 2.1 — The pipeline",
+    "figNote": "One command per stage",
     "steps": {
       "convert": {
         "id": "01",

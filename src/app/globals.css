@@ -4,8 +4,8 @@
   /* Dither map: rendered in the editorial blue accent on cream */
   --dither-filter: brightness(0.55) sepia(1) saturate(3.2) hue-rotate(196deg);
 
-  /* Hero legibility scrim over the dither map. Light mode keeps it light so the
-     map stays visible; dark mode (overridden below) is heavier. */
+  /* Hero legibility scrim over the dither map — light enough that the map
+     stays visible. */
   --hero-scrim: linear-gradient(
     to right,
     color-mix(in srgb, var(--p-bg) 90%, transparent),
@@ -20,9 +20,11 @@
   --p-ink: #16170f;
   --p-ink-2: #3d3f33;
   --p-ink-3: #74766a;
-  --p-line: #e1e1d8;
-  --p-line-soft: #ececE5;
-  --p-line-strong: #c9c9bd;
+  /* Structural rules are near-black ink; the soft tier is for interior
+     separators only (rows inside a bordered block). */
+  --p-line: #16170f;
+  --p-line-soft: #d6d5ca;
+  --p-line-strong: #16170f;
   --p-primary: #4163cc;
   --p-primary-ink: #2d4aa8;
   --p-grad-a: #4163cc;
@@ -63,38 +65,6 @@
   --p-pad-section-x: clamp(20px, 5vw, 64px);
   --p-pad-section-y: clamp(56px, 8vw, 104px);
 
-}
-
-[data-theme="dark"] {
-  /* Dither map: muted warm-blue on warm-dark */
-  --dither-filter: brightness(0.45) sepia(1) saturate(2.2) hue-rotate(198deg);
-
-  --hero-scrim: linear-gradient(
-    to right,
-    var(--p-bg),
-    color-mix(in srgb, var(--p-bg) 82%, transparent) 45%,
-    color-mix(in srgb, var(--p-bg) 45%, transparent)
-  );
-
-  --p-bg: #141410;
-  --p-bg-soft: #1b1b15;
-  --p-paper: #1f1f18;
-  --p-ink: #f3f2ea;
-  --p-ink-2: #cbcabd;
-  --p-ink-3: #908f80;
-  --p-line: #2f2f26;
-  --p-line-soft: #26261e;
-  --p-line-strong: #3a3a2f;
-  --p-primary: #8b9eee;
-  --p-primary-ink: #aab6f2;
-  --p-grad-a: #8b9eee;
-  --p-grad-b: #8b9eee;
-  --p-accent: #8b9eee;
-  --p-accent-ink: #aab6f2;
-  --p-on-primary: #15160f;
-  --p-shadow-sm: none;
-  --p-shadow-md: 0 1px 0 var(--p-line);
-  --p-shadow-lg: 0 1px 0 var(--p-line);
 }
 
 @theme inline {

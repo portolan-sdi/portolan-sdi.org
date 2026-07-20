@@ -11,6 +11,7 @@ import { QuickstartSection } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
+import { PipelineFigure } from "./pipeline-figure";
 import { Btn, DirArrow, Ltr, SectionHead } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { Catalog } from "@/lib/catalogs";
@@ -321,6 +322,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
             title={t("howItWorks.title")}
             subtitle={t("howItWorks.subtitle")}
           />
+          <div className="mb-[var(--p-pad-lg)]">
+            <PipelineFigure />
+          </div>
           <div className="border-t border-p-line-strong">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {howSteps.map((step) => (
