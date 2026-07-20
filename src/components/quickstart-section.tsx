@@ -21,6 +21,9 @@ export function QuickstartSection() {
         />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
           <Card className="flex flex-col gap-3">
+            <span className="font-mono text-micro text-p-ink-3">
+              {t("browse.stamp")}
+            </span>
             <h3 className="text-card-title-lg font-semibold">{t("browse.title")}</h3>
             <p className="text-body leading-relaxed">
               {t.rich("browse.description", { m: monoChunk })}
@@ -32,6 +35,9 @@ export function QuickstartSection() {
             </a>
           </Card>
           <Card className="flex flex-col gap-3">
+            <span className="font-mono text-micro text-p-ink-3">
+              {t("cli.stamp")}
+            </span>
             <h3 className="text-card-title-lg font-semibold">{t("cli.title")}</h3>
             <p className="text-body leading-relaxed">
               {t.rich("cli.description", { m: monoChunk })}
@@ -41,6 +47,9 @@ export function QuickstartSection() {
             </a>
           </Card>
           <Card className="flex flex-col gap-3">
+            <span className="font-mono text-micro text-p-ink-3">
+              {t("claude.stamp")}
+            </span>
             <h3 className="text-card-title-lg font-semibold">{t("claude.title")}</h3>
             <p className="text-body leading-relaxed">{t("claude.description")}</p>
             <a

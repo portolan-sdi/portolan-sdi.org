@@ -47,7 +47,7 @@ export function EcosystemSection() {
                   {i > 0 && " · "}
                   <a
                     href={project.href}
-                    className="text-p-primary hover:underline"
+                    className="font-mono text-small text-p-primary hover:underline"
                   >
                     <Ltr>{project.name}</Ltr> <DirArrow kind="external" />
                   </a>
@@ -67,7 +67,9 @@ export function EcosystemSection() {
                 {group.tools.map((tool, i) => (
                   <span key={tool}>
                     {i > 0 && " · "}
-                    <Ltr>{tool}</Ltr>
+                    <span className="font-mono text-small">
+                      <Ltr>{tool}</Ltr>
+                    </span>
                   </span>
                 ))}
               </p>

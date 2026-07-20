@@ -103,15 +103,18 @@
     "title": "Publica tu primer catálogo.",
     "intro": "Empieza por explorar un catálogo publicado. Luego publica el tuyo con la CLI o con un agente.",
     "browse": {
+      "stamp": "Opción A",
       "title": "Explora un catálogo",
       "description": "Los catálogos Portolan están publicados en la web. Abre el navegador para explorar conjuntos de datos publicados, o dirige DuckDB a cualquier URL de <m>GeoParquet</m> y consúltala en el momento.",
       "cta": "Abrir el navegador"
     },
     "cli": {
+      "stamp": "Opción B",
       "title": "Con la CLI",
       "description": "Instala <m>portolan-cli</m> y luego <m>init</m>, <m>add</m>, <m>check</m> y <m>push</m>. La CLI convierte tus archivos y genera el catálogo."
     },
     "claude": {
+      "stamp": "Opción C",
       "title": "Con Claude",
       "description": "Instala la skill de Portolan en Claude Code y dirígela a tus datos. Se encarga de la conversión, los metadatos y la publicación. Los agentes destacan con CLI y archivos de texto, así que incluso quienes no son expertos pueden publicar."
     }
@@ -190,7 +193,9 @@
       "noLocation": "{count, plural, one {# catálogo sin datos de ubicación} other {# catálogos sin datos de ubicación}}",
       "loading": "Cargando mapa..."
     },
-    "generated": "Última actualización {date}"
+    "generated": "Última actualización {date}",
+    "caption": "Catálogos publicados por ubicación",
+    "captionNote": "{count} mostrados · en vivo desde el registro"
   },
   "resources": {
     "eyebrow": "Charlas y demos",

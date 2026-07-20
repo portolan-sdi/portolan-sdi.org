@@ -528,6 +528,14 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               </div>
             )}
 
+            {/* Annotation row: same anatomy as a figure caption */}
+            <div className="flex justify-between gap-3 pt-2 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
+              <span className="text-p-primary">{t("registry.caption")}</span>
+              <span>
+                {t("registry.captionNote", { count: filteredCatalogs.length })}
+              </span>
+            </div>
+
             {/* Inline Submit */}
             <div className="mt-10 bg-p-paper border border-p-line rounded-[var(--p-r-lg)] p-6">
               <div className="flex flex-col md:flex-row md:items-center gap-4">

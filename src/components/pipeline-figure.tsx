@@ -2,100 +2,257 @@
 
 import { useTranslations } from "next-intl";
 
-// Annotated technical figure: source formats converge on the CLI, land in a
-// bucket, and are read directly by clients. Drawn in the primary blue with
-// mono labels — format and tool names stay Latin in every locale, and the
-// diagram itself never mirrors (dir="ltr").
+// Animated technical figure (ported from the "exploded portolan map" design
+// handoff): legacy sources stream into portolan-cli, standardized output is
+// pushed to a bucket, and consumers read the files directly. Semantic
+// language: solid curves with traveling packets = writes; dashed marching
+// lines = reads. Keyframes (pd-src / pd-flow / pd-march / pd-glow) live in
+// globals.css and are disabled under prefers-reduced-motion.
+//
+// Format and tool names inside the figure stay Latin in every locale, and the
+// diagram never mirrors (dir="ltr"). Canvas geometry is the handoff's fixed
+// 1480x430 grid; the SVG scales with the page and gains a horizontal scroll
+// on narrow screens instead of shrinking below legibility.
+
+const INK = "var(--p-primary)";
+const TEXT = "var(--p-primary-ink)";
+const FAINT = "color-mix(in srgb, var(--p-primary) 45%, transparent)";
+
+// Source boxes: five rows on a 46px rhythm. The last row is a live endpoint
+// (broadcast icon); the rest are files (document icon).
+const SOURCES = [
+  { label: "geotiff", top: 48, live: false },
+  { label: "netcdf", top: 94, live: false },
+  { label: "shapefile", top: 140, live: false },
+  { label: "gpkg", top: 186, live: false },
+  { label: "wfs / arcgis", top: 232, live: true },
+] as const;
+
+const CURVES = [
+  "M250 66 C340 66 390 150 490 152",
+  "M250 112 C340 112 390 157 490 158",
+  "M250 158 C340 158 390 163 490 164",
+  "M250 204 C340 204 390 169 490 169",
+  "M250 250 C340 250 390 175 490 174",
+] as const;
+
+const CONSUMERS = [
+  { label: "DUCKDB", y: 95, read: "M1150 130 L1300 92", delay: "0s" },
+  { label: "BROWSER", y: 185, read: "M1158 178 L1300 180", delay: "0.3s" },
+  { label: "AGENT", y: 273, read: "M1150 226 L1300 268", delay: "0.6s" },
+] as const;
+
+function DocIcon({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`} stroke={INK} strokeWidth="1" fill="none">
+      <path d="M1 1h6l4 4v8H1Z" />
+      <path d="M7 1v4h4" />
+    </g>
+  );
+}
+
+function BroadcastIcon({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <circle cx="7" cy="7" r="1.6" fill={INK} />
+      <path
+        d="M3.2 3.2a5.4 5.4 0 0 1 7.6 0M3.2 10.8a5.4 5.4 0 0 0 7.6 0"
+        fill="none"
+        stroke={INK}
+        strokeWidth="1"
+      />
+    </g>
+  );
+}
+
 export function PipelineFigure() {
   const t = useTranslations("howItWorks");
 
-  const label = { fill: "var(--p-primary-ink)" };
-  const dim = { fill: "var(--p-ink-3)" };
-
   return (
-    <figure
-      dir="ltr"
-      className="m-0 border border-p-line bg-p-paper p-4 pb-2"
-      style={{
-        backgroundImage:
-          "linear-gradient(color-mix(in srgb, var(--p-primary) 6%, transparent) 1px, transparent 1px)," +
-          "linear-gradient(90deg, color-mix(in srgb, var(--p-primary) 6%, transparent) 1px, transparent 1px)",
-        backgroundSize: "22px 22px",
-      }}
-    >
-      <svg
-        viewBox="0 0 880 190"
-        role="img"
-        aria-label={t("figCaption")}
-        className="block w-full h-auto font-mono [&_text]:tracking-[0.08em]"
-        style={{ fontSize: "9px" }}
+    <figure dir="ltr" className="m-0 border border-p-line bg-p-paper p-4 pb-2">
+      <div
+        className="overflow-x-auto"
+        style={{
+          backgroundImage:
+            "radial-gradient(color-mix(in srgb, var(--p-primary) 25%, transparent) 1px, transparent 1.2px)",
+          backgroundSize: "24px 24px",
+        }}
       >
-        {/* source formats */}
-        <g stroke="var(--p-primary)" strokeWidth="1.2" fill="var(--p-paper)">
-          <rect x="16" y="22" width="118" height="26" />
-          <rect x="16" y="58" width="118" height="26" />
-          <rect x="16" y="94" width="118" height="26" />
-          <rect x="16" y="130" width="118" height="26" />
-        </g>
-        <text x="28" y="39" style={label}>shapefile</text>
-        <text x="28" y="75" style={label}>geotiff</text>
-        <text x="28" y="111" style={label}>wfs / gpkg</text>
-        <text x="28" y="147" style={label}>arcgis fs</text>
-        {/* converge on the CLI */}
-        <g stroke="var(--p-primary)" strokeWidth="0.8" fill="none">
-          <path d="M134 35 C 210 35, 220 88, 288 88" />
-          <path d="M134 71 C 200 71, 214 88, 288 88" />
-          <path d="M134 107 C 200 107, 214 90, 288 90" />
-          <path d="M134 143 C 210 143, 220 92, 288 92" />
-        </g>
-        {/* cli box */}
-        <rect
-          x="288"
-          y="58"
-          width="182"
-          height="62"
-          fill="color-mix(in srgb, var(--p-primary) 6%, transparent)"
-          stroke="var(--p-primary)"
-          strokeWidth="1.5"
-        />
-        <text x="306" y="84" style={{ ...label, fontSize: "10.5px", fontWeight: 700 }}>
-          portolan-cli
-        </text>
-        <text x="302" y="102" style={dim}>convert · catalog · check</text>
-        {/* push arrow */}
-        <g stroke="var(--p-primary)" strokeWidth="1" fill="none">
-          <path d="M470 89 L560 89" />
-          <path d="M552 84 L562 89 L552 94" fill="var(--p-primary)" stroke="none" />
-        </g>
-        <text x="480" y="80" style={dim}>push</text>
-        {/* bucket */}
-        <path
-          d="M576 52 L688 52 L680 142 L584 142 Z"
-          fill="var(--p-paper)"
-          stroke="var(--p-primary)"
-          strokeWidth="1.5"
-        />
-        <ellipse
-          cx="632"
-          cy="52"
-          rx="56"
-          ry="9"
-          fill="var(--p-paper)"
-          stroke="var(--p-primary)"
-          strokeWidth="1.5"
-        />
-        <text x="600" y="92" style={label}>s3://…</text>
-        <text x="596" y="110" style={dim}>catalog.json</text>
-        {/* readers */}
-        <g stroke="var(--p-primary)" strokeWidth="0.8" strokeDasharray="3 3" fill="none">
-          <path d="M688 70 L760 40 L790 40" />
-          <path d="M690 97 L790 97" />
-          <path d="M688 124 L760 154 L790 154" />
-        </g>
-        <text x="796" y="44" style={dim}>DUCKDB</text>
-        <text x="796" y="101" style={dim}>BROWSER</text>
-        <text x="796" y="158" style={dim}>AGENT</text>
-      </svg>
+        <svg
+          viewBox="0 18 1480 300"
+          role="img"
+          aria-label={t("figCaption")}
+          className="block w-full h-auto min-w-[960px] font-mono"
+        >
+          {/* source curves (base) */}
+          {CURVES.map((d) => (
+            <path key={d} d={d} fill="none" stroke={FAINT} strokeWidth="1" />
+          ))}
+          {/* source packets (writes) */}
+          {CURVES.map((d, i) => (
+            <path
+              key={`pk-${d}`}
+              d={d}
+              pathLength={100}
+              fill="none"
+              stroke={INK}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeDasharray="10 100"
+              className="pd-src"
+              style={{ animationDelay: `${i * 0.15}s` }}
+            />
+          ))}
+
+          {/* source boxes */}
+          {SOURCES.map((src) => (
+            <g key={src.label}>
+              <rect
+                x="60"
+                y={src.top}
+                width="190"
+                height="36"
+                fill="var(--p-paper)"
+                stroke={INK}
+                strokeWidth="1"
+              />
+              {src.live ? (
+                <BroadcastIcon x={74} y={src.top + 11} />
+              ) : (
+                <DocIcon x={74} y={src.top + 11} />
+              )}
+              <text
+                x="96"
+                y={src.top + 22.5}
+                fontSize="12"
+                letterSpacing="1"
+                fill={TEXT}
+              >
+                {src.label}
+              </text>
+            </g>
+          ))}
+
+          {/* cli box with arrival glow */}
+          <rect
+            x="485.5"
+            y="123.5"
+            width="309"
+            height="109"
+            fill="none"
+            stroke={INK}
+            strokeWidth="5"
+            opacity="0"
+            className="pd-glow"
+          />
+          <rect
+            x="490"
+            y="128"
+            width="300"
+            height="100"
+            fill="color-mix(in srgb, var(--p-primary) 6%, var(--p-paper))"
+            stroke={INK}
+            strokeWidth="1.5"
+          />
+          <text
+            x="640"
+            y="174"
+            textAnchor="middle"
+            fontSize="15"
+            fontWeight="600"
+            letterSpacing="1.5"
+            fill={TEXT}
+          >
+            portolan-cli
+          </text>
+          <text
+            x="640"
+            y="197"
+            textAnchor="middle"
+            fontSize="11"
+            letterSpacing="2"
+            fill={FAINT}
+          >
+            ingest · convert · push
+          </text>
+
+          {/* push stream (uniform, standardized output) */}
+          <path
+            d="M790 168 H944"
+            fill="none"
+            stroke={INK}
+            strokeWidth="2"
+            strokeDasharray="5 9"
+            className="pd-flow"
+          />
+          <path d="M948 162 L962 168 L948 174 Z" fill={INK} />
+          <text
+            x="869"
+            y="150"
+            textAnchor="middle"
+            fontSize="10"
+            letterSpacing="1.5"
+            fill={INK}
+          >
+            cloud-optimized
+          </text>
+
+          {/* s3 bucket */}
+          <path
+            d="M965 105 L978 245 Q1060 263 1142 245 L1155 105"
+            fill="var(--p-paper)"
+            stroke={INK}
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <ellipse
+            cx="1060"
+            cy="105"
+            rx="95"
+            ry="16"
+            fill="var(--p-paper)"
+            stroke={INK}
+            strokeWidth="1.5"
+          />
+          <text
+            x="1060"
+            y="162"
+            textAnchor="middle"
+            fontSize="13"
+            letterSpacing="1"
+            fill={TEXT}
+          >
+            s3://any-bucket
+          </text>
+          <text
+            x="1060"
+            y="185"
+            textAnchor="middle"
+            fontSize="11"
+            fill={FAINT}
+          >
+            catalog.json
+          </text>
+
+          {/* consumer reads (pulls) */}
+          {CONSUMERS.map((c) => (
+            <g key={c.label}>
+              <path
+                d={c.read}
+                fill="none"
+                stroke={FAINT}
+                strokeWidth="1.2"
+                strokeDasharray="5 6"
+                className="pd-march"
+                style={{ animationDelay: c.delay }}
+              />
+              <text x="1312" y={c.y} fontSize="13" letterSpacing="2" fill={INK}>
+                {c.label}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
       <figcaption className="flex justify-between gap-3 mt-3 pt-2 px-1 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
         <span className="text-p-primary">{t("figCaption")}</span>
         <span>{t("figNote")}</span>
