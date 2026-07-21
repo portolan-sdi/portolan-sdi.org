@@ -10,7 +10,8 @@
     "languageAria": "Cambiar idioma",
     "collapse": "Contraer",
     "index": "Índice",
-    "external": "Externo"
+    "external": "Externo",
+    "expand": "Expandir"
   },
   "hero": {
     "title": "El futuro de los datos espaciales",

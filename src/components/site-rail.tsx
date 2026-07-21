@@ -95,7 +95,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           onClick={() => setCollapsed(false)}
           className="fixed top-3.5 start-3.5 z-[45] hidden md:inline-flex items-center gap-2 h-9 px-3 bg-p-bg border border-p-line font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-2 hover:text-p-ink"
         >
-          <span aria-hidden="true">»</span> {t("nav.index")}
+          <span aria-hidden="true">»</span> {t("nav.expand")}
         </button>
       )}
 

@@ -10,7 +10,8 @@
     "languageAria": "Change language",
     "collapse": "Collapse",
     "index": "Index",
-    "external": "External"
+    "external": "External",
+    "expand": "Expand"
   },
   "hero": {
     "title": "The future of spatial data",
