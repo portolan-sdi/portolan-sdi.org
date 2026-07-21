@@ -91,8 +91,6 @@
   },
   "ecosystem": {
     "eyebrow": "Ecosistema",
-    "title": "Todo está en GitHub.",
-    "subtitle": "El estándar define qué es un buen catálogo. El validador lo comprueba, la CLI lo construye, y el navegador y el registro lo hacen fácil de encontrar y usar. Cada parte aumenta el valor de las demás, y todo es <m>Apache-2.0</m>.",
     "projects": {
       "spec": "El estándar. Qué debe ser un catálogo.",
       "reis": "El validador. Comprueba que un catálogo cumple.",
