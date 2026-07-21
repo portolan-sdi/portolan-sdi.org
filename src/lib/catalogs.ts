@@ -27,8 +27,14 @@ export interface CatalogsResponse {
   catalogs: Catalog[];
 }
 
+// Pinned to the last registry commit whose export still carried per-catalog
+// `bbox` (and the flat `catalogs` array this file parses). On 2026-06-30 the
+// registry reshaped the export into a STAC super-catalog and dropped spatial
+// extent entirely, which leaves the map with nothing to plot. Tracking the
+// restore in portolan-registry; unpin back to `main` once bboxes return.
+// https://github.com/portolan-sdi/portolan-registry/issues/36
 const CATALOGS_URL =
-  "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/catalogs.json";
+  "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/6f55bba64afe/exports/catalogs.json";
 
 // Tag the registry fetch so the registry CI can invalidate it on demand
 // (POST /api/revalidate) the moment a new export is published, instead of
