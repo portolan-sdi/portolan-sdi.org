@@ -1,7 +1,30 @@
 # Portolan
 
-The goal of Portolan is to enable organizations to easily share open data in an low-cost, accessible, soveriegn, reliable and user-friendly manner. We are focused on enabling governments, but any organization that wants to share data with the world (or even internally) will benefit from the tools and standards Portolan provides. The effort is run as a collaborative open source project - not controlled by any organization and with open decision-making from the start.
+Portolan is an opinionated standard for publishing geospatial data as
+cloud-native files on object storage, plus the tools that make it real: the
+validator, CLI, browser, and registry. It is not a hosting service. It is open
+source, openly governed, and free.
 
-The core of Portolan is the [cloud native geospatial](https://cloudnativegeo.org) formats, can be hosted on any cloud (or any server that supports range requests). The formats scale incredibly well, and are cheaper than almost any option, as the only costs are for storage and ‘egress’. A small government with mostly vector data will pay just a few dollars a month, and even a full set of imagery and point clouds will likely be less than $50 a month. Organizations like [Source Cooperative](https://source.coop) currently provide free hosting for open data, and Portolan runs easily on those. 
+A Portolan catalog is a directory of open-format data described by structured
+STAC metadata, hosted on any S3-compatible bucket with no servers or databases
+to run. The only cost is storage plus egress. The stack can live inside your
+own jurisdiction, and the plain-text metadata is readable by people, scripts,
+and agents.
 
-Portolan brings together a number of open source projects to make it easier to get data into those formats, and to make the data that is in those formats more friendly and accessible to all. A Portolan node is a set of open geospatial data that as interactive as any geospatial ‘portal’, but is faster, more reliable, more scalable and much cheaper to run. Our goal is to enable thousands of Portolan nodes, and make geospatial information truly accessible. Leveraging standard, accessible formats also enables AI to much more easily take advantage of the information, so Portolan nodes become part of the broader data infrastructure with ease.
+This repository is the Portolan website, published at
+[portolan-sdi.org](https://portolan-sdi.org). It is a Next.js app with content
+in English, Spanish, and Arabic.
+
+## Develop
+
+```bash
+pnpm install
+pnpm dev      # start the dev server
+pnpm build    # production build
+pnpm lint     # eslint
+```
+
+## Links
+
+- Website: [portolan-sdi.org](https://portolan-sdi.org)
+- Source: [github.com/portolan-sdi](https://github.com/portolan-sdi)
