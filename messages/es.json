@@ -1,19 +1,19 @@
 {
   "meta": {
-    "title": "Portolan, infraestructura de datos espaciales nativa de la nube",
-    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos. Sin servidores, sin bases de datos, sin licencias propietarias. Los metadatos estructurados permiten que personas y agentes de IA lean un catálogo y lo consulten directamente."
+    "title": "Portolan, un estándar con criterio para catálogos geoespaciales nativos de la nube",
+    "description": "Portolan es un estándar con criterio para publicar datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que personas y agentes de IA lean un catálogo, lo entiendan y lo consulten directamente. El estándar fija el nivel de calidad, un validador lo hace cumplir y las herramientas abaratan la creación de catálogos."
   },
   "nav": {
     "registry": "Registro",
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
-    "tagline": "Una infraestructura de datos espaciales nativa de la nube."
+    "tagline": "Un estándar con criterio para catálogos geoespaciales nativos de la nube."
   },
   "hero": {
     "title": "El futuro de los datos espaciales",
     "titleAccent": "son solo archivos.",
-    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que personas y agentes de IA lean un catálogo, lo entiendan y lo consulten directamente.",
+    "description": "Portolan es un estándar con criterio para publicar datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. No hay nada a lo que iniciar sesión ni nada de lo que depender. Los metadatos estructurados permiten que personas y agentes de IA lean un catálogo, lo entiendan y lo consulten directamente.",
     "quickstart": "Inicio rápido",
     "browseCatalogs": "Explorar catálogos",
     "stats": {
@@ -26,7 +26,7 @@
   "why": {
     "eyebrow": "Por qué Portolan",
     "title": "El trabajo de una SDI ha cambiado.",
-    "subtitle": "La infraestructura de datos espaciales importa más que nunca. La arquitectura que la sostiene no ha seguido el ritmo.",
+    "subtitle": "La infraestructura de datos espaciales todavía da por sentados servidores, bases de datos y especialistas. Portolan no.",
     "cards": {
       "open": {
         "title": "Abierto",
@@ -34,16 +34,16 @@
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
-        "title": "Listo para IA",
-        "description": "Un agente puede leer el catálogo y responder preguntas sobre él. Archivos de texto simples explican cómo llegar a los datos, y los metadatos estructurados explican qué significan. La <link>demo Finland.SDI</link> muestra esto funcionando sobre una SDI nacional."
+        "title": "Personas y máquinas",
+        "description": "Herramientas más antiguas como WFS y Shapefiles atendían a un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona, un script o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciéndolo sobre una SDI nacional."
       },
       "easy": {
         "title": "Archivos en un bucket",
-        "description": "Una SDI tradicional necesita bases de datos, servicios y personal especializado. Un nodo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica."
+        "description": "Una SDI tradicional necesita bases de datos, servicios y personal especializado para operarlos. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica."
       },
       "scalable": {
         "title": "Escala con el almacenamiento",
-        "description": "El almacenamiento en la nube absorbe la carga, incluido el rastreo a escala de agentes. No hay servidores que dimensionar ni capacidad que planificar. La escala recae en la capa más probada que ofrece cualquier nube."
+        "description": "La misma configuración maneja megabytes o terabytes. No hay servidores que ejecutar, así que escalar es tarea de tu proveedor de nube, no tuya."
       },
       "lowCost": {
         "title": "Dos partidas de gasto",

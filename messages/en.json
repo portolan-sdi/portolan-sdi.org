@@ -1,19 +1,19 @@
 {
   "meta": {
-    "title": "Portolan — Cloud-native spatial data infrastructure",
-    "description": "Portolan publishes geospatial data as plain files on object storage. No servers, no databases, no proprietary licenses. Structured metadata lets people and AI agents read a catalog and query it directly."
+    "title": "Portolan — An opinionated standard for cloud-native geospatial catalogs",
+    "description": "Portolan is an opinionated standard for publishing geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets people and AI agents read a catalog, understand it, and query it directly. The standard sets the quality bar, a validator enforces it, and the tools make catalogs cheap to build."
   },
   "nav": {
     "registry": "Registry",
     "docs": "Docs",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
-    "tagline": "A cloud-native spatial data infrastructure."
+    "tagline": "An opinionated standard for cloud-native geospatial catalogs."
   },
   "hero": {
     "title": "The future of spatial data",
     "titleAccent": "is just files.",
-    "description": "Portolan publishes geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets people and AI agents read a catalog, understand it, and query it directly.",
+    "description": "Portolan is an opinionated standard for publishing geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. There is nothing to log into and nothing to depend on. Structured metadata lets people and AI agents read a catalog, understand it, and query it directly.",
     "quickstart": "Quickstart",
     "browseCatalogs": "Browse catalogs",
     "stats": {
@@ -26,7 +26,7 @@
   "why": {
     "eyebrow": "Why Portolan",
     "title": "The job of an SDI has changed.",
-    "subtitle": "Spatial data infrastructure matters more than ever. The architecture underneath it has not kept up.",
+    "subtitle": "Spatial data infrastructure still assumes servers, databases, and specialists. Portolan doesn't.",
     "cards": {
       "open": {
         "title": "Open",
@@ -34,16 +34,16 @@
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
-        "title": "AI-ready",
-        "description": "An agent can read the catalog and answer questions against it. Plain text files explain how to reach the data, and structured metadata explains what it means. The <link>Finland.SDI demo</link> shows this working against a national SDI."
+        "title": "People and machines",
+        "description": "Older tooling like WFS and Shapefiles served one client at a time. A Portolan catalog describes itself in plain text and structured metadata, so a person, a script, or an agent can find the data and query it with no bespoke API to learn. The <link>Finland.SDI demo</link> shows an agent doing it against a national SDI."
       },
       "easy": {
         "title": "Files in a bucket",
-        "description": "A traditional SDI needs databases, services, and specialist staff. A Portolan node is files in a bucket. Point the CLI at your data, convert, and push."
+        "description": "A traditional SDI needs databases, services, and specialist staff to run them. A Portolan catalog is files in a bucket. Point the CLI at your data, convert, and push."
       },
       "scalable": {
         "title": "Scales with storage",
-        "description": "Cloud storage absorbs the load, including agent-scale crawling. There are no servers to size and no capacity to plan. Scaling falls to the most proven layer any cloud offers."
+        "description": "The same setup handles megabytes or terabytes. There are no servers to run, so scaling is your cloud provider's job, not yours."
       },
       "lowCost": {
         "title": "Two line items",

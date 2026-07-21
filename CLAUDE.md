@@ -4,11 +4,11 @@
 
 ## Identity
 
-**Portolan** is a spatial data infrastructure (SDI) toolkit and set of conventions for publishing geospatial data as cloud-native files on object storage. It is **not** a hosting service — Portolan does not host data. It is open source, openly governed, and free.
+**Portolan** is **an opinionated standard** for publishing geospatial data as cloud-native files on object storage, **plus the tools that make it real** (the validator, CLI, browser, and registry). It is **not** a hosting service — Portolan does not host data. It is open source, openly governed, and free.
 
-Key framing words: **open · sovereign · AI-ready · cheap · cloud-native**.
+The governing noun is **standard**. Portolan is a standard, plus the tools that make it real — "ecosystem" describes the result, not the thing, so keep it a supporting word. Key framing words: **open · sovereign · AI-ready · cheap · cloud-native**.
 
-Avoid framing Portolan as a SaaS, a portal, a product, or a company.
+Avoid framing Portolan as a SaaS, a portal, a product, or a company. Conformance is not a claim you make — it is passing the validator.
 
 ## Visual System (non-negotiable)
 
@@ -36,7 +36,7 @@ disciplined blue accent, distinctive grotesque type, generous whitespace, and
 - **Mobile-first, always.** Start from the single-column small-screen layout, then add `sm:` / `md:` / `lg:` breakpoints. Never write a desktop-only layout.
 - **Section padding:** sections use `px-[var(--p-pad-section-x)]` and `py-[var(--p-pad-section-y)]` (fluid `clamp()` tokens). Do not use the fixed `--p-pad-xl` for section padding.
 - **Grids collapse:** multi-column grids start at `grid-cols-1` and step up (for example `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`).
-- **Shared chrome:** the header and footer come from `SiteHeader` and `SiteFooter`. Do not inline `<header>` / `<footer>` markup in pages. The header is minimal — logo at the start, the mono tagline (`nav.tagline`, "A cloud-native spatial data infrastructure.", centered, hidden below `md`), and the locale control at the end, on solid `--p-bg` with a black rule, no frosted `backdrop-blur`, no nav links, no hamburger. The footer is centered: the logo linking home, the site navigation row (Registry, Docs, GitHub), and the mono tagline. No governance/license/repo meta row (removed July 2026) and no colophon (removed July 2026) — don't reintroduce either, and only real links — never dead spans that look like links.
+- **Shared chrome:** the header and footer come from `SiteHeader` and `SiteFooter`. Do not inline `<header>` / `<footer>` markup in pages. The header is minimal — logo at the start, the mono tagline (`nav.tagline`, "An opinionated standard for cloud-native geospatial catalogs.", centered, hidden below `md`), and the locale control at the end, on solid `--p-bg` with a black rule, no frosted `backdrop-blur`, no nav links, no hamburger. The footer is centered: the logo linking home, the site navigation row (Registry, Docs, GitHub), and the mono tagline. No governance/license/repo meta row (removed July 2026) and no colophon (removed July 2026) — don't reintroduce either, and only real links — never dead spans that look like links.
 
 ## Tech Stack
 
