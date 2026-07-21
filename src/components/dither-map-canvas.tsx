@@ -139,6 +139,11 @@ export default function DitherMapCanvas({
       }
 
       window.addEventListener("resize", handleResize);
+      // The container width also changes when the side rail collapses/expands,
+      // which does not fire a window resize — observe the element directly so
+      // the canvas re-fills the full column instead of leaving a right gutter.
+      const resizeObserver = new ResizeObserver(() => handleResize());
+      resizeObserver.observe(container);
 
       function animate() {
         if (disposed) return;
@@ -159,6 +164,7 @@ export default function DitherMapCanvas({
         disposed = true;
         cancelAnimationFrame(animFrameId);
         window.removeEventListener("resize", handleResize);
+        resizeObserver.disconnect();
         composer.dispose();
         renderer.dispose();
         if (plane) {

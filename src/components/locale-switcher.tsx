@@ -78,7 +78,7 @@ export function LocaleSwitcher() {
       {open ? (
         <div
           role="menu"
-          className="absolute end-0 bottom-full mb-2 min-w-40 py-1 rounded-[var(--p-r-md)] border border-p-line-soft bg-p-bg shadow-[var(--p-shadow-md)] text-small z-50"
+          className="absolute start-0 bottom-full mb-2 min-w-40 py-1 rounded-[var(--p-r-md)] border border-p-line-soft bg-p-bg shadow-[var(--p-shadow-md)] text-small z-50"
         >
           {routing.locales.map((loc) => {
             const isActive = loc === locale;
