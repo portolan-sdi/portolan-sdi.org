@@ -169,18 +169,17 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           </ul>
         </div>
 
-        <div className="border-t border-p-line px-[22px] pt-3.5 pb-[18px] flex flex-col gap-3.5">
+        <div className="border-t border-p-line px-[22px] py-3.5 flex items-center justify-between gap-3">
+          <LocaleSwitcher />
           <button
             type="button"
             onClick={() => setCollapsed(true)}
-            className="hidden md:inline-flex self-start items-center gap-1.5 font-mono text-eyebrow uppercase tracking-[0.06em] text-p-ink-3 hover:text-p-ink"
+            aria-label={t("nav.collapse")}
+            title={t("nav.collapse")}
+            className="hidden md:inline-flex items-center justify-center w-8 h-8 font-mono text-p-ink-3 hover:text-p-ink hover:bg-p-bg-soft transition-colors"
           >
-            <span aria-hidden="true">«</span> {t("nav.collapse")}
+            <span aria-hidden="true" className="text-[15px]">«</span>
           </button>
-          <LocaleSwitcher />
-          <p className="font-mono text-micro text-p-ink-3 m-0">
-            {t("nav.tagline")}
-          </p>
         </div>
       </nav>
 

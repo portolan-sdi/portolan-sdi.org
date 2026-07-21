@@ -8,7 +8,6 @@
     "docs": "Docs",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
-    "tagline": "An opinionated standard for cloud-native geospatial catalogs.",
     "collapse": "Collapse",
     "index": "Index",
     "external": "External"
@@ -62,32 +61,29 @@
   "howItWorks": {
     "eyebrow": "How it works",
     "title": "Point, convert, push.",
-    "subtitle": "A shared set of open formats replaces the server. Cloud storage does the scaling. Browsers, query engines, and AI agents read the files directly.",
     "figCaption": "Fig. 2.1 — The pipeline",
-    "figNote": "One command per stage",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Convert shapefiles, GeoTIFFs, WFS, GeoPackage, and ArcGIS Feature Services into cloud-native formats. Vectors become <m>GeoParquet</m>, rasters become <m>COG</m>, and map tiles become <m>PMTiles</m>."
+        "description": "Any input becomes cloud-native, legacy formats or new ones alike. Vectors turn into <m>GeoParquet</m>, rasters into <m>COG</m>, tiles into <m>PMTiles</m>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalog",
-        "description": "Generate a <m>STAC</m>-based catalog that describes every asset with structured metadata. Any <m>STAC</m> tool can read it."
+        "description": "A <m>STAC</m> catalog describes every asset, so any <m>STAC</m> tool can read it."
       },
       "publish": {
         "id": "03",
         "title": "Publish",
-        "description": "Push the files to any S3-compatible object storage. That includes AWS, GCS, Azure, R2, MinIO, and Source Cooperative for free open data hosting."
+        "description": "Push the files to any S3-compatible storage, from AWS, GCS, and Azure to R2, MinIO, or Source Cooperative."
       },
       "browse": {
         "id": "04",
-        "title": "Browse",
-        "description": "Open the catalog in the Portolan browser or any STAC viewer, query it with DuckDB, or point an agent at the URL. The data answers questions directly."
+        "title": "Use",
+        "description": "Use it with standard geospatial tools like DuckDB, Sedona, and QGIS, or point an agent at the URL."
       }
-    },
-    "worksWith": "Works with your existing tools"
+    }
   },
   "ecosystem": {
     "eyebrow": "Ecosystem",

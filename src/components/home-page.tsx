@@ -206,26 +206,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     "browse",
   ] as const;
 
-  // Tools you can consume a Portolan catalog with. These are interoperable with
-  // Portolan but not part of it, so they live here (annotating the pipeline)
-  // rather than in the Ecosystem section, which is the Portolan projects only.
-  const consumeTools = [
-    "DuckDB",
-    "BigQuery",
-    "Snowflake",
-    "Apache Sedona",
-    "QGIS",
-    "ArcGIS Pro",
-    "Felt",
-    "GDAL",
-    "GeoPandas",
-    "rasterio",
-    "loaders.gl",
-    "STAC Browser",
-    "stac-geoparquet",
-    "pystac",
-  ] as const;
-
   return (
     <SiteShell>
       {/* Hero */}
@@ -336,7 +316,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           <SectionHead
             eyebrow={t("howItWorks.eyebrow")}
             title={t("howItWorks.title")}
-            subtitle={t("howItWorks.subtitle")}
           />
           <div className="mb-[var(--p-pad-lg)]">
             <PipelineFigure />
@@ -375,15 +354,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               ))}
             </div>
           </div>
-          <p className="mt-6 font-mono text-micro text-p-ink-3 leading-relaxed">
-            {t("howItWorks.worksWith")}
-            {consumeTools.map((tool) => (
-              <span key={tool}>
-                {" · "}
-                <Ltr>{tool}</Ltr>
-              </span>
-            ))}
-          </p>
           <PublishPaths />
         </div>
       </section>

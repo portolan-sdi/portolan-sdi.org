@@ -253,9 +253,8 @@ export function PipelineFigure() {
           ))}
         </svg>
       </div>
-      <figcaption className="flex justify-between gap-3 mt-3 pt-2 px-1 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
-        <span className="text-p-primary">{t("figCaption")}</span>
-        <span>{t("figNote")}</span>
+      <figcaption className="mt-3 pt-2 px-1 border-t border-p-line-soft font-mono text-eyebrow text-p-primary">
+        {t("figCaption")}
       </figcaption>
     </figure>
   );

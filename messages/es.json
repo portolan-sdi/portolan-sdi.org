@@ -8,7 +8,6 @@
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
-    "tagline": "Un estándar con criterio para catálogos geoespaciales nativos de la nube.",
     "collapse": "Contraer",
     "index": "Índice",
     "external": "Externo"
@@ -62,32 +61,29 @@
   "howItWorks": {
     "eyebrow": "Cómo funciona",
     "title": "Apunta, convierte, publica.",
-    "subtitle": "Un conjunto compartido de formatos abiertos reemplaza al servidor. El almacenamiento en la nube se encarga de la escala. Los navegadores, los motores de consulta y los agentes de IA leen los archivos directamente.",
     "figCaption": "Fig. 2.1 · El proceso",
-    "figNote": "Un comando por etapa",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convertir",
-        "description": "Convierte shapefiles, GeoTIFF, WFS, GeoPackage y ArcGIS Feature Services en formatos nativos de la nube. Los vectores se vuelven <m>GeoParquet</m>, los rásteres <m>COG</m> y las teselas de mapa <m>PMTiles</m>."
+        "description": "Cualquier entrada se vuelve nativa de la nube, ya sean formatos heredados o nuevos. Los vectores pasan a <m>GeoParquet</m>, los rásteres a <m>COG</m> y las teselas a <m>PMTiles</m>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalogar",
-        "description": "Genera un catálogo basado en <m>STAC</m> que describe cada activo con metadatos estructurados. Cualquier herramienta <m>STAC</m> puede leerlo."
+        "description": "Un catálogo <m>STAC</m> describe cada activo, así que cualquier herramienta <m>STAC</m> puede leerlo."
       },
       "publish": {
         "id": "03",
         "title": "Publicar",
-        "description": "Envía los archivos a cualquier almacenamiento de objetos compatible con S3. Eso incluye AWS, GCS, Azure, R2, MinIO y Source Cooperative para alojamiento gratuito de datos abiertos."
+        "description": "Sube los archivos a cualquier almacenamiento compatible con S3, desde AWS, GCS y Azure hasta R2, MinIO o Source Cooperative."
       },
       "browse": {
         "id": "04",
-        "title": "Explorar",
-        "description": "Abre el catálogo en el navegador de Portolan o en cualquier visor STAC, consúltalo con DuckDB o dirige un agente a la URL. Los datos responden preguntas directamente."
+        "title": "Usar",
+        "description": "Úsalo con herramientas geoespaciales estándar como DuckDB, Sedona y QGIS, o apunta un agente a la URL."
       }
-    },
-    "worksWith": "Funciona con tus herramientas"
+    }
   },
   "ecosystem": {
     "eyebrow": "Ecosistema",
