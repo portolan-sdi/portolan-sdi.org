@@ -113,18 +113,15 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <nav
         aria-label={t("nav.homeAria")}
         inert={railOffCanvas || undefined}
-        className={`site-rail ${railStateClass} fixed inset-block-0 inset-inline-start-0 z-40 flex flex-col w-[min(86vw,320px)] md:w-[var(--p-rail)] bg-p-bg border-e border-p-line`}
+        className={`site-rail ${railStateClass} fixed inset-y-0 start-0 z-40 flex flex-col w-[min(86vw,320px)] md:w-[var(--p-rail)] bg-p-bg border-e border-p-line`}
       >
         <Link
           href="/"
           aria-label={t("nav.homeAria")}
           onClick={closeDrawer}
-          className="flex items-center gap-2.5 px-[22px] py-5 border-b border-p-line"
+          className="flex items-center px-[22px] py-5 border-b border-p-line"
         >
           <PortolanLogo size={26} />
-          <span className="font-semibold text-[17px] tracking-[-0.01em]">
-            Portolan
-          </span>
         </Link>
 
         <div className="flex-1 overflow-y-auto py-3.5">
