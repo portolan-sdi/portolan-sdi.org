@@ -285,9 +285,9 @@ body {
 
 /* --- Primary side rail navigation (replaces header + footer nav) ---------
    The rail is off-canvas by default (mobile drawer, opened with .is-open).
-   From md up it is pinned and content is inset by --p-rail; collapsing it
-   (.is-collapsed) slides it away and reclaims the full width. Transforms are
-   direction-aware so the rail hides toward its own inline-start edge. */
+   From md up it is permanently pinned and content is inset by --p-rail.
+   Transforms are direction-aware so the rail hides toward its own
+   inline-start edge below md. */
 .site-rail {
   transform: translateX(-100%);
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -303,22 +303,10 @@ body {
   [dir="rtl"] .site-rail {
     transform: translateX(0);
   }
-  .site-rail.is-collapsed {
-    transform: translateX(-100%);
-  }
-  [dir="rtl"] .site-rail.is-collapsed {
-    transform: translateX(100%);
-  }
-}
-.site-main {
-  transition: margin 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 @media (min-width: 768px) {
   .site-main {
     margin-inline-start: var(--p-rail);
-  }
-  .site-main.is-collapsed {
-    margin-inline-start: 0;
   }
 }
 
@@ -347,6 +335,24 @@ body {
     offset-distance: 100%;
   }
 }
+@keyframes tk-nodefloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes tk-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
 .tk-wave > * {
   animation: tk-drift 3.2s linear infinite;
 }
@@ -360,11 +366,21 @@ body {
 .tk-dot {
   animation: tk-pulse 2.6s ease-in-out infinite;
 }
+.tk-float {
+  animation: tk-nodefloat 4.5s ease-in-out infinite;
+}
+.tk-bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: tk-bar 2.6s ease-in-out infinite;
+}
 @media (prefers-reduced-motion: reduce) {
   .tk-wave > *,
   .tk-march,
   .tk-packet,
-  .tk-dot {
+  .tk-dot,
+  .tk-float,
+  .tk-bar {
     animation: none;
   }
 }
@@ -388,12 +404,86 @@ body {
   background-color: var(--p-ink);
 }
 
-/* --- Ecosystem project cards: subtle lift on hover ----------------------- */
+/* --- Ecosystem project cards -------------------------------------------- */
+/* Staggered pulse ring on each card's square status marker. Grows from the
+   marker's own size out to ~2.6x while fading — the square-cornered take on
+   the design's blip dot. Delay is set per-card inline (index * 0.35s). */
+@keyframes ec-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.ec-ping {
+  animation: ec-ping 4.2s ease-out infinite;
+}
+/* Cards rest raised on a hard blue offset shadow; hover presses them flush,
+   as if the card were clicked. Direction-aware so the shadow sits on the
+   reading-forward (inline-end) side. */
+.ec-card {
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 var(--p-primary);
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    border-color 0.14s ease;
+}
+.ec-card:hover {
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 0 var(--p-primary);
+  border-color: var(--p-line-strong);
+}
+[dir="rtl"] .ec-card {
+  transform: translate(3px, -3px);
+  box-shadow: -5px 5px 0 var(--p-primary);
+}
+[dir="rtl"] .ec-card:hover {
+  transform: translate(0, 0);
+}
+
+/* Talk/demo poster cards flip on hover/focus to reveal the quote or blurb;
+   the whole card is the link. */
+.tk-flip {
+  perspective: 1200px;
+}
+.tk-flip__inner {
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tk-flip:hover .tk-flip__inner,
+.tk-flip:focus-within .tk-flip__inner {
+  transform: rotateY(180deg);
+}
+.tk-flip__face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+/* Also cull every descendant of a face — otherwise a positioned/z-indexed
+   child can be promoted to its own layer and bleed through mirrored when the
+   card is flipped. */
+.tk-flip__face * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.tk-flip__back {
+  transform: rotateY(180deg);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .ec-lift {
+  .ec-card {
     transition: none;
   }
-  .ec-lift:hover {
-    transform: none;
+  .tk-flip__inner {
+    transition: none;
+  }
+  .ec-ping {
+    animation: none;
   }
 }

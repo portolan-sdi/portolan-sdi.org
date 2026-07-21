@@ -8,10 +8,8 @@
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
-    "collapse": "Contraer",
     "index": "Índice",
-    "external": "Externo",
-    "expand": "Expandir"
+    "external": "Externo"
   },
   "hero": {
     "title": "El futuro de los datos espaciales",
@@ -37,15 +35,18 @@
       },
       "aiFirst": {
         "title": "Legible por personas y máquinas",
-        "description": "Herramientas más antiguas como WFS y Shapefiles se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona, un script o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional."
+        "description": "Herramientas más antiguas como WFS y Shapefiles se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona, un script o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional.",
+        "tag": "autodescriptivo"
       },
       "easy": {
         "title": "Simple",
-        "description": "La infraestructura de datos espaciales tradicional necesita bases de datos, servicios y personal para operarla. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica."
+        "description": "La infraestructura de datos espaciales tradicional necesita bases de datos, servicios y personal para operarla. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica.",
+        "tag": "archivos en un bucket"
       },
       "scalable": {
         "title": "Escala con tu almacenamiento",
-        "description": "La misma configuración maneja megabytes o terabytes. No hay servidores que ejecutar, así que escalar es tarea de tu proveedor de nube, no tuya."
+        "description": "La misma configuración maneja megabytes o terabytes. No hay servidores que ejecutar, así que escalar es tarea de tu proveedor de nube, no tuya.",
+        "tag": "MB → TB"
       },
       "lowCost": {
         "title": "Bajo costo",
@@ -61,7 +62,7 @@
   },
   "howItWorks": {
     "eyebrow": "Cómo funciona",
-    "title": "Apunta, convierte, publica.",
+    "title": "Ingiere, convierte, publica.",
     "figCaption": "Fig. 2.1 · El proceso",
     "steps": {
       "convert": {
@@ -88,6 +89,11 @@
   },
   "ecosystem": {
     "eyebrow": "Ecosistema",
+    "title": "Hecho para crecer.",
+    "count": "{count} proyectos",
+    "legendCore": "núcleo",
+    "legendCommunity": "comunidad",
+    "submit": "Proponer una herramienta",
     "projects": {
       "spec": "El estándar. Qué debe ser un catálogo.",
       "reis": "El validador. Comprueba que un catálogo cumple.",
@@ -200,10 +206,21 @@
         "attribution": "Javier de la Torre · OGC Connect Helsinki",
         "quote": "«Las SDI se construyeron para expertos. Ahora deben servir a los agentes.»",
         "description": "Por qué la desintermediación hace a las SDI más importantes que nunca, y la arquitectura que necesitan. La demo en vivo del agente Finland.SDI cierra la charla."
+      },
+      "finlandDemo": {
+        "title": "Demo del agente Finland.SDI",
+        "attribution": "Demo en vivo · CARTO",
+        "description": "Un agente de IA responde preguntas sobre una SDI nacional leyendo directamente de su catálogo, sin una API a medida de por medio."
+      },
+      "costCalc": {
+        "title": "Calculadora de costos",
+        "attribution": "Interactiva · Open Geodag",
+        "description": "Estima cuánto cuesta publicar tus datos como Portolan. Todo el presupuesto es almacenamiento más salida, nada más."
       }
     },
     "watch": "Ver las diapositivas",
     "scrollPrev": "Anterior",
-    "scrollNext": "Siguiente"
+    "scrollNext": "Siguiente",
+    "openDemo": "Abrir la demo"
   }
 }

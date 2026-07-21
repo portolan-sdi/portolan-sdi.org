@@ -190,13 +190,15 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
   // `tag` is deliberately ragged: only some cards carry a bottom mono tag so
   // the grid doesn't read as a uniform template.
+  // Six principles, one ledger row each — title · body · mono tag. Order is
+  // deliberate, not ranked (no numbers, no bullets).
   const whyCards = [
-    { key: "open", tag: true },
-    { key: "aiFirst", tag: false },
-    { key: "easy", tag: false },
-    { key: "scalable", tag: false },
-    { key: "lowCost", tag: true },
-    { key: "sovereign", tag: true },
+    "open",
+    "aiFirst",
+    "easy",
+    "scalable",
+    "lowCost",
+    "sovereign",
   ] as const;
 
   const howSteps = [
@@ -260,52 +262,40 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
           <SectionHead eyebrow={t("why.eyebrow")} title={t("why.title")} wide />
-          <div className="border-t border-p-line-strong">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {whyCards.map((card) => (
-                <div
-                  key={card.key}
-                  className="grid content-start gap-3 py-7 border-b border-p-line
-                    sm:border-s sm:border-p-line
-                    sm:[&:nth-child(2n+1)]:border-s-0
-                    lg:[&:nth-child(3n+1)]:border-s-0
-                    lg:[&:nth-child(3n+2)]:border-s
-                    lg:[&:nth-child(3n)]:border-s
-                    sm:px-[clamp(1rem,2.5vw,2.5rem)]
-                    sm:[&:nth-child(2n+1)]:ps-0
-                    lg:[&:nth-child(3n+1)]:ps-0
-                    lg:[&:nth-child(3n+2)]:ps-[clamp(1rem,2.5vw,2.5rem)]
-                    lg:[&:nth-child(3n)]:ps-[clamp(1rem,2.5vw,2.5rem)]"
-                >
-                  <h3 className="text-card-title-lg font-bold tracking-[-0.02em]">
-                    {t(`why.cards.${card.key}.title`)}
-                  </h3>
-                  <p className="text-body leading-relaxed">
-                    {t.rich(`why.cards.${card.key}.description`, {
-                      m: monoChunk,
-                      link: (chunks) =>
-                        whyCardLinks[card.key] ? (
-                          <a
-                            href={whyCardLinks[card.key]}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-p-primary border-b border-p-primary/35 hover:border-p-primary"
-                          >
-                            {chunks}
-                          </a>
-                        ) : (
-                          <>{chunks}</>
-                        ),
-                    })}
-                  </p>
-                  {card.tag && (
-                    <span className="font-mono text-micro text-p-ink-3 mt-1">
-                      {t(`why.cards.${card.key}.tag`)}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
+          {/* Ledger: six principles, one row each. Near-black top rule, soft
+              interior rules. Rows nudge start-ward + tint faintly on hover. */}
+          <div className="border-t border-p-line-strong overflow-clip">
+            {whyCards.map((key) => (
+              <div
+                key={key}
+                className="group grid grid-cols-1 gap-2 border-b border-p-line px-2 py-6 [will-change:transform] transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[color-mix(in_srgb,var(--p-primary)_4%,var(--p-paper))] hover:translate-x-2 rtl:hover:-translate-x-2 md:grid-cols-[minmax(0,300px)_minmax(0,1fr)_minmax(0,200px)] md:items-baseline md:gap-8 md:py-[26px]"
+              >
+                <h3 className="text-card-title font-bold tracking-[-0.02em]">
+                  {t(`why.cards.${key}.title`)}
+                </h3>
+                <p className="text-body text-p-ink-2 leading-relaxed text-pretty">
+                  {t.rich(`why.cards.${key}.description`, {
+                    m: monoChunk,
+                    link: (chunks) =>
+                      whyCardLinks[key] ? (
+                        <a
+                          href={whyCardLinks[key]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-p-primary border-b border-p-primary/35 hover:border-p-primary"
+                        >
+                          {chunks}
+                        </a>
+                      ) : (
+                        <>{chunks}</>
+                      ),
+                  })}
+                </p>
+                <span className="font-mono text-micro text-p-primary md:justify-self-end md:text-end">
+                  {t(`why.cards.${key}.tag`)}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -320,39 +310,42 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           <div className="mb-[var(--p-pad-lg)]">
             <PipelineFigure />
           </div>
-          <div className="border-t border-p-line-strong">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-              {howSteps.map((step) => (
-                <div
-                  key={step}
-                  className="grid content-start gap-3 py-7 border-b border-p-line
-                    sm:border-s sm:border-p-line
-                    sm:[&:nth-child(2n+1)]:border-s-0
-                    lg:[&:nth-child(4n+1)]:border-s-0
-                    lg:[&:nth-child(4n+2)]:border-s
-                    lg:[&:nth-child(4n+3)]:border-s
-                    lg:[&:nth-child(4n)]:border-s
-                    sm:px-[clamp(1rem,2.5vw,2rem)]
-                    sm:[&:nth-child(2n+1)]:ps-0
-                    lg:[&:nth-child(4n+1)]:ps-0
-                    lg:[&:nth-child(4n+2)]:ps-[clamp(1rem,2.5vw,2rem)]
-                    lg:[&:nth-child(4n+3)]:ps-[clamp(1rem,2.5vw,2rem)]
-                    lg:[&:nth-child(4n)]:ps-[clamp(1rem,2.5vw,2rem)]"
-                >
-                  <span className="font-mono text-eyebrow text-p-primary tracking-[0.04em]">
+          {/* Stepper strip: four cells in one near-black frame, soft interior
+              dividers (wrap-aware for the 1/2/4-col responsive steps), faint
+              tint on hover. Number badge (mono, reversed) + title + a
+              reading-forward arrow on every cell but the last. */}
+          <div className="border border-p-line-strong grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {howSteps.map((step, i) => (
+              <div
+                key={step}
+                className="group p-6 border-p-line transition-colors duration-300
+                  border-b [&:last-child]:border-b-0
+                  sm:[&:nth-child(2n)]:border-s
+                  sm:[&:nth-child(n+3)]:border-b-0
+                  lg:border-b-0
+                  lg:[&:not(:first-child)]:border-s
+                  hover:bg-[color-mix(in_srgb,var(--p-primary)_4%,var(--p-paper))]"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="font-mono text-eyebrow text-p-bg bg-p-primary px-1.5 py-0.5 leading-none tracking-[0.04em] rtl:tracking-normal">
                     {t(`howItWorks.steps.${step}.id`)}
                   </span>
                   <h3 className="text-card-title font-bold tracking-[-0.02em]">
                     {t(`howItWorks.steps.${step}.title`)}
                   </h3>
-                  <p className="text-body leading-relaxed">
-                    {t.rich(`howItWorks.steps.${step}.description`, {
-                      m: monoChunk,
-                    })}
-                  </p>
+                  {i < howSteps.length - 1 && (
+                    <span aria-hidden className="ms-auto text-p-ink-3">
+                      <DirArrow />
+                    </span>
+                  )}
                 </div>
-              ))}
-            </div>
+                <p className="text-body text-p-ink-2 leading-relaxed text-pretty mt-3">
+                  {t.rich(`howItWorks.steps.${step}.description`, {
+                    m: monoChunk,
+                  })}
+                </p>
+              </div>
+            ))}
           </div>
           <PublishPaths />
         </div>

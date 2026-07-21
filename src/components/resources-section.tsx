@@ -22,26 +22,33 @@ const POSTER_WASH: React.CSSProperties = {
   `,
 };
 
-// Exactly two talks today. The demos, the cost calculator, and the example
-// catalogs are linked from inside these decks — the track is built to take more
-// cards later, but resist padding it with filler.
-const TALKS = [
-  { key: "holmesTalk", href: "https://cholmes.github.io/open-geodag-presentation/", motif: "flow" },
-  { key: "nextSdi", href: "https://jatorre.github.io/carto-ogc-helsinki/", motif: "wave" },
+// Talks (flip to a pulled quote) and demos (flip to a one-line blurb). The two
+// demos are the same live links surfaced in "Why Portolan"; they belong here as
+// demos too, and they make the track read denser. Built to take more cards.
+const ITEMS = [
+  { key: "holmesTalk", href: "https://cholmes.github.io/open-geodag-presentation/", motif: "flow", type: "talk" },
+  { key: "nextSdi", href: "https://jatorre.github.io/carto-ogc-helsinki/", motif: "wave", type: "talk" },
+  { key: "finlandDemo", href: "https://jatorre.github.io/carto-ogc-helsinki/webapp/", motif: "nodes", type: "demo" },
+  { key: "costCalc", href: "https://cholmes.github.io/open-geodag-presentation/calculator.html", motif: "bars", type: "demo" },
 ] as const;
 
 const FLOW_PATH = "M20 210 C 120 120, 220 300, 380 150";
+const SVG_PROPS = {
+  viewBox: "0 0 400 500",
+  preserveAspectRatio: "xMidYMid slice",
+  "aria-hidden": true,
+  className: "absolute inset-0 w-full h-full [backface-visibility:hidden]",
+} as const;
 
-function PosterMotif({ motif }: { motif: (typeof TALKS)[number]["motif"] }) {
+// Four distinct stroke motifs from the annotated-figure family, one per card:
+// flow (marching data path + travelling packet), wave (drifting contours),
+// nodes (a floating graph — for the agent demo), bars (pulsing columns — for
+// the cost calculator). All animation is disabled under reduced-motion.
+function PosterMotif({ motif }: { motif: (typeof ITEMS)[number]["motif"] }) {
   if (motif === "wave") {
     const wave = "M-30 150 q 52 -30 104 0 t 104 0 t 104 0 t 104 0 t 104 0";
     return (
-      <svg
-        viewBox="0 0 400 500"
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full"
-      >
+      <svg {...SVG_PROPS}>
         <g className="tk-wave" fill="none" strokeWidth="1.25">
           <path d={wave} stroke={PRIMARY} transform="translate(0 0)" />
           <path d={wave} stroke={PRIMARY_2} transform="translate(0 70)" />
@@ -51,26 +58,58 @@ function PosterMotif({ motif }: { motif: (typeof TALKS)[number]["motif"] }) {
       </svg>
     );
   }
+
+  if (motif === "nodes") {
+    const n: [number, number][] = [
+      [70, 130], [190, 90], [310, 165], [120, 270], [255, 300], [345, 250], [80, 380],
+    ];
+    const e: [number, number][] = [
+      [0, 1], [1, 2], [0, 3], [3, 4], [4, 2], [4, 5], [3, 6], [6, 4], [2, 5],
+    ];
+    return (
+      <svg {...SVG_PROPS}>
+        <g className="tk-float">
+          {e.map(([a, b], i) => (
+            <line key={i} x1={n[a][0]} y1={n[a][1]} x2={n[b][0]} y2={n[b][1]} stroke={PRIMARY_2} strokeWidth="1" />
+          ))}
+          {n.map(([x, y], i) => (
+            <circle key={i} cx={x} cy={y} r={i % 3 === 0 ? 5 : 3.5} fill={i % 2 ? PRIMARY_2 : PRIMARY} />
+          ))}
+        </g>
+      </svg>
+    );
+  }
+
+  if (motif === "bars") {
+    return (
+      <svg {...SVG_PROPS}>
+        <g>
+          {Array.from({ length: 7 }, (_, i) => {
+            const x = 34 + i * 52;
+            const h = 80 + ((i * 61) % 150);
+            return (
+              <rect
+                key={i}
+                className="tk-bar"
+                x={x}
+                y={430 - h}
+                width="24"
+                height={h}
+                fill={i % 2 ? PRIMARY_2 : PRIMARY}
+                style={{ animationDelay: `${(i * 0.22).toFixed(2)}s` }}
+              />
+            );
+          })}
+        </g>
+      </svg>
+    );
+  }
+
+  // flow (default)
   return (
-    <svg
-      viewBox="0 0 400 500"
-      preserveAspectRatio="xMidYMid slice"
-      aria-hidden="true"
-      className="absolute inset-0 w-full h-full"
-    >
-      <path
-        className="tk-march"
-        d={FLOW_PATH}
-        fill="none"
-        stroke={PRIMARY}
-        strokeWidth="1.5"
-      />
-      <path
-        d="M20 260 C 120 180, 240 340, 380 220"
-        fill="none"
-        stroke={PRIMARY_2}
-        strokeWidth="1"
-      />
+    <svg {...SVG_PROPS}>
+      <path className="tk-march" d={FLOW_PATH} fill="none" stroke={PRIMARY} strokeWidth="1.5" />
+      <path d="M20 260 C 120 180, 240 340, 380 220" fill="none" stroke={PRIMARY_2} strokeWidth="1" />
       <circle
         className="tk-packet"
         r="5"
@@ -127,9 +166,82 @@ export function ResourcesSection() {
       id="resources"
       className="py-[var(--p-pad-section-y)] bg-p-bg-soft border-y border-p-line"
     >
-      <div className="max-w-[1440px] mx-auto">
-        <div className="px-[var(--p-pad-section-x)] flex items-center justify-between gap-6">
-          <p className="font-mono text-eyebrow text-p-ink-3">{t("eyebrow")}</p>
+      <div className="max-w-[1440px] mx-auto px-[var(--p-pad-section-x)]">
+        <p className="font-mono text-eyebrow text-p-ink-3">{t("eyebrow")}</p>
+
+        {/* Track is left-aligned to the content column (matches the eyebrow);
+            it bleeds only past the inline-end edge so cards run off toward the
+            scroll direction. */}
+        <div
+          ref={trackRef}
+          onScroll={updateEdges}
+          className="mt-8 flex gap-5 overflow-x-auto snap-x snap-mandatory py-2 pe-[var(--p-pad-section-x)] -me-[var(--p-pad-section-x)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {ITEMS.map((item) => {
+            const isTalk = item.type === "talk";
+            const back = isTalk
+              ? stripOuterQuotes(t(`items.${item.key}.quote`))
+              : t(`items.${item.key}.description`);
+            return (
+              <a
+                key={item.key}
+                data-card
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="tk-flip group relative block shrink-0 grow-0 basis-[clamp(280px,78vw,380px)] snap-start"
+              >
+                <div className="tk-flip__inner relative w-full aspect-[4/5]">
+                  {/* Front — poster. Content is positioned AFTER the motif (no
+                      z-index) so it paints on top without a stacking context
+                      that could bleed through when flipped. */}
+                  <div
+                    dir="ltr"
+                    className="tk-flip__face absolute inset-0 overflow-hidden border border-p-line"
+                    style={POSTER_WASH}
+                  >
+                    <PosterMotif motif={item.motif} />
+                    <div className="absolute inset-0 flex flex-col p-[18px]">
+                      <p className="font-mono text-micro text-p-ink-3 tracking-[0.02em]">
+                        <Ltr>{t(`items.${item.key}.attribution`)}</Ltr>
+                      </p>
+                      <h3 className="mt-auto text-card-title-lg font-bold tracking-[-0.01em] leading-[1.12] text-p-ink">
+                        <Ltr>{t(`items.${item.key}.title`)}</Ltr>
+                      </h3>
+                    </div>
+                  </div>
+                  {/* Back — inverts to solid blue with a large pulled quote
+                      (talk) or blurb (demo). */}
+                  <div className="tk-flip__back tk-flip__face absolute inset-0 flex flex-col border border-p-line bg-p-primary p-6 text-p-on-primary">
+                    <p className="font-mono text-micro tracking-[0.02em] text-p-on-primary/70">
+                      <Ltr>{t(`items.${item.key}.attribution`)}</Ltr>
+                    </p>
+                    <div className="flex flex-1 items-center py-3">
+                      {isTalk ? (
+                        <blockquote className="text-feature font-bold leading-[1.12] text-p-on-primary">
+                          <span className="text-p-on-primary/55">“</span>
+                          {back}
+                          <span className="text-p-on-primary/55">”</span>
+                        </blockquote>
+                      ) : (
+                        <p className="text-feature font-bold leading-[1.12] text-p-on-primary">
+                          {back}
+                        </p>
+                      )}
+                    </div>
+                    <span className="inline-flex items-center gap-2 font-mono text-micro uppercase tracking-[0.06em] rtl:tracking-normal text-p-on-primary group-hover:gap-3 transition-all">
+                      {isTalk ? t("watch") : t("openDemo")}{" "}
+                      <DirArrow kind="external" />
+                    </span>
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Scroller — bottom-end, aligned to the content column */}
+        <div className="mt-8 flex justify-end">
           <div className="flex border border-p-line" role="group" aria-label={t("eyebrow")}>
             <button
               type="button"
@@ -154,50 +266,6 @@ export function ResourcesSection() {
               </svg>
             </button>
           </div>
-        </div>
-
-        <div
-          ref={trackRef}
-          onScroll={updateEdges}
-          className="mt-11 flex gap-5 overflow-x-auto snap-x snap-mandatory px-[var(--p-pad-section-x)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {TALKS.map((talk) => {
-            const quote = stripOuterQuotes(t(`items.${talk.key}.quote`));
-            return (
-              <a
-                key={talk.key}
-                data-card
-                href={talk.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group snap-start shrink-0 grow-0 basis-[clamp(280px,78vw,400px)] border border-p-line bg-p-paper flex flex-col"
-              >
-                <div
-                  dir="ltr"
-                  className="relative aspect-[4/5] overflow-hidden border-b border-p-line"
-                  style={POSTER_WASH}
-                >
-                  <PosterMotif motif={talk.motif} />
-                  <h3 className="absolute bottom-4 inset-x-4 z-[2] text-card-title-lg font-bold tracking-[-0.01em] leading-[1.12] text-p-ink">
-                    <Ltr>{t(`items.${talk.key}.title`)}</Ltr>
-                  </h3>
-                </div>
-                <div className="p-[18px] flex flex-col gap-3 flex-1">
-                  <p className="font-mono text-micro text-p-ink-3 tracking-[0.02em]">
-                    <Ltr>{t(`items.${talk.key}.attribution`)}</Ltr>
-                  </p>
-                  <blockquote className="text-body-lg font-medium leading-[1.4] text-p-ink-2">
-                    <span className="text-p-primary">“</span>
-                    {quote}
-                    <span className="text-p-primary">”</span>
-                  </blockquote>
-                  <span className="mt-auto inline-flex items-center gap-2 font-mono text-micro uppercase tracking-[0.06em] rtl:tracking-normal text-p-primary group-hover:gap-3 transition-all">
-                    {t("watch")} <DirArrow kind="external" />
-                  </span>
-                </div>
-              </a>
-            );
-          })}
         </div>
       </div>
     </section>

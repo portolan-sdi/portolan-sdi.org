@@ -8,10 +8,8 @@
     "docs": "Docs",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
-    "collapse": "Collapse",
     "index": "Index",
-    "external": "External",
-    "expand": "Expand"
+    "external": "External"
   },
   "hero": {
     "title": "The future of spatial data",
@@ -37,15 +35,18 @@
       },
       "aiFirst": {
         "title": "Readable by people and machines",
-        "description": "Older tooling like WFS and Shapefiles was built for one client at a time. A Portolan catalog describes itself in plain text and structured metadata, so a person, a script, or an agent can find the data and query it without a bespoke API to learn. The <link>Finland.SDI demo</link> shows an agent doing exactly that against a national SDI."
+        "description": "Older tooling like WFS and Shapefiles was built for one client at a time. A Portolan catalog describes itself in plain text and structured metadata, so a person, a script, or an agent can find the data and query it without a bespoke API to learn. The <link>Finland.SDI demo</link> shows an agent doing exactly that against a national SDI.",
+        "tag": "self-describing"
       },
       "easy": {
         "title": "Simple",
-        "description": "Traditional spatial data infrastructure needs databases, services, and staff to run them. A Portolan catalog is files in a bucket. Point the CLI at your data, convert, and push."
+        "description": "Traditional spatial data infrastructure needs databases, services, and staff to run them. A Portolan catalog is files in a bucket. Point the CLI at your data, convert, and push.",
+        "tag": "files in a bucket"
       },
       "scalable": {
         "title": "Scales with your storage",
-        "description": "The same setup handles megabytes or terabytes. There are no servers to run, so scaling is your cloud provider's job, not yours."
+        "description": "The same setup handles megabytes or terabytes. There are no servers to run, so scaling is your cloud provider's job, not yours.",
+        "tag": "MB → TB"
       },
       "lowCost": {
         "title": "Low cost",
@@ -61,7 +62,7 @@
   },
   "howItWorks": {
     "eyebrow": "How it works",
-    "title": "Point, convert, push.",
+    "title": "Ingest, convert, push.",
     "figCaption": "Fig. 2.1 — The pipeline",
     "steps": {
       "convert": {
@@ -88,6 +89,11 @@
   },
   "ecosystem": {
     "eyebrow": "Ecosystem",
+    "title": "Built to grow.",
+    "count": "{count} projects",
+    "legendCore": "core",
+    "legendCommunity": "community",
+    "submit": "Submit a tool",
     "projects": {
       "spec": "The standard. What a catalog must be.",
       "reis": "The validator. Proves a catalog conforms.",
@@ -200,10 +206,21 @@
         "attribution": "Javier de la Torre · OGC Connect Helsinki",
         "quote": "“SDIs were built for experts; now they must serve agents.”",
         "description": "Why de-intermediation makes SDIs more important than ever, and the architecture they need. The live Finland.SDI agent demo closes the talk."
+      },
+      "finlandDemo": {
+        "title": "Finland.SDI agent demo",
+        "attribution": "Live demo · CARTO",
+        "description": "An AI agent answers questions against a national SDI, reading straight from its catalog, with no bespoke API in between."
+      },
+      "costCalc": {
+        "title": "Cost calculator",
+        "attribution": "Interactive · Open Geodag",
+        "description": "Estimate what publishing your data as Portolan costs. The whole budget is storage plus egress, nothing else."
       }
     },
     "watch": "View the slides",
     "scrollPrev": "Previous",
-    "scrollNext": "Next"
+    "scrollNext": "Next",
+    "openDemo": "Open the demo"
   }
 }

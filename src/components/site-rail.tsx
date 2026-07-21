@@ -7,11 +7,11 @@ import { PortolanLogo } from "./portolan-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { DirArrow } from "./ui";
 
-// Primary navigation lives in a collapsible left rail (replaces the old minimal
-// header + footer nav). On md+ the rail is pinned and the page is inset by
-// --p-rail; "Collapse" slides it away and a "» Index" handle brings it back.
-// Below md the rail is an off-canvas drawer opened from a mono "Index" button.
-// Section labels reuse the existing section eyebrows so copy stays in one place.
+// Primary navigation lives in a left rail (replaces the old minimal header +
+// footer nav). On md+ the rail is permanently pinned and the page is inset by
+// --p-rail. Below md the rail is an off-canvas drawer opened from a mono
+// "Index" button. Section labels reuse the existing section eyebrows so copy
+// stays in one place.
 
 const DOCS_URL = "https://portolan-sdi.github.io/portolan-cli";
 const GITHUB_URL = "https://github.com/portolan-sdi";
@@ -40,7 +40,6 @@ function useIsDesktop() {
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const t = useTranslations();
   const isDesktop = useIsDesktop();
-  const [collapsed, setCollapsed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -74,31 +73,14 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("keydown", onKey);
   }, [drawerOpen, closeDrawer]);
 
-  const railOffCanvas = isDesktop ? collapsed : !drawerOpen;
-  const railStateClass = isDesktop
-    ? collapsed
-      ? "is-collapsed"
-      : ""
-    : drawerOpen
-      ? "is-open"
-      : "";
+  const railOffCanvas = isDesktop ? false : !drawerOpen;
+  const railStateClass = isDesktop ? "" : drawerOpen ? "is-open" : "";
 
   const navLinkBase =
     "flex items-center justify-between gap-2 py-[9px] text-body transition-colors";
 
   return (
     <div className="min-h-screen bg-p-bg font-sans">
-      {/* Desktop re-open handle (only when collapsed) */}
-      {isDesktop && collapsed && (
-        <button
-          type="button"
-          onClick={() => setCollapsed(false)}
-          className="fixed top-3.5 start-3.5 z-[45] hidden md:inline-flex items-center gap-2 h-9 px-3 bg-p-bg border border-p-line font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-2 hover:text-p-ink"
-        >
-          <span aria-hidden="true">»</span> {t("nav.expand")}
-        </button>
-      )}
-
       {/* Mobile drawer scrim */}
       <div
         onClick={closeDrawer}
@@ -169,17 +151,8 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           </ul>
         </div>
 
-        <div className="border-t border-p-line px-[22px] py-3.5 flex items-center justify-between gap-3">
+        <div className="border-t border-p-line px-[22px] py-3.5">
           <LocaleSwitcher />
-          <button
-            type="button"
-            onClick={() => setCollapsed(true)}
-            aria-label={t("nav.collapse")}
-            title={t("nav.collapse")}
-            className="hidden md:inline-flex items-center justify-center w-8 h-8 font-mono text-p-ink-3 hover:text-p-ink hover:bg-p-bg-soft transition-colors"
-          >
-            <span aria-hidden="true" className="text-[15px]">«</span>
-          </button>
         </div>
       </nav>
 
@@ -198,9 +171,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         </button>
       </div>
 
-      <main className={`site-main ${isDesktop && collapsed ? "is-collapsed" : ""}`}>
-        {children}
-      </main>
+      <main className="site-main">{children}</main>
     </div>
   );
 }

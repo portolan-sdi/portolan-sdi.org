@@ -11,9 +11,10 @@ const orgs = [
   { name: "Planet", href: "https://www.planet.com/", file: "planet.svg", h: 26, aspect: 2.047 },
   { name: "Radiant Earth", href: "https://radiant.earth/", text: true },
   { name: "Source Cooperative", href: "https://source.coop/", file: "source-coop.svg", h: 19, aspect: 3.284 },
-  { name: "WRI", href: "https://www.wri.org/", file: "wri.svg", h: 30, aspect: 2.85 },
+  { name: "PDOK", href: "https://www.pdok.nl/", file: "pdok.png", h: 26, aspect: 2.615 },
   { name: "Ayuntamiento de Madrid", href: "https://www.madrid.es/", file: "madrid.png", h: 26, aspect: 3.0 },
   { name: "Municipalidad de Pergamino", href: "https://pergamino.ar/", file: "pergamino.svg", h: 30, aspect: 2.734 },
+  { name: "Ajuntament de Barcelona", href: "https://www.barcelona.cat/", file: "barcelona.svg", h: 22, aspect: 4.875 },
 ] as const;
 
 export function InvolvedSection() {

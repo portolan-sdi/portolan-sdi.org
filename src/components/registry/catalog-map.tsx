@@ -92,8 +92,26 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
         unlocatedCount++;
         continue;
       }
-      byId.set(catalog.id, catalog);
       const [west, south, east, north] = catalog.bbox;
+      // Guard against malformed bboxes: non-finite values, inverted axes, or
+      // coordinates outside the world. MapLibre's fitBounds throws on any lat
+      // outside [-90, 90] (or lon outside [-180, 180]), so a single bad entry
+      // would otherwise poison the accumulated bounds and break the map fit.
+      // West > east is allowed — that's an antimeridian crossing, handled below.
+      const validBbox =
+        [west, south, east, north].every(Number.isFinite) &&
+        south >= -90 &&
+        north <= 90 &&
+        south <= north &&
+        west >= -180 &&
+        west <= 180 &&
+        east >= -180 &&
+        east <= 180;
+      if (!validBbox) {
+        unlocatedCount++;
+        continue;
+      }
+      byId.set(catalog.id, catalog);
       const crossesAntimeridian = west > east;
       const widthDeg = crossesAntimeridian ? east + 360 - west : east - west;
       const heightDeg = north - south;
