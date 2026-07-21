@@ -21,7 +21,6 @@ const SECTIONS = [
   { id: "why", label: "why.eyebrow" },
   { id: "how", label: "howItWorks.eyebrow" },
   { id: "ecosystem", label: "ecosystem.eyebrow" },
-  { id: "quickstart", label: "quickstart.eyebrow" },
   { id: "resources", label: "resources.eyebrow" },
   { id: "registry", label: "nav.registry" },
 ] as const;

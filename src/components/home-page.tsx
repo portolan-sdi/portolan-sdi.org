@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { DitherMap } from "./dither-map";
 import { SiteShell } from "./site-rail";
-import { QuickstartSection } from "./quickstart-section";
+import { PublishPaths } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
@@ -223,7 +223,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 {t.rich("hero.description", { m: monoChunk })}
               </p>
               <div className="flex gap-6 items-center flex-wrap mt-9">
-                <Link href="/#quickstart">
+                <Link href="/#how">
                   <Btn variant="primary" size="lg">
                     {t("hero.quickstart")} <DirArrow />
                   </Btn>
@@ -256,11 +256,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
-          <SectionHead
-            eyebrow={t("why.eyebrow")}
-            title={t("why.title")}
-            subtitle={t("why.subtitle")}
-          />
+          <SectionHead eyebrow={t("why.eyebrow")} title={t("why.title")} />
           <div className="border-t border-p-line-strong">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {whyCards.map((card) => (
@@ -356,14 +352,12 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               ))}
             </div>
           </div>
+          <PublishPaths />
         </div>
       </section>
 
       {/* Ecosystem — the Portolan projects plus the wider format ecosystem */}
       <EcosystemSection />
-
-      {/* Quickstart */}
-      <QuickstartSection />
 
       {/* Talks & demos */}
       <ResourcesSection />

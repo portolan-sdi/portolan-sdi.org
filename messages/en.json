@@ -28,8 +28,7 @@
   },
   "why": {
     "eyebrow": "Why Portolan",
-    "title": "The job of an SDI has changed.",
-    "subtitle": "Spatial data infrastructure still assumes servers, databases, and specialists. Portolan doesn't.",
+    "title": "Spatial data infrastructure still assumes servers, databases, and specialists. Portolan doesn't.",
     "cards": {
       "open": {
         "title": "Open and interoperable",
@@ -102,22 +101,13 @@
     }
   },
   "quickstart": {
-    "eyebrow": "Quickstart",
     "title": "Publish your first catalog.",
-    "intro": "Start by browsing a live catalog. Then publish your own with the CLI or with an agent.",
-    "browse": {
-      "stamp": "Option A",
-      "title": "Browse a catalog",
-      "description": "Portolan catalogs are live on the web. Open the browser to explore published datasets, or point DuckDB at any <m>GeoParquet</m> URL and query it in place.",
-      "cta": "Open the browser"
-    },
+    "intro": "Two ways to publish your own catalog.",
     "cli": {
-      "stamp": "Option B",
       "title": "With the CLI",
       "description": "Install <m>portolan-cli</m>, then <m>init</m>, <m>add</m>, <m>check</m>, and <m>push</m>. The CLI converts your files and generates the catalog."
     },
     "claude": {
-      "stamp": "Option C",
       "title": "With Claude",
       "description": "Install the Portolan skill in Claude Code and point it at your data. It handles conversion, metadata, and publishing. Agents excel at CLIs and text files, so non-experts can publish too."
     }
