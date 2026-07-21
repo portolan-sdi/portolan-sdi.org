@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Portolan, un estándar con criterio para catálogos geoespaciales nativos de la nube",
-    "description": "Portolan es un estándar con criterio para publicar datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que personas y agentes de IA lean un catálogo, lo entiendan y lo consulten directamente. El estándar fija el nivel de calidad, un validador lo hace cumplir y las herramientas abaratan la creación de catálogos."
+    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que tanto las personas como los agentes de IA lean un catálogo, lo entiendan y lo consulten directamente. El estándar fija el nivel de calidad, un validador lo hace cumplir y un conjunto de herramientas hace que los catálogos sean baratos de crear y fáciles de usar."
   },
   "nav": {
     "registry": "Registro",
@@ -13,7 +13,7 @@
   "hero": {
     "title": "El futuro de los datos espaciales",
     "titleAccent": "son solo archivos.",
-    "description": "Portolan es un estándar con criterio para publicar datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. No hay nada a lo que iniciar sesión ni nada de lo que depender. Los metadatos estructurados permiten que personas y agentes de IA lean un catálogo, lo entiendan y lo consulten directamente.",
+    "description": "Portolan es un estándar con criterio para compartir datos geoespaciales como archivos nativos de la nube en almacenamiento de objetos, más las herramientas que lo hacen realidad. Un catálogo Portolan es un directorio de datos en formatos abiertos descritos con metadatos <m>STAC</m> estructurados, alojado en cualquier bucket compatible con S3. Sin servidores, sin bases de datos.",
     "quickstart": "Inicio rápido",
     "browseCatalogs": "Explorar catálogos",
     "stats": {
@@ -29,24 +29,24 @@
     "subtitle": "La infraestructura de datos espaciales todavía da por sentados servidores, bases de datos y especialistas. Portolan no.",
     "cards": {
       "open": {
-        "title": "Abierto",
-        "description": "Todos los formatos son abiertos y todas las herramientas son <m>Apache-2.0</m>. DuckDB, BigQuery y los SIG de escritorio leen los mismos bytes. Si Portolan desapareciera mañana, tus datos seguirían funcionando en todas partes.",
+        "title": "Abierto e interoperable",
+        "description": "Todo es de código abierto bajo <m>Apache-2.0</m> y se apoya en estándares existentes como <m>GeoParquet</m>, GeoTIFF optimizado para la nube y <m>STAC</m>. Estos formatos funcionan en DuckDB, BigQuery, Pandas y GIS de escritorio como QGIS y ArcGIS, así que tus datos funcionan en todas partes, con o sin Portolan.",
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
-        "title": "Personas y máquinas",
-        "description": "Herramientas más antiguas como WFS y Shapefiles atendían a un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona, un script o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciéndolo sobre una SDI nacional."
+        "title": "Legible por personas y máquinas",
+        "description": "Herramientas más antiguas como WFS y Shapefiles se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona, un script o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional."
       },
       "easy": {
-        "title": "Archivos en un bucket",
-        "description": "Una SDI tradicional necesita bases de datos, servicios y personal especializado para operarlos. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica."
+        "title": "Simple",
+        "description": "La infraestructura de datos espaciales tradicional necesita bases de datos, servicios y personal para operarla. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica."
       },
       "scalable": {
-        "title": "Escala con el almacenamiento",
+        "title": "Escala con tu almacenamiento",
         "description": "La misma configuración maneja megabytes o terabytes. No hay servidores que ejecutar, así que escalar es tarea de tu proveedor de nube, no tuya."
       },
       "lowCost": {
-        "title": "Dos partidas de gasto",
+        "title": "Bajo costo",
         "description": "Todo el presupuesto es almacenamiento más transferencia de salida. Compartir datos públicos no debería requerir un equipo de operaciones, y un conjunto de datos popular no debería romper un presupuesto. La <link>calculadora de costos</link> muestra lo que costarían tus datos.",
         "tag": "almacenamiento + salida"
       },
@@ -89,7 +89,7 @@
   "ecosystem": {
     "eyebrow": "Ecosistema",
     "title": "Todo está en GitHub.",
-    "subtitle": "Seis proyectos Portolan, todos <m>Apache-2.0</m>. Los formatos que publican son estándares comunitarios, así que la caja de herramientas ya existe.",
+    "subtitle": "El estándar define qué es un buen catálogo. El validador lo comprueba, la CLI lo construye, y el navegador y el registro lo hacen fácil de encontrar y usar. Cada parte aumenta el valor de las demás, y todo es <m>Apache-2.0</m>.",
     "groups": {
       "portolan": "Proyectos Portolan",
       "query": "Motores de consulta",

@@ -224,7 +224,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
             </h1>
             <div className="mt-[clamp(2rem,4vw,3rem)]">
               <p className="text-lead leading-relaxed max-w-[56ch]">
-                {t("hero.description")}
+                {t.rich("hero.description", { m: monoChunk })}
               </p>
               <div className="flex gap-6 items-center flex-wrap mt-9">
                 <Link href="/#quickstart">

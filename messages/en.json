@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Portolan — An opinionated standard for cloud-native geospatial catalogs",
-    "description": "Portolan is an opinionated standard for publishing geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets people and AI agents read a catalog, understand it, and query it directly. The standard sets the quality bar, a validator enforces it, and the tools make catalogs cheap to build."
+    "description": "Portolan publishes geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets both people and AI agents read a catalog, understand it, and query it directly. The standard sets the quality bar, a validator enforces it, and a set of tools makes catalogs cheap to build and easy to use."
   },
   "nav": {
     "registry": "Registry",
@@ -13,7 +13,7 @@
   "hero": {
     "title": "The future of spatial data",
     "titleAccent": "is just files.",
-    "description": "Portolan is an opinionated standard for publishing geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. There is nothing to log into and nothing to depend on. Structured metadata lets people and AI agents read a catalog, understand it, and query it directly.",
+    "description": "Portolan is an opinionated standard for sharing geospatial data as cloud-native files on object storage, plus the tools that make it real. A Portolan catalog is a directory of open-format data described by structured <m>STAC</m> metadata, hosted on any S3-compatible bucket. No servers, no databases.",
     "quickstart": "Quickstart",
     "browseCatalogs": "Browse catalogs",
     "stats": {
@@ -29,24 +29,24 @@
     "subtitle": "Spatial data infrastructure still assumes servers, databases, and specialists. Portolan doesn't.",
     "cards": {
       "open": {
-        "title": "Open",
-        "description": "Every format is open and every tool is <m>Apache-2.0</m>. DuckDB, BigQuery, and desktop GIS read the same bytes. If Portolan disappeared tomorrow, your data would still work everywhere.",
+        "title": "Open and interoperable",
+        "description": "Everything is open source under <m>Apache-2.0</m> and built on existing standards like <m>GeoParquet</m>, cloud-optimized GeoTIFF, and <m>STAC</m>. These formats work across DuckDB, BigQuery, Pandas, and desktop GIS like QGIS and ArcGIS, so your data works everywhere, with or without Portolan.",
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
-        "title": "People and machines",
-        "description": "Older tooling like WFS and Shapefiles served one client at a time. A Portolan catalog describes itself in plain text and structured metadata, so a person, a script, or an agent can find the data and query it with no bespoke API to learn. The <link>Finland.SDI demo</link> shows an agent doing it against a national SDI."
+        "title": "Readable by people and machines",
+        "description": "Older tooling like WFS and Shapefiles was built for one client at a time. A Portolan catalog describes itself in plain text and structured metadata, so a person, a script, or an agent can find the data and query it without a bespoke API to learn. The <link>Finland.SDI demo</link> shows an agent doing exactly that against a national SDI."
       },
       "easy": {
-        "title": "Files in a bucket",
-        "description": "A traditional SDI needs databases, services, and specialist staff to run them. A Portolan catalog is files in a bucket. Point the CLI at your data, convert, and push."
+        "title": "Simple",
+        "description": "Traditional spatial data infrastructure needs databases, services, and staff to run them. A Portolan catalog is files in a bucket. Point the CLI at your data, convert, and push."
       },
       "scalable": {
-        "title": "Scales with storage",
+        "title": "Scales with your storage",
         "description": "The same setup handles megabytes or terabytes. There are no servers to run, so scaling is your cloud provider's job, not yours."
       },
       "lowCost": {
-        "title": "Two line items",
+        "title": "Low cost",
         "description": "The whole budget is storage plus egress. Sharing public data should not take an operations team, and a popular dataset should not blow a budget. The <link>cost calculator</link> shows what your data would run.",
         "tag": "storage + egress"
       },
@@ -89,7 +89,7 @@
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "All of it is on GitHub.",
-    "subtitle": "Six Portolan projects, all <m>Apache-2.0</m>. The formats they publish are community standards, so the wider toolbox already exists.",
+    "subtitle": "The standard defines what a great catalog is. The validator proves it, the CLI builds it, and the browser and registry make it easy to find and use. Each part raises the value of the others, and all of it is <m>Apache-2.0</m>.",
     "groups": {
       "portolan": "Portolan projects",
       "query": "Query engines",
