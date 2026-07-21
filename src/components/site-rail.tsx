@@ -179,13 +179,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
             <span aria-hidden="true">«</span> {t("nav.collapse")}
           </button>
           <LocaleSwitcher />
-          <a
-            href="#registry"
-            onClick={closeDrawer}
-            className="flex items-center justify-between font-mono text-micro uppercase tracking-[0.08em] rtl:tracking-normal bg-p-ink text-p-bg px-3.5 py-3 hover:bg-p-primary transition-colors"
-          >
-            {t("registry.submit.title")} <DirArrow />
-          </a>
           <p className="font-mono text-micro text-p-ink-3 m-0">
             {t("nav.tagline")}
           </p>
