@@ -13,15 +13,10 @@ export function PublishPaths() {
     "mt-auto self-start font-mono text-micro text-p-primary hover:underline";
 
   return (
-    <div className="mt-[clamp(2.5rem,5vw,4rem)] border-t border-p-line-strong pt-[clamp(2rem,4vw,3rem)]">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-10 gap-y-2 mb-7">
-        <h3 className="text-card-title-lg font-bold tracking-[-0.02em]">
-          {t("quickstart.title")}
-        </h3>
-        <p className="text-body-lg leading-relaxed text-p-ink-2 max-w-[46ch]">
-          {t("quickstart.intro")}
-        </p>
-      </div>
+    <div className="mt-[clamp(2rem,4vw,3rem)] border-t border-p-line-strong pt-[clamp(1.75rem,3.5vw,2.5rem)]">
+      <h3 className="text-card-title-lg font-bold tracking-[-0.02em] mb-6">
+        {t("quickstart.title")}
+      </h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-stretch">
         <Card className="flex flex-col gap-3">

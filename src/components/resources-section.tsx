@@ -128,18 +128,8 @@ export function ResourcesSection() {
       className="py-[var(--p-pad-section-y)] bg-p-bg-soft border-y border-p-line"
     >
       <div className="max-w-[1440px] mx-auto">
-        <div className="px-[var(--p-pad-section-x)] flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="font-mono text-eyebrow text-p-ink-3 mb-4">
-              {t("eyebrow")}
-            </p>
-            <h2 className="text-section font-bold tracking-[-0.015em] leading-[1.08] max-w-[20ch]">
-              {t("title")}
-            </h2>
-            <p className="mt-4 text-body text-p-ink-2 max-w-[52ch]">
-              {t("subtitle")}
-            </p>
-          </div>
+        <div className="px-[var(--p-pad-section-x)] flex items-center justify-between gap-6">
+          <p className="font-mono text-eyebrow text-p-ink-3">{t("eyebrow")}</p>
           <div className="flex border border-p-line" role="group" aria-label={t("eyebrow")}>
             <button
               type="button"
@@ -171,7 +161,7 @@ export function ResourcesSection() {
           onScroll={updateEdges}
           className="mt-11 flex gap-5 overflow-x-auto snap-x snap-mandatory px-[var(--p-pad-section-x)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {TALKS.map((talk, i) => {
+          {TALKS.map((talk) => {
             const quote = stripOuterQuotes(t(`items.${talk.key}.quote`));
             return (
               <a
@@ -188,9 +178,6 @@ export function ResourcesSection() {
                   style={POSTER_WASH}
                 >
                   <PosterMotif motif={talk.motif} />
-                  <span className="absolute top-3.5 start-3.5 z-[2] font-mono text-[10.5px] tracking-[0.14em] uppercase text-p-primary">
-                    {t("talkLabel")} 0{i + 1}
-                  </span>
                   <h3 className="absolute bottom-4 inset-x-4 z-[2] text-card-title-lg font-bold tracking-[-0.01em] leading-[1.12] text-p-ink">
                     <Ltr>{t(`items.${talk.key}.title`)}</Ltr>
                   </h3>

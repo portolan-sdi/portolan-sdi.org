@@ -9,6 +9,8 @@ interface SectionHeadProps {
   subtitle?: ReactNode;
   /** Replaces the subtitle with arbitrary content (e.g. a CTA), bottom-right. */
   aside?: ReactNode;
+  /** Single-column, full-width title (no reserved right column, no max-width). */
+  wide?: boolean;
 }
 
 // Editorial section header: title block on the start side, supporting copy (or a
@@ -19,14 +21,23 @@ export function SectionHead({
   title,
   subtitle,
   aside,
+  wide,
 }: SectionHeadProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,46ch)] gap-5 md:gap-12 md:items-end mb-[clamp(2.5rem,5vw,4rem)]">
+    <div
+      className={`grid grid-cols-1 gap-5 md:gap-12 md:items-end mb-[clamp(2.5rem,5vw,4rem)] ${
+        wide ? "" : "md:grid-cols-[minmax(0,1fr)_minmax(0,46ch)]"
+      }`}
+    >
       <div>
         <div className="font-mono text-eyebrow text-p-ink-3 tracking-[0.04em]">
           {eyebrow}
         </div>
-        <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05] mt-3 max-w-[32ch] text-balance">
+        <h2
+          className={`text-section font-extrabold tracking-[-0.03em] leading-[1.05] mt-3 text-balance ${
+            wide ? "max-w-none" : "max-w-[32ch]"
+          }`}
+        >
           {title}
         </h2>
       </div>

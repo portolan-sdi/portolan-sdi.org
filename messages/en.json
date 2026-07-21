@@ -86,23 +86,24 @@
         "title": "Browse",
         "description": "Open the catalog in the Portolan browser or any STAC viewer, query it with DuckDB, or point an agent at the URL. The data answers questions directly."
       }
-    }
+    },
+    "worksWith": "Works with your existing tools"
   },
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "All of it is on GitHub.",
     "subtitle": "The standard defines what a great catalog is. The validator proves it, the CLI builds it, and the browser and registry make it easy to find and use. Each part raises the value of the others, and all of it is <m>Apache-2.0</m>.",
-    "groups": {
-      "portolan": "Portolan projects",
-      "query": "Query engines",
-      "gis": "Desktop GIS",
-      "libraries": "Libraries",
-      "stac": "STAC tooling"
+    "projects": {
+      "spec": "The standard. What a catalog must be.",
+      "reis": "The validator. Proves a catalog conforms.",
+      "cli": "The CLI. Build and publish catalogs.",
+      "registry": "The registry. Find published catalogs.",
+      "browser": "The browser. Explore catalogs on the web.",
+      "skills": "Claude skills. Publish with an agent."
     }
   },
   "quickstart": {
     "title": "Publish your first catalog.",
-    "intro": "Two ways to publish your own catalog.",
     "cli": {
       "title": "With the CLI",
       "description": "Install <m>portolan-cli</m>, then <m>init</m>, <m>add</m>, <m>check</m>, and <m>push</m>. The CLI converts your files and generates the catalog."
@@ -192,8 +193,6 @@
   },
   "resources": {
     "eyebrow": "Talks & demos",
-    "title": "Two talks that make the case.",
-    "subtitle": "Portolan is early-stage and developed in the open. The demos, the cost calculator, and the example catalogs are linked from inside the talks.",
     "items": {
       "holmesTalk": {
         "title": "A Cloud-Native Geo Upgrade for Spatial Data Infrastructure",
@@ -208,8 +207,7 @@
         "description": "Why de-intermediation makes SDIs more important than ever, and the architecture they need. The live Finland.SDI agent demo closes the talk."
       }
     },
-    "talkLabel": "Talk",
-    "watch": "Watch the talk",
+    "watch": "View the slides",
     "scrollPrev": "Previous",
     "scrollNext": "Next"
   },

@@ -206,6 +206,26 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     "browse",
   ] as const;
 
+  // Tools you can consume a Portolan catalog with. These are interoperable with
+  // Portolan but not part of it, so they live here (annotating the pipeline)
+  // rather than in the Ecosystem section, which is the Portolan projects only.
+  const consumeTools = [
+    "DuckDB",
+    "BigQuery",
+    "Snowflake",
+    "Apache Sedona",
+    "QGIS",
+    "ArcGIS Pro",
+    "Felt",
+    "GDAL",
+    "GeoPandas",
+    "rasterio",
+    "loaders.gl",
+    "STAC Browser",
+    "stac-geoparquet",
+    "pystac",
+  ] as const;
+
   return (
     <SiteShell>
       {/* Hero */}
@@ -238,7 +258,10 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 <p className="mt-10 font-mono text-micro text-p-ink-3">
                   {heroStats.map((stat) => (
                     <span key={stat.key}>
-                      <Ltr>{stat.value}</Ltr> {t(`hero.stats.${stat.key}`)}
+                      <span className="text-p-primary">
+                        <Ltr>{stat.value}</Ltr>
+                      </span>{" "}
+                      {t(`hero.stats.${stat.key}`)}
                       {" · "}
                     </span>
                   ))}
@@ -256,7 +279,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
-          <SectionHead eyebrow={t("why.eyebrow")} title={t("why.title")} />
+          <SectionHead eyebrow={t("why.eyebrow")} title={t("why.title")} wide />
           <div className="border-t border-p-line-strong">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {whyCards.map((card) => (
@@ -352,6 +375,15 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               ))}
             </div>
           </div>
+          <p className="mt-6 font-mono text-micro text-p-ink-3 leading-relaxed">
+            {t("howItWorks.worksWith")}
+            {consumeTools.map((tool) => (
+              <span key={tool}>
+                {" · "}
+                <Ltr>{tool}</Ltr>
+              </span>
+            ))}
+          </p>
           <PublishPaths />
         </div>
       </section>

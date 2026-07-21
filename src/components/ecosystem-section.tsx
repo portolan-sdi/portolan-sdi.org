@@ -3,23 +3,18 @@
 import { useTranslations } from "next-intl";
 import { DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 
-// Project and tool names are proper nouns and stay in Latin in every locale,
-// so they live here rather than in the messages files. Group labels are
-// translated. Third-party list is a draft pending an editorial pass.
-const portolanProjects = [
-  { name: "portolan-spec", href: "https://github.com/portolan-sdi/portolan-spec" },
-  { name: "reis", href: "https://github.com/portolan-sdi/reis" },
-  { name: "portolan-cli", href: "https://github.com/portolan-sdi/portolan-cli" },
-  { name: "portolan-registry", href: "https://github.com/portolan-sdi/portolan-registry" },
-  { name: "portolan-browser", href: "https://github.com/portolan-sdi/portolan-browser" },
-  { name: "portolan-skills", href: "https://github.com/portolan-sdi/portolan-skills" },
-] as const;
-
-const groups = [
-  { key: "query", tools: ["DuckDB", "BigQuery", "Snowflake", "Apache Sedona"] },
-  { key: "gis", tools: ["QGIS", "ArcGIS Pro", "Felt"] },
-  { key: "libraries", tools: ["GDAL", "GeoPandas", "rasterio", "loaders.gl"] },
-  { key: "stac", tools: ["STAC Browser", "stac-geoparquet", "pystac"] },
+// The Portolan projects — and only these. Interoperable tools (query engines,
+// desktop GIS, libraries, STAC tooling) are NOT part of Portolan and live in
+// the How-it-works section instead. Project names are proper nouns and stay
+// Latin in every locale; the one-line role on the card back is translated
+// (ecosystem.projects.<slug>). Cards flip name -> role on hover/focus.
+const projects = [
+  { slug: "spec", name: "portolan-spec", href: "https://github.com/portolan-sdi/portolan-spec" },
+  { slug: "reis", name: "reis", href: "https://github.com/portolan-sdi/reis" },
+  { slug: "cli", name: "portolan-cli", href: "https://github.com/portolan-sdi/portolan-cli" },
+  { slug: "registry", name: "portolan-registry", href: "https://github.com/portolan-sdi/portolan-registry" },
+  { slug: "browser", name: "portolan-browser", href: "https://github.com/portolan-sdi/portolan-browser" },
+  { slug: "skills", name: "portolan-skills", href: "https://github.com/portolan-sdi/portolan-skills" },
 ] as const;
 
 export function EcosystemSection() {
@@ -36,44 +31,31 @@ export function EcosystemSection() {
           title={t("title")}
           subtitle={t.rich("subtitle", { m: monoChunk })}
         />
-        <div className="border-t border-p-line-strong">
-          <div className="grid grid-cols-1 sm:grid-cols-[220px_minmax(0,1fr)] gap-x-8 gap-y-1 py-5 border-b border-p-line">
-            <span className="font-mono text-micro text-p-ink-3">
-              {t("groups.portolan")}
-            </span>
-            <p className="text-body leading-relaxed">
-              {portolanProjects.map((project, i) => (
-                <span key={project.name}>
-                  {i > 0 && " · "}
-                  <a
-                    href={project.href}
-                    className="font-mono text-small text-p-primary hover:underline"
-                  >
-                    <Ltr>{project.name}</Ltr> <DirArrow kind="external" />
-                  </a>
-                </span>
-              ))}
-            </p>
-          </div>
-          {groups.map((group) => (
-            <div
-              key={group.key}
-              className="grid grid-cols-1 sm:grid-cols-[220px_minmax(0,1fr)] gap-x-8 gap-y-1 py-5 border-b border-p-line"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {projects.map((project) => (
+            <a
+              key={project.slug}
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ec-card block h-[132px]"
             >
-              <span className="font-mono text-micro text-p-ink-3">
-                {t(`groups.${group.key}`)}
-              </span>
-              <p className="text-body leading-relaxed">
-                {group.tools.map((tool, i) => (
-                  <span key={tool}>
-                    {i > 0 && " · "}
-                    <span className="font-mono text-small">
-                      <Ltr>{tool}</Ltr>
-                    </span>
+              <div className="ec-card__inner">
+                <div className="ec-card__face ec-card__front flex items-center justify-center border border-p-line bg-p-paper p-4">
+                  <span className="font-mono text-body text-p-primary">
+                    <Ltr>{project.name}</Ltr>
                   </span>
-                ))}
-              </p>
-            </div>
+                </div>
+                <div className="ec-card__back flex flex-col justify-between border border-p-ink bg-p-ink text-p-bg p-4">
+                  <p className="text-body leading-snug">
+                    {t(`projects.${project.slug}`)}
+                  </p>
+                  <span className="font-mono text-micro opacity-80">
+                    <Ltr>{project.name}</Ltr> <DirArrow kind="external" />
+                  </span>
+                </div>
+              </div>
+            </a>
           ))}
         </div>
       </div>

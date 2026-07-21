@@ -368,3 +368,33 @@ body {
     animation: none;
   }
 }
+
+/* --- Ecosystem flip cards (Portolan projects: name -> role on hover/focus) - */
+.ec-card {
+  perspective: 900px;
+}
+.ec-card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.ec-card:hover .ec-card__inner,
+.ec-card:focus-visible .ec-card__inner {
+  transform: rotateY(180deg);
+}
+.ec-card__face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.ec-card__back {
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ec-card__inner {
+    transition: none;
+  }
+}

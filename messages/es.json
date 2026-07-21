@@ -86,23 +86,24 @@
         "title": "Explorar",
         "description": "Abre el catálogo en el navegador de Portolan o en cualquier visor STAC, consúltalo con DuckDB o dirige un agente a la URL. Los datos responden preguntas directamente."
       }
-    }
+    },
+    "worksWith": "Funciona con tus herramientas"
   },
   "ecosystem": {
     "eyebrow": "Ecosistema",
     "title": "Todo está en GitHub.",
     "subtitle": "El estándar define qué es un buen catálogo. El validador lo comprueba, la CLI lo construye, y el navegador y el registro lo hacen fácil de encontrar y usar. Cada parte aumenta el valor de las demás, y todo es <m>Apache-2.0</m>.",
-    "groups": {
-      "portolan": "Proyectos Portolan",
-      "query": "Motores de consulta",
-      "gis": "SIG de escritorio",
-      "libraries": "Bibliotecas",
-      "stac": "Herramientas STAC"
+    "projects": {
+      "spec": "El estándar. Qué debe ser un catálogo.",
+      "reis": "El validador. Comprueba que un catálogo cumple.",
+      "cli": "La CLI. Crea y publica catálogos.",
+      "registry": "El registro. Encuentra catálogos publicados.",
+      "browser": "El navegador. Explora catálogos en la web.",
+      "skills": "Skills de Claude. Publica con un agente."
     }
   },
   "quickstart": {
     "title": "Publica tu primer catálogo.",
-    "intro": "Dos formas de publicar tu propio catálogo.",
     "cli": {
       "title": "Con la CLI",
       "description": "Instala <m>portolan-cli</m> y luego <m>init</m>, <m>add</m>, <m>check</m> y <m>push</m>. La CLI convierte tus archivos y genera el catálogo."
@@ -192,8 +193,6 @@
   },
   "resources": {
     "eyebrow": "Charlas y demos",
-    "title": "Dos charlas que defienden la idea.",
-    "subtitle": "Portolan está en una etapa temprana y se desarrolla en abierto. Las demos, la calculadora de costos y los catálogos de ejemplo están enlazados dentro de las charlas.",
     "items": {
       "holmesTalk": {
         "title": "A Cloud-Native Geo Upgrade for Spatial Data Infrastructure",
@@ -208,8 +207,7 @@
         "description": "Por qué la desintermediación hace a las SDI más importantes que nunca, y la arquitectura que necesitan. La demo en vivo del agente Finland.SDI cierra la charla."
       }
     },
-    "talkLabel": "Charla",
-    "watch": "Ver la charla",
+    "watch": "Ver las diapositivas",
     "scrollPrev": "Anterior",
     "scrollNext": "Siguiente"
   },
