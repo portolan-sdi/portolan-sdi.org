@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Portolan — talks carousel (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --p-bg:#fcfcfa; --p-bg-soft:#f5f5f1; --p-paper:#fff;
+    --p-ink:#16170f; --p-ink-2:#3d3f33; --p-ink-3:#74766a;
+    --p-line:#16170f; --p-primary:#4163cc; --p-primary-2:#8aa0e6;
+    --sans:"Hanken Grotesk",ui-sans-serif,system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--p-bg);color:var(--p-ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  .wrap{padding:clamp(56px,8vw,104px) 0;max-width:1440px;margin:0 auto}
+  .head{padding:0 clamp(20px,5vw,64px);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px}
+  .head .kicker{font-family:var(--mono);font-size:11px;color:var(--p-ink-3);margin-bottom:16px}
+  .head h2{font-size:clamp(28px,3.5vw,44px);line-height:1.08;letter-spacing:-.015em;font-weight:700;max-width:20ch}
+  .arrows{display:flex;gap:0;border:1px solid var(--p-line)}
+  .arrows button{
+    width:46px;height:46px;background:var(--p-bg);border:0;cursor:pointer;color:var(--p-ink);
+    display:grid;place-items:center;font-size:18px;
+  }
+  .arrows button:first-child{border-inline-end:1px solid var(--p-line)}
+  .arrows button:hover{background:var(--p-ink);color:var(--p-bg)}
+  .arrows button:disabled{color:var(--p-ink-3);cursor:not-allowed;background:var(--p-bg)}
+  .arrows [dir] ,html[dir="rtl"] .arrows svg{transform:scaleX(-1)}
+
+  /* track */
+  .track{
+    margin-top:44px;display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:0 clamp(20px,5vw,64px);scrollbar-width:none;
+  }
+  .track::-webkit-scrollbar{display:none}
+  .card{
+    scroll-snap-align:start;flex:0 0 clamp(280px,80vw,420px);
+    border:1px solid var(--p-line);background:var(--p-paper);display:flex;flex-direction:column;
+  }
+
+  /* poster panel */
+  .poster{
+    position:relative;aspect-ratio:4/5;overflow:hidden;border-block-end:1px solid var(--p-line);
+    background:
+      repeating-linear-gradient(0deg, color-mix(in srgb,var(--p-primary) 10%, transparent) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(90deg, color-mix(in srgb,var(--p-primary) 10%, transparent) 0 1px, transparent 1px 26px),
+      color-mix(in srgb,var(--p-primary) 6%, var(--p-paper));
+  }
+  .poster svg{position:absolute;inset:0;width:100%;height:100%}
+  .poster .p-kicker{
+    position:absolute;inset-block-start:14px;inset-inline-start:14px;z-index:2;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--p-primary);
+  }
+  .poster .p-title{
+    position:absolute;inset-block-end:16px;inset-inline-start:16px;inset-inline-end:16px;z-index:2;
+    font-size:22px;line-height:1.12;font-weight:700;letter-spacing:-.01em;color:var(--p-ink);
+  }
+
+  .body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .attrib{font-family:var(--mono);font-size:11px;color:var(--p-ink-3);letter-spacing:.02em}
+  .quote{font-size:16px;line-height:1.4;color:var(--p-ink-2);font-weight:500}
+  .cta{margin-top:auto;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--p-primary);display:inline-flex;gap:8px;align-items:center}
+  .card:hover .cta{gap:12px}
+  .rule-note{padding:22px clamp(20px,5vw,64px) 0;font-family:var(--mono);font-size:11px;color:var(--p-ink-3)}
+
+  /* motif animations */
+  @keyframes drift{to{transform:translateX(-26px)}}
+  @keyframes march{to{stroke-dashoffset:-40}}
+  @keyframes pulse{0%,100%{opacity:.25}50%{opacity:.9}}
+  @keyframes packet{to{offset-distance:100%}}
+  @keyframes scan{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+  .m-wave path{animation:drift 3.2s linear infinite}
+  .m-flow .lead{stroke-dasharray:6 6;animation:march 1.6s linear infinite}
+  .m-flow .pkt{offset-path:path('M20 210 C 120 120, 220 300, 380 150');animation:packet 3.4s ease-in-out infinite}
+  .m-dots circle{animation:pulse 2.6s ease-in-out infinite}
+  .m-bars rect{transform-origin:bottom;animation:scan 2.2s ease-in-out infinite}
+
+  @media(prefers-reduced-motion:reduce){
+    .poster *{animation:none !important}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <p class="kicker">Talks &amp; demos</p>
+        <h2>Two talks that make the case.</h2>
+      </div>
+      <div class="arrows" role="group" aria-label="Scroll talks">
+        <button id="prev" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button id="next" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+
+    <div class="track" id="track" tabindex="0" aria-label="Talks">
+
+      <!-- card 1: marching flow motif -->
+      <article class="card">
+        <div class="poster">
+          <span class="p-kicker">Talk 01</span>
+          <svg viewBox="0 0 400 500" class="m-flow" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <path class="lead" d="M20 210 C 120 120, 220 300, 380 150" fill="none" stroke="var(--p-primary)" stroke-width="1.5"/>
+            <path d="M20 260 C 120 180, 240 340, 380 220" fill="none" stroke="var(--p-primary-2)" stroke-width="1"/>
+            <circle class="pkt" r="5" fill="var(--p-primary)"/>
+          </svg>
+          <h3 class="p-title">A Cloud-Native Geo Upgrade for Spatial Data Infrastructure</h3>
+        </div>
+        <div class="body">
+          <p class="attrib">Chris Holmes · Open Geodag 2026</p>
+          <p class="quote">“An SDI without servers.”</p>
+          <a class="cta" href="#">Watch the talk →</a>
+        </div>
+      </article>
+
+      <!-- card 2: drifting contours -->
+      <article class="card">
+        <div class="poster">
+          <span class="p-kicker">Talk 02</span>
+          <svg viewBox="0 0 400 500" class="m-wave" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <g fill="none" stroke="var(--p-primary)" stroke-width="1.25">
+              <path d="M-30 150 q 52 -30 104 0 t 104 0 t 104 0 t 104 0 t 104 0"/>
+              <path d="M-30 220 q 52 -30 104 0 t 104 0 t 104 0 t 104 0 t 104 0" stroke="var(--p-primary-2)"/>
+              <path d="M-30 290 q 52 -30 104 0 t 104 0 t 104 0 t 104 0 t 104 0"/>
+              <path d="M-30 360 q 52 -30 104 0 t 104 0 t 104 0 t 104 0 t 104 0" stroke="var(--p-primary-2)"/>
+            </g>
+          </svg>
+          <h3 class="p-title">The Next SDI</h3>
+        </div>
+        <div class="body">
+          <p class="attrib">Javier de la Torre · OGC Connect Helsinki</p>
+          <p class="quote">“SDIs were built for experts; now they must serve agents.”</p>
+          <a class="cta" href="#">Watch the talk →</a>
+        </div>
+      </article>
+
+      <!-- card 3 (placeholder / "eventually expanded"): pulsing dot grid -->
+      <article class="card">
+        <div class="poster">
+          <span class="p-kicker">Demo</span>
+          <svg viewBox="0 0 400 500" class="m-dots" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <g fill="var(--p-primary)"><!-- dots injected by script --></g>
+          </svg>
+          <h3 class="p-title">Finland.SDI — live agent demo</h3>
+        </div>
+        <div class="body">
+          <p class="attrib">Interactive · in the browser</p>
+          <p class="quote">An agent querying a national catalog, live.</p>
+          <a class="cta" href="#">Open the demo →</a>
+        </div>
+      </article>
+
+      <!-- card 4 (placeholder): scanning bars -->
+      <article class="card">
+        <div class="poster">
+          <span class="p-kicker">Tool</span>
+          <svg viewBox="0 0 400 500" class="m-bars" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <g fill="var(--p-primary)">
+              <rect x="60"  y="140" width="34" height="220" style="animation-delay:0s"/>
+              <rect x="120" y="140" width="34" height="220" style="animation-delay:.2s" fill="var(--p-primary-2)"/>
+              <rect x="180" y="140" width="34" height="220" style="animation-delay:.4s"/>
+              <rect x="240" y="140" width="34" height="220" style="animation-delay:.6s" fill="var(--p-primary-2)"/>
+              <rect x="300" y="140" width="34" height="220" style="animation-delay:.8s"/>
+            </g>
+          </svg>
+          <h3 class="p-title">Cost calculator</h3>
+        </div>
+        <div class="body">
+          <p class="attrib">Storage + egress, estimated</p>
+          <p class="quote">What your data would actually run.</p>
+          <a class="cta" href="#">Estimate cost →</a>
+        </div>
+      </article>
+
+    </div>
+    <p class="rule-note">// horizontal scroll-snap · arrows or trackpad · new talks/demos append to the track</p>
+  </div>
+
+  <script>
+    // build the dot grid for card 3
+    const dots=document.querySelector('.m-dots g');
+    if(dots){let s='';for(let y=80;y<=440;y+=40)for(let x=60;x<=340;x+=40){s+=`<circle cx="${x}" cy="${y}" r="6" style="animation-delay:${((x+y)%400)/400*2.6}s"/>`;}dots.innerHTML=s;}
+
+    // arrow scrolling by one card width
+    const track=document.getElementById('track');
+    const step=()=>{const c=track.querySelector('.card');return c?c.getBoundingClientRect().width+20:400;};
+    const dir=()=>getComputedStyle(document.documentElement).direction==='rtl'?-1:1;
+    document.getElementById('next').onclick=()=>track.scrollBy({left:step()*dir(),behavior:'smooth'});
+    document.getElementById('prev').onclick=()=>track.scrollBy({left:-step()*dir(),behavior:'smooth'});
+
+    const upd=()=>{
+      const max=track.scrollWidth-track.clientWidth-2;
+      const x=Math.abs(track.scrollLeft);
+      document.getElementById('prev').disabled=x<=2;
+      document.getElementById('next').disabled=x>=max;
+    };
+    track.addEventListener('scroll',upd);window.addEventListener('resize',upd);upd();
+  </script>
+</body>
+</html>

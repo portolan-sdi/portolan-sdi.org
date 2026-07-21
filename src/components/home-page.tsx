@@ -5,8 +5,7 @@ import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { DitherMap } from "./dither-map";
-import { SiteHeader } from "./site-header";
-import { SiteFooter } from "./site-footer";
+import { SiteShell } from "./site-rail";
 import { QuickstartSection } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
@@ -208,12 +207,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   ] as const;
 
   return (
-    <div className="bg-p-bg min-h-full font-sans">
-      {/* Header */}
-      <SiteHeader />
-
+    <SiteShell>
       {/* Hero */}
-      <section className="relative border-b border-p-line overflow-hidden">
+      <section id="top" className="relative border-b border-p-line overflow-hidden">
         <DitherMap className="absolute inset-0 w-full h-full opacity-80 dark:opacity-60" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
@@ -610,8 +606,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         </section>
       )}
 
-      {/* Footer */}
-      <SiteFooter />
-    </div>
+    </SiteShell>
   );
 }

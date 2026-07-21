@@ -8,7 +8,10 @@
     "docs": "Docs",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
-    "tagline": "An opinionated standard for cloud-native geospatial catalogs."
+    "tagline": "An opinionated standard for cloud-native geospatial catalogs.",
+    "collapse": "Collapse",
+    "index": "Index",
+    "external": "External"
   },
   "hero": {
     "title": "The future of spatial data",
@@ -214,7 +217,11 @@
         "quote": "“SDIs were built for experts; now they must serve agents.”",
         "description": "Why de-intermediation makes SDIs more important than ever, and the architecture they need. The live Finland.SDI agent demo closes the talk."
       }
-    }
+    },
+    "talkLabel": "Talk",
+    "watch": "Watch the talk",
+    "scrollPrev": "Previous",
+    "scrollNext": "Next"
   },
   "involved": {
     "label": "Supported by"

@@ -3,6 +3,5 @@ export { DitherMap } from "./dither-map";
 export { MapPreview } from "./map-preview";
 export { LiveCount } from "./live-count";
 export { HomePage } from "./home-page";
-export { SiteHeader } from "./site-header";
-export { SiteFooter } from "./site-footer";
+export { SiteShell } from "./site-rail";
 export * from "./ui";

@@ -57,6 +57,9 @@
   --p-pad-lg: 32px;
   --p-pad-xl: 56px;
 
+  /* Primary side rail width (see .site-rail / .site-main) */
+  --p-rail: 264px;
+
   /* Shadows — flat editorial: no drop shadows, hairlines only */
   --p-shadow-sm: none;
   --p-shadow-md: 0 1px 0 var(--p-line);
@@ -278,4 +281,90 @@ body {
 }
 .catalog-map-popup .maplibregl-popup-tip {
   display: none;
+}
+
+/* --- Primary side rail navigation (replaces header + footer nav) ---------
+   The rail is off-canvas by default (mobile drawer, opened with .is-open).
+   From md up it is pinned and content is inset by --p-rail; collapsing it
+   (.is-collapsed) slides it away and reclaims the full width. Transforms are
+   direction-aware so the rail hides toward its own inline-start edge. */
+.site-rail {
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[dir="rtl"] .site-rail {
+  transform: translateX(100%);
+}
+.site-rail.is-open {
+  transform: translateX(0);
+}
+@media (min-width: 768px) {
+  .site-rail,
+  [dir="rtl"] .site-rail {
+    transform: translateX(0);
+  }
+  .site-rail.is-collapsed {
+    transform: translateX(-100%);
+  }
+  [dir="rtl"] .site-rail.is-collapsed {
+    transform: translateX(100%);
+  }
+}
+.site-main {
+  transition: margin 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (min-width: 768px) {
+  .site-main {
+    margin-inline-start: var(--p-rail);
+  }
+  .site-main.is-collapsed {
+    margin-inline-start: 0;
+  }
+}
+
+/* --- Talks carousel poster motifs (annotated-figure family, blue strokes) - */
+@keyframes tk-drift {
+  to {
+    transform: translateX(-26px);
+  }
+}
+@keyframes tk-march {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+@keyframes tk-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes tk-packet {
+  to {
+    offset-distance: 100%;
+  }
+}
+.tk-wave > * {
+  animation: tk-drift 3.2s linear infinite;
+}
+.tk-march {
+  stroke-dasharray: 6 6;
+  animation: tk-march 1.6s linear infinite;
+}
+.tk-packet {
+  animation: tk-packet 3.4s ease-in-out infinite;
+}
+.tk-dot {
+  animation: tk-pulse 2.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tk-wave > *,
+  .tk-march,
+  .tk-packet,
+  .tk-dot {
+    animation: none;
+  }
 }

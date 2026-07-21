@@ -8,7 +8,10 @@
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
-    "tagline": "Un estándar con criterio para catálogos geoespaciales nativos de la nube."
+    "tagline": "Un estándar con criterio para catálogos geoespaciales nativos de la nube.",
+    "collapse": "Contraer",
+    "index": "Índice",
+    "external": "Externo"
   },
   "hero": {
     "title": "El futuro de los datos espaciales",
@@ -214,7 +217,11 @@
         "quote": "«Las SDI se construyeron para expertos. Ahora deben servir a los agentes.»",
         "description": "Por qué la desintermediación hace a las SDI más importantes que nunca, y la arquitectura que necesitan. La demo en vivo del agente Finland.SDI cierra la charla."
       }
-    }
+    },
+    "talkLabel": "Charla",
+    "watch": "Ver la charla",
+    "scrollPrev": "Anterior",
+    "scrollNext": "Siguiente"
   },
   "involved": {
     "label": "Con el apoyo de"
