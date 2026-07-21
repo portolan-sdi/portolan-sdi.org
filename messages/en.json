@@ -1,152 +1,123 @@
 {
   "meta": {
-    "title": "Portolan — Cloud-native spatial data infrastructure",
-    "description": "Portolan is a new foundation for sharing geospatial data: cloud-native files on object storage — no servers, no databases, no proprietary licenses. Structured metadata and open formats mean an agent can read a catalog, understand it, and analyze it directly. Open, AI-first, easy to implement, scalable, low cost, and sovereign."
+    "title": "Portolan — An opinionated standard for cloud-native geospatial catalogs",
+    "description": "Portolan publishes geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets both people and AI agents read a catalog, understand it, and query it directly. The standard sets the quality bar, a validator enforces it, and a set of tools makes catalogs cheap to build and easy to use."
   },
   "nav": {
-    "why": "Why",
-    "howItWorks": "How it works",
-    "tools": "Tools",
+    "registry": "Registry",
     "docs": "Docs",
-    "quickstart": "Quickstart",
     "homeAria": "Portolan home",
-    "menuAria": "Toggle menu",
-    "languageAria": "Change language"
+    "languageAria": "Change language",
+    "index": "Index",
+    "external": "External"
   },
   "hero": {
     "title": "The future of spatial data",
-    "phrases": {
-      "files": "is just files.",
-      "servers": "has no servers.",
-      "agents": "is built for agents.",
-      "scalable": "is infinitely scalable.",
-      "sovereign": "is fully sovereign."
-    },
-    "description": "Portolan is a new foundation for sharing geospatial data: cloud-native files on object storage — no servers, no databases, no proprietary licenses. Structured metadata and open formats mean an agent can read a catalog, understand it, and analyze it directly. Open, AI-first, easy to implement, scalable, low cost, and sovereign.",
+    "titleAccent": "is just files.",
+    "description": "Portolan is an opinionated standard for sharing geospatial data as cloud-native files on object storage, plus the tools that make it real. A Portolan catalog is a directory of open-format data described by structured <m>STAC</m> metadata, hosted on any S3-compatible bucket. No servers, no databases.",
     "quickstart": "Quickstart",
     "browseCatalogs": "Browse catalogs",
     "stats": {
       "catalogs": "catalogs",
       "collections": "collections",
-      "features": "features"
+      "features": "features",
+      "live": "live from the registry"
     }
   },
   "why": {
     "eyebrow": "Why Portolan",
-    "title": "A cloud-native upgrade for spatial data infrastructure.",
-    "subtitle": "SDIs are becoming more relevant than ever — but their requirements are changing.",
+    "title": "Spatial data infrastructure still assumes servers, databases, and specialists. Portolan doesn't.",
     "cards": {
       "open": {
-        "title": "Open",
-        "description": "100% open source under Apache-2.0, open formats, open governance. Geospatial data is data: DuckDB, BigQuery, and Pandas read the same bytes as desktop GIS. If Portolan disappeared tomorrow, your data would still work everywhere.",
+        "title": "Open and interoperable",
+        "description": "Everything is open source under <m>Apache-2.0</m> and built on existing standards like <m>GeoParquet</m>, cloud-optimized GeoTIFF, and <m>STAC</m>. These formats work across DuckDB, BigQuery, Pandas, and desktop GIS like QGIS and ArcGIS, so your data works everywhere, with or without Portolan.",
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
-        "title": "AI-first",
-        "description": "Today's SDIs weren't built for AI. Portolan explains to agents in plain text files how to access the data — no API calls needed — and structured metadata tells them what it means. The <link>Finland.SDI demo</link> shows an agent answering questions against a national SDI.",
-        "tag": "AI as a first-class citizen"
+        "title": "Readable by people and machines",
+        "description": "Older tooling like WFS and Shapefiles was built for one client at a time. A Portolan catalog describes itself in plain text and structured metadata, so a person, a script, or an agent can find the data and query it without a bespoke API to learn. The <link>Finland.SDI demo</link> shows an agent doing exactly that against a national SDI.",
+        "tag": "self-describing"
       },
       "easy": {
-        "title": "Easy to implement",
-        "description": "A traditional SDI needs databases, services, and specialist staff — a barrier most organizations can't clear. A Portolan node is files in a bucket: point, convert, push.",
-        "tag": "point · convert · push"
+        "title": "Simple",
+        "description": "Traditional spatial data infrastructure needs databases, services, and staff to run them. A Portolan catalog is files in a bucket. Point the CLI at your data, convert, and push.",
+        "tag": "files in a bucket"
       },
       "scalable": {
-        "title": "Infinitely scalable",
-        "description": "Agents crawl entire datasets, not single queries. With no servers, scaling is handled entirely by cloud storage — the most robust, proven layer any cloud offers.",
-        "tag": "0 servers · ∞ requests"
+        "title": "Scales with your storage",
+        "description": "The same setup handles megabytes or terabytes. There are no servers to run, so scaling is your cloud provider's job, not yours.",
+        "tag": "MB → TB"
       },
       "lowCost": {
         "title": "Low cost",
-        "description": "Only two costs: storage and egress. Sharing public data shouldn't be an organizational burden, and popular datasets shouldn't cause budget shortfalls. The <link>cost calculator</link> shows what your data would run.",
+        "description": "The whole budget is storage plus egress. Sharing public data should not take an operations team, and a popular dataset should not blow a budget. The <link>cost calculator</link> shows what your data would run.",
         "tag": "storage + egress"
       },
       "sovereign": {
-        "title": "Fully sovereign",
-        "description": "Control the full stack within your own jurisdiction — no foreign vendor in the stack. Host on AWS, GCS, Azure, MinIO, Hetzner, Scaleway, or any S3-compatible storage.",
+        "title": "Sovereign",
+        "description": "The full stack can live inside your own jurisdiction. Host on AWS, GCS, Azure, MinIO, Hetzner, Scaleway, or any S3-compatible storage. No foreign vendor sits between your agency and its data.",
         "tag": "bring your own bucket"
       }
     }
   },
   "howItWorks": {
     "eyebrow": "How it works",
-    "title": "Point, convert, push.",
-    "subtitle": "A community-built set of formats eliminates the need for a server — and scales through the power of cloud storage. No database, no tile server, no portal software: browsers, query engines, and AI agents read the files directly.",
+    "title": "Ingest, convert, push.",
+    "figCaption": "Fig. 2.1 — The pipeline",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Transform shapefiles, GeoTIFFs, WFS, GeoPackage, and ArcGIS Feature Services into cloud-native formats: GeoParquet for vectors, COG for rasters, PMTiles for map tiles."
+        "description": "Any input becomes cloud-native, legacy formats or new ones alike. Vectors turn into <m>GeoParquet</m>, rasters into <m>COG</m>, tiles into <m>PMTiles</m>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalog",
-        "description": "Generate a Portolan catalog that describes every asset with structured metadata. It is built on STAC, so any STAC tool can read it."
+        "description": "A <m>STAC</m> catalog describes every asset, so any <m>STAC</m> tool can read it."
       },
       "publish": {
         "id": "03",
         "title": "Publish",
-        "description": "Push the files to any S3-compatible object storage: AWS, GCS, Azure, R2, MinIO, or Source Cooperative for free open data hosting."
+        "description": "Push the files to any S3-compatible storage, from AWS, GCS, and Azure to R2, MinIO, or Source Cooperative."
       },
       "browse": {
         "id": "04",
-        "title": "Browse",
-        "description": "Open the result in the Portolan browser or any STAC viewer, query it with DuckDB, or point an agent at the catalog URL — data answers questions directly."
+        "title": "Use",
+        "description": "Use it with standard geospatial tools like DuckDB, Sedona, and QGIS, or point an agent at the URL."
       }
     }
   },
-  "toolkit": {
-    "eyebrow": "The toolkit",
-    "title": "Open by default.",
-    "allProjects": "All projects",
-    "cli": {
-      "name": "portolan-cli",
-      "title": "The CLI",
-      "version": "v1.0.0a0 · alpha",
-      "description": "Convert, validate, and sync. One command takes a folder of shapefiles to a browsable catalog on S3.",
-      "compatibility": "Works with AWS · GCS · Azure · R2 · MinIO · Source.coop"
-    },
-    "viewer": {
-      "name": "portolan-viewer",
-      "tag": "In design",
-      "title": "Browser-native viewer",
-      "description": "A lightweight viewer that reads Portolan catalogs and cloud-native files directly, with no server behind it."
-    },
-    "skills": {
-      "name": "portolan-skills",
-      "tag": "In development",
-      "title": "AI agent skills",
-      "description": "Skills that let Claude, Gemini, and Codex agents publish catalogs and query cloud-native geospatial data."
-    },
-    "readMore": "Read more"
-  },
-  "footer": {
-    "openGovernance": "Open governance",
-    "license": "Apache-2.0",
-    "repo": "portolan-sdi/portolan"
+  "ecosystem": {
+    "eyebrow": "Ecosystem",
+    "title": "Built to grow.",
+    "count": "{count} projects",
+    "legendCore": "core",
+    "legendCommunity": "community",
+    "submit": "Submit a tool",
+    "projects": {
+      "spec": "The standard. What a catalog must be.",
+      "reis": "The validator. Proves a catalog conforms.",
+      "cli": "The CLI. Build and publish catalogs.",
+      "registry": "The registry. Find published catalogs.",
+      "browser": "The browser. Explore catalogs on the web.",
+      "skills": "Claude skills. Publish with an agent."
+    }
   },
   "quickstart": {
-    "eyebrow": "Quickstart",
-    "title": "Quickstart",
-    "intro": "Browse an existing catalog, then publish your own data with the CLI or with an AI agent.",
-    "browse": {
-      "title": "Browse a catalog",
-      "description": "Portolan catalogs are live on the web. Open the browser to explore published datasets, or point DuckDB at any GeoParquet URL and query it in place.",
-      "cta": "Open the browser"
-    },
+    "title": "Publish your first catalog.",
     "cli": {
       "title": "With the CLI",
-      "description": "Install portolan-cli, then init, add, check, and push. The CLI converts your files and generates the catalog."
+      "description": "Install <m>portolan-cli</m>, then <m>init</m>, <m>add</m>, <m>check</m>, and <m>push</m>. The CLI converts your files and generates the catalog."
     },
     "claude": {
       "title": "With Claude",
-      "description": "Install the Portolan skill in Claude Code and point it at your data. It handles conversion, metadata, and publishing — AI tools excel at CLIs and text files, so non-experts can publish too."
+      "description": "Install the Portolan skill in Claude Code and point it at your data. It handles conversion, metadata, and publishing. Agents excel at CLIs and text files, so non-experts can publish too."
     }
   },
   "registry": {
     "eyebrow": "Catalog registry",
     "title": "Browse {count} catalogs",
-    "description": "Discover and connect to Portolan catalogs from around the world.",
+    "description": "Catalogs published around the world, live in the registry.",
     "search": {
       "placeholder": "Search catalogs...",
       "noResults": "No catalogs match your search",
@@ -212,17 +183,17 @@
       "zoomOut": "Zoom out",
       "info": "Map information",
       "reset": "Reset view",
-      "infoBody": "Basemap © CARTO, © OpenStreetMap contributors. Search powered by Nominatim. Catalogs appear as dots; zoom in to see their coverage areas.",
+      "infoBody": "Basemap © CARTO, © OpenStreetMap contributors. Search powered by Nominatim. Catalogs appear as dots. Zoom in to see their coverage areas.",
       "closeDetails": "Close details",
       "noLocation": "{count, plural, one {# catalog has no location data} other {# catalogs have no location data}}",
       "loading": "Loading map..."
     },
-    "generated": "Last updated: {date}"
+    "generated": "Last updated: {date}",
+    "caption": "Published catalogs by location",
+    "captionNote": "{count} shown · live from the registry"
   },
   "resources": {
     "eyebrow": "Talks & demos",
-    "title": "Two talks that make the case.",
-    "subtitle": "Portolan is early-stage and developed in the open. Start here — the demos, the cost calculator, and the example catalogs are all linked from inside the talks.",
     "items": {
       "holmesTalk": {
         "title": "A Cloud-Native Geo Upgrade for Spatial Data Infrastructure",
@@ -234,8 +205,22 @@
         "title": "The Next SDI",
         "attribution": "Javier de la Torre · OGC Connect Helsinki",
         "quote": "“SDIs were built for experts; now they must serve agents.”",
-        "description": "Why de-intermediation makes SDIs more important than ever, and the architecture they need — including the live Finland.SDI agent demo."
+        "description": "Why de-intermediation makes SDIs more important than ever, and the architecture they need. The live Finland.SDI agent demo closes the talk."
+      },
+      "finlandDemo": {
+        "title": "Finland.SDI agent demo",
+        "attribution": "Live demo · CARTO",
+        "description": "An AI agent answers questions against a national SDI, reading straight from its catalog, with no bespoke API in between."
+      },
+      "costCalc": {
+        "title": "Cost calculator",
+        "attribution": "Interactive · Open Geodag",
+        "description": "Estimate what publishing your data as Portolan costs. The whole budget is storage plus egress, nothing else."
       }
-    }
+    },
+    "watch": "View the slides",
+    "scrollPrev": "Previous",
+    "scrollNext": "Next",
+    "openDemo": "Open the demo"
   }
 }

@@ -4,8 +4,8 @@
   /* Dither map: rendered in the editorial blue accent on cream */
   --dither-filter: brightness(0.55) sepia(1) saturate(3.2) hue-rotate(196deg);
 
-  /* Hero legibility scrim over the dither map. Light mode keeps it light so the
-     map stays visible; dark mode (overridden below) is heavier. */
+  /* Hero legibility scrim over the dither map — light enough that the map
+     stays visible. */
   --hero-scrim: linear-gradient(
     to right,
     color-mix(in srgb, var(--p-bg) 90%, transparent),
@@ -20,9 +20,11 @@
   --p-ink: #16170f;
   --p-ink-2: #3d3f33;
   --p-ink-3: #74766a;
-  --p-line: #e1e1d8;
-  --p-line-soft: #ececE5;
-  --p-line-strong: #c9c9bd;
+  /* Structural rules are near-black ink; the soft tier is for interior
+     separators only (rows inside a bordered block). */
+  --p-line: #16170f;
+  --p-line-soft: #d6d5ca;
+  --p-line-strong: #16170f;
   --p-primary: #4163cc;
   --p-primary-ink: #2d4aa8;
   --p-grad-a: #4163cc;
@@ -40,12 +42,13 @@
     monospace;
   --p-arabic: var(--font-cairo), "Segoe UI", Tahoma, sans-serif;
 
-  /* Radii — near-square editorial */
+  /* Radii — square. Every corner is 90 degrees; the tokens stay so existing
+     rounded-[var(--p-r-*)] utilities resolve to 0. */
   --p-r-xs: 0px;
-  --p-r-sm: 2px;
-  --p-r-md: 3px;
-  --p-r-lg: 4px;
-  --p-r-xl: 6px;
+  --p-r-sm: 0px;
+  --p-r-md: 0px;
+  --p-r-lg: 0px;
+  --p-r-xl: 0px;
 
   /* Spacing */
   --p-pad-xs: 8px;
@@ -53,6 +56,9 @@
   --p-pad-md: 20px;
   --p-pad-lg: 32px;
   --p-pad-xl: 56px;
+
+  /* Primary side rail width (see .site-rail / .site-main) */
+  --p-rail: 264px;
 
   /* Shadows — flat editorial: no drop shadows, hairlines only */
   --p-shadow-sm: none;
@@ -63,62 +69,6 @@
   --p-pad-section-x: clamp(20px, 5vw, 64px);
   --p-pad-section-y: clamp(56px, 8vw, 104px);
 
-  /* Terminal — theme-aware. Light mode: warm paper code block. */
-  --term-bg: #f7f7f2;
-  --term-header: #eeeee8;
-  --term-border: #e1e1d8;
-  --term-title: #74766a;
-  --term-text: #3d3f33;
-  --term-syntax-text: #3d3f33;
-  --term-syntax-muted: #8a8a7c;
-  --term-syntax-accent: #4163cc;
-  --term-syntax-ok: #2f7d63;
-  --term-dot-red: #ff5f57;
-  --term-dot-yellow: #febc2e;
-  --term-dot-green: #28c840;
-}
-
-[data-theme="dark"] {
-  /* Dither map: muted warm-blue on warm-dark */
-  --dither-filter: brightness(0.45) sepia(1) saturate(2.2) hue-rotate(198deg);
-
-  --hero-scrim: linear-gradient(
-    to right,
-    var(--p-bg),
-    color-mix(in srgb, var(--p-bg) 82%, transparent) 45%,
-    color-mix(in srgb, var(--p-bg) 45%, transparent)
-  );
-
-  --p-bg: #141410;
-  --p-bg-soft: #1b1b15;
-  --p-paper: #1f1f18;
-  --p-ink: #f3f2ea;
-  --p-ink-2: #cbcabd;
-  --p-ink-3: #908f80;
-  --p-line: #2f2f26;
-  --p-line-soft: #26261e;
-  --p-line-strong: #3a3a2f;
-  --p-primary: #8b9eee;
-  --p-primary-ink: #aab6f2;
-  --p-grad-a: #8b9eee;
-  --p-grad-b: #8b9eee;
-  --p-accent: #8b9eee;
-  --p-accent-ink: #aab6f2;
-  --p-on-primary: #15160f;
-  --p-shadow-sm: none;
-  --p-shadow-md: 0 1px 0 var(--p-line);
-  --p-shadow-lg: 0 1px 0 var(--p-line);
-
-  /* Terminal — dark mode: warm near-black code block */
-  --term-bg: #16170f;
-  --term-header: #1f1f18;
-  --term-border: #2f2f26;
-  --term-title: #908f80;
-  --term-text: #cbcabd;
-  --term-syntax-text: #cbcabd;
-  --term-syntax-muted: #908f80;
-  --term-syntax-accent: #8b9eee;
-  --term-syntax-ok: #3fcf5f;
 }
 
 @theme inline {
@@ -195,36 +145,41 @@ body {
   padding: 0;
 }
 
-body {
-  font-family: var(--p-sans);
-  background: var(--p-bg);
-  color: var(--p-ink);
-  -webkit-font-smoothing: antialiased;
-}
+/* Element defaults live in the base layer so Tailwind utilities (which sit in
+   the utilities layer) can override them — unlayered rules would always win
+   over layered utilities regardless of specificity. */
+@layer base {
+  body {
+    font-family: var(--p-sans);
+    background: var(--p-bg);
+    color: var(--p-ink);
+    -webkit-font-smoothing: antialiased;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-family: var(--p-sans);
-  letter-spacing: -0.02em;
-  color: var(--p-ink);
-  font-weight: 600;
-}
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--p-sans);
+    letter-spacing: -0.02em;
+    color: var(--p-ink);
+    font-weight: 600;
+  }
 
-p {
-  color: var(--p-ink-2);
-}
+  p {
+    color: var(--p-ink-2);
+  }
 
-a {
-  color: var(--p-primary);
-  text-decoration: none;
-}
+  a {
+    color: var(--p-primary);
+    text-decoration: none;
+  }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
 }
 
 /* Arabic (RTL): the whole page renders in Cairo, which Archivo cannot render.
@@ -236,17 +191,72 @@ button {
 }
 
 /* Mono-styled eyebrow labels use the mono token; route them to Cairo on RTL
-   pages too. Real code/terminal blocks carry dir="ltr" and stay monospace. */
+   pages too. Real code blocks carry dir="ltr" and stay monospace. */
 [dir="rtl"] .font-mono {
   font-family: var(--p-arabic);
 }
 
-/* Keep real code/terminal blocks in true monospace even on an RTL page.
-   The Terminal root carries dir="ltr"; this re-assert wins by source order. */
+/* Keep dir="ltr" mono content in true monospace even on an RTL page;
+   this re-assert wins by source order. */
 [dir="ltr"] .font-mono,
 .font-mono[dir="ltr"],
 [dir="ltr"] .font-mono * {
   font-family: var(--p-mono);
+}
+
+/* Pipeline figure (PipelineFigure): packet writes, marching reads, arrival
+   glow. Solid curves + traveling packets = writes; dashed marching = reads. */
+@keyframes pd-src {
+  0% {
+    stroke-dashoffset: 10;
+  }
+  45%,
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+@keyframes pd-flow {
+  to {
+    stroke-dashoffset: -14;
+  }
+}
+@keyframes pd-march {
+  to {
+    stroke-dashoffset: -11;
+  }
+}
+@keyframes pd-glow {
+  0%,
+  42% {
+    opacity: 0;
+  }
+  52% {
+    opacity: 0.14;
+  }
+  68%,
+  100% {
+    opacity: 0;
+  }
+}
+.pd-src {
+  animation: pd-src 3.6s linear infinite;
+}
+.pd-flow {
+  animation: pd-flow 0.6s linear infinite;
+}
+.pd-march {
+  animation: pd-march 0.9s linear infinite;
+}
+.pd-glow {
+  animation: pd-glow 3.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pd-src,
+  .pd-flow,
+  .pd-march,
+  .pd-glow {
+    animation: none;
+  }
 }
 
 @keyframes caret-blink {
@@ -271,4 +281,209 @@ button {
 }
 .catalog-map-popup .maplibregl-popup-tip {
   display: none;
+}
+
+/* --- Primary side rail navigation (replaces header + footer nav) ---------
+   The rail is off-canvas by default (mobile drawer, opened with .is-open).
+   From md up it is permanently pinned and content is inset by --p-rail.
+   Transforms are direction-aware so the rail hides toward its own
+   inline-start edge below md. */
+.site-rail {
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[dir="rtl"] .site-rail {
+  transform: translateX(100%);
+}
+.site-rail.is-open {
+  transform: translateX(0);
+}
+@media (min-width: 768px) {
+  .site-rail,
+  [dir="rtl"] .site-rail {
+    transform: translateX(0);
+  }
+}
+@media (min-width: 768px) {
+  .site-main {
+    margin-inline-start: var(--p-rail);
+  }
+}
+
+/* --- Talks carousel poster motifs (annotated-figure family, blue strokes) - */
+@keyframes tk-drift {
+  to {
+    transform: translateX(-26px);
+  }
+}
+@keyframes tk-march {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+@keyframes tk-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes tk-packet {
+  to {
+    offset-distance: 100%;
+  }
+}
+@keyframes tk-nodefloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes tk-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.tk-wave > * {
+  animation: tk-drift 3.2s linear infinite;
+}
+.tk-march {
+  stroke-dasharray: 6 6;
+  animation: tk-march 1.6s linear infinite;
+}
+.tk-packet {
+  animation: tk-packet 3.4s ease-in-out infinite;
+}
+.tk-dot {
+  animation: tk-pulse 2.6s ease-in-out infinite;
+}
+.tk-float {
+  animation: tk-nodefloat 4.5s ease-in-out infinite;
+}
+.tk-bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: tk-bar 2.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tk-wave > *,
+  .tk-march,
+  .tk-packet,
+  .tk-dot,
+  .tk-float,
+  .tk-bar {
+    animation: none;
+  }
+}
+
+/* --- Monochrome supporter logos ------------------------------------------
+   Any source (color SVG, or the CARTO PNG's alpha) is painted a single grey
+   via mask-image, so the whole strip reads as one flat monochrome. */
+.logo-mono {
+  display: inline-block;
+  background-color: var(--p-ink-3);
+  transition: background-color 0.2s;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.logo-link:hover .logo-mono,
+.logo-link:focus-visible .logo-mono {
+  background-color: var(--p-ink);
+}
+
+/* --- Ecosystem project cards -------------------------------------------- */
+/* Staggered pulse ring on each card's square status marker. Grows from the
+   marker's own size out to ~2.6x while fading — the square-cornered take on
+   the design's blip dot. Delay is set per-card inline (index * 0.35s). */
+@keyframes ec-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.ec-ping {
+  animation: ec-ping 4.2s ease-out infinite;
+}
+/* Cards rest raised on a hard blue offset shadow; hover presses them flush,
+   as if the card were clicked. Direction-aware so the shadow sits on the
+   reading-forward (inline-end) side. */
+.ec-card {
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 var(--p-primary);
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    border-color 0.14s ease;
+}
+.ec-card:hover {
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 0 var(--p-primary);
+  border-color: var(--p-line-strong);
+}
+[dir="rtl"] .ec-card {
+  transform: translate(3px, -3px);
+  box-shadow: -5px 5px 0 var(--p-primary);
+}
+[dir="rtl"] .ec-card:hover {
+  transform: translate(0, 0);
+}
+
+/* Talk/demo poster cards flip on hover/focus to reveal the quote or blurb;
+   the whole card is the link. */
+.tk-flip {
+  perspective: 1200px;
+}
+.tk-flip__inner {
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tk-flip:hover .tk-flip__inner,
+.tk-flip:focus-within .tk-flip__inner {
+  transform: rotateY(180deg);
+}
+.tk-flip__face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+/* Also cull every descendant of a face — otherwise a positioned/z-indexed
+   child can be promoted to its own layer and bleed through mirrored when the
+   card is flipped. */
+.tk-flip__face * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.tk-flip__back {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ec-card {
+    transition: none;
+  }
+  .tk-flip__inner {
+    transition: none;
+  }
+  .ec-ping {
+    animation: none;
+  }
 }

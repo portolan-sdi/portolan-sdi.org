@@ -26,8 +26,7 @@ interface DitherMapCanvasProps {
 
 // Monochrome dither: a quiet textural backdrop, not a colored feature. Warm
 // near-black on cream (light) and warm near-white on the warm-dark bg (dark).
-const LIGHT_MODE_COLOR = new Color(0x2c2b22);
-const DARK_MODE_COLOR = new Color(0xdcdacd);
+const DITHER_COLOR = new Color(0x2c2b22);
 
 export default function DitherMapCanvas({
   className = "",
@@ -83,24 +82,7 @@ export default function DitherMapCanvas({
         height * renderer.getPixelRatio()
       );
 
-      function isDarkMode() {
-        return document.documentElement.dataset.theme === "dark";
-      }
-
-      function updateColor() {
-        const dark = isDarkMode();
-        ditherPass.uniforms.ditherColor.value.copy(
-          dark ? DARK_MODE_COLOR : LIGHT_MODE_COLOR
-        );
-      }
-
-      updateColor();
-
-      const themeObserver = new MutationObserver(updateColor);
-      themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["data-theme"],
-      });
+      ditherPass.uniforms.ditherColor.value.copy(DITHER_COLOR);
 
       composer.addPass(ditherPass);
 
@@ -157,6 +139,11 @@ export default function DitherMapCanvas({
       }
 
       window.addEventListener("resize", handleResize);
+      // The container width also changes when the side rail collapses/expands,
+      // which does not fire a window resize — observe the element directly so
+      // the canvas re-fills the full column instead of leaving a right gutter.
+      const resizeObserver = new ResizeObserver(() => handleResize());
+      resizeObserver.observe(container);
 
       function animate() {
         if (disposed) return;
@@ -177,7 +164,7 @@ export default function DitherMapCanvas({
         disposed = true;
         cancelAnimationFrame(animFrameId);
         window.removeEventListener("resize", handleResize);
-        themeObserver.disconnect();
+        resizeObserver.disconnect();
         composer.dispose();
         renderer.dispose();
         if (plane) {

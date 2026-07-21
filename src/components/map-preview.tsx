@@ -81,7 +81,7 @@ export function MapPreview({ height = 360, className }: MapPreviewProps) {
         Live node · 3 collections · 1.2 TB
       </div>
       <div className="absolute top-3 right-3.5 font-mono text-[11px] text-p-accent tracking-[0.06em] flex items-center gap-1.5">
-        <span className="w-1.5 h-1.5 rounded-full bg-p-accent shadow-[0_0_8px_var(--p-accent)]" />
+        <span className="w-1.5 h-1.5 bg-p-accent" />
         LIVE
       </div>
     </div>

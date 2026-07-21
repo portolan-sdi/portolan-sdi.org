@@ -21,15 +21,12 @@ import type {
 } from "maplibre-gl";
 import type { Catalog } from "@/lib/catalogs";
 import { getValidationTier } from "@/lib/catalogs";
-import { useResolvedTheme } from "@/hooks/use-resolved-theme";
 import { MapGeocoder } from "./map-geocoder";
 import { Tag, DirArrow } from "../ui";
 import type { GeocodeSuggestion } from "@/hooks/use-geocode";
 
-const CARTO_STYLE = {
-  light: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
-  dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-} as const;
+const CARTO_STYLE =
+  "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
 
 const INITIAL_VIEW = { longitude: 0, latitude: 20, zoom: 1.3 };
 
@@ -70,7 +67,6 @@ interface CatalogMapProps {
 
 export default function CatalogMap({ catalogs }: CatalogMapProps) {
   const t = useTranslations("registry");
-  const theme = useResolvedTheme();
 
   const mapRef = useRef<MapRef | null>(null);
   const didFit = useRef(false);
@@ -96,8 +92,26 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
         unlocatedCount++;
         continue;
       }
-      byId.set(catalog.id, catalog);
       const [west, south, east, north] = catalog.bbox;
+      // Guard against malformed bboxes: non-finite values, inverted axes, or
+      // coordinates outside the world. MapLibre's fitBounds throws on any lat
+      // outside [-90, 90] (or lon outside [-180, 180]), so a single bad entry
+      // would otherwise poison the accumulated bounds and break the map fit.
+      // West > east is allowed — that's an antimeridian crossing, handled below.
+      const validBbox =
+        [west, south, east, north].every(Number.isFinite) &&
+        south >= -90 &&
+        north <= 90 &&
+        south <= north &&
+        west >= -180 &&
+        west <= 180 &&
+        east >= -180 &&
+        east <= 180;
+      if (!validBbox) {
+        unlocatedCount++;
+        continue;
+      }
+      byId.set(catalog.id, catalog);
       const crossesAntimeridian = west > east;
       const widthDeg = crossesAntimeridian ? east + 360 - west : east - west;
       const heightDeg = north - south;
@@ -163,10 +177,10 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
   const colors = useMemo(
     () => ({
       primary: readThemeHex("--p-primary", "#4163cc"),
-      accent: readThemeHex("--p-accent", "#f4b860"),
-      stroke: theme === "dark" ? "#161e47" : "#ffffff",
+      accent: readThemeHex("--p-accent", "#4163cc"),
+      stroke: "#ffffff",
     }),
-    [theme],
+    [],
   );
 
   const selectedExpr: ExpressionSpecification = [
@@ -257,7 +271,6 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
   const dotFilter: ExpressionSpecification = [">", ["get", "rectZoom"], zoom];
   const rectFilter: ExpressionSpecification = ["<=", ["get", "rectZoom"], zoom];
 
-  const mapStyle = theme === "dark" ? CARTO_STYLE.dark : CARTO_STYLE.light;
 
   return (
     <>
@@ -270,7 +283,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
         <MapGL
           ref={mapRef}
           initialViewState={INITIAL_VIEW}
-          mapStyle={mapStyle}
+          mapStyle={CARTO_STYLE}
           attributionControl={false}
           dragRotate={false}
           touchPitch={false}
@@ -428,7 +441,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
               onClick={() => setInfoOpen((v) => !v)}
               aria-label={t("map.info")}
               aria-expanded={infoOpen}
-              className="shrink-0 flex items-center justify-center w-5 h-5 rounded-full border border-p-line text-p-ink-3 hover:text-p-ink hover:border-p-ink-3 transition-colors text-micro font-mono"
+              className="shrink-0 flex items-center justify-center w-5 h-5 border border-p-line text-p-ink-3 hover:text-p-ink hover:border-p-ink-3 transition-colors text-micro font-mono"
             >
               i
             </button>

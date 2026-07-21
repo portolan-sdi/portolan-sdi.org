@@ -10,9 +10,9 @@ interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const sizeClasses: Record<BtnSize, string> = {
-  sm: "px-4 py-2 text-small",
-  md: "px-5 py-2.5 text-body-lg",
-  lg: "px-6 py-3 text-body-lg",
+  sm: "px-4 py-2 text-micro",
+  md: "px-5 py-2.5 text-small",
+  lg: "px-6 py-3 text-small",
 };
 
 const variantClasses: Record<BtnVariant, string> = {
@@ -29,7 +29,7 @@ export const Btn = forwardRef<HTMLButtonElement, BtnProps>(
         ref={ref}
         className={`
           inline-flex items-center justify-center gap-2
-          rounded-[var(--p-r-md)] font-semibold font-sans
+          rounded-[var(--p-r-md)] font-mono font-medium uppercase tracking-[0.08em] rtl:tracking-normal
           cursor-pointer whitespace-nowrap
           transition-[background-color,border-color,color] duration-150
           ${sizeClasses[size]}
