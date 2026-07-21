@@ -375,12 +375,17 @@ body {
 .logo-mono {
   display: inline-block;
   background-color: var(--p-ink-3);
+  transition: background-color 0.2s;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-position: center;
   -webkit-mask-size: contain;
   mask-size: contain;
+}
+.logo-link:hover .logo-mono,
+.logo-link:focus-visible .logo-mono {
+  background-color: var(--p-ink);
 }
 
 /* --- Ecosystem project cards: subtle lift on hover ----------------------- */

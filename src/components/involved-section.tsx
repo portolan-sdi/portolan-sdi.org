@@ -1,48 +1,46 @@
-"use client";
-
-import { useTranslations } from "next-intl";
 import { Ltr } from "./ui";
 
-// Credibility strip directly under the hero. Logos render as flat monochrome
-// grey via CSS mask-image (see .logo-mono) so the whole row is one colour.
-// `aspect` = intrinsic width/height; `h` sets the on-screen height in px and
-// width follows. Radiant Earth has no wordmark asset yet, so it renders as a
-// grey text wordmark until one lands. Org list is a draft pending confirmation.
+// Credibility strip under the hero: a mix of users and supporters, so there is
+// no "Supported by" label — just the logos, each linking to its canonical site.
+// Logos render as flat monochrome grey via CSS mask-image (see .logo-mono), so
+// any source (color SVG, or a PNG's alpha) recolors uniformly; on hover they
+// darken to full ink. `aspect` = intrinsic width/height; `h` is the px height.
+// Radiant Earth has no wordmark asset yet, so it renders as a grey text link.
 const orgs = [
-  { name: "CARTO", file: "carto.png", h: 22, aspect: 2.554 },
-  { name: "Planet", file: "planet.svg", h: 26, aspect: 2.047 },
-  { name: "Radiant Earth", text: true },
-  { name: "Source Cooperative", file: "source-coop.svg", h: 19, aspect: 3.284 },
-  { name: "WRI", file: "wri.svg", h: 30, aspect: 2.85 },
+  { name: "CARTO", href: "https://carto.com/", file: "carto.png", h: 22, aspect: 2.554 },
+  { name: "Planet", href: "https://www.planet.com/", file: "planet.svg", h: 26, aspect: 2.047 },
+  { name: "Radiant Earth", href: "https://radiant.earth/", text: true },
+  { name: "Source Cooperative", href: "https://source.coop/", file: "source-coop.svg", h: 19, aspect: 3.284 },
+  { name: "WRI", href: "https://www.wri.org/", file: "wri.svg", h: 30, aspect: 2.85 },
+  { name: "Ayuntamiento de Madrid", href: "https://www.madrid.es/", file: "madrid.png", h: 26, aspect: 3.0 },
+  { name: "Municipalidad de Pergamino", href: "https://pergamino.ar/", file: "pergamino.svg", h: 30, aspect: 2.734 },
 ] as const;
 
 export function InvolvedSection() {
-  const t = useTranslations("involved");
-
   return (
     <section
       id="involved"
+      aria-label="Users and supporters"
       className="px-[var(--p-pad-section-x)] py-[clamp(2rem,4vw,3.5rem)]"
     >
-      <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row md:items-center gap-x-12 gap-y-5">
-        <span className="font-mono text-eyebrow text-p-ink-3 tracking-[0.04em] shrink-0">
-          {t("label")}
-        </span>
-        <div className="flex flex-wrap items-center gap-x-[clamp(1.75rem,4vw,3.5rem)] gap-y-5">
-          {orgs.map((org) =>
-            "text" in org ? (
-              <span
-                key={org.name}
-                className="text-body-lg font-bold tracking-[-0.02em] text-p-ink-3"
-              >
+      <div className="max-w-[1240px] mx-auto flex flex-wrap items-center gap-x-[clamp(1.75rem,4vw,3.5rem)] gap-y-6">
+        {orgs.map((org) => (
+          <a
+            key={org.name}
+            href={org.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={org.name}
+            className="logo-link inline-flex items-center"
+          >
+            {"text" in org ? (
+              <span className="text-body-lg font-bold tracking-[-0.02em] text-p-ink-3 transition-colors hover:text-p-ink">
                 <Ltr>{org.name}</Ltr>
               </span>
             ) : (
               <span
-                key={org.name}
-                role="img"
-                aria-label={org.name}
-                className="logo-mono shrink-0"
+                aria-hidden="true"
+                className="logo-mono"
                 style={{
                   height: `${org.h}px`,
                   width: `${Math.round(org.h * org.aspect)}px`,
@@ -50,9 +48,9 @@ export function InvolvedSection() {
                   maskImage: `url(/logos/${org.file})`,
                 }}
               />
-            ),
-          )}
-        </div>
+            )}
+          </a>
+        ))}
       </div>
     </section>
   );
