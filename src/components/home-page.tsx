@@ -9,6 +9,7 @@ import { SiteShell } from "./site-rail";
 import { PublishPaths } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
+import { AudienceSection } from "./audience-section";
 import { InvolvedSection } from "./involved-section";
 import { PipelineFigure } from "./pipeline-figure";
 import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
@@ -224,6 +225,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               <p className="text-lead leading-relaxed max-w-[56ch]">
                 {t.rich("hero.description", { m: monoChunk })}
               </p>
+              <p className="text-body-lg leading-relaxed max-w-[56ch] text-p-ink-2 mt-5">
+                {t.rich("hero.summary", { m: monoChunk })}
+              </p>
               <div className="flex gap-6 items-center flex-wrap mt-9">
                 <Link href="/#how">
                   <Btn variant="primary" size="lg">
@@ -254,6 +258,10 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* Who is Portolan for — three audiences, right after the hero to make
+          the thesis tangible before the credibility strip */}
+      <AudienceSection />
 
       {/* Who's involved — credibility strip; placeholder wordmarks until logo assets land */}
       <InvolvedSection />

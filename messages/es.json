@@ -14,7 +14,8 @@
   "hero": {
     "title": "El futuro de los datos espaciales",
     "titleAccent": "son solo archivos.",
-    "description": "Portolan es un estándar con criterio para compartir datos geoespaciales como archivos nativos de la nube en almacenamiento de objetos, más las herramientas que lo hacen realidad. Un catálogo Portolan es un directorio de datos en formatos abiertos descritos con metadatos <m>STAC</m> estructurados, alojado en cualquier bucket compatible con S3. Sin servidores, sin bases de datos.",
+    "description": "Comparte datos geoespaciales como archivos simples en tu propio almacenamiento. Describes los datos una vez y se abren en QGIS, se consultan desde DuckDB, se cargan en un notebook y un agente puede leerlos directamente desde la URL. No hay servidor que ejecutar ni cuenta que crear.",
+    "summary": "Portolan es un estándar abierto construido sobre <m>STAC</m> y <m>GeoParquet</m>, más herramientas para crear catálogos y un registro para encontrarlos.",
     "quickstart": "Inicio rápido",
     "browseCatalogs": "Explorar catálogos",
     "stats": {
@@ -26,70 +27,91 @@
   },
   "why": {
     "eyebrow": "Por qué Portolan",
-    "title": "La infraestructura de datos espaciales todavía da por sentados servidores, bases de datos y especialistas. Portolan no.",
+    "title": "La infraestructura de datos espaciales todavía da por sentados servidores y especialistas. Portolan no.",
     "cards": {
       "open": {
-        "title": "Abierto e interoperable",
-        "description": "Todo es de código abierto bajo <m>Apache-2.0</m> y se apoya en estándares existentes como <m>GeoParquet</m>, GeoTIFF optimizado para la nube y <m>STAC</m>. Estos formatos funcionan en DuckDB, BigQuery, Pandas y GIS de escritorio como QGIS y ArcGIS, así que tus datos siguen siendo útiles, con o sin Portolan.",
+        "title": "Tus datos funcionan en las herramientas que la gente ya usa.",
+        "description": "Un catálogo son formatos abiertos de principio a fin, desde <m>GeoParquet</m> hasta GeoTIFF optimizado para la nube y <m>STAC</m>. Se abre en QGIS y ArcGIS y se consulta desde DuckDB y BigQuery. Sigue siendo útil con o sin Portolan, y todo es de código abierto bajo <m>Apache-2.0</m>.",
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
-        "title": "Legible por personas y máquinas",
-        "description": "Los portales de descarga y las API específicas se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional.",
+        "title": "No hace falta ser especialista.",
+        "description": "Un catálogo se explica solo. Los metadatos dicen qué cubre el dato y qué significan los campos, en texto que una persona o un agente puede leer. No hay una API que aprender. La <link>demo Finland.SDI</link> muestra a un agente respondiendo preguntas sobre un archivo nacional de esta forma.",
         "tag": "autodescriptivo"
       },
       "easy": {
-        "title": "Simple",
-        "description": "La infraestructura de datos espaciales tradicional necesita bases de datos, servicios y personal para operarla. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica.",
+        "title": "Publicar es una tarde, no un proyecto.",
+        "description": "Apunta la CLI a tus datos y publica. No hay base de datos que levantar ni nada ejecutándose después. Un catálogo son archivos en un bucket.",
         "tag": "archivos en un bucket"
       },
       "scalable": {
-        "title": "Escala con tu almacenamiento",
-        "description": "La misma configuración maneja megabytes o terabytes. No hay servidores que ejecutar, así que escalar es tarea de tu proveedor de nube, no tuya.",
+        "title": "No hay nada que escalar.",
+        "description": "La misma configuración sirve megabytes o terabytes. El crecimiento es tarea de tu proveedor de nube, porque el almacenamiento es lo único que crece.",
         "tag": "MB → TB"
       },
       "lowCost": {
-        "title": "Bajo costo",
-        "description": "Todo el presupuesto es almacenamiento más transferencia de salida. Compartir datos públicos no debería requerir un equipo de operaciones, y un conjunto de datos popular no debería romper un presupuesto. La <link>calculadora de costos</link> muestra lo que costarían tus datos.",
+        "title": "La factura es almacenamiento más transferencia de salida.",
+        "description": "Ese es todo el presupuesto, y va a tu proveedor de nube, no a nosotros. Un conjunto de datos popular no debería romper un presupuesto. La <link>calculadora de costos</link> muestra lo que costaría el tuyo.",
         "tag": "almacenamiento + salida"
       },
       "sovereign": {
-        "title": "Soberano",
-        "description": "Toda la pila puede vivir dentro de tu propia jurisdicción. Alójala en AWS, GCS, Azure, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Ningún proveedor extranjero se interpone entre tu institución y sus datos.",
+        "title": "Tus datos permanecen en tu jurisdicción.",
+        "description": "Alójalos en AWS, GCS, Azure, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Ningún proveedor extranjero se interpone entre tu institución y sus datos.",
         "tag": "usa tu propio bucket"
+      }
+    }
+  },
+  "audiences": {
+    "eyebrow": "Para quién es",
+    "title": "Portolan se creó para",
+    "cards": {
+      "large": {
+        "title": "Grandes publicadores",
+        "body": "La mayoría de quienes podrían usar un archivo grande nunca lo tocan, porque el portal exige una cuenta y la API exige una biblioteca cliente. Un catálogo Portolan no tiene ninguna de las dos. Describes el archivo una vez, y analistas y agentes pueden consultarlo sin descargarlo, con preguntas que nunca planeaste.",
+        "cta": "Portolan para grandes publicadores"
+      },
+      "small": {
+        "title": "Pequeños publicadores",
+        "body": "Los mapas de inundación y las huellas de edificios de una ciudad a menudo quedan sin publicar, porque compartirlos ha significado un servidor y una línea de presupuesto para mantenerlo vivo. Un catálogo Portolan son archivos en un bucket. Nada se ejecuta después y la factura se acerca a cero, y el registro hace que el catálogo sea tan localizable como un archivo planetario.",
+        "cta": "Portolan para pequeños publicadores"
+      },
+      "users": {
+        "title": "Usuarios de datos",
+        "body": "Trabajar con datos espaciales ha significado construir una tubería nueva para cada fuente. Un catálogo Portolan dice qué cubre y qué significan sus campos antes de que descargues nada, y los formatos te permiten traer los doscientos megabytes que necesitas en lugar de los cuarenta gigabytes que los rodean. Puedes empezar a trabajar la tarde en que encuentras los datos, y un agente también, porque un catálogo que se explica a una persona se explica a una máquina.",
+        "cta": "Portolan para usuarios de datos"
       }
     }
   },
   "howItWorks": {
     "eyebrow": "Cómo funciona",
-    "title": "Ingiere, convierte, publica.",
+    "title": "Tres pasos para publicar, uno para usar.",
     "figCaption": "Fig. 2.1 · El proceso",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convertir",
-        "description": "Cualquier entrada se vuelve nativa de la nube, ya sean formatos heredados o nuevos. Los vectores pasan a <m>GeoParquet</m>, los rásteres a <m>COG</m> y las teselas a <m>PMTiles</m>."
+        "description": "La CLI convierte lo que tienes en archivos nativos de la nube. Los Shapefiles y GeoPackages pasan a <m>GeoParquet</m>, los rásteres a <m>COG</m> y las teselas a <m>PMTiles</m>."
       },
       "catalog": {
         "id": "02",
-        "title": "Catalogar",
-        "description": "Un catálogo <m>STAC</m> describe cada activo, así que cualquier herramienta <m>STAC</m> puede leerlo."
+        "title": "Describir",
+        "description": "La CLI escribe un catálogo <m>STAC</m> para tus archivos. Esa es la parte que permite a un desconocido entender tus datos sin preguntarte."
       },
       "publish": {
         "id": "03",
         "title": "Publicar",
-        "description": "Sube los archivos a cualquier almacenamiento compatible con S3, desde AWS, GCS y Azure hasta R2, MinIO o Source Cooperative."
+        "description": "Sube los archivos a cualquier bucket compatible con S3. AWS, GCS, Azure, R2, MinIO o Source Cooperative sirven todos."
       },
       "browse": {
         "id": "04",
         "title": "Usar",
-        "description": "Úsalo con herramientas geoespaciales estándar como DuckDB, Sedona y QGIS, o apunta un agente a la URL."
+        "description": "Abre el catálogo en QGIS, consúltalo desde DuckDB o Sedona, cárgalo en un notebook o dale la URL a un agente."
       }
     }
   },
   "ecosystem": {
-    "eyebrow": "Ecosistema",
-    "title": "Hecho para crecer.",
+    "eyebrow": "Herramientas",
+    "title": "Portolan es un estándar, más las herramientas que lo hacen realidad.",
     "count": "{count} proyectos",
     "legendCore": "núcleo",
     "legendCommunity": "comunidad",
@@ -107,11 +129,11 @@
     "title": "Publica tu primer catálogo.",
     "cli": {
       "title": "Con la CLI",
-      "description": "Instala <m>portolan-cli</m> y luego <m>init</m>, <m>add</m>, <m>check</m> y <m>push</m>. La CLI convierte tus archivos y genera el catálogo."
+      "description": "Instala <m>portolan-cli</m> y luego <m>init</m>, <m>add</m>, <m>check</m> y <m>push</m>. Convierte tus archivos y escribe el catálogo por ti."
     },
     "claude": {
       "title": "Con Claude",
-      "description": "Instala la skill de Portolan en Claude Code y dirígela a tus datos. Se encarga de la conversión, los metadatos y la publicación. Los agentes destacan con CLI y archivos de texto, así que incluso quienes no son expertos pueden publicar."
+      "description": "Instala la skill de Portolan en Claude Code y dirígela a tus datos. Ejecuta los pasos de conversión, descripción y publicación por ti, así no tienes que ser ingeniero de datos."
     }
   },
   "registry": {
