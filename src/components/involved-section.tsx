@@ -15,6 +15,7 @@ const orgs = [
   { name: "Ayuntamiento de Madrid", href: "https://www.madrid.es/", file: "madrid.png", h: 26, aspect: 3.0 },
   { name: "Municipalidad de Pergamino", href: "https://pergamino.ar/", file: "pergamino.svg", h: 30, aspect: 2.734 },
   { name: "Ajuntament de Barcelona", href: "https://www.barcelona.cat/", file: "barcelona.svg", h: 22, aspect: 4.875 },
+  { name: "walkthru.earth", href: "https://walkthru.earth/", file: "logo-wte.svg", h: 30, aspect: 4.5 },
 ] as const;
 
 export function InvolvedSection() {
