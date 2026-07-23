@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Portolan, un estándar con criterio para catálogos geoespaciales nativos de la nube",
-    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que tanto las personas como los agentes de IA lean un catálogo, lo entiendan y lo consulten directamente. El estándar fija el nivel de calidad, un validador lo hace cumplir y un conjunto de herramientas hace que los catálogos sean baratos de crear y fáciles de usar."
+    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que una persona o un agente lea un catálogo y lo consulte directamente. El estándar fija el nivel de calidad, un validador lo hace cumplir, las herramientas hacen que los catálogos sean baratos de crear y un registro los conecta en una red que cualquiera puede buscar."
   },
   "nav": {
     "registry": "Registro",
@@ -30,12 +30,12 @@
     "cards": {
       "open": {
         "title": "Abierto e interoperable",
-        "description": "Todo es de código abierto bajo <m>Apache-2.0</m> y se apoya en estándares existentes como <m>GeoParquet</m>, GeoTIFF optimizado para la nube y <m>STAC</m>. Estos formatos funcionan en DuckDB, BigQuery, Pandas y GIS de escritorio como QGIS y ArcGIS, así que tus datos funcionan en todas partes, con o sin Portolan.",
+        "description": "Todo es de código abierto bajo <m>Apache-2.0</m> y se apoya en estándares existentes como <m>GeoParquet</m>, GeoTIFF optimizado para la nube y <m>STAC</m>. Estos formatos funcionan en DuckDB, BigQuery, Pandas y GIS de escritorio como QGIS y ArcGIS, así que tus datos siguen siendo útiles, con o sin Portolan.",
         "tag": "GeoParquet · COG · STAC"
       },
       "aiFirst": {
         "title": "Legible por personas y máquinas",
-        "description": "Herramientas más antiguas como WFS y Shapefiles se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona, un script o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional.",
+        "description": "Los portales de descarga y las API específicas se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional.",
         "tag": "autodescriptivo"
       },
       "easy": {
