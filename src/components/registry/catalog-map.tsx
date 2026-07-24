@@ -20,7 +20,7 @@ import type {
   ExpressionSpecification,
 } from "maplibre-gl";
 import type { Catalog } from "@/lib/catalogs";
-import { getValidationTier } from "@/lib/catalogs";
+import { getBrowserUrl, getValidationTier } from "@/lib/catalogs";
 import { MapGeocoder } from "./map-geocoder";
 import { Tag, DirArrow } from "../ui";
 import type { GeocodeSuggestion } from "@/hooks/use-geocode";
@@ -397,7 +397,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
               {selected.description}
             </p>
             <a
-              href={selected.url}
+              href={getBrowserUrl(selected.url)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-3 inline-block text-small text-p-primary hover:underline"
