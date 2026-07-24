@@ -53,6 +53,18 @@ export async function getCatalogs(): Promise<CatalogsResponse> {
   return res.json();
 }
 
+// The Portolan browser opens any catalog.json via a hash route that carries the
+// host and path with the scheme stripped, e.g.
+//   https://data.source.coop/cholmes/portolan-nl/catalog.json
+//   -> https://browser.portolan-sdi.org/#/external/data.source.coop/cholmes/portolan-nl/catalog.json
+// Linking the raw JSON instead just dumps the document in the user's browser.
+const BROWSER_BASE = "https://browser.portolan-sdi.org/#/external/";
+
+export function getBrowserUrl(catalogUrl: string): string {
+  const withoutScheme = catalogUrl.replace(/^https?:\/\//, "");
+  return `${BROWSER_BASE}${withoutScheme}`;
+}
+
 export function getValidationTier(validation: CatalogValidation): "unvalidated" | "basic" | "full" {
   const { stac_valid, has_versions_json, has_portolan_dir } = validation;
 

@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Card, Tag, DirArrow } from "../ui";
 import type { Catalog } from "@/lib/catalogs";
-import { getValidationTier } from "@/lib/catalogs";
+import { getBrowserUrl, getValidationTier } from "@/lib/catalogs";
 
 interface CatalogCardProps {
   catalog: Catalog;
@@ -75,7 +75,7 @@ export function CatalogCard({ catalog, onTagClick }: CatalogCardProps) {
       )}
 
       <a
-        href={catalog.url}
+        href={getBrowserUrl(catalog.url)}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-auto text-small text-p-primary hover:underline"
