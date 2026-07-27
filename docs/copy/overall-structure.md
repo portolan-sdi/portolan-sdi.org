@@ -68,7 +68,7 @@ Restructured 2026-07-20 (second pass, user-directed):
   credibility strip ("Supported by" + wordmarks) — institutional cover
   arrives before the argument, not after.
 - **Toolkit section removed** ("What exists today" judged useless).
-  Its content dissolved: the six repos (portolan-spec, reis,
+  Its content dissolved: the six repos (portolan-spec, rashid,
   portolan-cli, portolan-registry, portolan-browser, portolan-skills)
   became the first Ecosystem row; the CLI/skills links moved into the
   Quickstart cards. Maturity tags and project descriptions dropped.
