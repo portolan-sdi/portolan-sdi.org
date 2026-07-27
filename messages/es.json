@@ -96,7 +96,7 @@
     "submit": "Proponer una herramienta",
     "projects": {
       "spec": "El estándar. Qué debe ser un catálogo.",
-      "reis": "El validador. Comprueba que un catálogo cumple.",
+      "rashid": "El validador. Comprueba que un catálogo cumple.",
       "cli": "La CLI. Crea y publica catálogos.",
       "registry": "El registro. Encuentra catálogos publicados.",
       "browser": "El navegador. Explora catálogos en la web.",

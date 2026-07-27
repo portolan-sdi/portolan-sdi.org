@@ -96,7 +96,7 @@
     "submit": "Submit a tool",
     "projects": {
       "spec": "The standard. What a catalog must be.",
-      "reis": "The validator. Proves a catalog conforms.",
+      "rashid": "The validator. Proves a catalog conforms.",
       "cli": "The CLI. Build and publish catalogs.",
       "registry": "The registry. Find published catalogs.",
       "browser": "The browser. Explore catalogs on the web.",

@@ -11,7 +11,7 @@ import { DirArrow, Ltr } from "./ui";
 // the two together are what "Built to grow." means. All six are core today.
 const projects = [
   { slug: "spec", name: "portolan-spec", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-spec" },
-  { slug: "reis", name: "reis", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/reis" },
+  { slug: "rashid", name: "rashid", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/rashid" },
   { slug: "cli", name: "portolan-cli", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-cli" },
   { slug: "registry", name: "portolan-registry", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-registry" },
   { slug: "browser", name: "portolan-browser", license: "ISC", core: true, href: "https://github.com/portolan-sdi/portolan-browser" },
@@ -23,7 +23,7 @@ const projects = [
 // contribute/awesome-list page or issue template once one exists.
 const submitHref = "https://github.com/portolan-sdi";
 
-// Tiny symbolic marks — spec = document, reis = check (validator), cli =
+// Tiny symbolic marks — spec = document, rashid = check (validator), cli =
 // terminal prompt, registry = index rows, browser = window, skills = spark.
 function ProjectIcon({ slug }: { slug: string }) {
   const p =
@@ -33,7 +33,7 @@ function ProjectIcon({ slug }: { slug: string }) {
         <path d="M14 3v4h4" />
         <path d="M9 13h6M9 16.5h6" />
       </>
-    ) : slug === "reis" ? (
+    ) : slug === "rashid" ? (
       <polyline points="4 13 9 18 20 6" />
     ) : slug === "cli" ? (
       <>
