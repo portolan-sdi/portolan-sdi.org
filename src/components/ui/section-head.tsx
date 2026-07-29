@@ -1,8 +1,12 @@
 import { ReactNode } from "react";
 
 interface SectionHeadProps {
-  /** Eyebrow label (from translations). */
-  eyebrow: string;
+  /**
+   * Eyebrow label (from translations). Omit where the title below already
+   * names the section: a kicker that restates the headline is noise, and the
+   * page budgets a small number of them.
+   */
+  eyebrow?: string;
   /** Section title (from translations). */
   title: ReactNode;
   /** Supporting copy shown in the right column on wide screens. */
@@ -30,11 +34,15 @@ export function SectionHead({
       }`}
     >
       <div>
-        <div className="font-mono text-eyebrow text-p-ink-3 tracking-[0.04em]">
-          {eyebrow}
-        </div>
+        {eyebrow && (
+          <div className="font-mono text-eyebrow text-p-ink-3 tracking-[0.04em]">
+            {eyebrow}
+          </div>
+        )}
         <h2
-          className={`text-section font-extrabold tracking-[-0.03em] leading-[1.05] mt-3 text-balance ${
+          className={`text-section font-extrabold tracking-[-0.03em] leading-[1.05] text-balance ${
+            eyebrow ? "mt-3" : ""
+          } ${
             wide ? "max-w-none" : "max-w-[32ch]"
           }`}
         >

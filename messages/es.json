@@ -5,6 +5,7 @@
   },
   "nav": {
     "registry": "Registro",
+    "why": "Por qué Portolan",
     "docs": "Docs",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
@@ -24,8 +25,10 @@
       "live": "en directo del registro"
     }
   },
+  "involved": {
+    "ariaLabel": "Usuarios y colaboradores"
+  },
   "why": {
-    "eyebrow": "Por qué Portolan",
     "title": "La infraestructura de datos espaciales todavía da por sentados servidores, bases de datos y especialistas. Portolan no.",
     "cards": {
       "open": {
@@ -115,7 +118,6 @@
     }
   },
   "registry": {
-    "eyebrow": "Registro de catálogos",
     "title": "Explora {count} catálogos",
     "description": "Catálogos publicados en todo el mundo, en directo desde el registro.",
     "search": {

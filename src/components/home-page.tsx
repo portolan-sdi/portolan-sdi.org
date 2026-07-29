@@ -261,7 +261,8 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
-          <SectionHead eyebrow={t("why.eyebrow")} title={t("why.title")} wide />
+          {/* No eyebrow: the title already states the problem this section is about. */}
+          <SectionHead title={t("why.title")} wide />
           {/* Ledger: six principles, one row each. Near-black top rule, soft
               interior rules. Rows nudge start-ward + tint faintly on hover. */}
           <div className="border-t border-p-line-strong overflow-clip">
@@ -361,8 +362,8 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {catalogs.length > 0 && (
         <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
           <div className="max-w-[1240px] mx-auto">
+            {/* No eyebrow: the title ("Browse N catalogs") already names the section. */}
             <SectionHead
-              eyebrow={t("registry.eyebrow")}
               title={t("registry.title", { count: catalogs.length })}
               subtitle={t("registry.description")}
             />

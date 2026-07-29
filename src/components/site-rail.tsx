@@ -18,7 +18,7 @@ const GITHUB_URL = "https://github.com/portolan-sdi";
 
 // In-page anchors, in document order. `label` is the translation key to read.
 const SECTIONS = [
-  { id: "why", label: "why.eyebrow" },
+  { id: "why", label: "nav.why" },
   { id: "how", label: "howItWorks.eyebrow" },
   { id: "ecosystem", label: "ecosystem.eyebrow" },
   { id: "resources", label: "resources.eyebrow" },
