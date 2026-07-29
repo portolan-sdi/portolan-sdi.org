@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Portolan, un estándar con criterio para catálogos geoespaciales nativos de la nube",
-    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que una persona o un agente lea un catálogo y lo consulte directamente. El estándar fija el nivel de calidad, un validador lo hace cumplir, las herramientas hacen que los catálogos sean baratos de crear y un registro los conecta en una red que cualquiera puede buscar."
+    "title": "Portolan, publica datos geoespaciales como archivos simples",
+    "description": "Portolan publica datos geoespaciales como archivos simples en tu propio almacenamiento, sin servidores, bases de datos ni cuentas. Los formatos optimizados para la nube y los metadatos estructurados permiten que personas y agentes trabajen con los datos y construyan sobre ellos directamente, mientras el registro conecta cada catálogo en una red de datos abiertos que se puede buscar."
   },
   "nav": {
     "registry": "Registro",
@@ -13,9 +13,9 @@
     "external": "Externo"
   },
   "hero": {
-    "title": "El futuro de los datos espaciales",
-    "titleAccent": "son solo archivos.",
-    "description": "Portolan es un estándar con criterio para compartir datos geoespaciales como archivos nativos de la nube en almacenamiento de objetos, más las herramientas que lo hacen realidad. Un catálogo Portolan es un directorio de datos en formatos abiertos descritos con metadatos <m>STAC</m> estructurados, alojado en cualquier bucket compatible con S3. Sin servidores, sin bases de datos.",
+    "title": "Publica datos geoespaciales como archivos simples en tu propio almacenamiento,",
+    "titleAccent": "conectados en una red que se puede buscar.",
+    "description": "Un catálogo es un directorio de datos en formatos abiertos en cualquier bucket compatible con S3, descrito con metadatos <m>STAC</m> estructurados, y funciona sin servidores, bases de datos ni cuentas. Los formatos optimizados para la nube permiten que personas y agentes consulten los datos directamente.",
     "quickstart": "Inicio rápido",
     "browseCatalogs": "Explorar catálogos",
     "stats": {
@@ -33,39 +33,39 @@
     "cards": {
       "open": {
         "title": "Abierto e interoperable",
-        "description": "Todo es de código abierto bajo <m>Apache-2.0</m> y se apoya en estándares existentes como <m>GeoParquet</m>, GeoTIFF optimizado para la nube y <m>STAC</m>. Estos formatos funcionan en DuckDB, BigQuery, Pandas y GIS de escritorio como QGIS y ArcGIS, así que tus datos siguen siendo útiles, con o sin Portolan.",
+        "description": "Los catálogos se apoyan en formatos abiertos establecidos como <m>GeoParquet</m>, <m>COG</m> y metadatos <m>STAC</m>, que ya funcionan en DuckDB, BigQuery, Pandas, QGIS y ArcGIS. El estándar y las herramientas son de código abierto bajo <m>Apache-2.0</m>. Si Portolan desapareciera mañana, cada archivo de un catálogo seguiría funcionando en las herramientas que ya usas.",
         "tag": "GeoParquet · COG · STAC"
       },
-      "aiFirst": {
-        "title": "Legible por personas y máquinas",
-        "description": "Los portales de descarga y las API específicas se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional.",
+      "peopleAndAgents": {
+        "title": "Listo para personas y agentes",
+        "description": "Un catálogo se describe a sí mismo en texto simple y metadatos estructurados, así que una persona puede leer qué son los datos y de dónde vienen, y un agente puede hacer lo mismo y consultarlos con herramientas estándar. La <link>demo Finland.SDI</link> muestra a un agente haciéndolo sobre conjuntos de datos nacionales.",
         "tag": "autodescriptivo"
       },
       "easy": {
-        "title": "Simple",
-        "description": "La infraestructura de datos espaciales tradicional necesita bases de datos, servicios y personal para operarla. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica.",
+        "title": "Simple de operar",
+        "description": "Operar infraestructura de datos espaciales normalmente implica GeoServer o una pila de Esri, con bases de datos, servicios y personal para mantenerlos en pie. Un catálogo Portolan no tiene nada de eso. Crear uno todavía requiere trabajo, y para eso están la CLI y el validador, pero una vez publicado no necesita mantenimiento.",
         "tag": "archivos en un bucket"
       },
       "scalable": {
         "title": "Escala con tu almacenamiento",
-        "description": "La misma configuración maneja megabytes o terabytes. No hay servidores que ejecutar, así que escalar es tarea de tu proveedor de nube, no tuya.",
+        "description": "El mismo catálogo funciona con megabytes o con terabytes. No hay servidores que ejecutar, así que escalar es problema de tu proveedor de nube, no tuyo.",
         "tag": "MB → TB"
       },
       "lowCost": {
         "title": "Bajo costo",
-        "description": "Todo el presupuesto es almacenamiento más transferencia de salida. Compartir datos públicos no debería requerir un equipo de operaciones, y un conjunto de datos popular no debería romper un presupuesto. La <link>calculadora de costos</link> muestra lo que costarían tus datos.",
+        "description": "Tus únicos costos son almacenamiento y transferencia de salida, pagados a tu proveedor de nube. Compartir datos públicos no debería requerir un equipo de operaciones, y un conjunto de datos popular no debería romper un presupuesto. La <link>calculadora de costos</link> muestra lo que costarían tus datos.",
         "tag": "almacenamiento + salida"
       },
       "sovereign": {
         "title": "Soberano",
-        "description": "Toda la pila puede vivir dentro de tu propia jurisdicción. Alójala en AWS, GCS, Azure, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Ningún proveedor extranjero se interpone entre tu institución y sus datos.",
+        "description": "Tú eliges dónde viven los datos, incluidos proveedores de tu propio país. Alójalos en AWS, Azure, GCS, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Nadie se interpone entre tu organización y sus datos.",
         "tag": "usa tu propio bucket"
       }
     }
   },
   "howItWorks": {
     "eyebrow": "Cómo funciona",
-    "title": "Ingiere, convierte, publica.",
+    "title": "De archivos sin procesar a un catálogo publicado.",
     "figCaption": "Fig. 2.1 · El proceso",
     "steps": {
       "convert": {
@@ -91,17 +91,17 @@
     }
   },
   "ecosystem": {
-    "eyebrow": "Ecosistema",
-    "title": "Hecho para crecer.",
+    "eyebrow": "Las partes",
+    "title": "Cada parte aumenta el valor de las demás.",
     "count": "{count} proyectos",
     "legendCore": "núcleo",
     "legendCommunity": "comunidad",
     "submit": "Proponer una herramienta",
     "projects": {
-      "spec": "El estándar. Qué debe ser un catálogo.",
-      "rashid": "El validador. Comprueba que un catálogo cumple.",
-      "cli": "La CLI. Crea y publica catálogos.",
-      "registry": "El registro. Encuentra catálogos publicados.",
+      "spec": "El estándar. Define cómo es un buen catálogo.",
+      "rashid": "El validador. Comprueba que un catálogo cumple el estándar.",
+      "cli": "La CLI. Hace que crear catálogos sea fácil.",
+      "registry": "El registro. Conecta cada catálogo en una red que se puede buscar.",
       "browser": "El navegador. Explora catálogos en la web.",
       "skills": "Skills de Claude. Publica con un agente."
     }
@@ -119,7 +119,7 @@
   },
   "registry": {
     "title": "Explora {count} catálogos",
-    "description": "Catálogos publicados en todo el mundo, en directo desde el registro.",
+    "description": "Un catálogo de catálogos. Cada entrada nombra a su productor, su proveedor y su anfitrión, así que puedes distinguir un catálogo oficial de una réplica y elegir la fuente en la que confías.",
     "search": {
       "placeholder": "Buscar catálogos...",
       "noResults": "Ningún catálogo coincide con tu búsqueda",
@@ -158,7 +158,7 @@
     },
     "cta": {
       "title": "¿Tienes un catálogo para compartir?",
-      "description": "Envía tu catálogo Portolan al registro.",
+      "description": "Enviar un catálogo abre un pull request en el repositorio del registro.",
       "button": "Enviar tu catálogo"
     },
     "submit": {

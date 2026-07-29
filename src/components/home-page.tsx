@@ -42,7 +42,7 @@ interface HomePageProps {
 // External references linked inline from the "why" cards. Keyed by card key;
 // cards without an entry render their description as plain text.
 const whyCardLinks: Record<string, string> = {
-  aiFirst: "https://jatorre.github.io/carto-ogc-helsinki/webapp/",
+  peopleAndAgents: "https://jatorre.github.io/carto-ogc-helsinki/webapp/",
   lowCost: "https://cholmes.github.io/open-geodag-presentation/calculator.html",
 };
 
@@ -194,7 +194,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   // deliberate, not ranked (no numbers, no bullets).
   const whyCards = [
     "open",
-    "aiFirst",
+    "peopleAndAgents",
     "easy",
     "scalable",
     "lowCost",
