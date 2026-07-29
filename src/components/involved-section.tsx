@@ -64,7 +64,6 @@ function LogoLink({ org, clone }: { org: Org; clone: boolean }) {
 export function InvolvedSection() {
   return (
     <section
-      id="involved"
       aria-label="Users and supporters"
       className="logo-strip overflow-hidden py-[clamp(2rem,4vw,3.5rem)]"
     >

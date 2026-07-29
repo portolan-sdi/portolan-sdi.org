@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { routing } from "@/i18n/routing";
 import { getDirection } from "@/i18n/direction";
+import { SITE_ORIGIN, alternateLanguages, localeUrl } from "@/lib/site";
 
 const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
@@ -37,11 +38,33 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
+  const title = t("title");
+  const description = t("description");
+
   return {
-    metadataBase: new URL("https://portolan-sdi.org"),
-    title: t("title"),
-    description: t("description"),
+    metadataBase: new URL(SITE_ORIGIN),
+    title,
+    description,
     icons: { icon: "/logo-mark.svg" },
+    alternates: {
+      canonical: localeUrl(locale),
+      languages: alternateLanguages(),
+    },
+    openGraph: {
+      type: "website",
+      siteName: "Portolan",
+      title,
+      description,
+      url: localeUrl(locale),
+      locale,
+      // og:image is emitted by the opengraph-image route in this segment.
+      // File-based metadata outranks anything set here, so it is not repeated.
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 

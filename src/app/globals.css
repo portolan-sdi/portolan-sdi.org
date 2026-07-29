@@ -27,8 +27,6 @@
   --p-line-strong: #16170f;
   --p-primary: #4163cc;
   --p-primary-ink: #2d4aa8;
-  --p-grad-a: #4163cc;
-  --p-grad-b: #4163cc;
   --p-accent: #4163cc;
   --p-accent-ink: #2d4aa8;
   --p-on-primary: #ffffff;
@@ -84,8 +82,6 @@
   --color-p-primary: var(--p-primary);
   --color-p-primary-ink: var(--p-primary-ink);
   --color-p-on-primary: var(--p-on-primary);
-  --color-p-grad-a: var(--p-grad-a);
-  --color-p-grad-b: var(--p-grad-b);
   --color-p-accent: var(--p-accent);
   --color-p-accent-ink: var(--p-accent-ink);
   --color-p-success: var(--p-success);
