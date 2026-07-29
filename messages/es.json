@@ -25,6 +25,9 @@
       "live": "en directo del registro"
     }
   },
+  "involved": {
+    "ariaLabel": "Usuarios y colaboradores"
+  },
   "why": {
     "title": "La infraestructura de datos espaciales todavía da por sentados servidores, bases de datos y especialistas. Portolan no.",
     "cards": {

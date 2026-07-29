@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Ltr } from "./ui";
 
 // Credibility strip under the hero: a mix of users and supporters, so there is
@@ -62,9 +63,11 @@ function LogoLink({ org, clone }: { org: Org; clone: boolean }) {
 }
 
 export function InvolvedSection() {
+  const t = useTranslations("involved");
+
   return (
     <section
-      aria-label="Users and supporters"
+      aria-label={t("ariaLabel")}
       className="logo-strip overflow-hidden py-[clamp(2rem,4vw,3.5rem)]"
     >
       <div className="logo-marquee">

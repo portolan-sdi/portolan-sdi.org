@@ -25,6 +25,9 @@
       "live": "live from the registry"
     }
   },
+  "involved": {
+    "ariaLabel": "Users and supporters"
+  },
   "why": {
     "title": "Spatial data infrastructure still assumes servers, databases, and specialists. Portolan doesn't.",
     "cards": {
