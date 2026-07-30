@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { DitherMap } from "./dither-map";
 import { SiteShell } from "./site-rail";
@@ -11,10 +11,10 @@ import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
 import { PipelineFigure } from "./pipeline-figure";
-import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
+import { Btn, DirArrow, SectionHead, monoChunk } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { Catalog } from "@/lib/catalogs";
-import { getValidationTier } from "@/lib/catalogs";
+import { getBrowserUrl, getValidationTier } from "@/lib/catalogs";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -39,6 +39,20 @@ interface HomePageProps {
   catalogs?: Catalog[];
 }
 
+// Three real catalogs named in the hero, as evidence that a Portolan catalog is
+// a thing you can open rather than a claim. Labels live in messages/ and are
+// ours, not the registry titles: one listed catalog has a null title, one is 64
+// characters of Spanish, one carries an em dash. Matched by URL against the live
+// export so a catalog that leaves the registry drops out of the hero instead of
+// linking somewhere dead. Hand-curated on purpose — three named datasets carry
+// more weight than a count while the registry is small, and when it grows this
+// row should become the count instead.
+const featuredCatalogUrls = [
+  { key: "dutch", url: "https://data.source.coop/cholmes/portolan-nl/catalog.json" },
+  { key: "jrc", url: "https://data.source.coop/nlebovits/jrc-glofas/catalog.json" },
+  { key: "ign", url: "https://data.source.coop/nlebovits/ign-argentina/catalog.json" },
+] as const;
+
 // External references linked inline from the "why" cards. Keyed by card key;
 // cards without an entry render their description as plain text.
 const whyCardLinks: Record<string, string> = {
@@ -48,7 +62,6 @@ const whyCardLinks: Record<string, string> = {
 
 export function HomePage({ catalogs = [] }: HomePageProps) {
   const t = useTranslations();
-  const locale = useLocale();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
@@ -71,26 +84,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const submitFieldError =
     submitUrl && !isValidSubmitUrl ? t("registry.submit.urlError") : submitError;
 
-  // Live registry totals shown in the hero stats row. Latin digits in every
-  // locale per the translation contract.
-  const heroStats = useMemo(() => {
-    if (catalogs.length === 0) return null;
-    const format = new Intl.NumberFormat(locale === "ar" ? "ar-u-nu-latn" : locale, {
-      notation: "compact",
-      maximumFractionDigits: 1,
-    });
-    return [
-      { key: "catalogs", value: format.format(catalogs.length) },
-      {
-        key: "collections",
-        value: format.format(catalogs.reduce((sum, c) => sum + (c.collection_count ?? 0), 0)),
-      },
-      {
-        key: "features",
-        value: format.format(catalogs.reduce((sum, c) => sum + (c.feature_count ?? 0), 0)),
-      },
-    ];
-  }, [catalogs, locale]);
+  // Only name a hero catalog the registry still lists.
+  const featuredCatalogs = useMemo(() => {
+    const listed = new Set(catalogs.map((c) => c.url));
+    return featuredCatalogUrls.filter((f) => listed.has(f.url));
+  }, [catalogs]);
 
   const allTags = useMemo(() => {
     return Array.from(new Set(catalogs.flatMap((c) => c.keywords ?? []))).sort();
@@ -221,39 +219,57 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">
+            {/* No hard break: one fixed break point cannot serve three
+                languages at three different word lengths, so the accent runs
+                inline and text-balance sets the lines. */}
             <h1 className="text-hero font-extrabold tracking-[-0.035em] text-balance">
-              {t("hero.title")} <br />
+              {t("hero.title")}{" "}
               <span className="text-p-primary">{t("hero.titleAccent")}</span>
             </h1>
             <div className="mt-[clamp(2rem,4vw,3rem)]">
               <p className="text-lead leading-relaxed max-w-[56ch]">
                 {t.rich("hero.description", { m: monoChunk })}
               </p>
-              <div className="flex gap-6 items-center flex-wrap mt-9">
-                <Link href="/#how">
+              {/* One primary act, one plain link. Two lg buttons side by side
+                  ranked nothing, and the filled one only scrolled. */}
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-9">
+                <Link href="/#registry">
                   <Btn variant="primary" size="lg">
-                    {t("hero.quickstart")} <DirArrow />
-                  </Btn>
-                </Link>
-                <a href="https://browser.portolan-sdi.org/">
-                  <Btn variant="ghost" size="lg">
                     {t("hero.browseCatalogs")} <DirArrow />
                   </Btn>
-                </a>
+                </Link>
+                <Link
+                  href="/#how"
+                  className="font-mono text-small text-p-primary hover:underline"
+                >
+                  {t("hero.publishYourOwn")} <DirArrow />
+                </Link>
               </div>
-              {heroStats && (
-                <p className="mt-10 font-mono text-micro text-p-ink-3">
-                  {heroStats.map((stat) => (
-                    <span key={stat.key}>
-                      <span className="text-p-primary">
-                        <Ltr>{stat.value}</Ltr>
-                      </span>{" "}
-                      {t(`hero.stats.${stat.key}`)}
-                      {" · "}
-                    </span>
-                  ))}
-                  {t("hero.stats.live")}
-                </p>
+              {/* Evidence, not a claim: every name here opens a real catalog in
+                  the browser, so a visitor can check "plain files in a bucket"
+                  before committing to anything. Each link is also a rehearsal
+                  of the primary act above it. */}
+              {featuredCatalogs.length > 0 && (
+                <div className="mt-10 border-t border-p-line-soft pt-4">
+                  {/* ink-2, not ink-3: at text-micro over the dither ground the
+                      lighter tier drops under the 4.5:1 floor. */}
+                  <p className="font-mono text-micro text-p-ink-2">
+                    {t("hero.featured.intro")}
+                  </p>
+                  <ul className="mt-2 flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-6">
+                    {featuredCatalogs.map((featured) => (
+                      <li key={featured.key}>
+                        <a
+                          href={getBrowserUrl(featured.url)}
+                          className="font-mono text-micro text-p-primary hover:underline"
+                        >
+                          {t(`hero.featured.${featured.key}`)}{" "}
+                          <DirArrow kind="external" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
           </div>

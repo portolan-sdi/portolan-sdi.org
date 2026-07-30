@@ -13,16 +13,16 @@
     "external": "External"
   },
   "hero": {
-    "title": "Publish geospatial data as plain files in your own storage,",
-    "titleAccent": "connected into a searchable network.",
-    "description": "A catalog is a directory of open-format data on any S3-compatible bucket, described by structured <m>STAC</m> metadata, and it runs without servers, databases, or accounts. Cloud-optimized formats let people and agents query the data directly.",
-    "quickstart": "Quickstart",
+    "title": "Portolan makes geospatial data",
+    "titleAccent": "easy to publish and easy to use.",
+    "description": "A catalog is plain files in your own storage, described so that a person or an agent can understand the data and query it directly. No servers, databases, or accounts.",
     "browseCatalogs": "Browse catalogs",
-    "stats": {
-      "catalogs": "catalogs",
-      "collections": "collections",
-      "features": "features",
-      "live": "live from the registry"
+    "publishYourOwn": "Publish your own",
+    "featured": {
+      "intro": "Open Portolan catalogs you can query right now:",
+      "dutch": "Dutch government geodata",
+      "jrc": "JRC global flood hazard maps",
+      "ign": "Argentina's IGN reference layers"
     }
   },
   "involved": {
