@@ -13,9 +13,8 @@
     "external": "Externo"
   },
   "hero": {
-    "title": "Portolan hace que los datos geoespaciales sean",
-    "titleAccent": "fáciles de publicar y fáciles de usar.",
-    "description": "Un catálogo son archivos simples en tu propio almacenamiento, descritos de forma que una persona o un agente pueda entender los datos y consultarlos directamente. Sin servidores, sin bases de datos, sin cuentas.",
+    "title": "El futuro de los datos espaciales son simples archivos.",
+    "description": "Portolan hace que los datos geoespaciales sean fáciles de publicar y fáciles de usar. Un catálogo son archivos de formato abierto en tu propio almacenamiento, sin ningún servidor detrás, diseñado para personas y agentes.",
     "browseCatalogs": "Explorar catálogos",
     "publishYourOwn": "Publica el tuyo",
     "featured": {

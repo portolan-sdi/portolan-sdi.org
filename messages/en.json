@@ -13,9 +13,8 @@
     "external": "External"
   },
   "hero": {
-    "title": "Portolan makes geospatial data",
-    "titleAccent": "easy to publish and easy to use.",
-    "description": "A catalog is plain files in your own storage, described so that a person or an agent can understand the data and query it directly. No servers, databases, or accounts.",
+    "title": "The future of spatial data is just files.",
+    "description": "Portolan makes geospatial data easy to publish and easy to use. A catalog is open-format files in your own storage, with no server behind it, designed for people and agents.",
     "browseCatalogs": "Browse catalogs",
     "publishYourOwn": "Publish your own",
     "featured": {

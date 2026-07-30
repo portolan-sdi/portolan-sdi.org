@@ -219,12 +219,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">
-            {/* No hard break: one fixed break point cannot serve three
-                languages at three different word lengths, so the accent runs
-                inline and text-balance sets the lines. */}
+            {/* One sentence, one ink. No hard break: a fixed break point cannot
+                serve three languages at three different word lengths, so
+                text-balance sets the lines. */}
             <h1 className="text-hero font-extrabold tracking-[-0.035em] text-balance">
-              {t("hero.title")}{" "}
-              <span className="text-p-primary">{t("hero.titleAccent")}</span>
+              {t("hero.title")}
             </h1>
             <div className="mt-[clamp(2rem,4vw,3rem)]">
               <p className="text-lead leading-relaxed max-w-[56ch]">
