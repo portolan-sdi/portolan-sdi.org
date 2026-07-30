@@ -73,7 +73,7 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
   }, [highlightedIndex]);
 
   return (
-    <div className="relative w-[260px] max-w-[calc(100vw-2rem)]">
+    <div className="relative w-[200px] max-w-[calc(100vw-2rem)]">
       <input
         ref={inputRef}
         type="text"
@@ -96,7 +96,7 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
         aria-haspopup="listbox"
         aria-controls="map-geocoder-suggestions"
         autoComplete="off"
-        className="w-full bg-p-paper border border-p-line rounded-[var(--p-r-md)] px-3 py-2 text-small text-p-ink placeholder:text-p-ink-3 shadow-[var(--p-shadow-md)] focus:outline-none focus:border-p-primary transition-colors"
+        className="w-full bg-p-paper border border-p-line rounded-[var(--p-r-md)] px-2.5 py-1.5 font-mono text-micro text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary transition-colors"
       />
       {isLoading && (
         <span className="absolute end-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 rounded-full border-2 border-p-line border-t-p-primary animate-spin" />

@@ -66,6 +66,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
   const isValidSubmitUrl = submitUrl.trim().endsWith("catalog.json");
 
+  // One error region, so the field's aria-describedby always points at exactly
+  // one node: a malformed URL is worth saying before a stale server error.
+  const submitFieldError =
+    submitUrl && !isValidSubmitUrl ? t("registry.submit.urlError") : submitError;
+
   // Live registry totals shown in the hero stats row. Latin digits in every
   // locale per the translation contract.
   const heroStats = useMemo(() => {
@@ -212,7 +217,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     <SiteShell>
       {/* Hero */}
       <section id="top" className="relative border-b border-p-line overflow-hidden">
-        <DitherMap className="absolute inset-0 w-full h-full opacity-80 dark:opacity-60" />
+        <DitherMap className="absolute inset-0 w-full h-full opacity-80" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">
@@ -360,7 +365,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (
-        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
+        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
           <div className="max-w-[1240px] mx-auto">
             {/* No eyebrow: the title ("Browse N catalogs") already names the section. */}
             <SectionHead
@@ -397,15 +402,14 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 <button
                   type="button"
                   onClick={() => setShowBboxFilter(!showBboxFilter)}
-                  className={`flex items-center gap-2 px-3 py-2.5 text-body border rounded-[var(--p-r-md)] transition-colors ${
+                  aria-expanded={showBboxFilter}
+                  aria-controls="registry-bbox-filter"
+                  className={`inline-flex items-center justify-center font-mono text-small px-4 py-2.5 border rounded-[var(--p-r-md)] transition-colors ${
                     showBboxFilter || parsedBbox
-                      ? "bg-[color-mix(in_oklab,var(--p-primary)_10%,transparent)] border-[color-mix(in_oklab,var(--p-primary)_25%,transparent)] text-p-primary-ink"
-                      : "bg-p-paper border-p-line text-p-ink hover:border-p-ink-3"
+                      ? "bg-[color-mix(in_oklab,var(--p-primary)_12%,transparent)] border-[color-mix(in_oklab,var(--p-primary)_25%,transparent)] text-p-primary-ink"
+                      : "bg-p-paper border-p-line text-p-ink-3 hover:text-p-ink-2"
                   }`}
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
                   {t("registry.filters.bbox")}
                 </button>
 
@@ -435,19 +439,25 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               </div>
 
               {showBboxFilter && (
-                <div className="flex flex-wrap items-center gap-3 p-4 bg-p-paper border border-p-line rounded-[var(--p-r-md)]">
+                <div id="registry-bbox-filter" className="flex flex-wrap items-center gap-3 p-4 bg-p-paper border border-p-line rounded-[var(--p-r-md)]">
                   <span className="text-micro text-p-ink-3 font-mono w-full sm:w-auto">{t("registry.filters.bboxLabel")}</span>
                   <div className="flex flex-wrap gap-2">
                     {(["west", "south", "east", "north"] as const).map((dir) => (
                       <div key={dir} className="flex items-center gap-1">
-                        <label className="text-micro text-p-ink-3 uppercase w-6">{t(`registry.compass.${dir}`)}</label>
+                        <label
+                          htmlFor={`bbox-${dir}`}
+                          className="font-mono text-micro text-p-ink-3 w-5 shrink-0"
+                        >
+                          {t(`registry.compass.${dir}`)}
+                        </label>
                         <input
+                          id={`bbox-${dir}`}
                           type="number"
                           step="any"
                           value={bboxFilter[dir]}
                           onChange={(e) => setBboxFilter((prev) => ({ ...prev, [dir]: e.target.value }))}
                           placeholder={dir === "west" || dir === "east" ? t("registry.filters.lonPlaceholder") : t("registry.filters.latPlaceholder")}
-                          className="w-20 px-2 py-1.5 text-micro bg-p-bg border border-p-line rounded-[var(--p-r-sm)] text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary"
+                          className="w-20 px-2 py-1.5 font-mono text-micro bg-p-bg border border-p-line rounded-[var(--p-r-sm)] text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary"
                         />
                       </div>
                     ))}
@@ -515,15 +525,16 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
             )}
 
             {/* Annotation row: same anatomy as a figure caption */}
-            <div className="flex justify-between gap-3 pt-2 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
+            <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-3 pt-2 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
               <span className="text-p-primary">{t("registry.caption")}</span>
               <span>
                 {t("registry.captionNote", { count: filteredCatalogs.length })}
               </span>
             </div>
 
-            {/* Inline Submit */}
-            <div className="mt-10 bg-p-paper border border-p-line rounded-[var(--p-r-lg)] p-6">
+            {/* Inline Submit. Separated by a rule, not boxed: the page reserves
+                bordered blocks for discrete records, not for page furniture. */}
+            <div className="mt-10 border-t border-p-line-strong pt-6">
               <div className="flex flex-col md:flex-row md:items-center gap-4">
                 <div className="flex-1">
                   <h3 className="text-card-title font-semibold text-p-ink">{t("registry.cta.title")}</h3>
@@ -566,28 +577,24 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                         placeholder="https://...catalog.json"
                         disabled={submitState === "submitting"}
                         className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
-                          submitUrl && !isValidSubmitUrl ? "border-red-400" : "border-p-line focus:border-p-primary"
+                          submitUrl && !isValidSubmitUrl ? "border-p-error" : "border-p-line focus:border-p-primary"
                         }`}
+                        aria-invalid={submitUrl !== "" && !isValidSubmitUrl}
+                        aria-describedby={submitFieldError ? "submit-url-error" : undefined}
                       />
-                      {submitUrl && !isValidSubmitUrl && (
-                        <p className="text-micro text-red-500 mt-1">{t("registry.submit.urlError")}</p>
-                      )}
-                      {submitError && (
-                        <p className="text-micro text-red-500 mt-1">{submitError}</p>
+                      {submitFieldError && (
+                        <p id="submit-url-error" role="alert" className="text-micro text-p-error mt-1">
+                          {submitFieldError}
+                        </p>
                       )}
                     </div>
-                    <button
+                    <Btn
                       type="button"
                       onClick={handleSubmitCatalog}
                       disabled={!isValidSubmitUrl || submitState === "submitting"}
-                      className={`px-5 py-2.5 rounded-[var(--p-r-md)] text-body font-semibold transition-colors whitespace-nowrap ${
-                        isValidSubmitUrl && submitState !== "submitting"
-                          ? "bg-p-primary text-p-on-primary hover:bg-p-primary-ink"
-                          : "bg-p-line text-p-ink-3 cursor-not-allowed"
-                      }`}
                     >
                       {submitState === "submitting" ? t("registry.submit.submitting") : t("registry.submit.submit")}
-                    </button>
+                    </Btn>
                   </div>
                 )}
               </div>

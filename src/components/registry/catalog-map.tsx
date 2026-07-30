@@ -414,7 +414,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
               {t("map.infoBody")}
             </div>
           )}
-          <div className="flex items-center gap-2 bg-p-paper/90 backdrop-blur-sm border border-p-line rounded-[var(--p-r-md)] px-2.5 py-1">
+          <div className="flex items-center gap-2 bg-p-paper border border-p-line rounded-[var(--p-r-md)] px-2.5 py-1">
             <span className="text-micro text-p-ink-3 font-mono">
               {"© "}
               <a
