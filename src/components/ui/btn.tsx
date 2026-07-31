@@ -32,6 +32,8 @@ export const Btn = forwardRef<HTMLButtonElement, BtnProps>(
           rounded-[var(--p-r-md)] font-mono font-medium uppercase tracking-[0.08em] rtl:tracking-normal
           cursor-pointer whitespace-nowrap
           transition-[background-color,border-color,color] duration-150
+          disabled:cursor-not-allowed disabled:bg-p-paper disabled:text-p-ink-3
+          disabled:border disabled:border-p-line-soft disabled:hover:bg-p-paper
           ${sizeClasses[size]}
           ${variantClasses[variant]}
           ${className ?? ""}

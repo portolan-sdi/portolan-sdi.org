@@ -32,6 +32,7 @@
   --p-on-primary: #ffffff;
   --p-success: #2f7d63;
   --p-warn: #b06e2a;
+  --p-error: #a8392b;
 
   /* Type */
   --p-sans: var(--font-hanken), var(--font-cairo), ui-sans-serif, system-ui,
@@ -86,6 +87,7 @@
   --color-p-accent-ink: var(--p-accent-ink);
   --color-p-success: var(--p-success);
   --color-p-warn: var(--p-warn);
+  --color-p-error: var(--p-error);
 
   --font-sans: var(--p-sans);
   --font-mono: var(--p-mono);

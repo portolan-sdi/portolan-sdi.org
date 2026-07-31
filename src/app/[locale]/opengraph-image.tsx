@@ -31,7 +31,7 @@ export default async function Image({
   const rtl = getDirection(locale) === "rtl";
 
   const messages = (await import(`../../../messages/${locale}.json`)).default;
-  const { title, titleAccent } = messages.hero;
+  const { title } = messages.hero;
 
   // Satori does not implement the Unicode bidi algorithm: it lays glyph runs
   // out in logical order, which renders Arabic word sequences reversed. Rather
@@ -89,14 +89,13 @@ export default async function Image({
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
               fontSize: 84,
               lineHeight: 1.04,
               letterSpacing: "-0.035em",
+              maxWidth: 1000,
             }}
           >
-            <div style={{ display: "flex" }}>{title}</div>
-            <div style={{ display: "flex", color: PRIMARY }}>{titleAccent}</div>
+            {title}
           </div>
         )}
 

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { DitherMap } from "./dither-map";
 import { SiteShell } from "./site-rail";
@@ -11,10 +11,10 @@ import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
 import { PipelineFigure } from "./pipeline-figure";
-import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
+import { Btn, DirArrow, SectionHead, monoChunk } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { Catalog } from "@/lib/catalogs";
-import { getValidationTier } from "@/lib/catalogs";
+import { getBrowserUrl, getValidationTier } from "@/lib/catalogs";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -39,16 +39,29 @@ interface HomePageProps {
   catalogs?: Catalog[];
 }
 
+// Three real catalogs named in the hero, as evidence that a Portolan catalog is
+// a thing you can open rather than a claim. Labels live in messages/ and are
+// ours, not the registry titles: one listed catalog has a null title, one is 64
+// characters of Spanish, one carries an em dash. Matched by URL against the live
+// export so a catalog that leaves the registry drops out of the hero instead of
+// linking somewhere dead. Hand-curated on purpose — three named datasets carry
+// more weight than a count while the registry is small, and when it grows this
+// row should become the count instead.
+const featuredCatalogUrls = [
+  { key: "dutch", url: "https://data.source.coop/cholmes/portolan-nl/catalog.json" },
+  { key: "jrc", url: "https://data.source.coop/nlebovits/jrc-glofas/catalog.json" },
+  { key: "ign", url: "https://data.source.coop/nlebovits/ign-argentina/catalog.json" },
+] as const;
+
 // External references linked inline from the "why" cards. Keyed by card key;
 // cards without an entry render their description as plain text.
 const whyCardLinks: Record<string, string> = {
-  aiFirst: "https://jatorre.github.io/carto-ogc-helsinki/webapp/",
+  peopleAndAgents: "https://jatorre.github.io/carto-ogc-helsinki/webapp/",
   lowCost: "https://cholmes.github.io/open-geodag-presentation/calculator.html",
 };
 
 export function HomePage({ catalogs = [] }: HomePageProps) {
   const t = useTranslations();
-  const locale = useLocale();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
@@ -66,26 +79,16 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
   const isValidSubmitUrl = submitUrl.trim().endsWith("catalog.json");
 
-  // Live registry totals shown in the hero stats row. Latin digits in every
-  // locale per the translation contract.
-  const heroStats = useMemo(() => {
-    if (catalogs.length === 0) return null;
-    const format = new Intl.NumberFormat(locale === "ar" ? "ar-u-nu-latn" : locale, {
-      notation: "compact",
-      maximumFractionDigits: 1,
-    });
-    return [
-      { key: "catalogs", value: format.format(catalogs.length) },
-      {
-        key: "collections",
-        value: format.format(catalogs.reduce((sum, c) => sum + (c.collection_count ?? 0), 0)),
-      },
-      {
-        key: "features",
-        value: format.format(catalogs.reduce((sum, c) => sum + (c.feature_count ?? 0), 0)),
-      },
-    ];
-  }, [catalogs, locale]);
+  // One error region, so the field's aria-describedby always points at exactly
+  // one node: a malformed URL is worth saying before a stale server error.
+  const submitFieldError =
+    submitUrl && !isValidSubmitUrl ? t("registry.submit.urlError") : submitError;
+
+  // Only name a hero catalog the registry still lists.
+  const featuredCatalogs = useMemo(() => {
+    const listed = new Set(catalogs.map((c) => c.url));
+    return featuredCatalogUrls.filter((f) => listed.has(f.url));
+  }, [catalogs]);
 
   const allTags = useMemo(() => {
     return Array.from(new Set(catalogs.flatMap((c) => c.keywords ?? []))).sort();
@@ -194,7 +197,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   // deliberate, not ranked (no numbers, no bullets).
   const whyCards = [
     "open",
-    "aiFirst",
+    "peopleAndAgents",
     "easy",
     "scalable",
     "lowCost",
@@ -212,43 +215,60 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     <SiteShell>
       {/* Hero */}
       <section id="top" className="relative border-b border-p-line overflow-hidden">
-        <DitherMap className="absolute inset-0 w-full h-full opacity-80 dark:opacity-60" />
+        <DitherMap className="absolute inset-0 w-full h-full opacity-80" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">
+            {/* One sentence, one ink. No hard break: a fixed break point cannot
+                serve three languages at three different word lengths, so
+                text-balance sets the lines. */}
             <h1 className="text-hero font-extrabold tracking-[-0.035em] text-balance">
-              {t("hero.title")} <br />
-              <span className="text-p-primary">{t("hero.titleAccent")}</span>
+              {t("hero.title")}
             </h1>
             <div className="mt-[clamp(2rem,4vw,3rem)]">
               <p className="text-lead leading-relaxed max-w-[56ch]">
                 {t.rich("hero.description", { m: monoChunk })}
               </p>
-              <div className="flex gap-6 items-center flex-wrap mt-9">
-                <Link href="/#how">
+              {/* One primary act, one plain link. Two lg buttons side by side
+                  ranked nothing, and the filled one only scrolled. */}
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-9">
+                <Link href="/#registry">
                   <Btn variant="primary" size="lg">
-                    {t("hero.quickstart")} <DirArrow />
-                  </Btn>
-                </Link>
-                <a href="https://browser.portolan-sdi.org/">
-                  <Btn variant="ghost" size="lg">
                     {t("hero.browseCatalogs")} <DirArrow />
                   </Btn>
-                </a>
+                </Link>
+                <Link
+                  href="/#how"
+                  className="font-mono text-small text-p-primary hover:underline"
+                >
+                  {t("hero.publishYourOwn")} <DirArrow />
+                </Link>
               </div>
-              {heroStats && (
-                <p className="mt-10 font-mono text-micro text-p-ink-3">
-                  {heroStats.map((stat) => (
-                    <span key={stat.key}>
-                      <span className="text-p-primary">
-                        <Ltr>{stat.value}</Ltr>
-                      </span>{" "}
-                      {t(`hero.stats.${stat.key}`)}
-                      {" · "}
-                    </span>
-                  ))}
-                  {t("hero.stats.live")}
-                </p>
+              {/* Evidence, not a claim: every name here opens a real catalog in
+                  the browser, so a visitor can check "plain files in a bucket"
+                  before committing to anything. Each link is also a rehearsal
+                  of the primary act above it. */}
+              {featuredCatalogs.length > 0 && (
+                <div className="mt-10 border-t border-p-line-soft pt-4">
+                  {/* ink-2, not ink-3: at text-micro over the dither ground the
+                      lighter tier drops under the 4.5:1 floor. */}
+                  <p className="font-mono text-micro text-p-ink-2">
+                    {t("hero.featured.intro")}
+                  </p>
+                  <ul className="mt-2 flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-6">
+                    {featuredCatalogs.map((featured) => (
+                      <li key={featured.key}>
+                        <a
+                          href={getBrowserUrl(featured.url)}
+                          className="font-mono text-micro text-p-primary hover:underline"
+                        >
+                          {t(`hero.featured.${featured.key}`)}{" "}
+                          <DirArrow kind="external" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
           </div>
@@ -360,7 +380,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (
-        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
+        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
           <div className="max-w-[1240px] mx-auto">
             {/* No eyebrow: the title ("Browse N catalogs") already names the section. */}
             <SectionHead
@@ -397,15 +417,14 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 <button
                   type="button"
                   onClick={() => setShowBboxFilter(!showBboxFilter)}
-                  className={`flex items-center gap-2 px-3 py-2.5 text-body border rounded-[var(--p-r-md)] transition-colors ${
+                  aria-expanded={showBboxFilter}
+                  aria-controls="registry-bbox-filter"
+                  className={`inline-flex items-center justify-center font-mono text-small px-4 py-2.5 border rounded-[var(--p-r-md)] transition-colors ${
                     showBboxFilter || parsedBbox
-                      ? "bg-[color-mix(in_oklab,var(--p-primary)_10%,transparent)] border-[color-mix(in_oklab,var(--p-primary)_25%,transparent)] text-p-primary-ink"
-                      : "bg-p-paper border-p-line text-p-ink hover:border-p-ink-3"
+                      ? "bg-[color-mix(in_oklab,var(--p-primary)_12%,transparent)] border-[color-mix(in_oklab,var(--p-primary)_25%,transparent)] text-p-primary-ink"
+                      : "bg-p-paper border-p-line text-p-ink-3 hover:text-p-ink-2"
                   }`}
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
                   {t("registry.filters.bbox")}
                 </button>
 
@@ -435,19 +454,25 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               </div>
 
               {showBboxFilter && (
-                <div className="flex flex-wrap items-center gap-3 p-4 bg-p-paper border border-p-line rounded-[var(--p-r-md)]">
+                <div id="registry-bbox-filter" className="flex flex-wrap items-center gap-3 p-4 bg-p-paper border border-p-line rounded-[var(--p-r-md)]">
                   <span className="text-micro text-p-ink-3 font-mono w-full sm:w-auto">{t("registry.filters.bboxLabel")}</span>
                   <div className="flex flex-wrap gap-2">
                     {(["west", "south", "east", "north"] as const).map((dir) => (
                       <div key={dir} className="flex items-center gap-1">
-                        <label className="text-micro text-p-ink-3 uppercase w-6">{t(`registry.compass.${dir}`)}</label>
+                        <label
+                          htmlFor={`bbox-${dir}`}
+                          className="font-mono text-micro text-p-ink-3 w-5 shrink-0"
+                        >
+                          {t(`registry.compass.${dir}`)}
+                        </label>
                         <input
+                          id={`bbox-${dir}`}
                           type="number"
                           step="any"
                           value={bboxFilter[dir]}
                           onChange={(e) => setBboxFilter((prev) => ({ ...prev, [dir]: e.target.value }))}
                           placeholder={dir === "west" || dir === "east" ? t("registry.filters.lonPlaceholder") : t("registry.filters.latPlaceholder")}
-                          className="w-20 px-2 py-1.5 text-micro bg-p-bg border border-p-line rounded-[var(--p-r-sm)] text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary"
+                          className="w-20 px-2 py-1.5 font-mono text-micro bg-p-bg border border-p-line rounded-[var(--p-r-sm)] text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary"
                         />
                       </div>
                     ))}
@@ -515,15 +540,16 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
             )}
 
             {/* Annotation row: same anatomy as a figure caption */}
-            <div className="flex justify-between gap-3 pt-2 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
+            <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-3 pt-2 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
               <span className="text-p-primary">{t("registry.caption")}</span>
               <span>
                 {t("registry.captionNote", { count: filteredCatalogs.length })}
               </span>
             </div>
 
-            {/* Inline Submit */}
-            <div className="mt-10 bg-p-paper border border-p-line rounded-[var(--p-r-lg)] p-6">
+            {/* Inline Submit. Separated by a rule, not boxed: the page reserves
+                bordered blocks for discrete records, not for page furniture. */}
+            <div className="mt-10 border-t border-p-line-strong pt-6">
               <div className="flex flex-col md:flex-row md:items-center gap-4">
                 <div className="flex-1">
                   <h3 className="text-card-title font-semibold text-p-ink">{t("registry.cta.title")}</h3>
@@ -566,28 +592,24 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                         placeholder="https://...catalog.json"
                         disabled={submitState === "submitting"}
                         className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
-                          submitUrl && !isValidSubmitUrl ? "border-red-400" : "border-p-line focus:border-p-primary"
+                          submitUrl && !isValidSubmitUrl ? "border-p-error" : "border-p-line focus:border-p-primary"
                         }`}
+                        aria-invalid={submitUrl !== "" && !isValidSubmitUrl}
+                        aria-describedby={submitFieldError ? "submit-url-error" : undefined}
                       />
-                      {submitUrl && !isValidSubmitUrl && (
-                        <p className="text-micro text-red-500 mt-1">{t("registry.submit.urlError")}</p>
-                      )}
-                      {submitError && (
-                        <p className="text-micro text-red-500 mt-1">{submitError}</p>
+                      {submitFieldError && (
+                        <p id="submit-url-error" role="alert" className="text-micro text-p-error mt-1">
+                          {submitFieldError}
+                        </p>
                       )}
                     </div>
-                    <button
+                    <Btn
                       type="button"
                       onClick={handleSubmitCatalog}
                       disabled={!isValidSubmitUrl || submitState === "submitting"}
-                      className={`px-5 py-2.5 rounded-[var(--p-r-md)] text-body font-semibold transition-colors whitespace-nowrap ${
-                        isValidSubmitUrl && submitState !== "submitting"
-                          ? "bg-p-primary text-p-on-primary hover:bg-p-primary-ink"
-                          : "bg-p-line text-p-ink-3 cursor-not-allowed"
-                      }`}
                     >
                       {submitState === "submitting" ? t("registry.submit.submitting") : t("registry.submit.submit")}
-                    </button>
+                    </Btn>
                   </div>
                 )}
               </div>
