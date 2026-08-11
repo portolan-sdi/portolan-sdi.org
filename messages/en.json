@@ -164,6 +164,9 @@
     "submit": {
       "title": "Submit a catalog",
       "urlError": "URL must end with catalog.json",
+      "emailPlaceholder": "you@example.org",
+      "emailError": "Enter an email address",
+      "emailLabel": "We email you at this address if your catalog stops validating",
       "submit": "Submit",
       "submitting": "Submitting...",
       "successTitle": "Submitted!",

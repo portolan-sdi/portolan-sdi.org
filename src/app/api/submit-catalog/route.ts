@@ -11,7 +11,14 @@ const REPO_NAME = "portolan-registry";
 
 interface SubmitRequest {
   url: string;
+  submitterEmail: string;
 }
+
+// The registry requires an address on every entry, because a catalog goes
+// stale when its catalog.json cannot be fetched, and any address inside it is
+// then out of reach. Rejecting whitespace matters beyond shape: this value is
+// interpolated into YAML, and a newline in it would inject a second key.
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function deriveSlug(url: string): string {
   try {
@@ -74,11 +81,21 @@ async function getInstallationToken(): Promise<string> {
 export async function POST(req: NextRequest) {
   try {
     const body: SubmitRequest = await req.json();
-    const { url } = body;
+    const url = body.url?.trim();
+    const submitterEmail = body.submitterEmail?.trim();
 
-    if (!url || !url.trim().endsWith("catalog.json")) {
+    if (!url || !url.endsWith("catalog.json")) {
       return NextResponse.json(
         { error: "URL must end with catalog.json" },
+        { status: 400 }
+      );
+    }
+
+    // Both guards sit ahead of getInstallationToken, so a malformed
+    // submission costs no GitHub call and leaves no half-made branch behind.
+    if (!submitterEmail || !EMAIL_PATTERN.test(submitterEmail)) {
+      return NextResponse.json(
+        { error: "Enter an email address the registry can reach you at" },
         { status: 400 }
       );
     }
@@ -133,7 +150,7 @@ export async function POST(req: NextRequest) {
       throw new Error("Failed to create branch");
     }
 
-    const yamlContent = `url: ${url}\n`;
+    const yamlContent = `url: ${url}\nsubmitter_email: ${submitterEmail}\n`;
     const filePath = `catalogs/${slug}.yaml`;
 
     const createFile = await fetch(
