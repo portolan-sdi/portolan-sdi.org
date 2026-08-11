@@ -1,13 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Card, Tag, DirArrow } from "../ui";
+import { Card, Tag, DirArrow, Ltr } from "../ui";
 import type { Catalog } from "@/lib/catalogs";
-import { getBrowserUrl, getValidationTier } from "@/lib/catalogs";
+import { getBrowserUrl, getLicenseSummary, getValidationTier } from "@/lib/catalogs";
 
 interface CatalogCardProps {
   catalog: Catalog;
-  onTagClick?: (tag: string) => void;
 }
 
 function getRegionFromBbox(bbox: [number, number, number, number] | null) {
@@ -24,13 +24,31 @@ function getRegionFromBbox(bbox: [number, number, number, number] | null) {
   };
 }
 
-export function CatalogCard({ catalog, onTagClick }: CatalogCardProps) {
+export function CatalogCard({ catalog }: CatalogCardProps) {
   const t = useTranslations("registry");
+  const [logoBroken, setLogoBroken] = useState(false);
   const tier = getValidationTier(catalog.validation);
   const region = getRegionFromBbox(catalog.bbox);
+  const license = getLicenseSummary(catalog.licenses);
+  const logo = logoBroken ? null : catalog.logo;
 
   return (
     <Card className="flex flex-col gap-3">
+      {logo && (
+        // Logos come from whatever host the catalog lives on, so there is no
+        // finite allowlist to give next/image's remotePatterns. A plain <img>
+        // keeps the optimizer from becoming an open proxy. The registry checks
+        // the image resolves at crawl time; onError covers later rot.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={logo.href}
+          alt={logo.title ?? catalog.title}
+          onError={() => setLogoBroken(true)}
+          loading="lazy"
+          className="h-8 w-auto max-w-[160px] self-start object-contain"
+        />
+      )}
+
       <div className="flex justify-between items-start gap-2">
         <h3 className="text-card-title font-semibold line-clamp-2">{catalog.title}</h3>
         <Tag
@@ -41,12 +59,26 @@ export function CatalogCard({ catalog, onTagClick }: CatalogCardProps) {
         </Tag>
       </div>
 
-      <p className="text-body text-p-ink-2 line-clamp-2">{catalog.description}</p>
-
       <div className="flex flex-wrap gap-2 text-micro text-p-ink-3 font-mono">
         <span>{t("card.collections", { count: catalog.collection_count })}</span>
-        <span>·</span>
-        <span>STAC {catalog.stac_version}</span>
+        {catalog.stac_version && (
+          <>
+            <span>·</span>
+            <span>STAC {catalog.stac_version}</span>
+          </>
+        )}
+        {license && (
+          <>
+            <span>·</span>
+            <span>
+              {license.kind === "single" ? (
+                <Ltr>{license.id}</Ltr>
+              ) : (
+                t("card.licenses", { count: license.count })
+              )}
+            </span>
+          </>
+        )}
         {region && (
           <>
             <span>·</span>
@@ -58,21 +90,6 @@ export function CatalogCard({ catalog, onTagClick }: CatalogCardProps) {
           </>
         )}
       </div>
-
-      {catalog.keywords && catalog.keywords.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mt-1">
-          {catalog.keywords.slice(0, 3).map((keyword) => (
-            <button
-              key={keyword}
-              type="button"
-              onClick={() => onTagClick?.(keyword)}
-              className="text-micro font-mono px-2 py-1 rounded-[var(--p-r-sm)] bg-p-bg-soft border border-p-line-soft text-p-ink-3 hover:text-p-ink-2 hover:bg-p-line transition-colors"
-            >
-              {keyword}
-            </button>
-          ))}
-        </div>
-      )}
 
       <a
         href={getBrowserUrl(catalog.url)}

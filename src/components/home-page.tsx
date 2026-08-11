@@ -51,7 +51,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const locale = useLocale();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
   const [validationFilter, setValidationFilter] = useState<"all" | "unvalidated" | "basic" | "full">("all");
   const [bboxFilter, setBboxFilter] = useState<{ west: string; south: string; east: string; north: string }>({
     west: "", south: "", east: "", north: ""
@@ -87,10 +86,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     ];
   }, [catalogs, locale]);
 
-  const allTags = useMemo(() => {
-    return Array.from(new Set(catalogs.flatMap((c) => c.keywords ?? []))).sort();
-  }, [catalogs]);
-
   const parsedBbox = useMemo(() => {
     const { west, south, east, north } = bboxFilter;
     if (!west && !south && !east && !north) return null;
@@ -105,15 +100,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const filteredCatalogs = useMemo(() => {
     return catalogs.filter((catalog) => {
       const query = searchQuery.toLowerCase();
-      const matchesSearch =
-        query === "" ||
-        catalog.title.toLowerCase().includes(query) ||
-        catalog.description.toLowerCase().includes(query);
-
-      const catalogKeywords = catalog.keywords ?? [];
-      const matchesTags =
-        selectedTags.size === 0 ||
-        catalogKeywords.some((keyword) => selectedTags.has(keyword));
+      const matchesSearch = query === "" || catalog.title.toLowerCase().includes(query);
 
       const tier = getValidationTier(catalog.validation);
       const matchesValidation =
@@ -129,30 +116,17 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           catSouth <= parsedBbox.north;
       }
 
-      return matchesSearch && matchesTags && matchesValidation && matchesBbox;
+      return matchesSearch && matchesValidation && matchesBbox;
     });
-  }, [catalogs, searchQuery, selectedTags, validationFilter, parsedBbox]);
-
-  const handleTagToggle = (tag: string) => {
-    setSelectedTags((prev) => {
-      const next = new Set(prev);
-      if (next.has(tag)) {
-        next.delete(tag);
-      } else {
-        next.add(tag);
-      }
-      return next;
-    });
-  };
+  }, [catalogs, searchQuery, validationFilter, parsedBbox]);
 
   const handleClearFilters = () => {
     setSearchQuery("");
-    setSelectedTags(new Set());
     setValidationFilter("all");
     setBboxFilter({ west: "", south: "", east: "", north: "" });
   };
 
-  const hasActiveFilters = searchQuery !== "" || selectedTags.size > 0 || validationFilter !== "all" || parsedBbox !== null;
+  const hasActiveFilters = searchQuery !== "" || validationFilter !== "all" || parsedBbox !== null;
 
   const handleSubmitCatalog = async () => {
     if (!isValidSubmitUrl || submitState === "submitting") return;
@@ -455,28 +429,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 </div>
               )}
 
-              {allTags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {allTags.map((tag) => {
-                    const isSelected = selectedTags.has(tag);
-                    return (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => handleTagToggle(tag)}
-                        className={`text-micro font-mono px-3 py-1.5 rounded-[var(--p-r-sm)] border transition-colors ${
-                          isSelected
-                            ? "bg-[color-mix(in_oklab,var(--p-primary)_12%,transparent)] text-p-primary-ink border-[color-mix(in_oklab,var(--p-primary)_25%,transparent)]"
-                            : "bg-p-bg text-p-ink-3 border-p-line hover:bg-p-line hover:text-p-ink-2"
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
               {hasActiveFilters && (
                 <button
                   type="button"
@@ -494,11 +446,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
             ) : filteredCatalogs.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredCatalogs.map((catalog) => (
-                  <CatalogCard
-                    key={catalog.id}
-                    catalog={catalog}
-                    onTagClick={handleTagToggle}
-                  />
+                  <CatalogCard key={catalog.id} catalog={catalog} />
                 ))}
               </div>
             ) : (

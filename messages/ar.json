@@ -154,7 +154,8 @@
       "maintainer": "يديره",
       "submitted": "أُرسل",
       "viewCatalog": "عرض الكتالوج",
-      "collections": "{count, plural, other {# مجموعة}}"
+      "collections": "{count, plural, other {# مجموعة}}",
+      "licenses": "{count, plural, other {# رخصة}}"
     },
     "cta": {
       "title": "هل لديك كتالوج لمشاركته؟",
