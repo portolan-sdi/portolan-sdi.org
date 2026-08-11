@@ -154,7 +154,8 @@
       "maintainer": "Mantenido por",
       "submitted": "Enviado",
       "viewCatalog": "Ver catálogo",
-      "collections": "{count, plural, one {# colección} other {# colecciones}}"
+      "collections": "{count, plural, one {# colección} other {# colecciones}}",
+      "licenses": "{count, plural, one {# licencia} other {# licencias}}"
     },
     "cta": {
       "title": "¿Tienes un catálogo para compartir?",

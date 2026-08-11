@@ -365,6 +365,17 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
         {/* Detail panel (bottom-left) */}
         {selected && (
           <div className="absolute bottom-3 start-3 z-10 w-[340px] max-w-[calc(100%-1.5rem)] bg-p-paper border border-p-line rounded-[var(--p-r-md)] p-4 shadow-[var(--p-shadow-lg)]">
+            {selected.logo && (
+              // Same reasoning as catalog-card: catalog-hosted logos have no
+              // finite host allowlist for next/image's remotePatterns.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={selected.logo.href}
+                alt={selected.logo.title ?? selected.title}
+                loading="lazy"
+                className="mb-2 h-6 w-auto max-w-[140px] object-contain"
+              />
+            )}
             <div className="flex items-start justify-between gap-2">
               <h3 className="text-card-title font-semibold line-clamp-2">
                 {selected.title}
@@ -393,8 +404,9 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
                 );
               })()}
             </div>
-            <p className="mt-3 text-body text-p-ink-2 line-clamp-2">
-              {selected.description}
+            <p className="mt-3 text-micro text-p-ink-3 font-mono">
+              {t("card.collections", { count: selected.collection_count })}
+              {selected.stac_version && ` · STAC ${selected.stac_version}`}
             </p>
             <a
               href={getBrowserUrl(selected.url)}

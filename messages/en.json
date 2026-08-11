@@ -154,7 +154,8 @@
       "maintainer": "Maintained by",
       "submitted": "Submitted",
       "viewCatalog": "View catalog",
-      "collections": "{count, plural, one {# collection} other {# collections}}"
+      "collections": "{count, plural, one {# collection} other {# collections}}",
+      "licenses": "{count, plural, one {# license} other {# licenses}}"
     },
     "cta": {
       "title": "Have a catalog to share?",
