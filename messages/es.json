@@ -166,7 +166,7 @@
       "urlError": "La URL debe terminar en catalog.json",
       "emailPlaceholder": "tu@ejemplo.org",
       "emailError": "Introduce una dirección de correo",
-      "emailHint": "Aquí te escribimos si tu catálogo deja de validarse",
+      "emailLabel": "Te escribimos a esta dirección si tu catálogo deja de validarse",
       "submit": "Enviar",
       "submitting": "Enviando...",
       "successTitle": "¡Enviado!",

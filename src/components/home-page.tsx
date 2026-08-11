@@ -565,44 +565,40 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     </button>
                   </div>
                 ) : (
-                  <div className="flex flex-col sm:flex-row gap-2 md:w-auto w-full">
-                    <div className="flex-1 sm:min-w-[300px] flex flex-col gap-2">
-                      <div>
-                        <input
-                          type="url"
-                          value={submitUrl}
-                          onChange={(e) => setSubmitUrl(e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && canSubmit && handleSubmitCatalog()}
-                          placeholder="https://...catalog.json"
-                          disabled={submitState === "submitting"}
-                          className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
-                            submitUrl && !isValidSubmitUrl ? "border-red-400" : "border-p-line focus:border-p-primary"
-                          }`}
-                        />
-                        {submitUrl && !isValidSubmitUrl && (
-                          <p className="text-micro text-red-500 mt-1">{t("registry.submit.urlError")}</p>
-                        )}
-                      </div>
-                      <div>
-                        <input
-                          type="email"
-                          value={submitEmail}
-                          onChange={(e) => setSubmitEmail(e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && canSubmit && handleSubmitCatalog()}
-                          placeholder={t("registry.submit.emailPlaceholder")}
-                          disabled={submitState === "submitting"}
-                          className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
-                            submitEmail && !isValidSubmitEmail ? "border-red-400" : "border-p-line focus:border-p-primary"
-                          }`}
-                        />
-                        {submitEmail && !isValidSubmitEmail ? (
-                          <p className="text-micro text-red-500 mt-1">{t("registry.submit.emailError")}</p>
-                        ) : (
-                          <p className="text-micro text-p-ink-3 mt-1">{t("registry.submit.emailHint")}</p>
-                        )}
-                      </div>
-                      {submitError && (
-                        <p className="text-micro text-red-500">{submitError}</p>
+                  <div className="md:w-auto w-full">
+                    <div className="flex flex-col sm:flex-row gap-2">
+                    <div className="flex-1 sm:min-w-[260px]">
+                      <input
+                        type="url"
+                        value={submitUrl}
+                        onChange={(e) => setSubmitUrl(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && canSubmit && handleSubmitCatalog()}
+                        placeholder="https://...catalog.json"
+                        disabled={submitState === "submitting"}
+                        className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
+                          submitUrl && !isValidSubmitUrl ? "border-red-400" : "border-p-line focus:border-p-primary"
+                        }`}
+                      />
+                      {submitUrl && !isValidSubmitUrl && (
+                        <p className="text-micro text-red-500 mt-1">{t("registry.submit.urlError")}</p>
+                      )}
+                    </div>
+                    <div className="sm:w-[200px]">
+                      <input
+                        type="email"
+                        value={submitEmail}
+                        onChange={(e) => setSubmitEmail(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && canSubmit && handleSubmitCatalog()}
+                        placeholder={t("registry.submit.emailPlaceholder")}
+                        aria-label={t("registry.submit.emailLabel")}
+                        title={t("registry.submit.emailLabel")}
+                        disabled={submitState === "submitting"}
+                        className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
+                          submitEmail && !isValidSubmitEmail ? "border-red-400" : "border-p-line focus:border-p-primary"
+                        }`}
+                      />
+                      {submitEmail && !isValidSubmitEmail && (
+                        <p className="text-micro text-red-500 mt-1">{t("registry.submit.emailError")}</p>
                       )}
                     </div>
                     <button
@@ -617,6 +613,10 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     >
                       {submitState === "submitting" ? t("registry.submit.submitting") : t("registry.submit.submit")}
                     </button>
+                    </div>
+                    {submitError && (
+                      <p className="text-micro text-red-500 mt-1">{submitError}</p>
+                    )}
                   </div>
                 )}
               </div>

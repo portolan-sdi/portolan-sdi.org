@@ -166,7 +166,7 @@
       "urlError": "يجب أن ينتهي الرابط بـ catalog.json",
       "emailPlaceholder": "you@example.org",
       "emailError": "أدخل عنوان بريد إلكتروني",
-      "emailHint": "نراسلك عليه إذا توقّف كتالوجك عن اجتياز التحقق",
+      "emailLabel": "نراسلك على هذا العنوان إذا توقّف كتالوجك عن اجتياز التحقق",
       "submit": "إرسال",
       "submitting": "جارٍ الإرسال...",
       "successTitle": "تم الإرسال!",
