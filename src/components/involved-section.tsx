@@ -6,7 +6,7 @@ import { Ltr } from "./ui";
 // Logos render as flat monochrome grey via CSS mask-image (see .logo-mono), so
 // any source (color SVG, or a PNG's alpha) recolors uniformly; on hover they
 // darken to full ink. `aspect` = intrinsic width/height; `h` is the px height.
-// Radiant Earth has no wordmark asset yet, so it renders as a grey text link.
+// An org with no usable mark falls back to `text: true`, a grey text link.
 //
 // The strip auto-scrolls as a seamless marquee (see .logo-marquee): the list is
 // rendered twice so the pair loops without a seam. Hover or focus pauses it;
@@ -18,7 +18,7 @@ type Org =
 const orgs: readonly Org[] = [
   { name: "CARTO", href: "https://carto.com/", file: "carto.png", h: 22, aspect: 2.554 },
   { name: "Planet", href: "https://www.planet.com/", file: "planet.svg", h: 26, aspect: 2.047 },
-  { name: "Radiant Earth", href: "https://radiant.earth/", text: true },
+  { name: "Radiant Earth", href: "https://radiant.earth/", file: "radiant-earth.svg", h: 16, aspect: 7.24 },
   { name: "Taylor Geospatial Engine", href: "https://taylorgeospatial.org/", file: "taylor-geospatial.png", h: 22, aspect: 4.018 },
   { name: "Source Cooperative", href: "https://source.coop/", file: "source-coop.svg", h: 19, aspect: 3.284 },
   { name: "PDOK", href: "https://www.pdok.nl/", file: "pdok.png", h: 26, aspect: 2.615 },
