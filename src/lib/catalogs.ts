@@ -14,18 +14,35 @@ export interface CatalogLogo {
   title?: string;
 }
 
+// Whether the publisher runs the authoritative copy or re-hosts someone
+// else's. The registry does not export this yet, so it is null for every
+// catalog today and the UI hides the control that filters on it. See
+// https://github.com/portolan-sdi/portolan-registry/issues (kind field).
+export type CatalogKind = "official" | "mirror";
+
 export interface Catalog {
   id: string;
   url: string;
   title: string;
-  stac_version: string | null;
+  kind: CatalogKind | null;
+  /** Portolan spec version the catalog declares. Null for plain STAC. */
+  spec_version: string | null;
   bbox: [number, number, number, number] | null;
   logo: CatalogLogo | null;
   collection_count: number;
   feature_count: number;
+  item_count: number;
+  asset_count: number;
+  /** Sum over the catalog's assets. Null when the crawl could not total it. */
+  total_size_bytes: number | null;
   // SPDX id -> how many collections declare it.
   licenses: Record<string, number>;
+  /** When the data last changed, as the catalog itself reports it. */
+  updated: string | null;
+  /** When the registry last read the catalog. Same for every entry in a run. */
   last_crawled: string | null;
+  /** Set once the registry stops being able to read the catalog. */
+  stale_since: string | null;
   validation: CatalogValidation;
 }
 
@@ -46,12 +63,18 @@ interface ChildLink {
   title?: string;
   bbox?: [number, number, number, number] | null;
   "portolan_registry:id": string;
-  "portolan_registry:stac_version"?: string | null;
+  "portolan_registry:kind"?: string | null;
+  "portolan_registry:spec_version"?: string | null;
   "portolan_registry:logo"?: CatalogLogo | null;
   "portolan_registry:collection_count"?: number | null;
   "portolan_registry:feature_count"?: number | null;
+  "portolan_registry:item_count"?: number | null;
+  "portolan_registry:asset_count"?: number | null;
+  "portolan_registry:total_size_bytes"?: number | null;
   "portolan_registry:licenses"?: Record<string, number> | null;
+  "portolan_registry:updated"?: string | null;
   "portolan_registry:last_crawled"?: string | null;
+  "portolan_registry:stale_since"?: string | null;
   "portolan_registry:stac_valid"?: boolean | null;
   "portolan_registry:has_versions_json"?: boolean | null;
   "portolan_registry:has_portolan_dir"?: boolean | null;
@@ -78,6 +101,10 @@ function isBbox(value: unknown): value is [number, number, number, number] {
   );
 }
 
+function toKind(value: unknown): CatalogKind | null {
+  return value === "official" || value === "mirror" ? value : null;
+}
+
 function toCatalog(link: ChildLink): Catalog {
   const logo = link["portolan_registry:logo"];
 
@@ -85,13 +112,19 @@ function toCatalog(link: ChildLink): Catalog {
     id: link["portolan_registry:id"],
     url: link.href,
     title: link.title ?? link["portolan_registry:id"],
-    stac_version: link["portolan_registry:stac_version"] ?? null,
+    kind: toKind(link["portolan_registry:kind"]),
+    spec_version: link["portolan_registry:spec_version"] ?? null,
     bbox: isBbox(link.bbox) ? link.bbox : null,
     logo: logo && logo.href ? logo : null,
     collection_count: link["portolan_registry:collection_count"] ?? 0,
     feature_count: link["portolan_registry:feature_count"] ?? 0,
+    item_count: link["portolan_registry:item_count"] ?? 0,
+    asset_count: link["portolan_registry:asset_count"] ?? 0,
+    total_size_bytes: link["portolan_registry:total_size_bytes"] ?? null,
     licenses: link["portolan_registry:licenses"] ?? {},
+    updated: link["portolan_registry:updated"] ?? null,
     last_crawled: link["portolan_registry:last_crawled"] ?? null,
+    stale_since: link["portolan_registry:stale_since"] ?? null,
     validation: {
       stac_valid: link["portolan_registry:stac_valid"] ?? false,
       has_versions_json: link["portolan_registry:has_versions_json"] ?? false,
@@ -144,6 +177,92 @@ export function getValidationTier(validation: CatalogValidation): "unvalidated" 
     return "basic";
   }
   return "unvalidated";
+}
+
+// How much of the world a catalog claims. Three catalogs in the registry today
+// declare a bbox covering 75% or more of the globe, so drawing every bbox the
+// same way buries the located ones under a full-canvas wash. The map spends
+// each tier differently: `local` draws filled, `large` draws as an outline, and
+// `global` leaves the map for a labelled group beneath it.
+export type CoverageTier = "local" | "large" | "global";
+
+const GLOBAL_AREA_FRACTION = 0.5;
+const LARGE_AREA_FRACTION = 0.15;
+const LARGE_LON_FRACTION = 0.8;
+
+/** Degree spans of a bbox, treating west > east as an antimeridian crossing. */
+export function getBboxSpans(bbox: [number, number, number, number]) {
+  const [west, south, east, north] = bbox;
+  const lonSpan = west > east ? east + 360 - west : east - west;
+  const latSpan = north - south;
+  return { lonSpan, latSpan, lonFraction: lonSpan / 360, latFraction: latSpan / 180 };
+}
+
+export function getCoverageTier(
+  bbox: [number, number, number, number] | null
+): CoverageTier | null {
+  if (!bbox) return null;
+  const { lonFraction, latFraction } = getBboxSpans(bbox);
+  const areaFraction = lonFraction * latFraction;
+
+  if (areaFraction >= GLOBAL_AREA_FRACTION) return "global";
+  // A band spanning every longitude covers little area but still crosses the
+  // whole map, so it earns the quieter treatment on longitude alone.
+  if (areaFraction >= LARGE_AREA_FRACTION || lonFraction >= LARGE_LON_FRACTION) {
+    return "large";
+  }
+  return "local";
+}
+
+// Object stores report sizes in decimal units, so 1 MB is 10^6 bytes here.
+const BYTE_UNITS = ["B", "kB", "MB", "GB", "TB", "PB"] as const;
+
+/** Latin digits in every locale, per the translation contract. */
+function numberLocale(locale: string): string {
+  return locale === "ar" ? "ar-u-nu-latn" : locale;
+}
+
+export function formatBytes(bytes: number | null, locale: string): string | null {
+  if (bytes === null || !Number.isFinite(bytes) || bytes < 0) return null;
+
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1000 && unit < BYTE_UNITS.length - 1) {
+    value /= 1000;
+    unit++;
+  }
+
+  // Whole bytes read oddly with a decimal, and so does a four-digit gigabyte.
+  const digits = unit === 0 || value >= 100 ? 0 : 1;
+  const formatted = new Intl.NumberFormat(numberLocale(locale), {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value);
+
+  return `${formatted} ${BYTE_UNITS[unit]}`;
+}
+
+export function formatCount(value: number, locale: string): string {
+  return new Intl.NumberFormat(numberLocale(locale), {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+// Fixed to UTC so the server and the client agree on the day. Without it a
+// timestamp near midnight formats differently in each and React reports a
+// hydration mismatch.
+export function formatDate(iso: string | null, locale: string): string | null {
+  if (!iso) return null;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return new Intl.DateTimeFormat(numberLocale(locale), {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
 }
 
 // The export reports licenses as an SPDX id -> collection count map. One id is

@@ -500,6 +500,19 @@ body {
 .tk-flip:focus-within .tk-flip__inner {
   transform: rotateY(180deg);
 }
+/* Catalog cards carry controls on both faces, so React owns their turn rather
+   than CSS: it has to know which face is showing to keep the hidden one out of
+   the tab order. Hover, tap, and keyboard focus all set data-flipped. The two
+   rules below drop the shared hover behaviour and read that attribute instead.
+   Order matters, since the data-flipped rule has to come after the hover reset
+   to win when a pointer is over a card that is already turned. */
+.tk-flip--manual:hover .tk-flip__inner,
+.tk-flip--manual:focus-within .tk-flip__inner {
+  transform: none;
+}
+.tk-flip--manual .tk-flip__inner[data-flipped="true"] {
+  transform: rotateY(180deg);
+}
 .tk-flip__face {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;

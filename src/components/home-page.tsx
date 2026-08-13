@@ -13,10 +13,62 @@ import { InvolvedSection } from "./involved-section";
 import { PipelineFigure } from "./pipeline-figure";
 import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
-import type { Catalog } from "@/lib/catalogs";
-import { getValidationTier } from "@/lib/catalogs";
+import type { Catalog, CatalogKind } from "@/lib/catalogs";
+import { formatDate, getCoverageTier } from "@/lib/catalogs";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
+
+// Two rows of three on a wide screen. Small enough that the control is real
+// at the registry's current size rather than appearing only after it doubles.
+const CARDS_PER_PAGE = 6;
+
+// The global block sits under the map and stays one row on a wide screen.
+const GLOBAL_PER_PAGE = 3;
+
+// Page control shared by the card grid and the global block. Mirrors the arrows
+// on the talks row rather than introducing a second pagination idiom.
+function Pager({
+  page,
+  pageCount,
+  onChange,
+}: {
+  page: number;
+  pageCount: number;
+  onChange: (next: number) => void;
+}) {
+  const t = useTranslations("registry.pagination");
+  if (pageCount <= 1) return null;
+
+  return (
+    <div className="mt-8 flex items-center justify-end gap-4">
+      <span className="font-mono text-micro text-p-ink-3">
+        {t("status", { page: String(page + 1), total: String(pageCount) })}
+      </span>
+      <div className="flex border border-p-line">
+        <button
+          type="button"
+          onClick={() => onChange(page - 1)}
+          disabled={page === 0}
+          aria-label={t("prev")}
+          className="px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
+        >
+          <span aria-hidden="true" className="rtl:hidden">&#8249;</span>
+          <span aria-hidden="true" className="hidden rtl:inline">&#8250;</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange(page + 1)}
+          disabled={page >= pageCount - 1}
+          aria-label={t("next")}
+          className="border-s border-p-line px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
+        >
+          <span aria-hidden="true" className="rtl:hidden">&#8250;</span>
+          <span aria-hidden="true" className="hidden rtl:inline">&#8249;</span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // Placeholder shown while the deck.gl/maplibre chunk loads on first map view.
 function MapSkeleton() {
@@ -51,12 +103,10 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const locale = useLocale();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [validationFilter, setValidationFilter] = useState<"all" | "unvalidated" | "basic" | "full">("all");
-  const [bboxFilter, setBboxFilter] = useState<{ west: string; south: string; east: string; north: string }>({
-    west: "", south: "", east: "", north: ""
-  });
-  const [showBboxFilter, setShowBboxFilter] = useState(false);
+  const [kindFilter, setKindFilter] = useState<"all" | CatalogKind>("all");
   const [registryView, setRegistryView] = useState<"cards" | "map">("map");
+  const [rawPage, setPage] = useState(0);
+  const [rawGlobalPage, setGlobalPage] = useState(0);
 
   const [submitUrl, setSubmitUrl] = useState("");
   const [submitEmail, setSubmitEmail] = useState("");
@@ -91,47 +141,66 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     ];
   }, [catalogs, locale]);
 
-  const parsedBbox = useMemo(() => {
-    const { west, south, east, north } = bboxFilter;
-    if (!west && !south && !east && !north) return null;
-    const w = parseFloat(west);
-    const s = parseFloat(south);
-    const e = parseFloat(east);
-    const n = parseFloat(north);
-    if ([w, s, e, n].some(isNaN)) return null;
-    return { west: w, south: s, east: e, north: n };
-  }, [bboxFilter]);
+  // The registry does not export whether a catalog is the official copy or a
+  // mirror yet, so every entry reports null and this set stays empty. The
+  // control appears on its own once the export carries the field.
+  const availableKinds = useMemo(() => {
+    return Array.from(
+      new Set(catalogs.map((c) => c.kind).filter((k): k is CatalogKind => k !== null))
+    );
+  }, [catalogs]);
 
   const filteredCatalogs = useMemo(() => {
     return catalogs.filter((catalog) => {
-      const query = searchQuery.toLowerCase();
-      const matchesSearch = query === "" || catalog.title.toLowerCase().includes(query);
+      const query = searchQuery.trim().toLowerCase();
+      const matchesSearch =
+        query === "" ||
+        catalog.title.toLowerCase().includes(query) ||
+        catalog.id.toLowerCase().includes(query) ||
+        Object.keys(catalog.licenses).some((id) => id.toLowerCase().includes(query));
 
-      const tier = getValidationTier(catalog.validation);
-      const matchesValidation =
-        validationFilter === "all" || tier === validationFilter;
+      const matchesKind = kindFilter === "all" || catalog.kind === kindFilter;
 
-      let matchesBbox = true;
-      if (parsedBbox && catalog.bbox) {
-        const [catWest, catSouth, catEast, catNorth] = catalog.bbox;
-        matchesBbox =
-          catEast >= parsedBbox.west &&
-          catWest <= parsedBbox.east &&
-          catNorth >= parsedBbox.south &&
-          catSouth <= parsedBbox.north;
-      }
-
-      return matchesSearch && matchesValidation && matchesBbox;
+      return matchesSearch && matchesKind;
     });
-  }, [catalogs, searchQuery, validationFilter, parsedBbox]);
+  }, [catalogs, searchQuery, kindFilter]);
+
+  // A catalog claiming most of the globe would cover every located one beneath
+  // it and drag the initial map fit out to the whole world. Those get their own
+  // block under the map, where their titles are readable.
+  const { mappableCatalogs, globalCatalogs } = useMemo(() => {
+    const mappable: Catalog[] = [];
+    const global: Catalog[] = [];
+    for (const catalog of filteredCatalogs) {
+      (getCoverageTier(catalog.bbox) === "global" ? global : mappable).push(catalog);
+    }
+    return { mappableCatalogs: mappable, globalCatalogs: global };
+  }, [filteredCatalogs]);
+
+  const pageCount = Math.max(1, Math.ceil(filteredCatalogs.length / CARDS_PER_PAGE));
+  // Filtering can shrink the list under the current page.
+  const page = Math.min(rawPage, pageCount - 1);
+  const pagedCatalogs = filteredCatalogs.slice(
+    page * CARDS_PER_PAGE,
+    page * CARDS_PER_PAGE + CARDS_PER_PAGE
+  );
+
+  const globalPageCount = Math.max(1, Math.ceil(globalCatalogs.length / GLOBAL_PER_PAGE));
+  const globalPage = Math.min(rawGlobalPage, globalPageCount - 1);
+  const pagedGlobalCatalogs = globalCatalogs.slice(
+    globalPage * GLOBAL_PER_PAGE,
+    globalPage * GLOBAL_PER_PAGE + GLOBAL_PER_PAGE
+  );
 
   const handleClearFilters = () => {
     setSearchQuery("");
-    setValidationFilter("all");
-    setBboxFilter({ west: "", south: "", east: "", north: "" });
+    setKindFilter("all");
+    setPage(0);
   };
 
-  const hasActiveFilters = searchQuery !== "" || validationFilter !== "all" || parsedBbox !== null;
+  const hasActiveFilters = searchQuery !== "" || kindFilter !== "all";
+
+  const crawledAt = formatDate(catalogs[0]?.last_crawled ?? null, locale);
 
   const handleSubmitCatalog = async () => {
     if (!canSubmit || submitState === "submitting") return;
@@ -345,11 +414,27 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {catalogs.length > 0 && (
         <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
           <div className="max-w-[1240px] mx-auto">
-            {/* No eyebrow: the title ("Browse N catalogs") already names the section. */}
-            <SectionHead
-              title={t("registry.title", { count: catalogs.length })}
-              subtitle={t("registry.description")}
-            />
+            {/* No eyebrow and no subtitle: the title ("Browse N catalogs")
+                already names the section. */}
+            <SectionHead title={t("registry.title", { count: catalogs.length })} wide />
+
+            {/* Where the listing comes from and when it was last read. */}
+            <p className="-mt-[clamp(1.5rem,3vw,2.5rem)] mb-8 flex flex-wrap items-center gap-x-1.5 font-mono text-eyebrow text-p-ink-3">
+              <a
+                href="https://github.com/portolan-sdi/portolan-registry"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-p-primary hover:underline"
+              >
+                <Ltr>portolan-registry</Ltr> ↗
+              </a>
+              {crawledAt && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{t("registry.lastChecked", { date: crawledAt })}</span>
+                </>
+              )}
+            </p>
 
             {/* Filters */}
             <div className="space-y-4 mb-8">
@@ -359,41 +444,33 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t("registry.search.placeholder")}
-                  className="flex-1 bg-p-paper border border-p-line rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary transition-colors"
+                  className="flex-1 bg-p-paper border border-p-line px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary transition-colors"
                 />
-                <div className="relative">
-                  <select
-                    value={validationFilter}
-                    onChange={(e) => setValidationFilter(e.target.value as typeof validationFilter)}
-                    className="appearance-none bg-p-paper border border-p-line rounded-[var(--p-r-md)] pl-3 pr-8 py-2.5 text-body text-p-ink focus:outline-none focus:border-p-primary transition-colors cursor-pointer"
-                    aria-label={t("registry.filters.validation")}
-                  >
-                    <option value="all">{t("registry.filters.all")}</option>
-                    <option value="unvalidated">{t("registry.validation.unvalidated")}</option>
-                    <option value="basic">{t("registry.validation.basic")}</option>
-                    <option value="full">{t("registry.validation.full")}</option>
-                  </select>
-                  <svg className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-p-ink-3 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowBboxFilter(!showBboxFilter)}
-                  className={`flex items-center gap-2 px-3 py-2.5 text-body border rounded-[var(--p-r-md)] transition-colors ${
-                    showBboxFilter || parsedBbox
-                      ? "bg-[color-mix(in_oklab,var(--p-primary)_10%,transparent)] border-[color-mix(in_oklab,var(--p-primary)_25%,transparent)] text-p-primary-ink"
-                      : "bg-p-paper border-p-line text-p-ink hover:border-p-ink-3"
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
-                  {t("registry.filters.bbox")}
-                </button>
+                {/* Only rendered once the export distinguishes official copies
+                    from mirrors. A control with one option filters nothing. */}
+                {availableKinds.length > 1 && (
+                  <div className="relative">
+                    <select
+                      value={kindFilter}
+                      onChange={(e) => setKindFilter(e.target.value as typeof kindFilter)}
+                      className="appearance-none bg-p-paper border border-p-line ps-3 pe-8 py-2.5 text-body text-p-ink focus:outline-none focus:border-p-primary transition-colors cursor-pointer"
+                      aria-label={t("registry.filters.kind")}
+                    >
+                      <option value="all">{t("registry.filters.allKinds")}</option>
+                      {availableKinds.map((kind) => (
+                        <option key={kind} value={kind}>
+                          {t(`registry.kind.${kind}`)}
+                        </option>
+                      ))}
+                    </select>
+                    <svg className="absolute end-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-p-ink-3 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                )}
 
                 {/* Cards | Map view toggle */}
-                <div className="flex items-stretch border border-p-line rounded-[var(--p-r-md)] overflow-hidden self-start sm:self-auto sm:ms-auto">
+                <div className="flex items-stretch border border-p-line overflow-hidden self-start sm:self-auto sm:ms-auto">
                   {(["cards", "map"] as const).map((view, i) => {
                     const isActive = registryView === view;
                     return (
@@ -417,26 +494,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 </div>
               </div>
 
-              {showBboxFilter && (
-                <div className="flex flex-wrap items-center gap-3 p-4 bg-p-paper border border-p-line rounded-[var(--p-r-md)]">
-                  <span className="text-micro text-p-ink-3 font-mono w-full sm:w-auto">{t("registry.filters.bboxLabel")}</span>
-                  <div className="flex flex-wrap gap-2">
-                    {(["west", "south", "east", "north"] as const).map((dir) => (
-                      <div key={dir} className="flex items-center gap-1">
-                        <label className="text-micro text-p-ink-3 uppercase w-6">{t(`registry.compass.${dir}`)}</label>
-                        <input
-                          type="number"
-                          step="any"
-                          value={bboxFilter[dir]}
-                          onChange={(e) => setBboxFilter((prev) => ({ ...prev, [dir]: e.target.value }))}
-                          placeholder={dir === "west" || dir === "east" ? t("registry.filters.lonPlaceholder") : t("registry.filters.latPlaceholder")}
-                          className="w-20 px-2 py-1.5 text-micro bg-p-bg border border-p-line rounded-[var(--p-r-sm)] text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {hasActiveFilters && (
                 <button
@@ -451,13 +508,52 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
             {/* Catalog view: map or grid */}
             {registryView === "map" ? (
-              <CatalogMap catalogs={filteredCatalogs} />
+              <>
+                <CatalogMap catalogs={mappableCatalogs} />
+                {globalCatalogs.length > 0 && (
+                  <div className="mt-10 border-t border-p-line pt-8">
+                    <h3 className="text-card-title-lg font-semibold">
+                      {t("registry.global.title")}
+                    </h3>
+                    {/* One row on a wide screen. Three cards in two columns
+                        wrap to two rows at md, so that height is reserved
+                        instead. */}
+                    <div
+                      className={`mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ${
+                        globalPageCount > 1 ? "md:min-h-[540px] lg:min-h-[260px]" : ""
+                      }`}
+                    >
+                      {pagedGlobalCatalogs.map((catalog) => (
+                        <CatalogCard key={catalog.id} catalog={catalog} />
+                      ))}
+                    </div>
+                    <Pager
+                      page={globalPage}
+                      pageCount={globalPageCount}
+                      onChange={setGlobalPage}
+                    />
+                  </div>
+                )}
+              </>
             ) : filteredCatalogs.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {filteredCatalogs.map((catalog) => (
-                  <CatalogCard key={catalog.id} catalog={catalog} />
-                ))}
-              </div>
+              <>
+                {/* A short last page must not shrink the grid, or everything
+                    below it jumps when you change page. Cards are 260px with a
+                    20px gap, so two rows reserve 540 and three reserve 820.
+                    Single-column screens are left alone: reserving six rows
+                    there would leave a screenful of blank under a short page,
+                    and the whole grid is taller than the viewport anyway. */}
+                <div
+                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ${
+                    pageCount > 1 ? "md:min-h-[820px] lg:min-h-[540px]" : ""
+                  }`}
+                >
+                  {pagedCatalogs.map((catalog) => (
+                    <CatalogCard key={catalog.id} catalog={catalog} />
+                  ))}
+                </div>
+                <Pager page={page} pageCount={pageCount} onChange={setPage} />
+              </>
             ) : (
               <div className="text-center py-12">
                 <p className="text-body text-p-ink-2">{t("registry.search.noResults")}</p>
@@ -470,14 +566,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 </button>
               </div>
             )}
-
-            {/* Annotation row: same anatomy as a figure caption */}
-            <div className="flex justify-between gap-3 pt-2 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
-              <span className="text-p-primary">{t("registry.caption")}</span>
-              <span>
-                {t("registry.captionNote", { count: filteredCatalogs.length })}
-              </span>
-            </div>
 
             {/* Inline Submit */}
             <div className="mt-10 bg-p-paper border border-p-line rounded-[var(--p-r-lg)] p-6">
