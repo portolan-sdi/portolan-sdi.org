@@ -22,6 +22,54 @@ type SubmitState = "idle" | "submitting" | "success" | "error";
 // at the registry's current size rather than appearing only after it doubles.
 const CARDS_PER_PAGE = 6;
 
+// The global block sits under the map and stays one row on a wide screen.
+const GLOBAL_PER_PAGE = 3;
+
+// Page control shared by the card grid and the global block. Mirrors the arrows
+// on the talks row rather than introducing a second pagination idiom.
+function Pager({
+  page,
+  pageCount,
+  onChange,
+}: {
+  page: number;
+  pageCount: number;
+  onChange: (next: number) => void;
+}) {
+  const t = useTranslations("registry.pagination");
+  if (pageCount <= 1) return null;
+
+  return (
+    <div className="mt-8 flex items-center justify-end gap-4">
+      <span className="font-mono text-micro text-p-ink-3">
+        {t("status", { page: String(page + 1), total: String(pageCount) })}
+      </span>
+      <div className="flex border border-p-line">
+        <button
+          type="button"
+          onClick={() => onChange(page - 1)}
+          disabled={page === 0}
+          aria-label={t("prev")}
+          className="px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
+        >
+          <span aria-hidden="true" className="rtl:hidden">&#8249;</span>
+          <span aria-hidden="true" className="hidden rtl:inline">&#8250;</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange(page + 1)}
+          disabled={page >= pageCount - 1}
+          aria-label={t("next")}
+          className="border-s border-p-line px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
+        >
+          <span aria-hidden="true" className="rtl:hidden">&#8250;</span>
+          <span aria-hidden="true" className="hidden rtl:inline">&#8249;</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Placeholder shown while the deck.gl/maplibre chunk loads on first map view.
 function MapSkeleton() {
   const t = useTranslations("registry");
@@ -58,6 +106,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const [kindFilter, setKindFilter] = useState<"all" | CatalogKind>("all");
   const [registryView, setRegistryView] = useState<"cards" | "map">("map");
   const [rawPage, setPage] = useState(0);
+  const [rawGlobalPage, setGlobalPage] = useState(0);
 
   const [submitUrl, setSubmitUrl] = useState("");
   const [submitEmail, setSubmitEmail] = useState("");
@@ -134,6 +183,13 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const pagedCatalogs = filteredCatalogs.slice(
     page * CARDS_PER_PAGE,
     page * CARDS_PER_PAGE + CARDS_PER_PAGE
+  );
+
+  const globalPageCount = Math.max(1, Math.ceil(globalCatalogs.length / GLOBAL_PER_PAGE));
+  const globalPage = Math.min(rawGlobalPage, globalPageCount - 1);
+  const pagedGlobalCatalogs = globalCatalogs.slice(
+    globalPage * GLOBAL_PER_PAGE,
+    globalPage * GLOBAL_PER_PAGE + GLOBAL_PER_PAGE
   );
 
   const handleClearFilters = () => {
@@ -459,11 +515,23 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     <h3 className="text-card-title-lg font-semibold">
                       {t("registry.global.title")}
                     </h3>
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {globalCatalogs.map((catalog) => (
+                    {/* One row on a wide screen. Three cards in two columns
+                        wrap to two rows at md, so that height is reserved
+                        instead. */}
+                    <div
+                      className={`mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ${
+                        globalPageCount > 1 ? "md:min-h-[540px] lg:min-h-[260px]" : ""
+                      }`}
+                    >
+                      {pagedGlobalCatalogs.map((catalog) => (
                         <CatalogCard key={catalog.id} catalog={catalog} />
                       ))}
                     </div>
+                    <Pager
+                      page={globalPage}
+                      pageCount={globalPageCount}
+                      onChange={setGlobalPage}
+                    />
                   </div>
                 )}
               </>
@@ -484,38 +552,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     <CatalogCard key={catalog.id} catalog={catalog} />
                   ))}
                 </div>
-                {pageCount > 1 && (
-                  <div className="mt-8 flex items-center justify-end gap-4">
-                    <span className="font-mono text-micro text-p-ink-3">
-                      {t("registry.pagination.status", {
-                        page: String(page + 1),
-                        total: String(pageCount),
-                      })}
-                    </span>
-                    <div className="flex border border-p-line" role="group">
-                      <button
-                        type="button"
-                        onClick={() => setPage((p) => Math.max(0, p - 1))}
-                        disabled={page === 0}
-                        aria-label={t("registry.pagination.prev")}
-                        className="px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
-                      >
-                        <span aria-hidden="true" className="rtl:hidden">&#8249;</span>
-                        <span aria-hidden="true" className="hidden rtl:inline">&#8250;</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
-                        disabled={page >= pageCount - 1}
-                        aria-label={t("registry.pagination.next")}
-                        className="border-s border-p-line px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
-                      >
-                        <span aria-hidden="true" className="rtl:hidden">&#8250;</span>
-                        <span aria-hidden="true" className="hidden rtl:inline">&#8249;</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
+                <Pager page={page} pageCount={pageCount} onChange={setPage} />
               </>
             ) : (
               <div className="text-center py-12">

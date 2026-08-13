@@ -168,8 +168,28 @@ export function CatalogCard({ catalog }: CatalogProps) {
   const [flipped, setFlipped] = useState(false);
   const updated = formatDate(catalog.updated, locale);
 
+  // The same link on both faces. Only the face you can see is tabbable.
+  const viewCatalog = (tabIndex: number) => (
+    <a
+      href={getBrowserUrl(catalog.url)}
+      target="_blank"
+      rel="noopener noreferrer"
+      tabIndex={tabIndex}
+      className="text-small text-p-primary hover:underline"
+    >
+      {t("card.viewCatalog")} <DirArrow />
+    </a>
+  );
+
   return (
-    <div className="tk-flip tk-flip--manual">
+    <div
+      className="tk-flip tk-flip--manual"
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFlipped(false);
+      }}
+    >
       <div className="tk-flip__inner relative h-[260px] w-full" data-flipped={flipped}>
         <div className="tk-flip__face absolute inset-0 flex flex-col gap-3 border border-p-line bg-p-paper p-5">
           <CatalogHeader catalog={catalog} />
@@ -178,40 +198,48 @@ export function CatalogCard({ catalog }: CatalogProps) {
             {updated && t("card.updated", { date: updated })}
           </MetaRow>
 
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-            <a
-              href={getBrowserUrl(catalog.url)}
-              target="_blank"
-              rel="noopener noreferrer"
-              tabIndex={flipped ? -1 : 0}
-              className="text-small text-p-primary hover:underline"
-            >
-              {t("card.viewCatalog")} <DirArrow />
-            </a>
-            <button
-              type="button"
-              aria-expanded={flipped}
-              tabIndex={flipped ? -1 : 0}
-              onClick={() => setFlipped(true)}
-              className="font-mono text-micro text-p-ink-3 transition-colors hover:text-p-ink cursor-pointer"
-            >
-              {t("card.showDetails")}
-            </button>
-          </div>
+          {/* Anchored to the same corner as the back's copy of this link. The
+              card turns as the pointer arrives, and the target does not move. */}
+          <div className="mt-auto flex justify-end">{viewCatalog(flipped ? -1 : 0)}</div>
+
+          {/* Turns the card where there is no pointer to hover with. Sits under
+              the action row so it never swallows a tap meant for the link. */}
+          <button
+            type="button"
+            aria-expanded={flipped}
+            tabIndex={-1}
+            aria-hidden="true"
+            onClick={() => setFlipped(true)}
+            className="absolute inset-x-0 top-0 bottom-14 cursor-pointer"
+          />
+
+          {/* Keyboard-only route to the back. Invisible until focused, so
+              pointer users never see a control they do not need. */}
+          <button
+            type="button"
+            aria-expanded={flipped}
+            onFocus={() => setFlipped(true)}
+            onClick={() => setFlipped(true)}
+            className="sr-only focus:not-sr-only focus:absolute focus:bottom-5 focus:start-5 focus:z-10 focus:border focus:border-p-line focus:bg-p-paper focus:px-2 focus:py-1 focus:font-mono focus:text-micro"
+          >
+            {t("card.showDetails")}
+          </button>
         </div>
 
         <div className="tk-flip__back tk-flip__face absolute inset-0 flex flex-col gap-2 border border-p-line bg-p-bg-soft p-5">
           <CatalogFacts catalog={catalog} />
 
-          <div className="mt-auto">
-            <CatalogActions catalog={catalog} tabbable={flipped} />
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+            <CopyUrlButton url={catalog.url} tabIndex={flipped ? 0 : -1} />
+            {viewCatalog(flipped ? 0 : -1)}
           </div>
 
+          {/* Only devices without hover need a way back. A pointer just leaves. */}
           <button
             type="button"
             onClick={() => setFlipped(false)}
             tabIndex={flipped ? 0 : -1}
-            className="absolute top-3 end-3 text-p-ink-3 hover:text-p-ink transition-colors cursor-pointer"
+            className="absolute top-3 end-3 hidden text-p-ink-3 transition-colors hover:text-p-ink cursor-pointer [@media(hover:none)]:block"
             aria-label={t("card.hideDetails")}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
