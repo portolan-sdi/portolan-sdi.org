@@ -150,7 +150,9 @@
       "updated": "updated {date}",
       "copyUrl": "Copy address",
       "copied": "Copied",
-      "noLocation": "No location reported"
+      "noLocation": "No location reported",
+      "showDetails": "Details",
+      "hideDetails": "Hide details"
     },
     "cta": {
       "title": "Have a catalog to share?",
@@ -186,23 +188,25 @@
       "closeDetails": "Close details",
       "noLocation": "{count} without location",
       "loading": "Loading map...",
-      "worldwide": "Worldwide",
-      "legend": {
-        "dot": "Location",
-        "area": "Coverage",
-        "wide": "Wide coverage"
-      }
+      "info": "Map credits"
     },
     "generated": "Last updated: {date}",
-    "captionFiltered": "{shown} of {total} shown",
-    "captionCrawled": "crawled {date}",
     "kind": {
       "official": "Official",
       "mirror": "Mirror"
     },
     "status": {
       "stale": "Stale"
-    }
+    },
+    "global": {
+      "title": "Global datasets"
+    },
+    "pagination": {
+      "prev": "Previous page",
+      "next": "Next page",
+      "status": "{page} / {total}"
+    },
+    "lastChecked": "Last checked: {date}"
   },
   "resources": {
     "eyebrow": "Talks & demos",

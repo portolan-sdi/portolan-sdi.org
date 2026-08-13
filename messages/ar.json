@@ -150,7 +150,9 @@
       "updated": "حُدّث في {date}",
       "copyUrl": "نسخ العنوان",
       "copied": "تم النسخ",
-      "noLocation": "لا يوجد موقع مُعلن"
+      "noLocation": "لا يوجد موقع مُعلن",
+      "showDetails": "التفاصيل",
+      "hideDetails": "إخفاء التفاصيل"
     },
     "cta": {
       "title": "هل لديك كتالوج لمشاركته؟",
@@ -186,23 +188,25 @@
       "closeDetails": "إغلاق التفاصيل",
       "noLocation": "{count} بدون موقع",
       "loading": "جارٍ تحميل الخريطة...",
-      "worldwide": "عالمي",
-      "legend": {
-        "dot": "الموقع",
-        "area": "التغطية",
-        "wide": "تغطية واسعة"
-      }
+      "info": "حقوق الخريطة"
     },
     "generated": "آخر تحديث {date}",
-    "captionFiltered": "{shown} من {total} معروضة",
-    "captionCrawled": "جُمعت في {date}",
     "kind": {
       "official": "رسمي",
       "mirror": "نسخة مرآة"
     },
     "status": {
       "stale": "قديم"
-    }
+    },
+    "global": {
+      "title": "بيانات عالمية"
+    },
+    "pagination": {
+      "prev": "الصفحة السابقة",
+      "next": "الصفحة التالية",
+      "status": "{page} / {total}"
+    },
+    "lastChecked": "آخر مراجعة {date}"
   },
   "resources": {
     "eyebrow": "محاضرات وتجارب",

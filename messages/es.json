@@ -150,7 +150,9 @@
       "updated": "actualizado el {date}",
       "copyUrl": "Copiar dirección",
       "copied": "Copiado",
-      "noLocation": "Sin ubicación declarada"
+      "noLocation": "Sin ubicación declarada",
+      "showDetails": "Detalles",
+      "hideDetails": "Ocultar detalles"
     },
     "cta": {
       "title": "¿Tienes un catálogo para compartir?",
@@ -186,23 +188,25 @@
       "closeDetails": "Cerrar detalles",
       "noLocation": "{count} sin ubicación",
       "loading": "Cargando mapa...",
-      "worldwide": "Mundial",
-      "legend": {
-        "dot": "Ubicación",
-        "area": "Cobertura",
-        "wide": "Cobertura amplia"
-      }
+      "info": "Créditos del mapa"
     },
     "generated": "Última actualización {date}",
-    "captionFiltered": "{shown} de {total} mostrados",
-    "captionCrawled": "rastreado el {date}",
     "kind": {
       "official": "Oficial",
       "mirror": "Espejo"
     },
     "status": {
       "stale": "Obsoleto"
-    }
+    },
+    "global": {
+      "title": "Datos globales"
+    },
+    "pagination": {
+      "prev": "Página anterior",
+      "next": "Página siguiente",
+      "status": "{page} / {total}"
+    },
+    "lastChecked": "Última revisión {date}"
   },
   "resources": {
     "eyebrow": "Charlas y demos",

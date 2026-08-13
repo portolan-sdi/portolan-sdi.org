@@ -14,9 +14,13 @@ import { PipelineFigure } from "./pipeline-figure";
 import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { Catalog, CatalogKind } from "@/lib/catalogs";
-import { formatDate } from "@/lib/catalogs";
+import { formatDate, getCoverageTier } from "@/lib/catalogs";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
+
+// Two rows of three on a wide screen. Small enough that the control is real
+// at the registry's current size rather than appearing only after it doubles.
+const CARDS_PER_PAGE = 6;
 
 // Placeholder shown while the deck.gl/maplibre chunk loads on first map view.
 function MapSkeleton() {
@@ -53,6 +57,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [kindFilter, setKindFilter] = useState<"all" | CatalogKind>("all");
   const [registryView, setRegistryView] = useState<"cards" | "map">("map");
+  const [rawPage, setPage] = useState(0);
 
   const [submitUrl, setSubmitUrl] = useState("");
   const [submitEmail, setSubmitEmail] = useState("");
@@ -111,9 +116,30 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     });
   }, [catalogs, searchQuery, kindFilter]);
 
+  // A catalog claiming most of the globe would cover every located one beneath
+  // it and drag the initial map fit out to the whole world. Those get their own
+  // block under the map, where their titles are readable.
+  const { mappableCatalogs, globalCatalogs } = useMemo(() => {
+    const mappable: Catalog[] = [];
+    const global: Catalog[] = [];
+    for (const catalog of filteredCatalogs) {
+      (getCoverageTier(catalog.bbox) === "global" ? global : mappable).push(catalog);
+    }
+    return { mappableCatalogs: mappable, globalCatalogs: global };
+  }, [filteredCatalogs]);
+
+  const pageCount = Math.max(1, Math.ceil(filteredCatalogs.length / CARDS_PER_PAGE));
+  // Filtering can shrink the list under the current page.
+  const page = Math.min(rawPage, pageCount - 1);
+  const pagedCatalogs = filteredCatalogs.slice(
+    page * CARDS_PER_PAGE,
+    page * CARDS_PER_PAGE + CARDS_PER_PAGE
+  );
+
   const handleClearFilters = () => {
     setSearchQuery("");
     setKindFilter("all");
+    setPage(0);
   };
 
   const hasActiveFilters = searchQuery !== "" || kindFilter !== "all";
@@ -333,9 +359,26 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
           <div className="max-w-[1240px] mx-auto">
             {/* No eyebrow and no subtitle: the title ("Browse N catalogs")
-                already names the section, and the caption under the map
-                carries the only other fact worth stating. */}
+                already names the section. */}
             <SectionHead title={t("registry.title", { count: catalogs.length })} wide />
+
+            {/* Where the listing comes from and when it was last read. */}
+            <p className="-mt-[clamp(1.5rem,3vw,2.5rem)] mb-8 flex flex-wrap items-center gap-x-1.5 font-mono text-eyebrow text-p-ink-3">
+              <a
+                href="https://github.com/portolan-sdi/portolan-registry"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-p-primary hover:underline"
+              >
+                <Ltr>portolan-registry</Ltr> ↗
+              </a>
+              {crawledAt && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{t("registry.lastChecked", { date: crawledAt })}</span>
+                </>
+              )}
+            </p>
 
             {/* Filters */}
             <div className="space-y-4 mb-8">
@@ -409,13 +452,71 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
             {/* Catalog view: map or grid */}
             {registryView === "map" ? (
-              <CatalogMap catalogs={filteredCatalogs} />
+              <>
+                <CatalogMap catalogs={mappableCatalogs} />
+                {globalCatalogs.length > 0 && (
+                  <div className="mt-10 border-t border-p-line pt-8">
+                    <h3 className="text-card-title-lg font-semibold">
+                      {t("registry.global.title")}
+                    </h3>
+                    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {globalCatalogs.map((catalog) => (
+                        <CatalogCard key={catalog.id} catalog={catalog} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             ) : filteredCatalogs.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {filteredCatalogs.map((catalog) => (
-                  <CatalogCard key={catalog.id} catalog={catalog} />
-                ))}
-              </div>
+              <>
+                {/* A short last page must not shrink the grid, or everything
+                    below it jumps when you change page. Cards are 260px with a
+                    20px gap, so two rows reserve 540 and three reserve 820.
+                    Single-column screens are left alone: reserving six rows
+                    there would leave a screenful of blank under a short page,
+                    and the whole grid is taller than the viewport anyway. */}
+                <div
+                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ${
+                    pageCount > 1 ? "md:min-h-[820px] lg:min-h-[540px]" : ""
+                  }`}
+                >
+                  {pagedCatalogs.map((catalog) => (
+                    <CatalogCard key={catalog.id} catalog={catalog} />
+                  ))}
+                </div>
+                {pageCount > 1 && (
+                  <div className="mt-8 flex items-center justify-end gap-4">
+                    <span className="font-mono text-micro text-p-ink-3">
+                      {t("registry.pagination.status", {
+                        page: String(page + 1),
+                        total: String(pageCount),
+                      })}
+                    </span>
+                    <div className="flex border border-p-line" role="group">
+                      <button
+                        type="button"
+                        onClick={() => setPage((p) => Math.max(0, p - 1))}
+                        disabled={page === 0}
+                        aria-label={t("registry.pagination.prev")}
+                        className="px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
+                      >
+                        <span aria-hidden="true" className="rtl:hidden">&#8249;</span>
+                        <span aria-hidden="true" className="hidden rtl:inline">&#8250;</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                        disabled={page >= pageCount - 1}
+                        aria-label={t("registry.pagination.next")}
+                        className="border-s border-p-line px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
+                      >
+                        <span aria-hidden="true" className="rtl:hidden">&#8250;</span>
+                        <span aria-hidden="true" className="hidden rtl:inline">&#8249;</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-12">
                 <p className="text-body text-p-ink-2">{t("registry.search.noResults")}</p>
@@ -428,28 +529,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 </button>
               </div>
             )}
-
-            {/* Annotation row: same anatomy as a figure caption. It names the
-                source of the data and how fresh it is, which nothing else on
-                the page says. */}
-            <div className="flex flex-wrap justify-between gap-x-3 gap-y-1 mt-3 pt-2 border-t border-p-line-soft font-mono text-eyebrow text-p-ink-3">
-              <a
-                href="https://github.com/portolan-sdi/portolan-registry"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-p-primary hover:underline"
-              >
-                <Ltr>portolan-sdi/portolan-registry</Ltr> ↗
-              </a>
-              <span>
-                {filteredCatalogs.length < catalogs.length &&
-                  `${t("registry.captionFiltered", {
-                    shown: String(filteredCatalogs.length),
-                    total: String(catalogs.length),
-                  })} · `}
-                {crawledAt && t("registry.captionCrawled", { date: crawledAt })}
-              </span>
-            </div>
 
             {/* Inline Submit */}
             <div className="mt-10 bg-p-paper border border-p-line rounded-[var(--p-r-lg)] p-6">

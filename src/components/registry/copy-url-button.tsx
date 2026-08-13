@@ -6,13 +6,15 @@ import { useTranslations } from "next-intl";
 interface CopyUrlButtonProps {
   url: string;
   className?: string;
+  /** -1 while the card face holding this button is turned away. */
+  tabIndex?: number;
 }
 
 const RESET_MS = 2000;
 
 // Copies a catalog.json address so it can be pasted into a client. The label
 // stays in place and swaps text, so the row does not reflow on click.
-export function CopyUrlButton({ url, className }: CopyUrlButtonProps) {
+export function CopyUrlButton({ url, className, tabIndex }: CopyUrlButtonProps) {
   const t = useTranslations("registry.card");
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -40,6 +42,7 @@ export function CopyUrlButton({ url, className }: CopyUrlButtonProps) {
     <button
       type="button"
       onClick={handleCopy}
+      tabIndex={tabIndex}
       title={url}
       className={`inline-flex items-center gap-1.5 text-micro font-mono text-p-ink-3 hover:text-p-ink transition-colors cursor-pointer ${className ?? ""}`}
     >

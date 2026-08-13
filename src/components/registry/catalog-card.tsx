@@ -2,7 +2,7 @@
 
 import { Fragment, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Card, Tag, DirArrow, Ltr } from "../ui";
+import { Tag, DirArrow, Ltr } from "../ui";
 import type { Catalog } from "@/lib/catalogs";
 import {
   formatBytes,
@@ -14,13 +14,13 @@ import {
 } from "@/lib/catalogs";
 import { CopyUrlButton } from "./copy-url-button";
 
-interface CatalogCardProps {
+interface CatalogProps {
   catalog: Catalog;
 }
 
 // Dot-separated run of facts. Anything the crawl did not report is dropped
-// rather than printed as "unknown", so cards stay ragged and every line on a
-// card is a fact about that catalog.
+// rather than printed as "unknown", so every line reads as a fact about that
+// catalog.
 function MetaRow({ children }: { children: ReactNode[] }) {
   const items = children.filter(Boolean);
   if (items.length === 0) return null;
@@ -37,26 +37,12 @@ function MetaRow({ children }: { children: ReactNode[] }) {
   );
 }
 
-/** Card contents without the surrounding chrome, so the map panel can reuse it. */
-export function CatalogCardBody({ catalog }: CatalogCardProps) {
+/** Logo, title, and any exception badge. Shared by the card front and the map panel. */
+export function CatalogHeader({ catalog }: CatalogProps) {
   const t = useTranslations("registry");
-  const locale = useLocale();
   const [logoBroken, setLogoBroken] = useState(false);
-
   const logo = logoBroken ? null : catalog.logo;
   const tier = getValidationTier(catalog.validation);
-  const license = getLicenseSummary(catalog.licenses);
-  const size = formatBytes(catalog.total_size_bytes, locale);
-  const updated = formatDate(catalog.updated, locale);
-
-  // A catalog holds either vector features or raster items, rarely both worth
-  // naming. Lead with whichever the crawl actually counted.
-  const contents =
-    catalog.feature_count > 0
-      ? t("card.features", { count: formatCount(catalog.feature_count, locale) })
-      : catalog.item_count > 0
-        ? t("card.items", { count: formatCount(catalog.item_count, locale) })
-        : null;
 
   return (
     <>
@@ -74,9 +60,8 @@ export function CatalogCardBody({ catalog }: CatalogCardProps) {
           className="h-8 w-auto max-w-[160px] self-start object-contain"
         />
       )}
-
-      <div className="flex justify-between items-start gap-2">
-        <h3 className="text-card-title font-semibold line-clamp-2">{catalog.title}</h3>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-card-title font-semibold line-clamp-3">{catalog.title}</h3>
         {/* Badge the exceptions only. A tag that reads the same on every card
             is chrome, not information. */}
         <div className="flex shrink-0 flex-col items-end gap-1">
@@ -85,54 +70,157 @@ export function CatalogCardBody({ catalog }: CatalogCardProps) {
           {tier === "unvalidated" && <Tag>{t("validation.unvalidated")}</Tag>}
         </div>
       </div>
-
-      <div className="space-y-1">
-        {/* What the catalog holds. */}
-        <MetaRow>
-          {catalog.collection_count === 1
-            ? t("card.collection")
-            : t("card.collections", {
-                count: formatCount(catalog.collection_count, locale),
-              })}
-          {contents}
-          {size}
-        </MetaRow>
-
-        {/* How it is published, and how current it is. */}
-        <MetaRow>
-          {catalog.spec_version && (
-            <Ltr>{t("card.specVersion", { version: catalog.spec_version })}</Ltr>
-          )}
-          {updated && t("card.updated", { date: updated })}
-          {license &&
-            (license.kind === "single" ? (
-              <Ltr>{license.id}</Ltr>
-            ) : (
-              t("card.licenses", { count: String(license.count) })
-            ))}
-          {!catalog.bbox && t("card.noLocation")}
-        </MetaRow>
-      </div>
-
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-1">
-        <CopyUrlButton url={catalog.url} />
-        <a
-          href={getBrowserUrl(catalog.url)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-small text-p-primary hover:underline"
-        >
-          {t("card.viewCatalog")} <DirArrow />
-        </a>
-      </div>
     </>
   );
 }
 
-export function CatalogCard({ catalog }: CatalogCardProps) {
+/** Everything the crawl measured. Shared by the card back and the map panel. */
+export function CatalogFacts({ catalog }: CatalogProps) {
+  const t = useTranslations("registry");
+  const locale = useLocale();
+
+  const license = getLicenseSummary(catalog.licenses);
+  const size = formatBytes(catalog.total_size_bytes, locale);
+  const updated = formatDate(catalog.updated, locale);
+
+  // A catalog holds either vector features or raster items, rarely both worth
+  // naming. Lead with whichever the crawl actually counted.
+  const contents =
+    catalog.feature_count > 0
+      ? t("card.features", { count: formatCount(catalog.feature_count, locale) })
+      : catalog.item_count > 0
+        ? t("card.items", { count: formatCount(catalog.item_count, locale) })
+        : null;
+
   return (
-    <Card className="flex flex-col gap-3">
-      <CatalogCardBody catalog={catalog} />
-    </Card>
+    <>
+      <MetaRow>
+        {collectionLabel(catalog, t, locale)}
+        {contents}
+        {size}
+      </MetaRow>
+      <MetaRow>
+        {catalog.spec_version && (
+          <Ltr>{t("card.specVersion", { version: catalog.spec_version })}</Ltr>
+        )}
+        {updated && t("card.updated", { date: updated })}
+        {license &&
+          (license.kind === "single" ? (
+            <Ltr>{license.id}</Ltr>
+          ) : (
+            t("card.licenses", { count: String(license.count) })
+          ))}
+        {!catalog.bbox && t("card.noLocation")}
+      </MetaRow>
+    </>
+  );
+}
+
+/**
+ * Copy the address, or open the catalog in the browser. `tabbable` is false on
+ * a card face that is turned away, so its controls leave the tab order while
+ * they are invisible.
+ */
+export function CatalogActions({
+  catalog,
+  tabbable = true,
+}: CatalogProps & { tabbable?: boolean }) {
+  const t = useTranslations("registry");
+  const tabIndex = tabbable ? 0 : -1;
+
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+      <CopyUrlButton url={catalog.url} tabIndex={tabIndex} />
+      <a
+        href={getBrowserUrl(catalog.url)}
+        target="_blank"
+        rel="noopener noreferrer"
+        tabIndex={tabIndex}
+        className="text-small text-p-primary hover:underline"
+      >
+        {t("card.viewCatalog")} <DirArrow />
+      </a>
+    </div>
+  );
+}
+
+function collectionLabel(
+  catalog: Catalog,
+  t: ReturnType<typeof useTranslations<"registry">>,
+  locale: string
+) {
+  return catalog.collection_count === 1
+    ? t("card.collection")
+    : t("card.collections", { count: formatCount(catalog.collection_count, locale) });
+}
+
+// The front carries identity and the primary action, the back carries the
+// measurements. Both faces stay in the accessibility tree, so a screen reader
+// reads the whole card without turning it. The hidden face's controls leave
+// the tab order, which keeps invisible buttons unreachable.
+//
+// Height is fixed rather than derived from content. The faces are absolutely
+// positioned, so the card needs a height, and a uniform grid keeps the page
+// from reflowing as cards turn.
+export function CatalogCard({ catalog }: CatalogProps) {
+  const t = useTranslations("registry");
+  const locale = useLocale();
+  const [flipped, setFlipped] = useState(false);
+  const updated = formatDate(catalog.updated, locale);
+
+  return (
+    <div className="tk-flip tk-flip--manual">
+      <div className="tk-flip__inner relative h-[260px] w-full" data-flipped={flipped}>
+        <div className="tk-flip__face absolute inset-0 flex flex-col gap-3 border border-p-line bg-p-paper p-5">
+          <CatalogHeader catalog={catalog} />
+          <MetaRow>
+            {collectionLabel(catalog, t, locale)}
+            {updated && t("card.updated", { date: updated })}
+          </MetaRow>
+
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+            <a
+              href={getBrowserUrl(catalog.url)}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabIndex={flipped ? -1 : 0}
+              className="text-small text-p-primary hover:underline"
+            >
+              {t("card.viewCatalog")} <DirArrow />
+            </a>
+            <button
+              type="button"
+              aria-expanded={flipped}
+              tabIndex={flipped ? -1 : 0}
+              onClick={() => setFlipped(true)}
+              className="font-mono text-micro text-p-ink-3 transition-colors hover:text-p-ink cursor-pointer"
+            >
+              {t("card.showDetails")}
+            </button>
+          </div>
+        </div>
+
+        <div className="tk-flip__back tk-flip__face absolute inset-0 flex flex-col gap-2 border border-p-line bg-p-bg-soft p-5">
+          <CatalogFacts catalog={catalog} />
+
+          <div className="mt-auto">
+            <CatalogActions catalog={catalog} tabbable={flipped} />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setFlipped(false)}
+            tabIndex={flipped ? 0 : -1}
+            className="absolute top-3 end-3 text-p-ink-3 hover:text-p-ink transition-colors cursor-pointer"
+            aria-label={t("card.hideDetails")}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
