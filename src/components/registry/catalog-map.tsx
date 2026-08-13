@@ -2,7 +2,7 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import {
   Map as MapGL,
@@ -20,9 +20,9 @@ import type {
   ExpressionSpecification,
 } from "maplibre-gl";
 import type { Catalog } from "@/lib/catalogs";
-import { getBrowserUrl, getValidationTier } from "@/lib/catalogs";
+import { getCoverageTier } from "@/lib/catalogs";
 import { MapGeocoder } from "./map-geocoder";
-import { Tag, DirArrow } from "../ui";
+import { CatalogCardBody } from "./catalog-card";
 import type { GeocodeSuggestion } from "@/hooks/use-geocode";
 
 const CARTO_STYLE =
@@ -75,13 +75,13 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hover, setHover] = useState<{ lng: number; lat: number; title: string } | null>(null);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
-  const [infoOpen, setInfoOpen] = useState(false);
 
-  const { points, polys, bounds, byId, unlocatedCount } = useMemo(() => {
+  const { points, polys, bounds, byId, globalCatalogs, unlocated } = useMemo(() => {
     const pointFeatures: GeoJSON.Feature<GeoJSON.Point>[] = [];
     const polyFeatures: GeoJSON.Feature<GeoJSON.Polygon>[] = [];
     const byId = new Map<string, Catalog>();
-    let unlocatedCount = 0;
+    const globalCatalogs: Catalog[] = [];
+    const unlocated: Catalog[] = [];
     let w = 180;
     let s = 90;
     let e = -180;
@@ -89,7 +89,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
 
     for (const catalog of catalogs) {
       if (!catalog.bbox) {
-        unlocatedCount++;
+        unlocated.push(catalog);
         continue;
       }
       const [west, south, east, north] = catalog.bbox;
@@ -108,10 +108,19 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
         east >= -180 &&
         east <= 180;
       if (!validBbox) {
-        unlocatedCount++;
+        unlocated.push(catalog);
         continue;
       }
       byId.set(catalog.id, catalog);
+
+      // A catalog claiming most of the globe covers every located one beneath
+      // it and drags the initial fit out to the whole world. It leaves the map
+      // and is listed underneath instead, where it stays selectable.
+      if (getCoverageTier(catalog.bbox) === "global") {
+        globalCatalogs.push(catalog);
+        continue;
+      }
+
       const crossesAntimeridian = west > east;
       const widthDeg = crossesAntimeridian ? east + 360 - west : east - west;
       const heightDeg = north - south;
@@ -122,17 +131,20 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
       const rectZoom = eligibleRect
         ? rectZoomFor(Math.max(widthDeg, heightDeg))
         : NEVER_RECT_ZOOM;
+      // Continent-scale boxes keep their outline but drop the fill, so a
+      // country-scale catalog inside one stays readable through it.
+      const tier = getCoverageTier(catalog.bbox) ?? "local";
 
       pointFeatures.push({
         type: "Feature",
-        properties: { catalogId: catalog.id, rectZoom },
+        properties: { catalogId: catalog.id, rectZoom, tier },
         geometry: { type: "Point", coordinates: centroid },
       });
 
       if (eligibleRect) {
         polyFeatures.push({
           type: "Feature",
-          properties: { catalogId: catalog.id, rectZoom },
+          properties: { catalogId: catalog.id, rectZoom, tier },
           geometry: {
             type: "Polygon",
             coordinates: [
@@ -167,7 +179,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
     const bounds: Bounds | null =
       pointFeatures.length > 0 ? [[w, s], [e, n]] : null;
 
-    return { points, polys, bounds, byId, unlocatedCount };
+    return { points, polys, bounds, byId, globalCatalogs, unlocated };
   }, [catalogs]);
 
   // Selection resolves through the current catalog set, so a filtered-out
@@ -261,22 +273,46 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
   };
   const fillPaint: FillLayerSpecification["paint"] = {
     "fill-color": colors.primary,
-    "fill-opacity": ["case", selectedExpr, 0.25, 0.15],
+    "fill-opacity": [
+      "case",
+      ["==", ["get", "tier"], "large"],
+      ["case", selectedExpr, 0.12, 0.05],
+      selectedExpr,
+      0.25,
+      0.15,
+    ],
   };
   const linePaint: LineLayerSpecification["paint"] = {
     "line-color": ["case", selectedExpr, colors.accent, colors.primary],
     "line-width": ["case", selectedExpr, 3, 2],
   };
 
+  const dashedLinePaint: LineLayerSpecification["paint"] = {
+    "line-color": ["case", selectedExpr, colors.accent, colors.primary],
+    "line-width": ["case", selectedExpr, 2.5, 1.5],
+    "line-dasharray": [3, 2],
+    "line-opacity": 0.8,
+  };
+
   const dotFilter: ExpressionSpecification = [">", ["get", "rectZoom"], zoom];
   const rectFilter: ExpressionSpecification = ["<=", ["get", "rectZoom"], zoom];
+  const localRectFilter: ExpressionSpecification = [
+    "all",
+    rectFilter,
+    ["==", ["get", "tier"], "local"],
+  ];
+  const largeRectFilter: ExpressionSpecification = [
+    "all",
+    rectFilter,
+    ["==", ["get", "tier"], "large"],
+  ];
 
 
   return (
     <>
       <div
         dir="ltr"
-        className="relative h-[520px] md:h-[600px] rounded-[var(--p-r-lg)] border border-p-line overflow-hidden"
+        className="relative h-[520px] md:h-[600px] border border-p-line overflow-hidden"
         role="application"
         aria-label={t("map.searchLabel")}
       >
@@ -297,8 +333,17 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
           style={{ width: "100%", height: "100%" }}
         >
           <Source id="catalog-polys" type="geojson" data={polys}>
+            {/* One fill across both tiers so a continent-scale box stays a
+                click target, at an opacity that keeps it from washing out the
+                smaller catalogs drawn inside it. */}
             <Layer id="catalog-bbox-fill" type="fill" filter={rectFilter} paint={fillPaint} />
-            <Layer id="catalog-bbox-line" type="line" filter={rectFilter} paint={linePaint} />
+            <Layer id="catalog-bbox-line" type="line" filter={localRectFilter} paint={linePaint} />
+            <Layer
+              id="catalog-bbox-large"
+              type="line"
+              filter={largeRectFilter}
+              paint={dashedLinePaint}
+            />
           </Source>
           <Source id="catalog-points" type="geojson" data={points}>
             <Layer id="catalog-dots" type="circle" filter={dotFilter} paint={dotPaint} />
@@ -324,7 +369,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
         </div>
 
         {/* Zoom + reset stack (top-right) */}
-        <div className="absolute top-3 end-3 z-10 flex flex-col rounded-[var(--p-r-md)] overflow-hidden border border-p-line shadow-[var(--p-shadow-md)]">
+        <div className="absolute top-3 end-3 z-10 flex flex-col overflow-hidden border border-p-line">
           <button
             type="button"
             onClick={() => mapRef.current?.zoomIn()}
@@ -364,108 +409,131 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
 
         {/* Detail panel (bottom-left) */}
         {selected && (
-          <div className="absolute bottom-3 start-3 z-10 w-[340px] max-w-[calc(100%-1.5rem)] bg-p-paper border border-p-line rounded-[var(--p-r-md)] p-4 shadow-[var(--p-shadow-lg)]">
-            {selected.logo && (
-              // Same reasoning as catalog-card: catalog-hosted logos have no
-              // finite host allowlist for next/image's remotePatterns.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={selected.logo.href}
-                alt={selected.logo.title ?? selected.title}
-                loading="lazy"
-                className="mb-2 h-6 w-auto max-w-[140px] object-contain"
-              />
-            )}
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="text-card-title font-semibold line-clamp-2">
-                {selected.title}
-              </h3>
-              <button
-                type="button"
-                onClick={() => setSelectedId(null)}
-                aria-label={t("map.closeDetails")}
-                className="shrink-0 text-p-ink-3 hover:text-p-ink transition-colors"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-            <div className="mt-2">
-              {(() => {
-                const tier = getValidationTier(selected.validation);
-                return (
-                  <Tag
-                    tone={tier === "full" ? "accent" : tier === "basic" ? "primary" : "default"}
-                  >
-                    {t(`validation.${tier}`)}
-                  </Tag>
-                );
-              })()}
-            </div>
-            <p className="mt-3 text-micro text-p-ink-3 font-mono">
-              {t("card.collections", { count: selected.collection_count })}
-              {selected.stac_version && ` · STAC ${selected.stac_version}`}
-            </p>
-            <a
-              href={getBrowserUrl(selected.url)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-block text-small text-p-primary hover:underline"
+          <div className="absolute bottom-3 start-3 z-10 flex w-[340px] max-w-[calc(100%-1.5rem)] flex-col gap-3 bg-p-paper border border-p-line p-4 pe-9">
+            <button
+              type="button"
+              onClick={() => setSelectedId(null)}
+              aria-label={t("map.closeDetails")}
+              className="absolute top-3 end-3 z-10 text-p-ink-3 hover:text-p-ink transition-colors"
             >
-              {t("card.viewCatalog")} <DirArrow />
-            </a>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+            {/* Same component the grid renders, so the two views cannot drift. */}
+            <CatalogCardBody catalog={selected} />
           </div>
         )}
 
-        {/* Attribution + info (bottom-right) */}
-        <div className="absolute bottom-3 end-3 z-10 flex items-center gap-2">
-          {infoOpen && (
-            <div className="w-[260px] max-w-[calc(100vw-2rem)] bg-p-paper border border-p-line rounded-[var(--p-r-md)] p-3 shadow-[var(--p-shadow-md)] text-micro text-p-ink-2 leading-relaxed">
-              {t("map.infoBody")}
-            </div>
-          )}
-          <div className="flex items-center gap-2 bg-p-paper/90 backdrop-blur-sm border border-p-line rounded-[var(--p-r-md)] px-2.5 py-1">
-            <span className="text-micro text-p-ink-3 font-mono">
-              {"© "}
-              <a
-                href="https://carto.com/attributions"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-p-ink-2 underline underline-offset-2"
-              >
-                CARTO
-              </a>
-              {" © "}
-              <a
-                href="https://www.openstreetmap.org/copyright"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-p-ink-2 underline underline-offset-2"
-              >
-                OpenStreetMap
-              </a>
-              {" contributors"}
-            </span>
-            <button
-              type="button"
-              onClick={() => setInfoOpen((v) => !v)}
-              aria-label={t("map.info")}
-              aria-expanded={infoOpen}
-              className="shrink-0 flex items-center justify-center w-5 h-5 border border-p-line text-p-ink-3 hover:text-p-ink hover:border-p-ink-3 transition-colors text-micro font-mono"
+        {/* Attribution (bottom-right). Solid, per the flat-surface rule. */}
+        <div className="absolute bottom-3 end-3 z-10 bg-p-paper border border-p-line px-2.5 py-1">
+          <span className="text-micro text-p-ink-3 font-mono">
+            {"© "}
+            <a
+              href="https://carto.com/attributions"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-p-ink-2 underline underline-offset-2"
             >
-              i
-            </button>
-          </div>
+              CARTO
+            </a>
+            {" · © "}
+            <a
+              href="https://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-p-ink-2 underline underline-offset-2"
+            >
+              OSM
+            </a>
+            {" · "}
+            <a
+              href="https://nominatim.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-p-ink-2 underline underline-offset-2"
+            >
+              Nominatim
+            </a>
+          </span>
         </div>
       </div>
 
-      {unlocatedCount > 0 && (
-        <p className="mt-3 text-micro text-p-ink-3 font-mono">
-          {t("map.noLocation", { count: unlocatedCount })}
-        </p>
-      )}
+      {/* Legend and the catalogs the map cannot place. Always visible: it is
+          shorter than the popover it replaced and does not need opening. */}
+      <div className="mt-3 flex flex-col gap-3 text-micro font-mono text-p-ink-3">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5" dir="ltr">
+          <LegendKey label={t("map.legend.dot")}>
+            <circle cx="7" cy="7" r="4.5" fill="var(--p-primary)" />
+          </LegendKey>
+          <LegendKey label={t("map.legend.area")}>
+            <rect
+              x="1.5"
+              y="2.5"
+              width="11"
+              height="9"
+              fill="var(--p-primary)"
+              fillOpacity={0.2}
+              stroke="var(--p-primary)"
+              strokeWidth="1.5"
+            />
+          </LegendKey>
+          <LegendKey label={t("map.legend.wide")}>
+            <rect
+              x="1.5"
+              y="2.5"
+              width="11"
+              height="9"
+              fill="none"
+              stroke="var(--p-primary)"
+              strokeWidth="1.5"
+              strokeDasharray="3 2"
+            />
+          </LegendKey>
+        </div>
+
+        {(globalCatalogs.length > 0 || unlocated.length > 0) && (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+            <span className="text-p-ink-2">
+              {globalCatalogs.length > 0
+                ? t("map.worldwide")
+                : t("map.noLocation", { count: String(unlocated.length) })}
+            </span>
+            {globalCatalogs.map((catalog) => (
+              <button
+                key={catalog.id}
+                type="button"
+                onClick={() =>
+                  setSelectedId((current) => (current === catalog.id ? null : catalog.id))
+                }
+                aria-pressed={selectedId === catalog.id}
+                className={`max-w-[22ch] truncate border px-2 py-0.5 transition-colors cursor-pointer ${
+                  selectedId === catalog.id
+                    ? "border-p-primary text-p-primary"
+                    : "border-p-line-soft hover:border-p-ink-3 hover:text-p-ink"
+                }`}
+              >
+                {catalog.title}
+              </button>
+            ))}
+            {globalCatalogs.length > 0 && unlocated.length > 0 && (
+              <span>· {t("map.noLocation", { count: String(unlocated.length) })}</span>
+            )}
+          </div>
+        )}
+      </div>
     </>
+  );
+}
+
+function LegendKey({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <span className="flex items-center gap-1.5">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" className="shrink-0">
+        {children}
+      </svg>
+      {label}
+    </span>
   );
 }
