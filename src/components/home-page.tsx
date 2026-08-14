@@ -91,13 +91,6 @@ interface HomePageProps {
   catalogs?: Catalog[];
 }
 
-// External references linked inline from the "why" cards. Keyed by card key;
-// cards without an entry render their description as plain text.
-const whyCardLinks: Record<string, string> = {
-  aiFirst: "https://jatorre.github.io/carto-ogc-helsinki/webapp/",
-  lowCost: "https://cholmes.github.io/open-geodag-presentation/calculator.html",
-};
-
 export function HomePage({ catalogs = [] }: HomePageProps) {
   const t = useTranslations();
   const locale = useLocale();
@@ -240,18 +233,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     setSubmitError(null);
   };
 
-  // `tag` is deliberately ragged: only some cards carry a bottom mono tag so
-  // the grid doesn't read as a uniform template.
-  // Six principles, one ledger row each — title · body · mono tag. Order is
+  // Four principles, one ledger row each: title, body, mono tag. Order is
   // deliberate, not ranked (no numbers, no bullets).
-  const whyCards = [
-    "open",
-    "aiFirst",
-    "easy",
-    "scalable",
-    "lowCost",
-    "sovereign",
-  ] as const;
+  const whyCards = ["open", "agents", "simple", "sovereign"] as const;
 
   const howSteps = [
     "convert",
@@ -315,7 +299,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         <div className="max-w-[1240px] mx-auto">
           {/* No eyebrow: the title already states the problem this section is about. */}
           <SectionHead title={t("why.title")} wide />
-          {/* Ledger: six principles, one row each. Near-black top rule, soft
+          {/* Ledger: four principles, one row each. Near-black top rule, soft
               interior rules. Rows nudge start-ward + tint faintly on hover. */}
           <div className="border-t border-p-line-strong overflow-clip">
             {whyCards.map((key) => (
@@ -327,22 +311,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   {t(`why.cards.${key}.title`)}
                 </h3>
                 <p className="text-body text-p-ink-2 leading-relaxed text-pretty">
-                  {t.rich(`why.cards.${key}.description`, {
-                    m: monoChunk,
-                    link: (chunks) =>
-                      whyCardLinks[key] ? (
-                        <a
-                          href={whyCardLinks[key]}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-p-primary border-b border-p-primary/35 hover:border-p-primary"
-                        >
-                          {chunks}
-                        </a>
-                      ) : (
-                        <>{chunks}</>
-                      ),
-                  })}
+                  {t.rich(`why.cards.${key}.description`, { m: monoChunk })}
                 </p>
                 <span className="font-mono text-micro text-p-primary md:justify-self-end md:text-end">
                   {t(`why.cards.${key}.tag`)}

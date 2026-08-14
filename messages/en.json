@@ -33,33 +33,23 @@
     "cards": {
       "open": {
         "title": "Open and interoperable",
-        "description": "Everything is open source under <m>Apache-2.0</m> and built on existing standards like <m>GeoParquet</m>, cloud-optimized GeoTIFF, and <m>STAC</m>. These formats work across DuckDB, BigQuery, Pandas, and desktop GIS like QGIS and ArcGIS, so your data stays useful with or without Portolan.",
+        "description": "Catalogs are built on established open formats like <m>GeoParquet</m>, <m>COG</m>, and <m>STAC</m> metadata. These work today in tools like DuckDB, BigQuery, Pandas, QGIS, and ArcGIS.",
         "tag": "GeoParquet · COG · STAC"
       },
-      "aiFirst": {
-        "title": "Readable by people and machines",
-        "description": "Download portals and one-off APIs were built for one client at a time. A Portolan catalog describes itself in plain text and structured metadata, so a person or an agent can find the data and query it without a bespoke API to learn. The <link>Finland.SDI demo</link> shows an agent doing exactly that against a national SDI.",
+      "agents": {
+        "title": "Ready for people and agents",
+        "description": "A catalog describes itself in plain text and structured metadata. A person can read what the data is and where it came from. An agent can do the same, then query it directly with standard tools, no API or credentials needed. Because every catalog is described the same way, an agent can find a city's parcel data and a satellite archive, join them, and answer a question no single dataset could.",
         "tag": "self-describing"
       },
-      "easy": {
-        "title": "Simple",
-        "description": "Traditional spatial data infrastructure needs databases, services, and staff to run them. A Portolan catalog is files in a bucket. Point the CLI at your data, convert, and push.",
+      "simple": {
+        "title": "Simple and scalable",
+        "description": "Running spatial data infrastructure normally means GeoServer or an Esri stack, with databases, services, and staff to keep them up. A Portolan catalog has none of that. Building one still takes work, which is what the CLI and validator are for, but once published it needs no maintenance, whether it holds megabytes or terabytes.",
         "tag": "files in a bucket"
       },
-      "scalable": {
-        "title": "Scales with your storage",
-        "description": "The same setup handles megabytes or terabytes. With no servers to run, scaling is your cloud provider's job, not yours.",
-        "tag": "MB → TB"
-      },
-      "lowCost": {
-        "title": "Low cost",
-        "description": "The whole budget is storage plus egress. Sharing public data should not take an operations team, and a popular dataset should not blow a budget. The <link>cost calculator</link> shows what your data would run.",
-        "tag": "storage + egress"
-      },
       "sovereign": {
-        "title": "Sovereign",
-        "description": "The full stack can live inside your own jurisdiction. Host on AWS, GCS, Azure, MinIO, Hetzner, Scaleway, or any S3-compatible storage. No foreign vendor sits between your agency and its data.",
-        "tag": "bring your own bucket"
+        "title": "Cheap and sovereign",
+        "description": "You choose where the data lives, including providers in your own country: AWS, Azure, GCS, MinIO, Hetzner, Scaleway, or any S3-compatible storage. You pay them for storage and bandwidth, and nothing else. No one sits between your organization and its data.",
+        "tag": "storage + bandwidth"
       }
     }
   },

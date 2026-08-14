@@ -33,33 +33,23 @@
     "cards": {
       "open": {
         "title": "Abierto e interoperable",
-        "description": "Todo es de código abierto bajo <m>Apache-2.0</m> y se apoya en estándares existentes como <m>GeoParquet</m>, GeoTIFF optimizado para la nube y <m>STAC</m>. Estos formatos funcionan en DuckDB, BigQuery, Pandas y GIS de escritorio como QGIS y ArcGIS, así que tus datos siguen siendo útiles, con o sin Portolan.",
+        "description": "Los catálogos se construyen sobre formatos abiertos consolidados como <m>GeoParquet</m>, <m>COG</m> y metadatos <m>STAC</m>. Estos funcionan hoy en herramientas como DuckDB, BigQuery, Pandas, QGIS y ArcGIS.",
         "tag": "GeoParquet · COG · STAC"
       },
-      "aiFirst": {
-        "title": "Legible por personas y máquinas",
-        "description": "Los portales de descarga y las API específicas se construyeron para un cliente a la vez. Un catálogo Portolan se describe a sí mismo en texto simple y metadatos estructurados, de modo que una persona o un agente puede encontrar los datos y consultarlos sin una API a medida que aprender. La <link>demo Finland.SDI</link> muestra a un agente haciendo exactamente eso sobre una SDI nacional.",
+      "agents": {
+        "title": "Listo para personas y agentes",
+        "description": "Un catálogo se describe a sí mismo en texto simple y metadatos estructurados. Una persona puede leer qué son los datos y de dónde vienen. Un agente puede hacer lo mismo y luego consultarlos directamente con herramientas estándar, sin API ni credenciales. Como todos los catálogos se describen igual, un agente puede encontrar los datos catastrales de una ciudad y un archivo satelital, unirlos y responder una pregunta que ningún conjunto de datos resolvería por sí solo.",
         "tag": "autodescriptivo"
       },
-      "easy": {
-        "title": "Simple",
-        "description": "La infraestructura de datos espaciales tradicional necesita bases de datos, servicios y personal para operarla. Un catálogo Portolan son archivos en un bucket. Apunta la CLI a tus datos, convierte y publica.",
+      "simple": {
+        "title": "Simple y escalable",
+        "description": "Operar una infraestructura de datos espaciales normalmente significa GeoServer o una pila de Esri, con bases de datos, servicios y personal que las mantenga. Un catálogo Portolan no tiene nada de eso. Construirlo sigue dando trabajo, y para eso están la CLI y el validador, pero una vez publicado no necesita mantenimiento, ya guarde megabytes o terabytes.",
         "tag": "archivos en un bucket"
       },
-      "scalable": {
-        "title": "Escala con tu almacenamiento",
-        "description": "La misma configuración maneja megabytes o terabytes. No hay servidores que ejecutar, así que escalar es tarea de tu proveedor de nube, no tuya.",
-        "tag": "MB → TB"
-      },
-      "lowCost": {
-        "title": "Bajo costo",
-        "description": "Todo el presupuesto es almacenamiento más transferencia de salida. Compartir datos públicos no debería requerir un equipo de operaciones, y un conjunto de datos popular no debería romper un presupuesto. La <link>calculadora de costos</link> muestra lo que costarían tus datos.",
-        "tag": "almacenamiento + salida"
-      },
       "sovereign": {
-        "title": "Soberano",
-        "description": "Toda la pila puede vivir dentro de tu propia jurisdicción. Alójala en AWS, GCS, Azure, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Ningún proveedor extranjero se interpone entre tu institución y sus datos.",
-        "tag": "usa tu propio bucket"
+        "title": "Barato y soberano",
+        "description": "Tú eliges dónde viven los datos, incluidos proveedores de tu propio país como AWS, Azure, GCS, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Les pagas por almacenamiento y ancho de banda, y por nada más. Nadie se interpone entre tu organización y sus datos.",
+        "tag": "almacenamiento + ancho de banda"
       }
     }
   },
