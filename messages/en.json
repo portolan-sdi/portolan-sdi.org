@@ -199,34 +199,32 @@
     "lastChecked": "Last checked: {date}"
   },
   "resources": {
-    "eyebrow": "Talks & demos",
+    "title": "Talks & demos",
     "items": {
       "holmesTalk": {
         "title": "A Cloud-Native Geo Upgrade for Spatial Data Infrastructure",
         "attribution": "Chris Holmes · Open Geodag 2026",
-        "quote": "“An SDI without servers.”",
-        "description": "Five requirements for a modern SDI, the cloud-native formats that meet them, and a live serverless portal for the Netherlands."
+        "description": "An exploration of how cloud-native geospatial formats — <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m>, <m>STAC</m>, and more — can fundamentally upgrade how Spatial Data Infrastructures work.",
+        "alt": "Opening slide of the talk, with the title and a link to the Dutch portal demo."
       },
       "nextSdi": {
         "title": "The Next SDI",
         "attribution": "Javier de la Torre · OGC Connect Helsinki",
-        "quote": "“SDIs were built for experts; now they must serve agents.”",
-        "description": "Why de-intermediation makes SDIs more important than ever, and the architecture they need. The live Finland.SDI agent demo closes the talk."
+        "description": "The next SDI is trusted infrastructure for agents that serve everyone without losing sovereignty.",
+        "alt": "Opening slide of the talk, over a map of street density."
       },
       "finlandDemo": {
         "title": "Finland.SDI agent demo",
-        "attribution": "Live demo · CARTO",
-        "description": "An AI agent answers questions against a national SDI, reading straight from its catalog, with no bespoke API in between."
+        "attribution": "CARTO",
+        "description": "An agent answers questions against a national SDI, reading straight from the catalog with no API.",
+        "alt": "The demo home screen, inviting a question about Finland's data."
       },
       "costCalc": {
         "title": "Cost calculator",
-        "attribution": "Interactive · Open Geodag",
-        "description": "Estimate what publishing your data as Portolan costs. The whole budget is storage plus egress, nothing else."
+        "attribution": "Open Geodag",
+        "description": "Estimate what publishing your data as a Portolan catalog will cost.",
+        "alt": "The calculator, comparing monthly storage and egress costs across three providers."
       }
-    },
-    "watch": "View the slides",
-    "scrollPrev": "Previous",
-    "scrollNext": "Next",
-    "openDemo": "Open the demo"
+    }
   }
 }
