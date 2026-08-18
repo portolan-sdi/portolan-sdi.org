@@ -199,34 +199,32 @@
     "lastChecked": "Última revisión {date}"
   },
   "resources": {
-    "eyebrow": "Charlas y demos",
+    "title": "Charlas y demos",
     "items": {
       "holmesTalk": {
         "title": "A Cloud-Native Geo Upgrade for Spatial Data Infrastructure",
         "attribution": "Chris Holmes · Open Geodag 2026",
-        "quote": "«Una SDI sin servidores.»",
-        "description": "Cinco requisitos para una SDI moderna, los formatos nativos de la nube que los cumplen y un portal sin servidores en vivo para los Países Bajos."
+        "description": "Una exploración de cómo los formatos geoespaciales nativos de la nube, como <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m> y <m>STAC</m>, pueden transformar el funcionamiento de las infraestructuras de datos espaciales.",
+        "alt": "Diapositiva inicial de la charla, con el título y un enlace a la demo del portal neerlandés."
       },
       "nextSdi": {
         "title": "The Next SDI",
         "attribution": "Javier de la Torre · OGC Connect Helsinki",
-        "quote": "«Las SDI se construyeron para expertos. Ahora deben servir a los agentes.»",
-        "description": "Por qué la desintermediación hace a las SDI más importantes que nunca, y la arquitectura que necesitan. La demo en vivo del agente Finland.SDI cierra la charla."
+        "description": "La próxima SDI es infraestructura confiable para agentes que sirven a todos sin perder la soberanía.",
+        "alt": "Diapositiva inicial de la charla, sobre un mapa de densidad de calles."
       },
       "finlandDemo": {
         "title": "Demo del agente Finland.SDI",
-        "attribution": "Demo en vivo · CARTO",
-        "description": "Un agente de IA responde preguntas sobre una SDI nacional leyendo directamente de su catálogo, sin una API a medida de por medio."
+        "attribution": "CARTO",
+        "description": "Un agente responde preguntas sobre una SDI nacional, leyendo directamente del catálogo y sin ninguna API.",
+        "alt": "La pantalla de inicio de la demo, que invita a preguntar sobre los datos de Finlandia."
       },
       "costCalc": {
         "title": "Calculadora de costos",
-        "attribution": "Interactiva · Open Geodag",
-        "description": "Estima cuánto cuesta publicar tus datos como Portolan. Todo el presupuesto es almacenamiento más salida, nada más."
+        "attribution": "Open Geodag",
+        "description": "Estima cuánto costará publicar tus datos como un catálogo Portolan.",
+        "alt": "La calculadora, que compara costos mensuales de almacenamiento y salida en tres proveedores."
       }
-    },
-    "watch": "Ver las diapositivas",
-    "scrollPrev": "Anterior",
-    "scrollNext": "Siguiente",
-    "openDemo": "Abrir la demo"
+    }
   }
 }

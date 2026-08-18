@@ -306,78 +306,76 @@ body {
   }
 }
 
-/* --- Talks carousel poster motifs (annotated-figure family, blue strokes) - */
-@keyframes tk-drift {
+/* --- Talks & demos source wall -------------------------------------------
+   The band wipes in from its inline-start edge and the cards fade up into
+   place, once, when the section first scrolls into view. `data-in` is set by
+   the section's IntersectionObserver.
+
+   The reveal animates the `translate` property, not `transform`, so the hover
+   lift below stays free to use `transform` even after the animation settles on
+   its final frame. */
+@keyframes tk-band-in {
+  from {
+    transform: scaleX(0);
+  }
   to {
-    transform: translateX(-26px);
+    transform: scaleX(1);
   }
 }
-@keyframes tk-march {
+@keyframes tk-card-in {
+  from {
+    opacity: 0;
+    translate: 0 28px;
+  }
   to {
-    stroke-dashoffset: -40;
+    opacity: 1;
+    translate: 0 0;
   }
 }
-@keyframes tk-pulse {
-  0%,
-  100% {
-    opacity: 0.25;
-  }
-  50% {
-    opacity: 0.9;
-  }
+.tk-wall[data-in="false"] .tk-band,
+.tk-wall[data-in="false"] .tk-card {
+  opacity: 0;
 }
-@keyframes tk-packet {
-  to {
-    offset-distance: 100%;
-  }
+.tk-wall[data-in="true"] .tk-band {
+  transform-origin: left;
+  animation: tk-band-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-@keyframes tk-nodefloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-7px);
-  }
+[dir="rtl"] .tk-wall[data-in="true"] .tk-band {
+  transform-origin: right;
 }
-@keyframes tk-bar {
-  0%,
-  100% {
-    transform: scaleY(0.35);
-  }
-  50% {
-    transform: scaleY(1);
-  }
+.tk-wall[data-in="true"] .tk-card {
+  opacity: 0;
+  animation: tk-card-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-.tk-wave > * {
-  animation: tk-drift 3.2s linear infinite;
+
+/* Hover and keyboard focus lift the card off the page, onto a hard blue
+   offset. Same ink-and-offset language as the ecosystem cards, in reverse. */
+.tk-card {
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
 }
-.tk-march {
-  stroke-dasharray: 6 6;
-  animation: tk-march 1.6s linear infinite;
+.tk-card:hover,
+.tk-card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 0 var(--p-primary);
+  border-color: var(--p-line-strong);
 }
-.tk-packet {
-  animation: tk-packet 3.4s ease-in-out infinite;
-}
-.tk-dot {
-  animation: tk-pulse 2.6s ease-in-out infinite;
-}
-.tk-float {
-  animation: tk-nodefloat 4.5s ease-in-out infinite;
-}
-.tk-bar {
-  transform-box: fill-box;
-  transform-origin: bottom;
-  animation: tk-bar 2.6s ease-in-out infinite;
-}
+
 @media (prefers-reduced-motion: reduce) {
-  .tk-wave > *,
-  .tk-march,
-  .tk-packet,
-  .tk-dot,
-  .tk-float,
-  .tk-bar {
+  .tk-wall .tk-band,
+  .tk-wall .tk-card {
+    opacity: 1;
     animation: none;
+  }
+  .tk-card {
+    transition: border-color 0.16s ease;
+  }
+  .tk-card:hover,
+  .tk-card:focus-visible {
+    transform: none;
+    box-shadow: none;
   }
 }
 
@@ -487,8 +485,8 @@ body {
   transform: translate(0, 0);
 }
 
-/* Talk/demo poster cards flip on hover/focus to reveal the quote or blurb;
-   the whole card is the link. */
+/* Registry catalog cards turn to reveal their back face; the card itself is
+   the link. */
 .tk-flip {
   perspective: 1200px;
 }
