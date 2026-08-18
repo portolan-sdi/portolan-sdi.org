@@ -56,7 +56,6 @@
   },
   "whoFor": {
     "title": "Who it's for",
-    "lead": "Portolan was created for organizations that publish geospatial data and the people who use it.",
     "stories": {
       "large": {
         "title": "Large publishers",

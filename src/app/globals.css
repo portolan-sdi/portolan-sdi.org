@@ -30,14 +30,6 @@
   --p-accent: #4163cc;
   --p-accent-ink: #2d4aa8;
   --p-on-primary: #ffffff;
-  /* Reversed surface. The who-it's-for section is the one ink band on the
-     page, so it needs text and an accent that hold contrast on --p-ink. This
-     is a surface, not a theme: nothing else may use it to reintroduce dark
-     mode. --p-primary lands at 3.4:1 on ink, so the accent lifts instead. */
-  --p-on-ink: #fcfcfa;
-  --p-on-ink-2: #c4c5b8;
-  --p-primary-lift: #93a8ea;
-
   --p-success: #2f7d63;
   --p-warn: #b06e2a;
 
@@ -89,9 +81,6 @@
   --color-p-line-strong: var(--p-line-strong);
   --color-p-primary: var(--p-primary);
   --color-p-primary-ink: var(--p-primary-ink);
-  --color-p-primary-lift: var(--p-primary-lift);
-  --color-p-on-ink: var(--p-on-ink);
-  --color-p-on-ink-2: var(--p-on-ink-2);
   --color-p-on-primary: var(--p-on-primary);
   --color-p-accent: var(--p-accent);
   --color-p-accent-ink: var(--p-accent-ink);
