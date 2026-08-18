@@ -10,7 +10,8 @@
     "homeAria": "Portolan home",
     "languageAria": "Change language",
     "index": "Index",
-    "external": "External"
+    "external": "External",
+    "who": "Who it's for"
   },
   "hero": {
     "title": "The future of spatial data",
@@ -50,6 +51,26 @@
         "title": "Cheap and sovereign",
         "description": "You choose where the data lives, including providers in your own country: AWS, Azure, GCS, MinIO, Hetzner, Scaleway, or any S3-compatible storage. You pay them for storage and bandwidth, and nothing else. No one sits between your organization and its data.",
         "tag": "storage + bandwidth"
+      }
+    }
+  },
+  "whoFor": {
+    "title": "Who it's for",
+    "stories": {
+      "large": {
+        "title": "Large publishers",
+        "today": "Most people who could use a large geospatial archive never touch it because accessing the archive means creating an account, learning a custom portal, or installing a client library for its API.",
+        "change": "With Portolan, publishers describe an archive once. Analysts and agents can then search and query the archive directly, including for uses the publisher never anticipated."
+      },
+      "small": {
+        "title": "Small publishers",
+        "today": "Cities have useful flood maps, building footprints, and other datasets sitting unpublished because sharing geospatial data has traditionally meant running a server and paying to maintain it.",
+        "change": "A Portolan catalog is files in object storage. Nothing needs to keep running after publication, hosting can cost almost nothing, and the Portolan registry makes a city catalog discoverable alongside much larger archives."
+      },
+      "users": {
+        "title": "Data users",
+        "today": "Working with spatial data often means building a new pipeline for every source. A Portolan catalog tells users what a dataset covers and what its fields mean before they download anything.",
+        "change": "Cloud-optimized formats let users fetch the two hundred megabytes they need instead of the forty gigabytes around them. Analysts can start working the day they find the data, while agents can query the same standardized metadata and files without a source-specific integration."
       }
     }
   },

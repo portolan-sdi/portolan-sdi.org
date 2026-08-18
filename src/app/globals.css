@@ -306,6 +306,47 @@ body {
   }
 }
 
+/* Who it's for: each story's rule wipes in from its inline-start edge, then
+   the story rises under it, once, when the section scrolls into view.
+   `data-in` is set by the section's IntersectionObserver. The rules stay at
+   full width at rest, so the wipe animates scaleX only.
+
+   The reveal animates `translate`, not `transform`, which leaves `transform`
+   free for the hover lift after the animation settles. */
+@keyframes wf-rule-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes wf-story-in {
+  from {
+    opacity: 0;
+    translate: 0 20px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.wf-set[data-in="false"] .wf-rule,
+.wf-set[data-in="false"] .wf-body {
+  opacity: 0;
+}
+.wf-set[data-in="true"] .wf-rule {
+  transform-origin: left;
+  animation: wf-rule-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+[dir="rtl"] .wf-set[data-in="true"] .wf-rule {
+  transform-origin: right;
+}
+.wf-set[data-in="true"] .wf-body {
+  opacity: 0;
+  animation: wf-story-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* --- Talks & demos source wall -------------------------------------------
    The band wipes in from its inline-start edge and the cards fade up into
    place, once, when the section first scrolls into view. `data-in` is set by
@@ -364,6 +405,14 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .wf-set .wf-rule,
+  .wf-set .wf-body {
+    opacity: 1;
+    animation: none;
+  }
+  .wf-story {
+    transition: none;
+  }
   .tk-wall .tk-band,
   .tk-wall .tk-card {
     opacity: 1;
