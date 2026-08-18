@@ -10,6 +10,7 @@ import { PublishPaths } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
+import { WhoForSection } from "./who-for-section";
 import { PipelineFigure } from "./pipeline-figure";
 import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
@@ -321,6 +322,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* Who it's for — the page's one reversed surface */}
+      <WhoForSection />
 
       {/* How it works */}
       <section id="how" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">

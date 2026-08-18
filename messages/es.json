@@ -10,7 +10,8 @@
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
     "index": "Índice",
-    "external": "Externo"
+    "external": "Externo",
+    "who": "Para quién es"
   },
   "hero": {
     "title": "El futuro de los datos espaciales",
@@ -50,6 +51,27 @@
         "title": "Barato y soberano",
         "description": "Tú eliges dónde viven los datos, incluidos proveedores de tu propio país como AWS, Azure, GCS, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Les pagas por almacenamiento y ancho de banda, y por nada más. Nadie se interpone entre tu organización y sus datos.",
         "tag": "almacenamiento + ancho de banda"
+      }
+    }
+  },
+  "whoFor": {
+    "title": "Para quién es",
+    "lead": "Portolan se creó para las organizaciones que publican datos geoespaciales y para las personas que los usan.",
+    "stories": {
+      "large": {
+        "title": "Publicadores grandes",
+        "today": "La mayoría de quienes podrían usar un archivo geoespacial grande nunca lo abren, porque acceder a él exige crear una cuenta, aprender un portal propio o instalar una biblioteca cliente para su API.",
+        "change": "Con Portolan, quien publica describe el archivo una sola vez. Después, analistas y agentes pueden buscar y consultar el archivo de forma directa, incluso para usos que nadie había previsto."
+      },
+      "small": {
+        "title": "Publicadores pequeños",
+        "today": "Las ciudades tienen mapas de inundación, huellas de edificios y otros conjuntos de datos útiles sin publicar, porque compartir datos geoespaciales siempre ha significado mantener un servidor y pagar por él.",
+        "change": "Un catálogo de Portolan son archivos en almacenamiento de objetos. Nada sigue funcionando después de publicar, el alojamiento puede costar casi nada y el registro de Portolan hace que el catálogo de una ciudad se encuentre junto a archivos mucho más grandes."
+      },
+      "users": {
+        "title": "Usuarios de datos",
+        "today": "Trabajar con datos espaciales suele significar construir una tubería nueva para cada fuente. Un catálogo de Portolan dice qué cubre un conjunto de datos y qué significan sus campos antes de descargar nada.",
+        "change": "Los formatos optimizados para la nube permiten traer los doscientos megabytes que se necesitan en lugar de los cuarenta gigabytes que los rodean. Un analista puede empezar a trabajar el mismo día que encuentra los datos, y un agente puede consultar los mismos metadatos y archivos estandarizados sin una integración propia de cada fuente."
       }
     }
   },
