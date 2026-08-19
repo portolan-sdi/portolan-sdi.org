@@ -101,7 +101,11 @@ export function EcosystemSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* `auto-rows-fr` keeps every row the same height. Without it each
+            row sizes to its own tallest card, so the row holding `rashid`
+            (whose description runs to three lines) stood 14px taller than
+            the row below it. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-5">
           {projects.map((project) => (
             <a
               key={project.slug}

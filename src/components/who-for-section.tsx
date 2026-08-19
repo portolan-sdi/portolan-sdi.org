@@ -6,7 +6,11 @@ import { useRevealed } from "@/hooks/use-revealed";
 
 const COST_CALCULATOR =
   "https://cholmes.github.io/open-geodag-presentation/calculator.html";
-const REGISTRY = "https://browser.portolan-sdi.org/";
+// The registry section at the foot of this page, which opens on the map. A
+// plain hash is correct in every locale, and it matches how the rail links
+// its own section anchors. This used to open the external browser, which is
+// a different thing from the registry the sentence names.
+const REGISTRY = "#registry";
 
 // Inline links inside translated prose. The <cost> and <reg> tags are part of
 // the message contract and carry the same text span in every locale.
