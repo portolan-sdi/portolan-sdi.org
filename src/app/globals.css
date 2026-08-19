@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  /* Dither map: rendered in the editorial blue accent on cream */
-  --dither-filter: brightness(0.55) sepia(1) saturate(3.2) hue-rotate(196deg);
-
   /* Hero legibility scrim over the dither map — light enough that the map
-     stays visible. */
+     stays visible. The opaque end must sit under the headline, which is
+     text-start in every locale, so the RTL block below flips the direction.
+     Logical keywords (`to inline-end`) do not resolve in any current engine,
+     so the physical direction is set per writing mode instead. */
   --hero-scrim: linear-gradient(
     to right,
     color-mix(in srgb, var(--p-bg) 90%, transparent),
@@ -21,17 +21,22 @@
   --p-ink-2: #3d3f33;
   --p-ink-3: #74766a;
   /* Structural rules are near-black ink; the soft tier is for interior
-     separators only (rows inside a bordered block). */
+     separators only (rows inside a bordered block). There is no third
+     "strong" tier: it held the same hex as --p-line, so it named a weight
+     the color layer cannot carry. Use a thicker border where a rule needs
+     more weight. */
   --p-line: #16170f;
   --p-line-soft: #d6d5ca;
-  --p-line-strong: #16170f;
   --p-primary: #4163cc;
   --p-primary-ink: #2d4aa8;
-  --p-accent: #4163cc;
-  --p-accent-ink: #2d4aa8;
   --p-on-primary: #ffffff;
+
+  /* State colors. Each `-ink` value is the text tier and clears 4.5:1 on
+     paper; the base value is for fills and rules. */
   --p-success: #2f7d63;
   --p-warn: #b06e2a;
+  --p-warn-ink: #8a5418;
+  --p-danger: #a3271f;
 
   /* Type */
   --p-sans: var(--font-hanken), var(--font-cairo), ui-sans-serif, system-ui,
@@ -48,12 +53,9 @@
   --p-r-lg: 0px;
   --p-r-xl: 0px;
 
-  /* Spacing */
-  --p-pad-xs: 8px;
-  --p-pad-sm: 12px;
-  --p-pad-md: 20px;
+  /* Spacing. Only the step with a call site remains; the other four were
+     defined and never spent. */
   --p-pad-lg: 32px;
-  --p-pad-xl: 56px;
 
   /* Primary side rail width (see .site-rail / .site-main) */
   --p-rail: 264px;
@@ -61,7 +63,6 @@
   /* Shadows — flat editorial: no drop shadows, hairlines only */
   --p-shadow-sm: none;
   --p-shadow-md: 0 1px 0 var(--p-line);
-  --p-shadow-lg: 0 1px 0 var(--p-line);
 
   /* Fluid section padding (mobile-first) — generous editorial whitespace */
   --p-pad-section-x: clamp(20px, 5vw, 64px);
@@ -78,14 +79,13 @@
   --color-p-ink-3: var(--p-ink-3);
   --color-p-line: var(--p-line);
   --color-p-line-soft: var(--p-line-soft);
-  --color-p-line-strong: var(--p-line-strong);
   --color-p-primary: var(--p-primary);
   --color-p-primary-ink: var(--p-primary-ink);
   --color-p-on-primary: var(--p-on-primary);
-  --color-p-accent: var(--p-accent);
-  --color-p-accent-ink: var(--p-accent-ink);
   --color-p-success: var(--p-success);
   --color-p-warn: var(--p-warn);
+  --color-p-warn-ink: var(--p-warn-ink);
+  --color-p-danger: var(--p-danger);
 
   --font-sans: var(--p-sans);
   --font-mono: var(--p-mono);
@@ -98,35 +98,31 @@
 
   --shadow-sm: var(--p-shadow-sm);
   --shadow-md: var(--p-shadow-md);
-  --shadow-lg: var(--p-shadow-lg);
 
-  /* Type scale (auto-generates text-* utilities) */
+  /* Type scale (auto-generates text-* utilities).
+
+     Eight steps. The previous thirteen included pairs that differed by 0.5px
+     (eyebrow/micro, small/body), which no screen can render as a hierarchy,
+     and `lead` outran `card-title` at full viewport, so a paragraph set
+     larger than a heading. Every adjacent ratio here lands between 1.15 and
+     1.83, and `lead` caps at 18px so `card-title` outranks it at every
+     width. */
   --text-eyebrow: 11px;
   --text-eyebrow--line-height: 1.4;
-  --text-micro: 11.5px;
-  --text-micro--line-height: 1.5;
   --text-small: 13px;
   --text-small--line-height: 1.5;
-  --text-body: 13.5px;
+  --text-body: 15px;
   --text-body--line-height: 1.6;
-  --text-body-lg: clamp(14px, 0.4vw + 13px, 15px);
-  --text-body-lg--line-height: 1.6;
-  --text-lead: clamp(16px, 0.6vw + 14px, 19px);
+  --text-lead: clamp(16px, 0.4vw + 14.5px, 18px);
   --text-lead--line-height: 1.6;
-  --text-card-title: 18px;
+  --text-card-title: 20px;
   --text-card-title--line-height: 1.3;
-  --text-card-title-lg: 20px;
-  --text-card-title-lg--line-height: 1.3;
-  --text-feature: clamp(22px, 2.2vw + 14px, 26px);
+  --text-feature: clamp(22px, 2vw + 15px, 26px);
   --text-feature--line-height: 1.2;
-  --text-section-sm: clamp(24px, 1.5vw + 18px, 30px);
-  --text-section-sm--line-height: 1.15;
-  --text-section: clamp(28px, 4vw + 8px, 44px);
+  --text-section: clamp(30px, 4vw + 8px, 46px);
   --text-section--line-height: 1.1;
   --text-hero: clamp(40px, 7vw, 84px);
   --text-hero--line-height: 1.02;
-  --text-hero-sm: clamp(30px, 4vw + 10px, 52px);
-  --text-hero-sm--line-height: 1.1;
 }
 
 *,
@@ -184,6 +180,14 @@ body {
    render in Cairo too. */
 [dir="rtl"] {
   --p-sans: var(--p-arabic);
+
+  /* Mirror the hero scrim so its opaque end stays under the headline. */
+  --hero-scrim: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--p-bg) 90%, transparent),
+    color-mix(in srgb, var(--p-bg) 50%, transparent) 42%,
+    color-mix(in srgb, var(--p-bg) 12%, transparent)
+  );
 }
 
 /* Mono-styled eyebrow labels use the mono token; route them to Cairo on RTL
@@ -221,19 +225,6 @@ body {
     stroke-dashoffset: -11;
   }
 }
-@keyframes pd-glow {
-  0%,
-  42% {
-    opacity: 0;
-  }
-  52% {
-    opacity: 0.14;
-  }
-  68%,
-  100% {
-    opacity: 0;
-  }
-}
 .pd-src {
   animation: pd-src 3.6s linear infinite;
 }
@@ -243,28 +234,14 @@ body {
 .pd-march {
   animation: pd-march 0.9s linear infinite;
 }
-.pd-glow {
-  animation: pd-glow 3.6s linear infinite;
-}
 @media (prefers-reduced-motion: reduce) {
   .pd-src,
   .pd-flow,
-  .pd-march,
-  .pd-glow {
+  .pd-march {
     animation: none;
   }
 }
 
-@keyframes caret-blink {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
 
 /* Catalog map (deck-free MapLibre) hover popup — themed to match Portolan
    surfaces instead of MapLibre's default white box. */
@@ -299,10 +276,32 @@ body {
   [dir="rtl"] .site-rail {
     transform: translateX(0);
   }
-}
-@media (min-width: 768px) {
+
+  /* Collapsed: the rail slides off toward its own inline-start edge and the
+     content reclaims the 264px. */
+  .site-rail.is-collapsed {
+    transform: translateX(-100%);
+  }
+  [dir="rtl"] .site-rail.is-collapsed {
+    transform: translateX(100%);
+  }
+
+  /* The margin is not animated. Only the rail's transform is, which the
+     compositor handles on its own layer. Easing the margin instead would
+     relayout <main> on every frame for 280ms, and <main> holds the MapLibre
+     canvas and the three.js dither map, both of which resize on reflow. The
+     content reflows once, then the rail slides away over it. */
   .site-main {
     margin-inline-start: var(--p-rail);
+  }
+  .site-rail.is-collapsed ~ .site-main {
+    margin-inline-start: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-rail {
+    transition: none;
   }
 }
 
@@ -401,7 +400,7 @@ body {
 .tk-card:focus-visible {
   transform: translateY(-6px);
   box-shadow: 0 6px 0 var(--p-primary);
-  border-color: var(--p-line-strong);
+  border-color: var(--p-line);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -491,25 +490,6 @@ body {
 }
 
 /* --- Ecosystem project cards -------------------------------------------- */
-/* Staggered pulse ring on each card's square status marker. Grows from the
-   marker's own size out to ~2.6x while fading — the square-cornered take on
-   the design's blip dot. Delay is set per-card inline (index * 0.35s). */
-@keyframes ec-ping {
-  0% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  70% {
-    opacity: 0;
-  }
-  100% {
-    transform: scale(2.6);
-    opacity: 0;
-  }
-}
-.ec-ping {
-  animation: ec-ping 4.2s ease-out infinite;
-}
 /* Cards rest raised on a hard blue offset shadow; hover presses them flush,
    as if the card were clicked. Direction-aware so the shadow sits on the
    reading-forward (inline-end) side. */
@@ -524,7 +504,7 @@ body {
 .ec-card:hover {
   transform: translate(0, 0);
   box-shadow: 0 0 0 0 var(--p-primary);
-  border-color: var(--p-line-strong);
+  border-color: var(--p-line);
 }
 [dir="rtl"] .ec-card {
   transform: translate(3px, -3px);
@@ -582,24 +562,28 @@ body {
   .tk-flip__inner {
     transition: none;
   }
-  .ec-ping {
-    animation: none;
-  }
   .logo-marquee {
     animation: none;
     width: 100%;
   }
+  /* The wrapped row is centered. Ten logos rarely divide evenly into the
+     available width, so a left-aligned last row leaves one logo stranded
+     under a full one. */
   .logo-track {
     flex: 1 1 100%;
     flex-wrap: wrap;
+    justify-content: center;
     row-gap: 1.5rem;
     padding-inline-end: 0;
   }
   .logo-track[data-clone] {
     display: none;
   }
+  /* No marquee means no edge fade to hide a logo that meets the viewport
+     edge, so the strip takes the same side padding as every section. */
   .logo-strip {
     -webkit-mask-image: none;
     mask-image: none;
+    padding-inline: var(--p-pad-section-x);
   }
 }

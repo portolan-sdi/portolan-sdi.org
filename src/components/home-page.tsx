@@ -6,7 +6,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { DitherMap } from "./dither-map";
 import { SiteShell } from "./site-rail";
-import { PublishPaths } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
@@ -42,7 +41,7 @@ function Pager({
 
   return (
     <div className="mt-8 flex items-center justify-end gap-4">
-      <span className="font-mono text-micro text-p-ink-3">
+      <span className="font-mono text-small text-p-ink-3">
         {t("status", { page: String(page + 1), total: String(pageCount) })}
       </span>
       <div className="flex border border-p-line">
@@ -53,8 +52,10 @@ function Pager({
           aria-label={t("prev")}
           className="px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
         >
-          <span aria-hidden="true" className="rtl:hidden">&#8249;</span>
-          <span aria-hidden="true" className="hidden rtl:inline">&#8250;</span>
+          {/* U+2039 is bidi-mirrored, so the engine flips it on an RTL page.
+              The old rtl: swap mirrored it a second time, which made prev and
+              next render as the same glyph in Arabic. */}
+          <span aria-hidden="true">&#8249;</span>
         </button>
         <button
           type="button"
@@ -63,8 +64,7 @@ function Pager({
           aria-label={t("next")}
           className="border-s border-p-line px-3 py-1.5 text-p-ink transition-colors hover:bg-p-bg-soft disabled:text-p-ink-3 disabled:hover:bg-transparent cursor-pointer disabled:cursor-default"
         >
-          <span aria-hidden="true" className="rtl:hidden">&#8250;</span>
-          <span aria-hidden="true" className="hidden rtl:inline">&#8249;</span>
+          <span aria-hidden="true">&#8250;</span>
         </button>
       </div>
     </div>
@@ -75,8 +75,8 @@ function Pager({
 function MapSkeleton() {
   const t = useTranslations("registry");
   return (
-    <div className="h-[520px] md:h-[600px] rounded-[var(--p-r-lg)] border border-p-line bg-p-bg-soft animate-pulse flex items-center justify-center">
-      <span className="text-micro text-p-ink-3 font-mono">{t("map.loading")}</span>
+    <div className="h-[440px] md:h-[520px] border border-p-line bg-p-bg-soft animate-pulse flex items-center justify-center">
+      <span className="text-small text-p-ink-3 font-mono">{t("map.loading")}</span>
     </div>
   );
 }
@@ -236,45 +236,47 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
   // Four principles, one ledger row each: title, body, mono tag. Order is
   // deliberate, not ranked (no numbers, no bullets).
-  const whyCards = ["open", "agents", "simple", "sovereign"] as const;
+  const whyCards = ["open", "simple", "agents"] as const;
 
-  const howSteps = [
-    "convert",
-    "catalog",
-    "publish",
-    "browse",
-  ] as const;
+  const howSteps = ["convert", "catalog", "publish", "use"] as const;
 
   return (
     <SiteShell>
       {/* Hero */}
       <section id="top" className="relative border-b border-p-line overflow-hidden">
-        <DitherMap className="absolute inset-0 w-full h-full opacity-80 dark:opacity-60" />
+        <DitherMap className="absolute inset-0 w-full h-full opacity-80" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">
             <h1 className="text-hero font-extrabold tracking-[-0.035em] text-balance">
               {t("hero.title")} <br />
-              <span className="text-p-primary">{t("hero.titleAccent")}</span>
+              {t("hero.titleAccent")}
             </h1>
             <div className="mt-[clamp(2rem,4vw,3rem)]">
               <p className="text-lead leading-relaxed max-w-[56ch]">
                 {t.rich("hero.description", { m: monoChunk })}
               </p>
-              <div className="flex gap-6 items-center flex-wrap mt-9">
+              {/* Stacked below sm, so both CTAs start on the column edge.
+                  The ghost variant carries no inline padding, so no negative
+                  margin is needed to pull it back into line. */}
+              <div className="flex flex-col items-start gap-4 mt-9 sm:flex-row sm:items-center sm:gap-6">
                 <Link href="/#how">
                   <Btn variant="primary" size="lg">
-                    {t("hero.quickstart")} <DirArrow />
+                    {t("hero.howItWorks")} <DirArrow />
                   </Btn>
                 </Link>
-                <a href="https://browser.portolan-sdi.org/">
+                {/* The registry section at the foot of this page, not the
+                    external browser. The map there is the first thing a
+                    visitor should see, and the section title reads
+                    "Browse N catalogs". */}
+                <Link href="/#registry">
                   <Btn variant="ghost" size="lg">
                     {t("hero.browseCatalogs")} <DirArrow />
                   </Btn>
-                </a>
+                </Link>
               </div>
               {heroStats && (
-                <p className="mt-10 font-mono text-micro text-p-ink-3">
+                <p className="mt-10 font-mono text-small text-p-ink-3">
                   {heroStats.map((stat) => (
                     <span key={stat.key}>
                       <span className="text-p-primary">
@@ -298,15 +300,23 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
-          {/* No eyebrow: the title already states the problem this section is about. */}
-          <SectionHead title={t("why.title")} wide />
-          {/* Ledger: four principles, one row each. Near-black top rule, soft
+          {/* The heading fills the band between the section rule and the
+              ledger rule. Left empty, those two rules sit in the same ink
+              with the section padding stranded between them, and the ledger
+              reads as a table that arrived without a title. */}
+          <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05] mb-[clamp(2.5rem,5vw,4rem)]">
+            {t("nav.why")}
+          </h2>
+          {/* Ledger: three principles, one row each. Near-black top rule, soft
               interior rules. Rows nudge start-ward + tint faintly on hover. */}
-          <div className="border-t border-p-line-strong overflow-clip">
+          <div className="border-t border-p-line overflow-clip">
             {whyCards.map((key) => (
               <div
                 key={key}
-                className="group grid grid-cols-1 gap-2 border-b border-p-line px-2 py-6 [will-change:transform] transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[color-mix(in_srgb,var(--p-primary)_4%,var(--p-paper))] hover:translate-x-2 rtl:hover:-translate-x-2 md:grid-cols-[minmax(0,300px)_minmax(0,1fr)_minmax(0,200px)] md:items-baseline md:gap-8 md:py-[26px]"
+                // No horizontal padding: every other section starts its text
+                // on the column edge, and an 8px inset here broke that edge
+                // for three rows only.
+                className="group grid grid-cols-1 gap-2 border-b border-p-line py-6 [will-change:transform] transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[color-mix(in_srgb,var(--p-primary)_4%,var(--p-paper))] hover:translate-x-2 rtl:hover:-translate-x-2 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:items-baseline md:gap-12 md:py-[26px]"
               >
                 <h3 className="text-card-title font-bold tracking-[-0.02em]">
                   {t(`why.cards.${key}.title`)}
@@ -314,9 +324,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 <p className="text-body text-p-ink-2 leading-relaxed text-pretty">
                   {t.rich(`why.cards.${key}.description`, { m: monoChunk })}
                 </p>
-                <span className="font-mono text-micro text-p-primary md:justify-self-end md:text-end">
-                  {t(`why.cards.${key}.tag`)}
-                </span>
               </div>
             ))}
           </div>
@@ -329,10 +336,37 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* How it works */}
       <section id="how" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
-          <SectionHead
-            eyebrow={t("howItWorks.eyebrow")}
-            title={t("howItWorks.title")}
-          />
+          {/* Title with the intro beneath it, matching the ecosystem header.
+              No eyebrow: the rail labels this section from
+              `howItWorks.eyebrow`, but printing it above an identical title
+              would just repeat the headline. */}
+          <div className="mb-[clamp(2.5rem,5vw,4rem)]">
+            <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
+              {t("howItWorks.title")}
+            </h2>
+            {/* No `max-w` line-measure cap here: this intro is one sentence
+                and sets on a single line at full column width. */}
+            <p className="mt-5 text-lead leading-relaxed text-p-ink-2">
+              {t.rich("howItWorks.intro", {
+                cli: (chunks) => (
+                  <a
+                    href="https://cli.portolan-sdi.org/"
+                    className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                  >
+                    {chunks}
+                  </a>
+                ),
+                skills: (chunks) => (
+                  <a
+                    href="https://github.com/portolan-sdi/portolan-skills"
+                    className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                  >
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </p>
+          </div>
           <div className="mb-[var(--p-pad-lg)]">
             <PipelineFigure />
           </div>
@@ -340,7 +374,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               dividers (wrap-aware for the 1/2/4-col responsive steps), faint
               tint on hover. Number badge (mono, reversed) + title + a
               reading-forward arrow on every cell but the last. */}
-          <div className="border border-p-line-strong grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="border border-p-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {howSteps.map((step, i) => (
               <div
                 key={step}
@@ -373,7 +407,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               </div>
             ))}
           </div>
-          <PublishPaths />
         </div>
       </section>
 
@@ -385,7 +418,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (
-        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
+        // Closing rule: every other section is bounded top and bottom, and
+        // without this the page stopped on open whitespace.
+        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-b border-p-line">
           <div className="max-w-[1240px] mx-auto">
             {/* No eyebrow and no subtitle: the title ("Browse N catalogs")
                 already names the section. */}
@@ -472,7 +507,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 <button
                   type="button"
                   onClick={handleClearFilters}
-                  className="text-micro text-p-ink-3 hover:text-p-ink-2 underline underline-offset-2"
+                  className="text-small text-p-ink-3 hover:text-p-ink-2 underline underline-offset-2"
                 >
                   {t("registry.search.clearFilters")}
                 </button>
@@ -485,7 +520,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 <CatalogMap catalogs={mappableCatalogs} />
                 {globalCatalogs.length > 0 && (
                   <div className="mt-10 border-t border-p-line pt-8">
-                    <h3 className="text-card-title-lg font-semibold">
+                    <h3 className="text-feature font-semibold">
                       {t("registry.global.title")}
                     </h3>
                     {/* One row on a wide screen. Three cards in two columns
@@ -568,7 +603,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     <button
                       type="button"
                       onClick={handleResetSubmit}
-                      className="text-micro text-p-ink-3 hover:text-p-ink-2 underline"
+                      className="text-small text-p-ink-3 hover:text-p-ink-2 underline"
                     >
                       {t("registry.submit.submitAnother")}
                     </button>
@@ -585,11 +620,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                         placeholder="https://...catalog.json"
                         disabled={submitState === "submitting"}
                         className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
-                          submitUrl && !isValidSubmitUrl ? "border-red-400" : "border-p-line focus:border-p-primary"
+                          submitUrl && !isValidSubmitUrl ? "border-p-danger" : "border-p-line focus:border-p-primary"
                         }`}
                       />
                       {submitUrl && !isValidSubmitUrl && (
-                        <p className="text-micro text-red-500 mt-1">{t("registry.submit.urlError")}</p>
+                        <p className="text-small text-p-danger mt-1">{t("registry.submit.urlError")}</p>
                       )}
                     </div>
                     <div className="sm:w-[200px]">
@@ -603,11 +638,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                         title={t("registry.submit.emailLabel")}
                         disabled={submitState === "submitting"}
                         className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
-                          submitEmail && !isValidSubmitEmail ? "border-red-400" : "border-p-line focus:border-p-primary"
+                          submitEmail && !isValidSubmitEmail ? "border-p-danger" : "border-p-line focus:border-p-primary"
                         }`}
                       />
                       {submitEmail && !isValidSubmitEmail && (
-                        <p className="text-micro text-red-500 mt-1">{t("registry.submit.emailError")}</p>
+                        <p className="text-small text-p-danger mt-1">{t("registry.submit.emailError")}</p>
                       )}
                     </div>
                     <button
@@ -624,7 +659,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     </button>
                     </div>
                     {submitError && (
-                      <p className="text-micro text-red-500 mt-1">{submitError}</p>
+                      <p className="text-small text-p-danger mt-1">{submitError}</p>
                     )}
                   </div>
                 )}

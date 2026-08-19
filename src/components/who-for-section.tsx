@@ -1,7 +1,31 @@
 "use client";
 
+import { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { useRevealed } from "@/hooks/use-revealed";
+
+const COST_CALCULATOR =
+  "https://cholmes.github.io/open-geodag-presentation/calculator.html";
+// The registry section at the foot of this page, which opens on the map. A
+// plain hash is correct in every locale, and it matches how the rail links
+// its own section anchors. This used to open the external browser, which is
+// a different thing from the registry the sentence names.
+const REGISTRY = "#registry";
+
+// Inline links inside translated prose. The <cost> and <reg> tags are part of
+// the message contract and carry the same text span in every locale.
+function inlineLink(href: string) {
+  return function link(chunks: ReactNode) {
+    return (
+      <a
+        href={href}
+        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+      >
+        {chunks}
+      </a>
+    );
+  };
+}
 
 // Who it's for — three user stories, one per group Portolan serves.
 //
@@ -35,7 +59,9 @@ export function WhoForSection() {
         </h2>
 
         <div
-          className="wf-set mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 items-start gap-[clamp(2.25rem,4vw,3.5rem)] md:grid-cols-3 md:gap-[clamp(1.75rem,3.4vw,3rem)]"
+          // Body copy sets at 15px, so the three columns need a tighter
+          // gutter to hold a measure near 45 characters at 1440px.
+          className="wf-set mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 items-start gap-[clamp(2.25rem,4vw,3.5rem)] md:grid-cols-3 md:gap-[clamp(1.5rem,2.4vw,2.25rem)]"
           data-in={revealed}
         >
           {STORIES.map((key, i) => (
@@ -61,7 +87,10 @@ export function WhoForSection() {
                   {t(`stories.${key}.today`)}
                 </p>
                 <p className="mt-4 text-body leading-[1.7] text-p-ink text-pretty">
-                  {t(`stories.${key}.change`)}
+                  {t.rich(`stories.${key}.change`, {
+                    cost: inlineLink(COST_CALCULATOR),
+                    reg: inlineLink(REGISTRY),
+                  })}
                 </p>
               </div>
             </div>

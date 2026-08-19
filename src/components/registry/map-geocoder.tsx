@@ -125,7 +125,7 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
               <div className="text-small text-p-ink truncate">
                 {suggestion.name}
               </div>
-              <div className="text-micro text-p-ink-3 truncate">
+              <div className="text-small text-p-ink-3 truncate">
                 {suggestion.displayName}
               </div>
             </li>

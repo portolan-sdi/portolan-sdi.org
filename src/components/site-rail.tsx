@@ -43,6 +43,9 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const isDesktop = useIsDesktop();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Desktop only. The rail holds eight links in 264px, which is 18% of a
+  // 1440px viewport, so the reader can give that width back to the content.
+  const [collapsed, setCollapsed] = useState(false);
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
@@ -74,8 +77,14 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("keydown", onKey);
   }, [drawerOpen, closeDrawer]);
 
-  const railOffCanvas = isDesktop ? false : !drawerOpen;
-  const railStateClass = isDesktop ? "" : drawerOpen ? "is-open" : "";
+  const railOffCanvas = isDesktop ? collapsed : !drawerOpen;
+  const railStateClass = isDesktop
+    ? collapsed
+      ? "is-collapsed"
+      : ""
+    : drawerOpen
+      ? "is-open"
+      : "";
 
   const navLinkBase =
     "flex items-center justify-between gap-2 py-[9px] text-body transition-colors";
@@ -152,10 +161,36 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           </ul>
         </div>
 
-        <div className="border-t border-p-line px-[22px] py-3.5">
+        {/* Locale control and the collapse button share the foot row. */}
+        <div className="border-t border-p-line px-[22px] py-3.5 flex items-center justify-between gap-2">
           <LocaleSwitcher />
+          <button
+            type="button"
+            onClick={() => setCollapsed(true)}
+            aria-label={t("nav.collapse")}
+            title={t("nav.collapse")}
+            className="hidden md:inline-flex items-center justify-center h-8 px-2 font-mono text-small text-p-ink-3 transition-colors hover:bg-p-bg-soft hover:text-p-ink"
+          >
+            {/* No rtl: variant. U+00AB is a bidi-mirrored character, so the
+                engine already flips it on an RTL page; swapping it by hand
+                mirrored it twice and pointed the arrow the wrong way. */}
+            <span aria-hidden="true">&#171;</span>
+          </button>
         </div>
       </nav>
+
+      {/* Restore handle. Sits where the rail's edge was, and only exists once
+          the rail is off-canvas on desktop. */}
+      {isDesktop && collapsed && (
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          className="fixed top-5 start-0 z-40 hidden md:inline-flex items-center gap-1.5 border border-s-0 border-p-line bg-p-bg px-3 py-1.5 font-mono text-eyebrow uppercase tracking-[0.1em] rtl:tracking-normal text-p-ink hover:bg-p-bg-soft"
+        >
+          <span aria-hidden="true">&#187;</span>
+          {t("nav.expand")}
+        </button>
+      )}
 
       {/* Mobile top bar (logo + drawer trigger) */}
       <div className="md:hidden sticky top-0 z-30 flex items-center justify-between border-b border-p-line bg-p-bg px-[var(--p-pad-section-x)] py-3">

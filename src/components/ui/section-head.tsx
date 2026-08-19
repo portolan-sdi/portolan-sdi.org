@@ -52,7 +52,7 @@ export function SectionHead({
       {aside ? (
         <div className="md:justify-self-end">{aside}</div>
       ) : subtitle ? (
-        <p className="text-body-lg leading-relaxed text-p-ink-2">{subtitle}</p>
+        <p className="text-lead leading-relaxed text-p-ink-2">{subtitle}</p>
       ) : null}
     </div>
   );

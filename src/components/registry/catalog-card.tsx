@@ -26,7 +26,7 @@ function MetaRow({ children }: { children: ReactNode[] }) {
   if (items.length === 0) return null;
 
   return (
-    <p className="flex flex-wrap items-center gap-x-1.5 text-micro text-p-ink-3 font-mono">
+    <p className="flex flex-wrap items-center gap-x-1.5 text-small text-p-ink-3 font-mono">
       {items.map((item, i) => (
         <Fragment key={i}>
           {i > 0 && <span aria-hidden="true">·</span>}
@@ -66,7 +66,7 @@ export function CatalogHeader({ catalog }: CatalogProps) {
             is chrome, not information. */}
         <div className="flex shrink-0 flex-col items-end gap-1">
           {catalog.kind && <Tag tone="primary">{t(`kind.${catalog.kind}`)}</Tag>}
-          {catalog.stale_since && <Tag tone="accent">{t("status.stale")}</Tag>}
+          {catalog.stale_since && <Tag tone="warn">{t("status.stale")}</Tag>}
           {tier === "unvalidated" && <Tag>{t("validation.unvalidated")}</Tag>}
         </div>
       </div>
@@ -220,7 +220,7 @@ export function CatalogCard({ catalog }: CatalogProps) {
             aria-expanded={flipped}
             onFocus={() => setFlipped(true)}
             onClick={() => setFlipped(true)}
-            className="sr-only focus:not-sr-only focus:absolute focus:bottom-5 focus:start-5 focus:z-10 focus:border focus:border-p-line focus:bg-p-paper focus:px-2 focus:py-1 focus:font-mono focus:text-micro"
+            className="sr-only focus:not-sr-only focus:absolute focus:bottom-5 focus:start-5 focus:z-10 focus:border focus:border-p-line focus:bg-p-paper focus:px-2 focus:py-1 focus:font-mono focus:text-small"
           >
             {t("card.showDetails")}
           </button>
