@@ -21,6 +21,10 @@ import { useTranslations } from "next-intl";
 const INK = "var(--p-primary)";
 const TEXT = "var(--p-primary-ink)";
 const FAINT = "color-mix(in srgb, var(--p-primary) 45%, transparent)";
+// Secondary text tier. FAINT is 45% alpha, which computes to 1.96:1 on paper
+// and cannot carry text, so it stays on strokes only. This sits a step lighter
+// than TEXT, so the sublabels still read as subordinate.
+const TEXT_QUIET = "var(--p-primary)";
 
 // One row per input kind named in step 1. The last row is a live endpoint
 // (broadcast icon); the rest are files (document icon).
@@ -160,7 +164,7 @@ export function PipelineFigure() {
             textAnchor="middle"
             fontSize="11"
             letterSpacing="2"
-            fill={FAINT}
+            fill={TEXT_QUIET}
           >
             convert · catalog
           </text>
@@ -203,7 +207,7 @@ export function PipelineFigure() {
           >
             s3://any-bucket
           </text>
-          <text x="890" y="147" textAnchor="middle" fontSize="11" fill={FAINT}>
+          <text x="890" y="147" textAnchor="middle" fontSize="11" fill={TEXT_QUIET}>
             catalog.json
           </text>
 

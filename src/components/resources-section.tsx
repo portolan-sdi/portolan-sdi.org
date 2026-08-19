@@ -83,7 +83,7 @@ export function ResourcesSection() {
         </header>
 
         <div style={{ "--tk-step": "clamp(36px,5vw,72px)" } as React.CSSProperties}
-          className="grid grid-cols-1 items-start gap-6 sm:grid-cols-2 sm:pb-[var(--tk-step)] lg:grid-cols-4 lg:gap-7">
+          className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 sm:pb-[var(--tk-step)] lg:grid-cols-4">
           {ITEMS.map((item, i) => {
             const alt = t(`items.${item.key}.alt`);
             return (
@@ -102,7 +102,7 @@ export function ResourcesSection() {
                 <Shot item={item} alt={alt} />
 
                 <div className="p-5">
-                  <p className="mb-4 font-mono text-micro text-p-ink-3">
+                  <p className="mb-4 font-mono text-small text-p-ink-3">
                     <Ltr>{t(`items.${item.key}.attribution`)}</Ltr>
                   </p>
 

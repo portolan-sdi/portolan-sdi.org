@@ -11,7 +11,9 @@
     "languageAria": "Cambiar idioma",
     "index": "Índice",
     "external": "Externo",
-    "who": "Para quién es"
+    "who": "Para quién es",
+    "collapse": "Contraer el índice",
+    "expand": "Índice"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",

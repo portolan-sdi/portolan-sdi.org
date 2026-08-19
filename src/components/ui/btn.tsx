@@ -9,17 +9,31 @@ interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
+// Only vertical padding and size live here. Horizontal padding belongs to the
+// variant, because a filled button needs it to hold its shape and the ghost
+// does not: inline padding on a variant with no background only pushed the
+// label off the column edge and ran its rule past the text.
+// `sm` drops a size step so the three stay distinguishable.
 const sizeClasses: Record<BtnSize, string> = {
-  sm: "px-4 py-2 text-micro",
-  md: "px-5 py-2.5 text-small",
-  lg: "px-6 py-3 text-small",
+  sm: "py-2 text-eyebrow",
+  md: "py-2.5 text-small",
+  lg: "py-3 text-small",
+};
+
+const sizePadding: Record<BtnSize, string> = {
+  sm: "px-4",
+  md: "px-5",
+  lg: "px-6",
 };
 
 const variantClasses: Record<BtnVariant, string> = {
   primary: "bg-p-primary text-p-on-primary hover:bg-p-primary-ink",
   secondary: "bg-p-paper text-p-ink border border-p-line hover:bg-p-bg-soft",
+  // The rule is visible at rest so the control reads as a control beside a
+  // solid primary block, and darkens to full ink on hover. It spans the label
+  // exactly, so no inline padding.
   ghost:
-    "bg-transparent text-p-ink rounded-none border-b-2 border-transparent hover:border-p-ink",
+    "bg-transparent text-p-ink rounded-none border-b-2 border-p-line-soft hover:border-p-ink",
 };
 
 export const Btn = forwardRef<HTMLButtonElement, BtnProps>(
@@ -33,6 +47,7 @@ export const Btn = forwardRef<HTMLButtonElement, BtnProps>(
           cursor-pointer whitespace-nowrap
           transition-[background-color,border-color,color] duration-150
           ${sizeClasses[size]}
+          ${variant === "ghost" ? "" : sizePadding[size]}
           ${variantClasses[variant]}
           ${className ?? ""}
         `}

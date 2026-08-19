@@ -11,7 +11,9 @@
     "languageAria": "Change language",
     "index": "Index",
     "external": "External",
-    "who": "Who it's for"
+    "who": "Who it's for",
+    "collapse": "Collapse the index",
+    "expand": "Index"
   },
   "hero": {
     "title": "Portolan makes geospatial data",

@@ -9,6 +9,11 @@ import { DirArrow, Ltr } from "./ui";
 // `core` = first-party Portolan project (filled marker). The hollow
 // "community" state is the open, still-empty tier that `submitHref` invites.
 // All six are core today.
+// The grid stays uniform. Varying the card widths was tried and reverted:
+// every description is one short sentence, so a double-width cell left a band
+// of empty paper and stranded the status marker at the far edge. Six sibling
+// projects are a list, and a list reads as one. The ragged-anatomy rule in
+// AGENTS.md targets decorative sameness on unrelated content, not an index.
 const projects = [
   { slug: "spec", name: "portolan-spec", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-spec" },
   { slug: "rashid", name: "rashid", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/rashid" },
@@ -84,28 +89,26 @@ export function EcosystemSection() {
             the end side (mirrors the design's space-between header row). No
             eyebrow: the title is the section label, so a kicker would repeat
             it. The rail still reads `ecosystem.eyebrow` for its own list. */}
-        <div className="flex items-end justify-between gap-6 mb-[clamp(2.5rem,5vw,4rem)]">
-          <div>
-            <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
-              {t("title")}
-            </h2>
-            <p className="mt-5 text-body-lg leading-relaxed text-p-ink-2 max-w-[54ch]">
-              {t("intro")}
-            </p>
-          </div>
-          <p className="font-mono text-eyebrow text-p-ink-3 whitespace-nowrap">
-            {t("count", { count: projects.length })}
+        {/* The count moved down to the legend row. Beside a 46px headline an
+            11px grey line read as debris, and it was the only section header
+            on the page carrying a right-hand element. */}
+        <div className="mb-[clamp(2.5rem,5vw,4rem)]">
+          <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
+            {t("title")}
+          </h2>
+          <p className="mt-5 text-lead leading-relaxed text-p-ink-2 max-w-[54ch]">
+            {t("intro")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {projects.map((project, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {projects.map((project) => (
             <a
               key={project.slug}
               href={project.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="ec-card group flex flex-col gap-2.5 border border-p-line bg-p-paper p-[18px]"
+              className="ec-card group flex flex-col gap-2.5 border border-p-line bg-p-paper p-5"
             >
               <div className="flex items-center gap-2.5">
                 <span className="inline-flex items-center justify-center w-9 h-9 shrink-0 border border-p-line bg-[color-mix(in_srgb,var(--p-primary)_8%,var(--p-paper))] text-p-primary transition-colors group-hover:border-p-primary">
@@ -114,25 +117,21 @@ export function EcosystemSection() {
                 <span className="font-mono text-body text-p-primary">
                   <Ltr>{project.name}</Ltr>
                 </span>
-                {/* Square status marker with a staggered pulse ring — the
-                    editorial, square-cornered take on the design's blip dot.
-                    Filled = core, hollow = community (see the legend below). */}
-                <span className="ms-auto relative inline-block w-[7px] h-[7px] shrink-0">
-                  <span
-                    className={`absolute inset-0 ${
-                      project.core ? "bg-p-primary" : "border border-p-primary"
-                    }`}
-                  />
-                  <span
-                    className="ec-ping absolute inset-0 border border-p-primary"
-                    style={{ animationDelay: `${(i * 0.35).toFixed(2)}s` }}
-                  />
-                </span>
+                {/* Square status marker. Filled = core, hollow = community
+                    (see the legend below). The pulse ring is gone: every
+                    project is core today, so six synchronized rings marked no
+                    distinction and drew the eye off the names. It returns
+                    when a community entry gives it something to contrast. */}
+                <span
+                  className={`inline-block w-[7px] h-[7px] shrink-0 ${
+                    project.core ? "bg-p-primary" : "border border-p-primary"
+                  }`}
+                />
               </div>
               <p className="text-body text-p-ink-2 leading-snug flex-1">
                 {t(`projects.${project.slug}`)}
               </p>
-              <div className="mt-auto flex items-center gap-3 font-mono text-micro text-p-ink-3">
+              <div className="mt-auto flex items-center gap-3 font-mono text-small text-p-ink-3">
                 {project.license && (
                   <span>
                     <Ltr>{project.license}</Ltr>
@@ -149,6 +148,10 @@ export function EcosystemSection() {
         {/* Legend for the two marker states + the open invitation to grow. */}
         <div className="mt-[18px] flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-eyebrow">
           <span className="inline-flex items-center gap-2 text-p-ink-3">
+            <span>{t("count", { count: projects.length })}</span>
+            <span aria-hidden className="text-p-ink-3">
+              ·
+            </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="inline-block w-[7px] h-[7px] bg-p-primary" />
               {t("legendCore")}

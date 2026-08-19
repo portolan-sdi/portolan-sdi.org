@@ -181,7 +181,10 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
   const colors = useMemo(
     () => ({
       primary: readThemeHex("--p-primary", "#4163cc"),
-      accent: readThemeHex("--p-accent", "#4163cc"),
+      // The selected state. This read --p-accent, which held the same hex as
+      // --p-primary, so a selected catalog rendered identically to every
+      // resting one. Ink separates them.
+      selected: readThemeHex("--p-ink", "#16170f"),
       stroke: "#ffffff",
     }),
     [],
@@ -258,7 +261,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
 
   const dotPaint: CircleLayerSpecification["paint"] = {
     "circle-radius": 6,
-    "circle-color": ["case", selectedExpr, colors.accent, colors.primary],
+    "circle-color": ["case", selectedExpr, colors.selected, colors.primary],
     "circle-stroke-width": 1.5,
     "circle-stroke-color": colors.stroke,
     "circle-opacity": 0.95,
@@ -275,12 +278,12 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
     ],
   };
   const linePaint: LineLayerSpecification["paint"] = {
-    "line-color": ["case", selectedExpr, colors.accent, colors.primary],
+    "line-color": ["case", selectedExpr, colors.selected, colors.primary],
     "line-width": ["case", selectedExpr, 3, 2],
   };
 
   const dashedLinePaint: LineLayerSpecification["paint"] = {
-    "line-color": ["case", selectedExpr, colors.accent, colors.primary],
+    "line-color": ["case", selectedExpr, colors.selected, colors.primary],
     "line-width": ["case", selectedExpr, 2.5, 1.5],
     "line-dasharray": [3, 2],
     "line-opacity": 0.8,
@@ -304,7 +307,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
     <>
       <div
         dir="ltr"
-        className="relative h-[520px] md:h-[600px] border border-p-line overflow-hidden"
+        className="relative h-[440px] md:h-[520px] border border-p-line overflow-hidden"
         role="application"
         aria-label={t("map.searchLabel")}
       >
@@ -350,7 +353,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
               offset={14}
               className="catalog-map-popup"
             >
-              <span className="text-micro font-mono text-p-ink">{hover.title}</span>
+              <span className="text-small font-mono text-p-ink">{hover.title}</span>
             </Popup>
           )}
         </MapGL>
@@ -424,7 +427,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
             does not have to sit across the bottom of the map to be. */}
         <div className="absolute bottom-3 end-3 z-10 flex items-end gap-2">
           {infoOpen && (
-            <div className="w-[240px] max-w-[calc(100vw-2rem)] border border-p-line bg-p-paper p-3 text-micro font-mono text-p-ink-2 leading-relaxed">
+            <div className="w-[240px] max-w-[calc(100vw-2rem)] border border-p-line bg-p-paper p-3 text-small font-mono text-p-ink-2 leading-relaxed">
               {"© "}
               <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-p-ink">
                 CARTO
@@ -444,7 +447,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
             onClick={() => setInfoOpen((v) => !v)}
             aria-label={t("map.info")}
             aria-expanded={infoOpen}
-            className="flex h-6 w-6 shrink-0 items-center justify-center border border-p-line bg-p-paper font-mono text-micro text-p-ink-3 transition-colors hover:text-p-ink"
+            className="flex h-6 w-6 shrink-0 items-center justify-center border border-p-line bg-p-paper font-mono text-small text-p-ink-3 transition-colors hover:text-p-ink"
           >
             i
           </button>
@@ -452,7 +455,7 @@ export default function CatalogMap({ catalogs }: CatalogMapProps) {
       </div>
 
       {unlocated.length > 0 && (
-        <p className="mt-3 text-micro font-mono text-p-ink-3">
+        <p className="mt-3 text-small font-mono text-p-ink-3">
           {t("map.noLocation", { count: String(unlocated.length) })}
         </p>
       )}

@@ -55,7 +55,9 @@ export function WhoForSection() {
         </h2>
 
         <div
-          className="wf-set mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 items-start gap-[clamp(2.25rem,4vw,3.5rem)] md:grid-cols-3 md:gap-[clamp(1.75rem,3.4vw,3rem)]"
+          // Body copy sets at 15px, so the three columns need a tighter
+          // gutter to hold a measure near 45 characters at 1440px.
+          className="wf-set mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 items-start gap-[clamp(2.25rem,4vw,3.5rem)] md:grid-cols-3 md:gap-[clamp(1.5rem,2.4vw,2.25rem)]"
           data-in={revealed}
         >
           {STORIES.map((key, i) => (

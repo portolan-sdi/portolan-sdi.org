@@ -44,7 +44,7 @@ export function CopyUrlButton({ url, className, tabIndex }: CopyUrlButtonProps) 
       onClick={handleCopy}
       tabIndex={tabIndex}
       title={url}
-      className={`inline-flex items-center gap-1.5 text-micro font-mono text-p-ink-3 hover:text-p-ink transition-colors cursor-pointer ${className ?? ""}`}
+      className={`inline-flex items-center gap-1.5 text-small font-mono text-p-ink-3 hover:text-p-ink transition-colors cursor-pointer ${className ?? ""}`}
     >
       {copied ? (
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

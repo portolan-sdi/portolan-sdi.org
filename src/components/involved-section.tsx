@@ -43,7 +43,7 @@ function LogoLink({ org, clone }: { org: Org; clone: boolean }) {
       className="logo-link inline-flex items-center"
     >
       {"text" in org ? (
-        <span className="text-body-lg font-bold tracking-[-0.02em] text-p-ink-3 transition-colors hover:text-p-ink">
+        <span className="text-lead font-bold tracking-[-0.02em] text-p-ink-3 transition-colors hover:text-p-ink">
           <Ltr>{org.name}</Ltr>
         </span>
       ) : (
