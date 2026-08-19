@@ -96,7 +96,7 @@ export default async function Image({
             }}
           >
             <div style={{ display: "flex" }}>{title}</div>
-            <div style={{ display: "flex", color: PRIMARY }}>{titleAccent}</div>
+            <div style={{ display: "flex" }}>{titleAccent}</div>
           </div>
         )}
 

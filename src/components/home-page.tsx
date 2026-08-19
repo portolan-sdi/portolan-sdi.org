@@ -6,7 +6,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { DitherMap } from "./dither-map";
 import { SiteShell } from "./site-rail";
-import { PublishPaths } from "./quickstart-section";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
@@ -236,14 +235,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
   // Four principles, one ledger row each: title, body, mono tag. Order is
   // deliberate, not ranked (no numbers, no bullets).
-  const whyCards = ["open", "agents", "simple", "sovereign"] as const;
+  const whyCards = ["open", "simple", "agents"] as const;
 
-  const howSteps = [
-    "convert",
-    "catalog",
-    "publish",
-    "browse",
-  ] as const;
+  const howSteps = ["convert", "catalog", "publish", "use"] as const;
 
   return (
     <SiteShell>
@@ -255,7 +249,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           <div className="max-w-[1240px] mx-auto">
             <h1 className="text-hero font-extrabold tracking-[-0.035em] text-balance">
               {t("hero.title")} <br />
-              <span className="text-p-primary">{t("hero.titleAccent")}</span>
+              {t("hero.titleAccent")}
             </h1>
             <div className="mt-[clamp(2rem,4vw,3rem)]">
               <p className="text-lead leading-relaxed max-w-[56ch]">
@@ -264,7 +258,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               <div className="flex gap-6 items-center flex-wrap mt-9">
                 <Link href="/#how">
                   <Btn variant="primary" size="lg">
-                    {t("hero.quickstart")} <DirArrow />
+                    {t("hero.howItWorks")} <DirArrow />
                   </Btn>
                 </Link>
                 <a href="https://browser.portolan-sdi.org/">
@@ -298,15 +292,16 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
-          {/* No eyebrow: the title already states the problem this section is about. */}
-          <SectionHead title={t("why.title")} wide />
-          {/* Ledger: four principles, one row each. Near-black top rule, soft
+          {/* No visible headline: the three rows carry the section on their own.
+              The heading stays in the accessibility tree for the rail anchor. */}
+          <h2 className="sr-only">{t("nav.why")}</h2>
+          {/* Ledger: three principles, one row each. Near-black top rule, soft
               interior rules. Rows nudge start-ward + tint faintly on hover. */}
           <div className="border-t border-p-line-strong overflow-clip">
             {whyCards.map((key) => (
               <div
                 key={key}
-                className="group grid grid-cols-1 gap-2 border-b border-p-line px-2 py-6 [will-change:transform] transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[color-mix(in_srgb,var(--p-primary)_4%,var(--p-paper))] hover:translate-x-2 rtl:hover:-translate-x-2 md:grid-cols-[minmax(0,300px)_minmax(0,1fr)_minmax(0,200px)] md:items-baseline md:gap-8 md:py-[26px]"
+                className="group grid grid-cols-1 gap-2 border-b border-p-line px-2 py-6 [will-change:transform] transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[color-mix(in_srgb,var(--p-primary)_4%,var(--p-paper))] hover:translate-x-2 rtl:hover:-translate-x-2 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:items-baseline md:gap-12 md:py-[26px]"
               >
                 <h3 className="text-card-title font-bold tracking-[-0.02em]">
                   {t(`why.cards.${key}.title`)}
@@ -314,9 +309,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                 <p className="text-body text-p-ink-2 leading-relaxed text-pretty">
                   {t.rich(`why.cards.${key}.description`, { m: monoChunk })}
                 </p>
-                <span className="font-mono text-micro text-p-primary md:justify-self-end md:text-end">
-                  {t(`why.cards.${key}.tag`)}
-                </span>
               </div>
             ))}
           </div>
@@ -329,10 +321,37 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* How it works */}
       <section id="how" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
-          <SectionHead
-            eyebrow={t("howItWorks.eyebrow")}
-            title={t("howItWorks.title")}
-          />
+          {/* Title with the intro beneath it, matching the ecosystem header.
+              No eyebrow: the rail labels this section from
+              `howItWorks.eyebrow`, but printing it above an identical title
+              would just repeat the headline. */}
+          <div className="mb-[clamp(2.5rem,5vw,4rem)]">
+            <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
+              {t("howItWorks.title")}
+            </h2>
+            {/* No `max-w` line-measure cap here: this intro is one sentence
+                and sets on a single line at full column width. */}
+            <p className="mt-5 text-body-lg leading-relaxed text-p-ink-2">
+              {t.rich("howItWorks.intro", {
+                cli: (chunks) => (
+                  <a
+                    href="https://cli.portolan-sdi.org/"
+                    className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                  >
+                    {chunks}
+                  </a>
+                ),
+                skills: (chunks) => (
+                  <a
+                    href="https://github.com/portolan-sdi/portolan-skills"
+                    className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                  >
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </p>
+          </div>
           <div className="mb-[var(--p-pad-lg)]">
             <PipelineFigure />
           </div>
@@ -373,7 +392,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               </div>
             ))}
           </div>
-          <PublishPaths />
         </div>
       </section>
 

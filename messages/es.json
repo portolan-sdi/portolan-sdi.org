@@ -14,10 +14,10 @@
     "who": "Para quién es"
   },
   "hero": {
-    "title": "El futuro de los datos espaciales",
-    "titleAccent": "son solo archivos.",
-    "description": "Portolan es un estándar con criterio para compartir datos geoespaciales como archivos nativos de la nube en almacenamiento de objetos, más las herramientas que lo hacen realidad. Un catálogo Portolan es un directorio de datos en formatos abiertos descritos con metadatos <m>STAC</m> estructurados, alojado en cualquier bucket compatible con S3. Sin servidores, sin bases de datos.",
-    "quickstart": "Inicio rápido",
+    "title": "Portolan hace que los datos geoespaciales",
+    "titleAccent": "sean fáciles de compartir y usar.",
+    "description": "Portolan combina formatos de archivo nativos de la nube con metadatos y documentación claros, para que personas y agentes puedan publicar y usar datos a cualquier escala. Así los datos son más fáciles de encontrar, de entender y de analizar de formas nuevas.",
+    "howItWorks": "Cómo funciona",
     "browseCatalogs": "Explorar catálogos",
     "stats": {
       "catalogs": "catálogos",
@@ -30,27 +30,18 @@
     "ariaLabel": "Usuarios y colaboradores"
   },
   "why": {
-    "title": "La infraestructura de datos espaciales todavía da por sentados servidores, bases de datos y especialistas. Portolan no.",
     "cards": {
       "open": {
         "title": "Abierto e interoperable",
-        "description": "Los catálogos se construyen sobre formatos abiertos consolidados como <m>GeoParquet</m>, <m>COG</m> y metadatos <m>STAC</m>. Estos funcionan hoy en herramientas como DuckDB, BigQuery, Pandas, QGIS y ArcGIS.",
-        "tag": "GeoParquet · COG · STAC"
-      },
-      "agents": {
-        "title": "Listo para personas y agentes",
-        "description": "Un catálogo se describe a sí mismo en texto simple y metadatos estructurados. Una persona puede leer qué son los datos y de dónde vienen. Un agente puede hacer lo mismo y luego consultarlos directamente con herramientas estándar, sin API ni credenciales. Como todos los catálogos se describen igual, un agente puede encontrar los datos catastrales de una ciudad y un archivo satelital, unirlos y responder una pregunta que ningún conjunto de datos resolvería por sí solo.",
-        "tag": "autodescriptivo"
+        "description": "Portolan se apoya en formatos existentes conformes con OGC como <m>GeoParquet</m>, <m>COG</m> y <m>STAC</m>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, Pandas o BigQuery sin interrupciones ni dificultades."
       },
       "simple": {
-        "title": "Simple y escalable",
-        "description": "Operar una infraestructura de datos espaciales normalmente significa GeoServer o una pila de Esri, con bases de datos, servicios y personal que las mantenga. Un catálogo Portolan no tiene nada de eso. Construirlo sigue dando trabajo, y para eso están la CLI y el validador, pero una vez publicado no necesita mantenimiento, ya guarde megabytes o terabytes.",
-        "tag": "archivos en un bucket"
+        "title": "Simple, barato, escalable, soberano",
+        "description": "Un catálogo Portolan vive en tu almacenamiento en la nube y no necesita servidores, bases de datos ni APIs. Funciona con cualquier proveedor compatible con <m>S3</m> en cualquier lugar, uses AWS o Azure, Hetzner o MinIO, y escala de megabytes a petabytes. Tus únicos costes son lo que le pagas a tu proveedor de nube."
       },
-      "sovereign": {
-        "title": "Barato y soberano",
-        "description": "Tú eliges dónde viven los datos, incluidos proveedores de tu propio país como AWS, Azure, GCS, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con S3. Les pagas por almacenamiento y ancho de banda, y por nada más. Nadie se interpone entre tu organización y sus datos.",
-        "tag": "almacenamiento + ancho de banda"
+      "agents": {
+        "title": "Hecho para personas y agentes",
+        "description": "Los catálogos Portolan están bien estructurados, bien formateados y bien documentados, así que personas y agentes pueden encontrarlos, entenderlos y usarlos. Explora el registro tú mismo para descubrir datos nuevos, o apunta un agente al registro y mira lo que puede encontrar y hacer."
       }
     }
   },
@@ -58,74 +49,65 @@
     "title": "Para quién es",
     "stories": {
       "large": {
-        "title": "Publicadores grandes",
-        "today": "La mayoría de quienes podrían usar un archivo geoespacial grande nunca lo abren, porque acceder a él exige crear una cuenta, aprender un portal propio o instalar una biblioteca cliente para su API.",
-        "change": "Con Portolan, quien publica describe el archivo una sola vez. Después, analistas y agentes pueden buscar y consultar el archivo de forma directa, incluso para usos que nadie había previsto."
+        "title": "Grandes publicadores",
+        "today": "Los archivos grandes, como las imágenes satelitales o los geoportales de escala nacional, son caros de almacenar y difíciles de mantener.",
+        "change": "Portolan permite publicar esos datos <cost>al menor coste posible</cost>, sin servidores, bases de datos ni APIs, y hace que sean más fáciles de descubrir y de usar."
       },
       "small": {
-        "title": "Publicadores pequeños",
-        "today": "Las ciudades tienen mapas de inundación, huellas de edificios y otros conjuntos de datos útiles sin publicar, porque compartir datos geoespaciales siempre ha significado mantener un servidor y pagar por él.",
-        "change": "Un catálogo de Portolan son archivos en almacenamiento de objetos. Nada sigue funcionando después de publicar, el alojamiento puede costar casi nada y el registro de Portolan hace que el catálogo de una ciudad se encuentre junto a archivos mucho más grandes."
+        "title": "Pequeños publicadores",
+        "today": "Muchos gobiernos municipales, ONG y otros productores de datos pequeños no pueden asumir el coste ni la complejidad de publicar datos con herramientas como GeoServer o Esri.",
+        "change": "Portolan baja la barrera de entrada y te deja compartir tus datos con nada más que un bucket de almacenamiento en la nube."
       },
       "users": {
         "title": "Usuarios de datos",
-        "today": "Trabajar con datos espaciales suele significar construir una tubería nueva para cada fuente. Un catálogo de Portolan dice qué cubre un conjunto de datos y qué significan sus campos antes de descargar nada.",
-        "change": "Los formatos optimizados para la nube permiten traer los doscientos megabytes que se necesitan en lugar de los cuarenta gigabytes que los rodean. Un analista puede empezar a trabajar el mismo día que encuentra los datos, y un agente puede consultar los mismos metadatos y archivos estandarizados sin una integración propia de cada fuente."
+        "today": "La mayoría de los datos geoespaciales están dispersos, mal documentados y guardados de formas que dificultan su uso.",
+        "change": "Portolan exige metadatos y documentación claros, usa formatos pensados para el acceso directo y ofrece un <reg>registro central</reg> de catálogos públicos. Dedicas menos tiempo a buscar, descargar y adaptar datos, y más tiempo a usarlos."
       }
     }
   },
   "howItWorks": {
     "eyebrow": "Cómo funciona",
-    "title": "Ingiere, convierte, publica.",
-    "figCaption": "Fig. 2.1 · El proceso",
+    "title": "Cómo funciona",
+    "intro": "Usa la <cli>CLI de Portolan</cli> o las <skills>habilidades de agente</skills> para transformar tus datos existentes en un catálogo Portolan.",
+    "figAlt": "Los archivos y servicios existentes entran en portolan-cli, que envía un catálogo al almacenamiento de objetos. QGIS, Python y los agentes lo leen directamente.",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convertir",
-        "description": "Cualquier entrada se vuelve nativa de la nube, ya sean formatos heredados o nuevos. Los vectores pasan a <m>GeoParquet</m>, los rásteres a <m>COG</m> y las teselas a <m>PMTiles</m>."
+        "description": "Tus datos existentes se convierten a formatos nativos de la nube. Trabajes con Shapefiles y GeoPackages, con un endpoint WFS o con un servidor Esri, acabarás con <m>GeoParquet</m> para vectores y <m>COG</m> para ráster."
       },
       "catalog": {
         "id": "02",
         "title": "Catalogar",
-        "description": "Un catálogo <m>STAC</m> describe cada activo, así que cualquier herramienta <m>STAC</m> puede leerlo."
+        "description": "Tus datos optimizados para la nube se organizan como un catálogo <m>STAC</m> con metadatos y documentación claros, incluidos READMEs y <m>AGENTS.md</m>. Así el catálogo es fácil de encontrar, de explorar y de usar, tanto para personas como para agentes."
       },
       "publish": {
         "id": "03",
         "title": "Publicar",
-        "description": "Sube los archivos a cualquier almacenamiento compatible con S3, desde AWS, GCS y Azure hasta R2, MinIO o Source Cooperative."
+        "description": "Tu catálogo se publica en cualquier almacenamiento compatible con S3, como AWS, GCS, Hetzner o MinIO. No hay servidores ni APIs que configurar. Compartirlo significa enviarle la URL a alguien."
       },
-      "browse": {
+      "use": {
         "id": "04",
         "title": "Usar",
-        "description": "Úsalo con herramientas geoespaciales estándar como DuckDB, Sedona y QGIS, o apunta un agente a la URL."
+        "description": "Ya puedes usar los datos directamente en herramientas como QGIS, ArcGIS o Python, o pasar la URL del catálogo a un agente para que se ponga a trabajar con la habilidad de consumo de Portolan."
       }
     }
   },
   "ecosystem": {
     "eyebrow": "Ecosistema",
-    "title": "Hecho para crecer.",
+    "title": "Ecosistema",
+    "intro": "El núcleo de código abierto de Portolan y las herramientas aportadas por la comunidad.",
     "count": "{count} proyectos",
     "legendCore": "núcleo",
     "legendCommunity": "comunidad",
     "submit": "Proponer una herramienta",
     "projects": {
-      "spec": "El estándar. Qué debe ser un catálogo.",
-      "rashid": "El validador. Comprueba que un catálogo cumple.",
-      "cli": "La CLI. Crea y publica catálogos.",
-      "registry": "El registro. Encuentra catálogos publicados.",
-      "browser": "El navegador. Explora catálogos en la web.",
-      "skills": "Skills de Claude. Publica con un agente."
-    }
-  },
-  "quickstart": {
-    "title": "Publica tu primer catálogo.",
-    "cli": {
-      "title": "Con la CLI",
-      "description": "Instala <m>portolan-cli</m> y luego <m>init</m>, <m>add</m>, <m>check</m> y <m>push</m>. La CLI convierte tus archivos y genera el catálogo."
-    },
-    "claude": {
-      "title": "Con Claude",
-      "description": "Instala la skill de Portolan en Claude Code y dirígela a tus datos. Se encarga de la conversión, los metadatos y la publicación. Los agentes destacan con CLI y archivos de texto, así que incluso quienes no son expertos pueden publicar."
+      "spec": "El estándar que define un catálogo Portolan.",
+      "rashid": "El validador que comprueba si un catálogo cumple la especificación Portolan.",
+      "cli": "Una herramienta de línea de comandos para crear, comprobar y publicar catálogos Portolan.",
+      "registry": "Un registro central de catálogos Portolan públicos.",
+      "browser": "Una interfaz web para navegar y explorar catálogos Portolan.",
+      "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos."
     }
   },
   "registry": {
@@ -223,27 +205,27 @@
     "title": "Charlas y demos",
     "items": {
       "holmesTalk": {
-        "title": "A Cloud-Native Geo Upgrade for Spatial Data Infrastructure",
+        "title": "Una mejora nativa de la nube para la infraestructura de datos espaciales",
         "attribution": "Chris Holmes · Open Geodag 2026",
-        "description": "Una exploración de cómo los formatos geoespaciales nativos de la nube, como <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m> y <m>STAC</m>, pueden transformar el funcionamiento de las infraestructuras de datos espaciales.",
+        "description": "Cómo <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m>, <m>STAC</m> y otros formatos nativos de la nube pueden mejorar el funcionamiento de las infraestructuras de datos espaciales.",
         "alt": "Diapositiva inicial de la charla, con el título y un enlace a la demo del portal neerlandés."
       },
       "nextSdi": {
-        "title": "The Next SDI",
+        "title": "La próxima IDE",
         "attribution": "Javier de la Torre · OGC Connect Helsinki",
-        "description": "La próxima SDI es infraestructura confiable para agentes que sirven a todos sin perder la soberanía.",
+        "description": "Cómo una IDE puede funcionar como infraestructura confiable para personas y agentes sin sacar los datos del control de quien los publica.",
         "alt": "Diapositiva inicial de la charla, sobre un mapa de densidad de calles."
       },
       "finlandDemo": {
-        "title": "Demo del agente Finland.SDI",
+        "title": "Demo de agente con Finland.SDI",
         "attribution": "CARTO",
-        "description": "Un agente responde preguntas sobre una SDI nacional, leyendo directamente del catálogo y sin ninguna API.",
+        "description": "Mira a un agente responder preguntas usando la IDE nacional de Finlandia, leyendo directamente del catálogo y sin una API.",
         "alt": "La pantalla de inicio de la demo, que invita a preguntar sobre los datos de Finlandia."
       },
       "costCalc": {
-        "title": "Calculadora de costos",
+        "title": "Calculadora de costes",
         "attribution": "Open Geodag",
-        "description": "Estima cuánto costará publicar tus datos como un catálogo Portolan.",
+        "description": "Estima el coste de publicar tus datos como un catálogo Portolan.",
         "alt": "La calculadora, que compara costos mensuales de almacenamiento y salida en tres proveedores."
       }
     }

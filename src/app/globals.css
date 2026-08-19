@@ -221,19 +221,6 @@ body {
     stroke-dashoffset: -11;
   }
 }
-@keyframes pd-glow {
-  0%,
-  42% {
-    opacity: 0;
-  }
-  52% {
-    opacity: 0.14;
-  }
-  68%,
-  100% {
-    opacity: 0;
-  }
-}
 .pd-src {
   animation: pd-src 3.6s linear infinite;
 }
@@ -243,14 +230,10 @@ body {
 .pd-march {
   animation: pd-march 0.9s linear infinite;
 }
-.pd-glow {
-  animation: pd-glow 3.6s linear infinite;
-}
 @media (prefers-reduced-motion: reduce) {
   .pd-src,
   .pd-flow,
-  .pd-march,
-  .pd-glow {
+  .pd-march {
     animation: none;
   }
 }

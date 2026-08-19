@@ -2,44 +2,44 @@
 
 import { useTranslations } from "next-intl";
 
-// Animated technical figure (ported from the "exploded portolan map" design
-// handoff): legacy sources stream into portolan-cli, standardized output is
-// pushed to a bucket, and consumers read the files directly. Semantic
-// language: solid curves with traveling packets = writes; dashed marching
-// lines = reads. Keyframes (pd-src / pd-flow / pd-march / pd-glow) live in
-// globals.css and are disabled under prefers-reduced-motion.
+// Animated technical figure for the "Get started" section: existing sources
+// stream into portolan-cli, cloud-optimized output is pushed to a bucket, and
+// consumers read the files directly. Semantic language: solid curves with
+// traveling packets = writes; dashed marching lines = reads. Keyframes
+// (pd-src / pd-flow / pd-march) live in globals.css and are disabled under
+// prefers-reduced-motion.
+//
+// The figure mirrors the four steps below it and stops there. It names one
+// input group per step-1 example, one destination, and three consumers, so a
+// reader can take it in at a glance instead of decoding it.
 //
 // Format and tool names inside the figure stay Latin in every locale, and the
-// diagram never mirrors (dir="ltr"). Canvas geometry is the handoff's fixed
-// 1480x430 grid; the SVG scales with the page and gains a horizontal scroll
-// on narrow screens instead of shrinking below legibility.
+// diagram never mirrors (dir="ltr"). Canvas geometry is a fixed 1200x240 grid;
+// the SVG scales with the page and gains a horizontal scroll on narrow screens
+// instead of shrinking below legibility.
 
 const INK = "var(--p-primary)";
 const TEXT = "var(--p-primary-ink)";
 const FAINT = "color-mix(in srgb, var(--p-primary) 45%, transparent)";
 
-// Source boxes: five rows on a 46px rhythm. The last row is a live endpoint
+// One row per input kind named in step 1. The last row is a live endpoint
 // (broadcast icon); the rest are files (document icon).
 const SOURCES = [
-  { label: "geotiff", top: 48, live: false },
-  { label: "netcdf", top: 94, live: false },
-  { label: "shapefile", top: 140, live: false },
-  { label: "gpkg", top: 186, live: false },
-  { label: "wfs / arcgis", top: 232, live: true },
+  { label: "shapefile / gpkg", top: 38, live: false },
+  { label: "geotiff", top: 98, live: false },
+  { label: "wfs / arcgis", top: 158, live: true },
 ] as const;
 
 const CURVES = [
-  "M250 66 C340 66 390 150 490 152",
-  "M250 112 C340 112 390 157 490 158",
-  "M250 158 C340 158 390 163 490 164",
-  "M250 204 C340 204 390 169 490 169",
-  "M250 250 C340 250 390 175 490 174",
+  "M220 55 C300 55 350 120 420 120",
+  "M220 115 C300 115 350 120 420 120",
+  "M220 175 C300 175 350 120 420 120",
 ] as const;
 
 const CONSUMERS = [
-  { label: "DUCKDB", y: 95, read: "M1150 130 L1300 92", delay: "0s" },
-  { label: "BROWSER", y: 185, read: "M1158 178 L1300 180", delay: "0.3s" },
-  { label: "AGENT", y: 273, read: "M1150 226 L1300 268", delay: "0.6s" },
+  { label: "QGIS", y: 78, read: "M966 100 L1072 74", delay: "0s" },
+  { label: "PYTHON", y: 134, read: "M980 130 L1072 130", delay: "0.3s" },
+  { label: "AGENT", y: 192, read: "M966 160 L1072 188", delay: "0.6s" },
 ] as const;
 
 function DocIcon({ x, y }: { x: number; y: number }) {
@@ -69,7 +69,7 @@ export function PipelineFigure() {
   const t = useTranslations("howItWorks");
 
   return (
-    <figure dir="ltr" className="m-0 border border-p-line bg-p-paper p-4 pb-2">
+    <figure dir="ltr" className="m-0 border border-p-line bg-p-paper p-4">
       <div
         className="overflow-x-auto"
         style={{
@@ -79,10 +79,10 @@ export function PipelineFigure() {
         }}
       >
         <svg
-          viewBox="0 18 1480 300"
+          viewBox="0 20 1200 200"
           role="img"
-          aria-label={t("figCaption")}
-          className="block w-full h-auto min-w-[960px] font-mono"
+          aria-label={t("figAlt")}
+          className="block w-full h-auto min-w-[720px] font-mono"
         >
           {/* source curves (base) */}
           {CURVES.map((d) => (
@@ -100,7 +100,7 @@ export function PipelineFigure() {
               strokeLinecap="round"
               strokeDasharray="10 100"
               className="pd-src"
-              style={{ animationDelay: `${i * 0.15}s` }}
+              style={{ animationDelay: `${i * 0.2}s` }}
             />
           ))}
 
@@ -108,22 +108,22 @@ export function PipelineFigure() {
           {SOURCES.map((src) => (
             <g key={src.label}>
               <rect
-                x="60"
+                x="40"
                 y={src.top}
-                width="190"
-                height="36"
+                width="180"
+                height="34"
                 fill="var(--p-paper)"
                 stroke={INK}
                 strokeWidth="1"
               />
               {src.live ? (
-                <BroadcastIcon x={74} y={src.top + 11} />
+                <BroadcastIcon x={54} y={src.top + 10} />
               ) : (
-                <DocIcon x={74} y={src.top + 11} />
+                <DocIcon x={54} y={src.top + 10} />
               )}
               <text
-                x="96"
-                y={src.top + 22.5}
+                x="76"
+                y={src.top + 21.5}
                 fontSize="12"
                 letterSpacing="1"
                 fill={TEXT}
@@ -133,30 +133,19 @@ export function PipelineFigure() {
             </g>
           ))}
 
-          {/* cli box with arrival glow */}
+          {/* cli box */}
           <rect
-            x="485.5"
-            y="123.5"
-            width="309"
-            height="109"
-            fill="none"
-            stroke={INK}
-            strokeWidth="5"
-            opacity="0"
-            className="pd-glow"
-          />
-          <rect
-            x="490"
-            y="128"
-            width="300"
-            height="100"
+            x="420"
+            y="86"
+            width="260"
+            height="68"
             fill="color-mix(in srgb, var(--p-primary) 6%, var(--p-paper))"
             stroke={INK}
             strokeWidth="1.5"
           />
           <text
-            x="640"
-            y="174"
+            x="550"
+            y="116"
             textAnchor="middle"
             fontSize="15"
             fontWeight="600"
@@ -166,57 +155,47 @@ export function PipelineFigure() {
             portolan-cli
           </text>
           <text
-            x="640"
-            y="197"
+            x="550"
+            y="137"
             textAnchor="middle"
             fontSize="11"
             letterSpacing="2"
             fill={FAINT}
           >
-            ingest · convert · push
+            convert · catalog
           </text>
 
-          {/* push stream (uniform, standardized output) */}
+          {/* push stream (cloud-optimized output) */}
           <path
-            d="M790 168 H944"
+            d="M680 120 H776"
             fill="none"
             stroke={INK}
             strokeWidth="2"
             strokeDasharray="5 9"
             className="pd-flow"
           />
-          <path d="M948 162 L962 168 L948 174 Z" fill={INK} />
-          <text
-            x="869"
-            y="150"
-            textAnchor="middle"
-            fontSize="10"
-            letterSpacing="1.5"
-            fill={INK}
-          >
-            cloud-optimized
-          </text>
+          <path d="M780 114 L794 120 L780 126 Z" fill={INK} />
 
           {/* s3 bucket */}
           <path
-            d="M965 105 L978 245 Q1060 263 1142 245 L1155 105"
+            d="M802 72 L814 186 Q890 202 966 186 L978 72"
             fill="var(--p-paper)"
             stroke={INK}
             strokeWidth="1.5"
             strokeLinejoin="round"
           />
           <ellipse
-            cx="1060"
-            cy="105"
-            rx="95"
-            ry="16"
+            cx="890"
+            cy="72"
+            rx="88"
+            ry="15"
             fill="var(--p-paper)"
             stroke={INK}
             strokeWidth="1.5"
           />
           <text
-            x="1060"
-            y="162"
+            x="890"
+            y="126"
             textAnchor="middle"
             fontSize="13"
             letterSpacing="1"
@@ -224,13 +203,7 @@ export function PipelineFigure() {
           >
             s3://any-bucket
           </text>
-          <text
-            x="1060"
-            y="185"
-            textAnchor="middle"
-            fontSize="11"
-            fill={FAINT}
-          >
+          <text x="890" y="147" textAnchor="middle" fontSize="11" fill={FAINT}>
             catalog.json
           </text>
 
@@ -246,16 +219,13 @@ export function PipelineFigure() {
                 className="pd-march"
                 style={{ animationDelay: c.delay }}
               />
-              <text x="1312" y={c.y} fontSize="13" letterSpacing="2" fill={INK}>
+              <text x="1084" y={c.y} fontSize="13" letterSpacing="2" fill={INK}>
                 {c.label}
               </text>
             </g>
           ))}
         </svg>
       </div>
-      <figcaption className="mt-3 pt-2 px-1 border-t border-p-line-soft font-mono text-eyebrow text-p-primary">
-        {t("figCaption")}
-      </figcaption>
     </figure>
   );
 }

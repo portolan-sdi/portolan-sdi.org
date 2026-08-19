@@ -7,8 +7,8 @@ import { DirArrow, Ltr } from "./ui";
 // and a link to the repo. Names and SPDX license ids stay Latin in every
 // locale; the one-line role is translated (ecosystem.projects.<slug>).
 // `core` = first-party Portolan project (filled marker). The hollow
-// "community" state is the open, still-empty tier that `submitHref` invites —
-// the two together are what "Built to grow." means. All six are core today.
+// "community" state is the open, still-empty tier that `submitHref` invites.
+// All six are core today.
 const projects = [
   { slug: "spec", name: "portolan-spec", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-spec" },
   { slug: "rashid", name: "rashid", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/rashid" },
@@ -80,16 +80,18 @@ export function EcosystemSection() {
       className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line"
     >
       <div className="max-w-[1240px] mx-auto">
-        {/* Header: eyebrow + title on the start side, a live count readout on
-            the end side (mirrors the design's space-between header row). */}
+        {/* Header: title + intro on the start side, a live count readout on
+            the end side (mirrors the design's space-between header row). No
+            eyebrow: the title is the section label, so a kicker would repeat
+            it. The rail still reads `ecosystem.eyebrow` for its own list. */}
         <div className="flex items-end justify-between gap-6 mb-[clamp(2.5rem,5vw,4rem)]">
           <div>
-            <p className="font-mono text-eyebrow text-p-ink-3 tracking-[0.04em]">
-              {t("eyebrow")}
-            </p>
-            <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05] mt-3">
+            <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
               {t("title")}
             </h2>
+            <p className="mt-5 text-body-lg leading-relaxed text-p-ink-2 max-w-[54ch]">
+              {t("intro")}
+            </p>
           </div>
           <p className="font-mono text-eyebrow text-p-ink-3 whitespace-nowrap">
             {t("count", { count: projects.length })}
