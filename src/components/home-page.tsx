@@ -265,11 +265,15 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     {t("hero.howItWorks")} <DirArrow />
                   </Btn>
                 </Link>
-                <a href="https://browser.portolan-sdi.org/">
+                {/* The registry section at the foot of this page, not the
+                    external browser. The map there is the first thing a
+                    visitor should see, and the section title reads
+                    "Browse N catalogs". */}
+                <Link href="/#registry">
                   <Btn variant="ghost" size="lg">
                     {t("hero.browseCatalogs")} <DirArrow />
                   </Btn>
-                </a>
+                </Link>
               </div>
               {heroStats && (
                 <p className="mt-10 font-mono text-small text-p-ink-3">
