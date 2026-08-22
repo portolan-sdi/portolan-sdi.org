@@ -206,6 +206,12 @@
   "resources": {
     "title": "محاضرات وتجارب",
     "items": {
+      "yharbyTalk": {
+        "title": "بنية تحتية مكانية دون خوادم مع Portolan",
+        "attribution": "Youssef Harby · Cloud Native Geospatial Japan 2026",
+        "description": "يبني الطريق إلى Portolan طبقة بعد طبقة، من طلبات النطاق على تخزين الكائنات إلى كتالوج <m>STAC</m> واحد تقرأه البرمجيات والناس والوكلاء بالطريقة نفسها.",
+        "alt": "الشريحة الافتتاحية للمحاضرة، وفيها العنوان بالإنجليزية واليابانية فوق اسم الحدث والمتحدّث."
+      },
       "holmesTalk": {
         "title": "ترقية مصمّمة للسحابة للبنية التحتية للبيانات المكانية",
         "attribution": "Chris Holmes · Open Geodag 2026",

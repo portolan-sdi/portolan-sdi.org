@@ -206,6 +206,12 @@
   "resources": {
     "title": "Charlas y demos",
     "items": {
+      "yharbyTalk": {
+        "title": "Portolan, una IDE sin servidores",
+        "attribution": "Youssef Harby · Cloud Native Geospatial Japan 2026",
+        "description": "Construye el camino hacia Portolan capa por capa, desde las peticiones de rango en el almacenamiento de objetos hasta un solo catálogo <m>STAC</m> que el software, las personas y los agentes leen igual.",
+        "alt": "Diapositiva inicial de la charla, con el título en inglés y japonés sobre el nombre del evento y el ponente."
+      },
       "holmesTalk": {
         "title": "Una mejora nativa de la nube para la infraestructura de datos espaciales",
         "attribution": "Chris Holmes · Open Geodag 2026",

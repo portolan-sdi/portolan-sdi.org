@@ -206,6 +206,12 @@
   "resources": {
     "title": "Talks & demos",
     "items": {
+      "yharbyTalk": {
+        "title": "Portolan: An SDI Without Servers",
+        "attribution": "Youssef Harby · Cloud Native Geospatial Japan 2026",
+        "description": "Builds the path to Portolan one layer at a time, from range requests on object storage to one <m>STAC</m> catalog that software, people, and agents read the same way.",
+        "alt": "Opening slide of the talk, with the title in English and Japanese above the event and the speaker."
+      },
       "holmesTalk": {
         "title": "A Cloud-Native Upgrade for Spatial Data Infrastructure",
         "attribution": "Chris Holmes · Open Geodag 2026",
