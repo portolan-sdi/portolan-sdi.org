@@ -1,8 +1,17 @@
+// What the registry checks about a catalog during a crawl.
+//
+// `stac_valid` comes from the crawl itself. The other two report the Markdown
+// documents that Portolan v0.1.2 requires at a catalog root. PORTO-CORE-061
+// asks for AGENTS.md under `rel: "agents"`. PORTO-CORE-062 asks for README.md
+// under `rel: "describedby"`. Both are MUST.
+//
+// These two replaced three earlier flags in August 2026. The old flags read a
+// spec draft that portolan-spec deleted before v0.1.0, so every catalog
+// reported the same values. See portolan-registry#89.
 export interface CatalogValidation {
   stac_valid: boolean;
-  has_versions_json: boolean;
-  has_portolan_dir: boolean;
-  has_llms_txt?: boolean;
+  has_agents_md: boolean;
+  has_readme: boolean;
 }
 
 // Read off the catalog's own `rel: "icon"` link. The registry resolves the
@@ -76,9 +85,8 @@ interface ChildLink {
   "portolan_registry:last_crawled"?: string | null;
   "portolan_registry:stale_since"?: string | null;
   "portolan_registry:stac_valid"?: boolean | null;
-  "portolan_registry:has_versions_json"?: boolean | null;
-  "portolan_registry:has_portolan_dir"?: boolean | null;
-  "portolan_registry:has_llms_txt"?: boolean | null;
+  "portolan_registry:has_agents_md"?: boolean | null;
+  "portolan_registry:has_readme"?: boolean | null;
 }
 
 interface RegistryExport {
@@ -127,9 +135,8 @@ function toCatalog(link: ChildLink): Catalog {
     stale_since: link["portolan_registry:stale_since"] ?? null,
     validation: {
       stac_valid: link["portolan_registry:stac_valid"] ?? false,
-      has_versions_json: link["portolan_registry:has_versions_json"] ?? false,
-      has_portolan_dir: link["portolan_registry:has_portolan_dir"] ?? false,
-      has_llms_txt: link["portolan_registry:has_llms_txt"] ?? false,
+      has_agents_md: link["portolan_registry:has_agents_md"] ?? false,
+      has_readme: link["portolan_registry:has_readme"] ?? false,
     },
   };
 }
@@ -167,10 +174,14 @@ export function getBrowserUrl(catalogUrl: string): string {
   return `${BROWSER_BASE}${withoutScheme}`;
 }
 
+// The card badges "unvalidated" only, so no tier reaches a pixel today. The
+// registry also sets `stac_valid` to true for every catalog, which makes
+// "unvalidated" unreachable. Both gaps need a decision. See
+// portolan-registry#89.
 export function getValidationTier(validation: CatalogValidation): "unvalidated" | "basic" | "full" {
-  const { stac_valid, has_versions_json, has_portolan_dir } = validation;
+  const { stac_valid, has_agents_md, has_readme } = validation;
 
-  if (stac_valid && has_versions_json && has_portolan_dir) {
+  if (stac_valid && has_agents_md && has_readme) {
     return "full";
   }
   if (stac_valid) {
