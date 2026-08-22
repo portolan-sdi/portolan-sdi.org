@@ -21,6 +21,11 @@ type Item = {
 
 const ITEMS: Item[] = [
   {
+    key: "yharbyTalk",
+    href: "https://yharby.github.io/cng-japan-2026/#/1",
+    src: "/img/talks/cng-japan.png",
+  },
+  {
     key: "holmesTalk",
     href: "https://cholmes.github.io/open-geodag-presentation/",
     src: "/img/talks/open-geodag.png",
@@ -83,7 +88,7 @@ export function ResourcesSection() {
         </header>
 
         <div style={{ "--tk-step": "clamp(36px,5vw,72px)" } as React.CSSProperties}
-          className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 sm:pb-[var(--tk-step)] lg:grid-cols-4">
+          className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 sm:pb-[var(--tk-step)] xl:grid-cols-5">
           {ITEMS.map((item, i) => {
             const alt = t(`items.${item.key}.alt`);
             return (
