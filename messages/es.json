@@ -13,7 +13,11 @@
     "collapse": "Contraer el índice",
     "expand": "Índice",
     "faq": "Preguntas frecuentes",
-    "coverage": "Explorar catálogos"
+    "coverage": "Explorar catálogos",
+    "overview": "Vista general",
+    "resources": "Recursos",
+    "talks": "Charlas y demos",
+    "toggleGroup": "Enlaces de {section}"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
@@ -247,42 +251,6 @@
     },
     "lastChecked": "Última revisión {date}"
   },
-  "resources": {
-    "title": "Charlas y demos",
-    "items": {
-      "yharbyTalk": {
-        "title": "Portolan, una IDE sin servidores",
-        "attribution": "Youssef Harby · Cloud Native Geospatial Japan 2026",
-        "description": "Construye el camino hacia Portolan capa por capa, desde las peticiones de rango en el almacenamiento de objetos hasta un solo catálogo <m>STAC</m> que el software, las personas y los agentes leen igual.",
-        "alt": "Diapositiva inicial de la charla, con el título en inglés y japonés sobre el nombre del evento y el ponente."
-      },
-      "holmesTalk": {
-        "title": "Una mejora nativa de la nube para la infraestructura de datos espaciales",
-        "attribution": "Chris Holmes · Open Geodag 2026",
-        "description": "Cómo <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m>, <m>STAC</m> y otros formatos nativos de la nube pueden mejorar el funcionamiento de las infraestructuras de datos espaciales.",
-        "alt": "Diapositiva inicial de la charla, con el título y un enlace a la demo del portal neerlandés."
-      },
-      "nextSdi": {
-        "title": "La próxima IDE",
-        "attribution": "Javier de la Torre · OGC Connect Helsinki",
-        "description": "Cómo una IDE puede funcionar como infraestructura confiable para personas y agentes sin sacar los datos del control de quien los publica.",
-        "alt": "Diapositiva inicial de la charla, sobre un mapa de densidad de calles."
-      },
-      "finlandDemo": {
-        "title": "Demo de agente con Finland.SDI",
-        "attribution": "CARTO",
-        "description": "Mira a un agente responder preguntas usando la IDE nacional de Finlandia, leyendo directamente del catálogo y sin una API.",
-        "alt": "La pantalla de inicio de la demo, que invita a preguntar sobre los datos de Finlandia."
-      },
-      "costCalc": {
-        "title": "Calculadora de costes",
-        "attribution": "Open Geodag",
-        "description": "Estima el coste de publicar tus datos como un catálogo Portolan.",
-        "alt": "La calculadora, que compara costos mensuales de almacenamiento y salida en tres proveedores."
-      }
-    },
-    "faqLink": "Leer las preguntas frecuentes"
-  },
   "faq": {
     "meta": {
       "title": "Preguntas frecuentes",
@@ -334,6 +302,45 @@
         "q": "¿Qué no puede hacer Portolan todavía?",
         "p1": "Portolan está aún en una fase temprana, y la especificación y las herramientas evolucionan a medida que las probamos con más publicadores, más conjuntos de datos y más casos de uso. Entre las carencias actuales están los datos con control de acceso, los flujos de edición transaccional y el soporte normativo para formatos como Zarr y COPC.",
         "p2": "Nuestro foco a corto plazo es ampliar el conjunto de catálogos de referencia, estabilizar la especificación central y llegar a una CLI v1.0 estable. Hasta entonces siguen siendo posibles los cambios incompatibles, así que ahora mismo Portolan encaja mejor con quienes adoptan pronto. Consulta la <roadmap>hoja de ruta del proyecto</roadmap> para ver el trabajo actual y las incidencias enlazadas."
+      }
+    }
+  },
+  "talks": {
+    "meta": {
+      "title": "Charlas y demos",
+      "description": "Charlas de conferencias y demos en vivo que muestran Portolan en uso. Diapositivas de Cloud Native Geospatial Japan, Open Geodag y OGC Connect Helsinki, además de una demo con agentes y una calculadora de costes de almacenamiento."
+    },
+    "title": "Charlas y demos",
+    "items": {
+      "yharbyTalk": {
+        "title": "Portolan, una IDE sin servidores",
+        "attribution": "Youssef Harby · Cloud Native Geospatial Japan 2026",
+        "description": "Construye el camino hacia Portolan capa por capa, desde las peticiones de rango en el almacenamiento de objetos hasta un solo catálogo <m>STAC</m> que el software, las personas y los agentes leen igual.",
+        "alt": "Diapositiva inicial de la charla, con el título en inglés y japonés sobre el nombre del evento y el ponente."
+      },
+      "holmesTalk": {
+        "title": "Una mejora nativa de la nube para la infraestructura de datos espaciales",
+        "attribution": "Chris Holmes · Open Geodag 2026",
+        "description": "Cómo <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m>, <m>STAC</m> y otros formatos nativos de la nube pueden mejorar el funcionamiento de las infraestructuras de datos espaciales.",
+        "alt": "Diapositiva inicial de la charla, con el título y un enlace a la demo del portal neerlandés."
+      },
+      "nextSdi": {
+        "title": "La próxima IDE",
+        "attribution": "Javier de la Torre · OGC Connect Helsinki",
+        "description": "Cómo una IDE puede funcionar como infraestructura confiable para personas y agentes sin sacar los datos del control de quien los publica.",
+        "alt": "Diapositiva inicial de la charla, sobre un mapa de densidad de calles."
+      },
+      "finlandDemo": {
+        "title": "Demo de agente con Finland.SDI",
+        "attribution": "CARTO",
+        "description": "Mira a un agente responder preguntas usando la IDE nacional de Finlandia, leyendo directamente del catálogo y sin una API.",
+        "alt": "La pantalla de inicio de la demo, que invita a preguntar sobre los datos de Finlandia."
+      },
+      "costCalc": {
+        "title": "Calculadora de costes",
+        "attribution": "Open Geodag",
+        "description": "Estima el coste de publicar tus datos como un catálogo Portolan.",
+        "alt": "La calculadora, que compara costos mensuales de almacenamiento y salida en tres proveedores."
       }
     }
   }

@@ -4,7 +4,6 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlyphMap } from "./glyph-map";
 import { SiteShell } from "./site-rail";
-import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
 import { GetInvolvedSection } from "./get-involved-section";
@@ -168,10 +167,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           </div>
           {/* Stepper strip: four cells in one near-black frame, soft interior
               dividers (wrap-aware for the 1/2/4-col responsive steps), faint
-              tint on hover. Number badge (mono, reversed) + title + a
-              reading-forward arrow on every cell but the last. */}
+              tint on hover. Number badge (mono, reversed) + title. The badges
+              already number the sequence, so the cells carry no arrow. An
+              arrow here read as a link and said nothing the order did not. */}
           <div className="border border-p-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {howSteps.map((step, i) => (
+            {howSteps.map((step) => (
               <div
                 key={step}
                 className="group p-6 border-p-line transition-colors duration-300
@@ -189,11 +189,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   <h3 className="text-card-title font-bold tracking-[-0.02em]">
                     {t(`howItWorks.steps.${step}.title`)}
                   </h3>
-                  {i < howSteps.length - 1 && (
-                    <span aria-hidden className="ms-auto text-p-ink-3">
-                      <DirArrow />
-                    </span>
-                  )}
                 </div>
                 <p className="text-body text-p-ink-2 leading-relaxed text-pretty mt-3">
                   {t.rich(`howItWorks.steps.${step}.description`, {
@@ -217,9 +212,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Ecosystem — the Portolan projects plus the wider format ecosystem */}
       <EcosystemSection />
-
-      {/* Talks & demos */}
-      <ResourcesSection />
 
       {/* Community contribution paths */}
       <GetInvolvedSection />

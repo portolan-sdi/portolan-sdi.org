@@ -218,9 +218,7 @@ export function RegistryPage({ catalogs = [] }: RegistryPageProps) {
     <SiteShell navItems={AWAY_ITEMS} activeId="registry">
       {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (
-        // Closing rule: every other section is bounded top and bottom, and
-        // without this the page stopped on open whitespace.
-        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-b border-p-line">
+        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
           <div className="max-w-[1240px] mx-auto">
             {/* No eyebrow and no subtitle: the title ("Browse N catalogs")
                 already names the section. */}
