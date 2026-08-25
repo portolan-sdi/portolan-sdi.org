@@ -484,8 +484,10 @@ body {
    The strip auto-scrolls as a seamless ticker: two identical tracks sit
    side by side and the pair translates by exactly one track width, so the
    loop has no seam. Hover or focus pauses it; both inline edges fade so
-   logos drift in and out instead of clipping. Direction-aware (reversed in
-   RTL) — the logos themselves never mirror, only the track translates.
+   logos drift in and out instead of clipping. The track runs against the hero
+   glyph map above it, and both flip on an RTL page, so the two stay opposed in
+   either direction. The logos themselves never mirror, only the track
+   translates.
    Under reduced-motion the clone is dropped and the single row wraps flat. */
 .logo-strip {
   --logo-gap: clamp(1.75rem, 4vw, 3.5rem);
@@ -499,6 +501,11 @@ body {
   display: flex;
   width: max-content;
   animation: logo-scroll 42s linear infinite;
+  /* Runs against the hero glyph map above it. Both strips once travelled the
+     same way, so the pair read as one coupled mechanism. Opposing them sets
+     the two apart as separate layers. The shorthand above resets the
+     direction, so this has to follow it. */
+  animation-direction: reverse;
 }
 .logo-strip:hover .logo-marquee,
 .logo-strip:focus-within .logo-marquee {
@@ -520,7 +527,9 @@ body {
   }
 }
 [dir="rtl"] .logo-marquee {
-  animation-direction: reverse;
+  /* Back to normal, which is the mirror of the reverse set above. The map
+     flips on an RTL page too, so the two stay opposed in both directions. */
+  animation-direction: normal;
 }
 
 /* --- Ecosystem project cards -------------------------------------------- */
