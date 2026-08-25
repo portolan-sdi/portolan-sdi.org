@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { DitherMap } from "./dither-map";
+import { GlyphMap } from "./glyph-map";
 import { SiteShell } from "./site-rail";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
@@ -224,7 +224,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
     <SiteShell>
       {/* Hero */}
       <section id="top" className="relative border-b border-p-line overflow-hidden">
-        <DitherMap className="absolute inset-0 w-full h-full opacity-80" />
+        <GlyphMap className="absolute inset-0 w-full h-full" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">

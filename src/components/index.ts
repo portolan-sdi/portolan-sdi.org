@@ -1,5 +1,5 @@
 export { PortolanLogo } from "./portolan-logo";
-export { DitherMap } from "./dither-map";
+export { GlyphMap } from "./glyph-map";
 export { LiveCount } from "./live-count";
 export { HomePage } from "./home-page";
 export { SiteShell } from "./site-rail";

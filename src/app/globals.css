@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Hero legibility scrim over the dither map — light enough that the map
+  /* Hero legibility scrim over the glyph map — light enough that the map
      stays visible. The opaque end must sit under the headline, which is
      text-start in every locale, so the RTL block below flips the direction.
      Logical keywords (`to inline-end`) do not resolve in any current engine,
@@ -289,7 +289,7 @@ body {
   /* The margin is not animated. Only the rail's transform is, which the
      compositor handles on its own layer. Easing the margin instead would
      relayout <main> on every frame for 280ms, and <main> holds the MapLibre
-     canvas and the three.js dither map, both of which resize on reflow. The
+     canvas and the hero glyph map, both of which resize on reflow. The
      content reflows once, then the rail slides away over it. */
   .site-main {
     margin-inline-start: var(--p-rail);
@@ -444,6 +444,40 @@ body {
 .logo-link:hover .logo-mono,
 .logo-link:focus-visible .logo-mono {
   background-color: var(--p-ink);
+}
+
+/* --- Hero glyph map drift ----------------------------------------------
+   The map rasterizes once, then drifts as a ticker, on the same principle
+   as the logo marquee below it. Identical tiles sit side by side and the
+   track translates by exactly one tile, so the loop has no seam.
+
+   The transform runs on the compositor. Re-rendering the glyph grid each
+   frame cannot look smooth at this speed: the drift covers about 33 px per
+   second and a character cell is about 6.5 px wide, so the raster would
+   step only five times a second whatever the frame rate.
+
+   The distance and the duration come from the component, which measures a
+   world span after layout. Direction-aware, to match the marquee. Under
+   reduced motion the track holds still. */
+.glyph-drift {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+}
+.glyph-drift[data-drifting="true"] {
+  animation: glyph-drift var(--glyph-drift-duration, 40s) linear infinite;
+}
+@keyframes glyph-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-1 * var(--glyph-drift-distance, 0px)));
+  }
+}
+[dir="rtl"] .glyph-drift[data-drifting="true"] {
+  animation-direction: reverse;
 }
 
 /* --- Supporter logo marquee --------------------------------------------

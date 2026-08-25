@@ -42,3 +42,6 @@ next-env.d.ts
 
 # superpowers plans / specs (local only)
 docs/superpowers/
+
+# bake script tile cache (local only)
+/.cache/
