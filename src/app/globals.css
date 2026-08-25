@@ -472,8 +472,10 @@ body {
    step only five times a second whatever the frame rate.
 
    The distance and the duration come from the component, which measures a
-   world span after layout. Direction-aware, to match the marquee. Under
-   reduced motion the track holds still. */
+   world span after layout. The map is a raster of text glyphs, so the frame
+   is pinned to `dir="ltr"` in the component and the drift never mirrors. The
+   map reads the same in every locale. Under reduced motion the track holds
+   still. */
 .glyph-drift {
   display: flex;
   width: max-content;
@@ -491,18 +493,15 @@ body {
     transform: translateX(calc(-1 * var(--glyph-drift-distance, 0px)));
   }
 }
-[dir="rtl"] .glyph-drift[data-drifting="true"] {
-  animation-direction: reverse;
-}
 
 /* --- Supporter logo marquee --------------------------------------------
    The strip auto-scrolls as a seamless ticker: two identical tracks sit
    side by side and the pair translates by exactly one track width, so the
    loop has no seam. Hover or focus pauses it; both inline edges fade so
    logos drift in and out instead of clipping. The track runs against the hero
-   glyph map above it, and both flip on an RTL page, so the two stay opposed in
-   either direction. The logos themselves never mirror, only the track
-   translates.
+   glyph map above it. The map holds one direction in every locale, so the
+   strip flips on an RTL page and the two stay opposed there. The logos
+   themselves never mirror, only the track translates.
    Under reduced-motion the clone is dropped and the single row wraps flat. */
 .logo-strip {
   --logo-gap: clamp(1.75rem, 4vw, 3.5rem);
