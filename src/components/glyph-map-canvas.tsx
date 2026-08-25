@@ -254,6 +254,10 @@ export default function GlyphMapCanvas({
         charMode: RENDER === "wire" ? "braille" : "ascii",
         useColors: true,
         glyphPalette: "default",
+        // Rasterize at 2x and average down. The map is drawn once and then
+        // translated, so the documented N-squared cost lands on a single
+        // frame at load and buys smoother coastlines for the whole session.
+        supersample: 2,
         directionalLight: {
           direction: lightDirection(LIGHT_AZ, LIGHT_EL),
           intensity: LIGHT_INTENSITY,
