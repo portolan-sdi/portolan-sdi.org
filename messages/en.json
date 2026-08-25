@@ -13,14 +13,14 @@
     "collapse": "Collapse the index",
     "expand": "Index",
     "faq": "FAQ",
-    "coverage": "Coverage"
+    "coverage": "Explore catalogs"
   },
   "hero": {
     "title": "Portolan makes geospatial data",
     "titleAccent": "easy to share and use.",
     "description": "Portolan combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale. This makes data easier to find, understand, and analyze in new ways.",
     "howItWorks": "How it works",
-    "browseCatalogs": "Browse catalogs"
+    "exploreCatalogs": "Explore catalogs"
   },
   "involved": {
     "ariaLabel": "Users and supporters"
@@ -124,7 +124,27 @@
     }
   },
   "coverage": {
-    "cta": "Explore the registry",
+    "title": "Explore catalogs",
+    "blurb": "See independently hosted geospatial catalogs from publishers around the world.",
+    "cta": "Browse the registry",
+    "featuredLabel": "Featured catalogs",
+    "featured": {
+      "global-data": {
+        "title": "Agricultural field boundaries",
+        "publisher": "Fields of the World",
+        "place": "Worldwide"
+      },
+      "portolan-nl": {
+        "title": "Dutch national geodata",
+        "publisher": "Portolan NL",
+        "place": "Netherlands"
+      },
+      "trimet": {
+        "title": "Regional transit data",
+        "publisher": "TriMet",
+        "place": "Portland, Oregon"
+      }
+    },
     "about": "This map shows where data in the Portolan registry is available. Each hexagon is shaded by the number of distinct catalogs with at least one collection covering that area.",
     "cell": {
       "catalogs": "{count, plural, one {# catalog} other {# catalogs}}"
@@ -133,6 +153,10 @@
     "legend": "catalogs per cell"
   },
   "registry": {
+    "meta": {
+      "title": "Registry",
+      "description": "Every Portolan catalog the registry tracks. Browse them on a map or as cards, see when each one was last checked, and submit your own."
+    },
     "title": "Browse {count} catalogs",
     "search": {
       "placeholder": "Search catalogs...",

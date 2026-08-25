@@ -2,27 +2,39 @@
 
 import { ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useRevealed } from "@/hooks/use-revealed";
 
 const COST_CALCULATOR =
   "https://cholmes.github.io/open-geodag-presentation/calculator.html";
-// The registry section at the foot of this page, which opens on the map. A
-// plain hash is correct in every locale, and it matches how the rail links
-// its own section anchors. This used to open the external browser, which is
-// a different thing from the registry the sentence names.
-const REGISTRY = "#registry";
+// The registry page, which opens on the map. It is a route, so it goes
+// through the locale-aware Link and keeps the /es and /ar prefix. This used to
+// open the external browser, which is a different thing from the registry the
+// sentence names.
+const REGISTRY = "/registry";
+
+const INLINE_LINK =
+  "text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink";
 
 // Inline links inside translated prose. The <cost> and <reg> tags are part of
 // the message contract and carry the same text span in every locale.
 function inlineLink(href: string) {
   return function link(chunks: ReactNode) {
     return (
-      <a
-        href={href}
-        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
-      >
+      <a href={href} className={INLINE_LINK}>
         {chunks}
       </a>
+    );
+  };
+}
+
+// The same link for a route on this site.
+function inlineRouteLink(href: string) {
+  return function link(chunks: ReactNode) {
+    return (
+      <Link href={href} className={INLINE_LINK}>
+        {chunks}
+      </Link>
     );
   };
 }
@@ -89,7 +101,7 @@ export function WhoForSection() {
                 <p className="mt-4 text-body leading-[1.7] text-p-ink text-pretty">
                   {t.rich(`stories.${key}.change`, {
                     cost: inlineLink(COST_CALCULATOR),
-                    reg: inlineLink(REGISTRY),
+                    reg: inlineRouteLink(REGISTRY),
                   })}
                 </p>
               </div>
