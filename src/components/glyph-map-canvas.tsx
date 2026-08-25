@@ -299,9 +299,13 @@ export default function GlyphMapCanvas({
 
   if (failed) return null;
 
+  // The map is a raster of text glyphs, so a right-to-left page reverses every
+  // glyph row and flips the tile order. The frame stays LTR in every locale,
+  // the same way a terminal block does.
   return (
     <div
       ref={frameRef}
+      dir="ltr"
       className={`relative overflow-hidden pointer-events-none transition-opacity duration-700 ${
         ready ? "opacity-100" : "opacity-0"
       } ${className}`}
