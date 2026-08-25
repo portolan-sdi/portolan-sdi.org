@@ -13,7 +13,8 @@
     "external": "External",
     "who": "Who it's for",
     "collapse": "Collapse the index",
-    "expand": "Index"
+    "expand": "Index",
+    "faq": "FAQ"
   },
   "hero": {
     "title": "Portolan makes geospatial data",
@@ -235,6 +236,64 @@
         "attribution": "Open Geodag",
         "description": "Estimate the cost of publishing your data as a Portolan catalog.",
         "alt": "The calculator, comparing monthly storage and egress costs across three providers."
+      }
+    },
+    "faqLink": "Read the FAQ"
+  },
+  "faq": {
+    "meta": {
+      "title": "Frequently asked questions",
+      "description": "Answers to common questions about Portolan. How it relates to STAC and cloud-optimized formats, why it does not need a serving layer, what conformance guarantees, and what it cannot do yet."
+    },
+    "title": "Frequently asked questions",
+    "items": {
+      "standards": {
+        "q": "Isn’t Portolan just STAC and cloud-optimized formats?",
+        "p1": "Portolan builds directly on STAC, GeoParquet, COG, PMTiles, and related standards. The difference is that those standards intentionally leave many implementation choices open, while Portolan defines and validates a quality floor for publishing geospatial data well.",
+        "p2": "For example, Portolan requires GeoParquet to be spatially ordered and include spatial statistics that let clients skip irrelevant row groups. It requires COGs to include useful overviews and embedded statistics, and requires hosted assets to support HTTP range requests and browser access through CORS. The goal is not just to use cloud-native formats in name, but to use them in ways that reliably deliver the performance and ergonomics they are supposed to provide.",
+        "p3": "See the <spec>Portolan specification</spec> and <rashid>rashid</rashid>, the Portolan validator."
+      },
+      "servers": {
+        "q": "Why not just use GeoServer, PostGIS, or an OGC API?",
+        "p1": "For public, read-heavy data, Portolan is based on the idea that a dedicated serving layer is usually unnecessary.",
+        "p2": "Modern clients can work directly with cloud-optimized files. DuckDB can query remote Parquet and GeoParquet with filtering, joins, and spatial operations. QGIS, BigQuery, Sedona, and other tools can work with the same underlying data. Portolan can also publish PMTiles and styles so interactive web maps do not need an on-demand tile server. You can still put an API, database, or application service on top when a particular use case needs one. Portolan removes the requirement that every dataset depend on one just to be accessible."
+      },
+      "staticFiles": {
+        "q": "Don’t static files give up capabilities that APIs provide?",
+        "p1": "Much less than they used to.",
+        "p2": "Filtering, reprojection, joins, spatial analysis, and other operations can increasingly happen in clients or analytical engines such as DuckDB, BigQuery, and Sedona. Visualization can be handled with pre-generated PMTiles or directly from source data, rather than requiring a tile-generation service.",
+        "p3": "Some capabilities are still outside Portolan’s current scope. Access-controlled data is planned for v1.0, while transactional editing workflows are not yet supported."
+      },
+      "conformance": {
+        "q": "What does Portolan conformance actually guarantee?",
+        "p1": "A catalog does not conform simply because it declares the Portolan extension. It conforms only if it passes the Portolan validator.",
+        "p2": "Validation covers the STAC structure, Portolan metadata requirements, and requirements that can only be checked by inspecting the data itself, such as GeoParquet spatial ordering, row-group statistics, and embedded COG statistics.",
+        "p3": "A conformant catalog therefore provides more than valid metadata. It gives users and software a stronger guarantee that the data are structured, hosted, documented, and optimized in predictable ways."
+      },
+      "lockIn": {
+        "q": "Does Portolan replace one proprietary platform with another?",
+        "p1": "No. Avoiding that is a core part of the architecture.",
+        "p2": "Portolan standardizes the published catalog, not the cloud provider, publishing workflow, user interface, analytical engine, or commercial vendor around it.",
+        "p3": "If a commercial product creates and manages a Portolan catalog and you later stop using that product, the published catalog still works. Another tool, provider, or vendor can take over.",
+        "p4": "The goal is an ecosystem of competing and interoperable implementations, not a vertically integrated Portolan platform."
+      },
+      "dataModel": {
+        "q": "Does Portolan standardize my data model?",
+        "p1": "No. Portolan standardizes how data are packaged, documented, hosted, and accessed. It does not prescribe one universal schema for roads, buildings, parcels, administrative boundaries, or other domain data.",
+        "p2": "Semantic standards and shared schemas can sit on top of Portolan where they are useful. Portolan addresses a different layer of interoperability: making differently produced datasets consistently discoverable, queryable, documented, and usable with common tools."
+      },
+      "agents": {
+        "q": "Why are agents part of a data publishing standard?",
+        "p1": "Agents are becoming another major class of data user, and that changes some of the assumptions behind public data infrastructure.",
+        "p2": "Agents can inspect and query many datasets quickly, so Portolan assumes catalogs will be consumed programmatically at scale. Every catalog and collection therefore includes an <m>AGENTS.md</m> file that can document access patterns, useful queries, data-quality notes, schema conventions, and other guidance that helps software use the data correctly.",
+        "p3": "Agents are not required to publish or consume Portolan data. The CLI provides a deterministic publishing workflow, and standard tools can use the resulting catalogs directly. Agent-readiness is a design requirement, not a dependency on any particular AI system."
+      },
+      "gaps": {
+        "q": "What can’t Portolan do yet?",
+        "p1": "Portolan is still early-stage, and the specification and tooling are evolving as we test them against more publishers, datasets, and use cases.",
+        "p2": "Current gaps include access-controlled data, transactional editing workflows, and normative support for formats such as Zarr and COPC. The CLI will also continue to evolve as publishing and migration workflows improve.",
+        "p3": "Our near-term focus is to test Portolan against a diverse set of reference catalogs, stabilize the core specification, and reach a stable v1.0 CLI. Until then, breaking changes remain possible, so Portolan is currently best suited to early adopters.",
+        "p4": "See the <roadmap>project roadmap</roadmap> for current work and linked issues."
       }
     }
   }

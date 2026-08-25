@@ -10,26 +10,32 @@ export const SITE_ORIGIN = "https://www.portolan-sdi.org";
 /**
  * Path for a locale under `localePrefix: "as-needed"`: the default locale is
  * served unprefixed, every other locale carries its prefix.
+ *
+ * `route` is a page path under the locale, such as `/faq`. It defaults to the
+ * home page, so the original single-route call sites read the same.
  */
-export function localePath(locale: string): string {
-  return locale === routing.defaultLocale ? "/" : `/${locale}`;
+export function localePath(locale: string, route = "/"): string {
+  const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
+  const suffix = route === "/" ? "" : route;
+  return `${prefix}${suffix}` || "/";
 }
 
-/** Absolute canonical URL for a locale's home page. */
-export function localeUrl(locale: string): string {
-  const path = localePath(locale);
+/** Absolute canonical URL for a locale's copy of a route. */
+export function localeUrl(locale: string, route = "/"): string {
+  const path = localePath(locale, route);
   return path === "/" ? SITE_ORIGIN : `${SITE_ORIGIN}${path}`;
 }
 
 /**
- * hreflang map for every locale, plus x-default pointing at the unprefixed
- * default so crawlers have an explicit fallback for unmatched languages.
+ * hreflang map for every locale's copy of one route, plus x-default pointing
+ * at the unprefixed default so crawlers have an explicit fallback for
+ * unmatched languages.
  */
-export function alternateLanguages(): Record<string, string> {
+export function alternateLanguages(route = "/"): Record<string, string> {
   const languages: Record<string, string> = {};
   for (const locale of routing.locales) {
-    languages[locale] = localeUrl(locale);
+    languages[locale] = localeUrl(locale, route);
   }
-  languages["x-default"] = localeUrl(routing.defaultLocale);
+  languages["x-default"] = localeUrl(routing.defaultLocale, route);
   return languages;
 }

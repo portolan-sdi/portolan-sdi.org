@@ -587,3 +587,54 @@ body {
     padding-inline: var(--p-pad-section-x);
   }
 }
+
+
+/* FAQ disclosure rows.
+
+   The list is native <details> elements sharing one `name`, so the browser
+   opens a single row at a time and every answer stays in the DOM. Height
+   animates through ::details-content, which needs interpolate-size to read
+   `auto` as a length. A browser without either opens instantly, which is the
+   correct fallback rather than a broken one. */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+/* Both markers have to go: Safari draws the WebKit pseudo-element, and the
+   others draw a list marker. */
+.faq-row > summary::-webkit-details-marker {
+  display: none;
+}
+.faq-row > summary::marker {
+  content: "";
+}
+
+.faq-row::details-content {
+  block-size: 0;
+  overflow: clip;
+  opacity: 0;
+  transition:
+    block-size 280ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 200ms ease-out,
+    content-visibility 280ms allow-discrete;
+}
+
+.faq-row[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+/* The row a deep link arrives on opens at full height in one frame, so the
+   page has grown before the scroll measures it. */
+.faq-row[data-instant]::details-content {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-row::details-content {
+    transition: none;
+    opacity: 1;
+  }
+}

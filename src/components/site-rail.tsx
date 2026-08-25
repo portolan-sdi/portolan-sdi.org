@@ -12,19 +12,54 @@ import { DirArrow } from "./ui";
 // --p-rail. Below md the rail is an off-canvas drawer opened from a mono
 // "Index" button. Section labels reuse the existing section eyebrows so copy
 // stays in one place.
+//
+// The item list is a prop so a standalone page can index its own contents
+// instead of the homepage's. An item with no `href` is an in-page anchor; an
+// item with one is a route, and routes use the locale-aware Link so /es and
+// /ar keep their prefix.
 
 const DOCS_URL = "https://portolan-sdi.github.io/portolan-cli";
 const GITHUB_URL = "https://github.com/portolan-sdi";
 
-// In-page anchors, in document order. `label` is the translation key to read.
-const SECTIONS = [
+export type RailItem = {
+  /** Element id on the current page, and the React key. */
+  id: string;
+  /** Translation key to read for the label. */
+  label: string;
+  /** Set for a route. Omit for an in-page anchor. */
+  href?: string;
+};
+
+// The homepage index, in document order.
+const HOME_ITEMS: RailItem[] = [
   { id: "why", label: "nav.why" },
   { id: "who", label: "nav.who" },
   { id: "how", label: "howItWorks.eyebrow" },
   { id: "ecosystem", label: "ecosystem.eyebrow" },
   { id: "resources", label: "resources.title" },
   { id: "registry", label: "nav.registry" },
-] as const;
+  { id: "faq", label: "nav.faq", href: "/faq" },
+];
+
+/**
+ * The same index for a page that is not the homepage. Every section anchor
+ * becomes a route to the homepage's copy of it, because a bare `#why` on
+ * /faq points at an element that does not exist there.
+ */
+export const AWAY_ITEMS: RailItem[] = HOME_ITEMS.map((item) =>
+  item.href ? item : { ...item, href: `/#${item.id}` },
+);
+
+interface SiteShellProps {
+  children: React.ReactNode;
+  /** Defaults to the homepage index. Pass AWAY_ITEMS from another page. */
+  navItems?: RailItem[];
+  /**
+   * Highlights this id and turns the scroll spy off. A page with no observable
+   * sections of its own names its own rail entry instead.
+   */
+  activeId?: string | null;
+}
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -38,21 +73,36 @@ function useIsDesktop() {
   return isDesktop;
 }
 
-export function SiteShell({ children }: { children: React.ReactNode }) {
+export function SiteShell({
+  children,
+  navItems = HOME_ITEMS,
+  activeId: activeIdProp,
+}: SiteShellProps) {
   const t = useTranslations();
   const isDesktop = useIsDesktop();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [spiedId, setSpiedId] = useState<string | null>(null);
   // Desktop only. The rail holds eight links in 264px, which is 18% of a
   // 1440px viewport, so the reader can give that width back to the content.
   const [collapsed, setCollapsed] = useState(false);
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
-  // Highlight the section currently in view.
+  const spyOn = activeIdProp === undefined;
+  const activeId = spyOn ? spiedId : activeIdProp;
+
+  // Highlight the section currently in view. Anchors only: a route has no
+  // element on this page to observe.
+  const anchorKey = navItems
+    .filter((item) => !item.href)
+    .map((item) => item.id)
+    .join(",");
+
   useEffect(() => {
-    const ids = SECTIONS.map((s) => s.id);
-    const els = ids
+    if (!spyOn) return;
+    const els = anchorKey
+      .split(",")
+      .filter(Boolean)
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
     if (els.length === 0) return;
@@ -61,13 +111,13 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActiveId(visible.target.id);
+        if (visible) setSpiedId(visible.target.id);
       },
       { rootMargin: "-40% 0px -55% 0px" },
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, []);
+  }, [anchorKey, spyOn]);
 
   // Close the mobile drawer on Escape.
   useEffect(() => {
@@ -88,6 +138,8 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
   const navLinkBase =
     "flex items-center justify-between gap-2 py-[9px] text-body transition-colors";
+  const groupLabelClass =
+    "px-[22px] pt-4 pb-1.5 font-mono text-eyebrow tracking-[0.04em] text-p-ink-3";
 
   return (
     <div className="min-h-screen bg-p-bg font-sans">
@@ -117,30 +169,37 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
         <div className="flex-1 overflow-y-auto py-3.5">
           <ul className="px-[22px]">
-            {SECTIONS.map((s) => {
-              const active = activeId === s.id;
+            {navItems.map((item) => {
+              const active = activeId === item.id;
+              const className = `${navLinkBase} ${
+                active ? "text-p-primary" : "text-p-ink hover:text-p-primary"
+              }`;
               return (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    onClick={closeDrawer}
-                    aria-current={active ? "true" : undefined}
-                    className={`${navLinkBase} ${
-                      active
-                        ? "text-p-primary"
-                        : "text-p-ink hover:text-p-primary"
-                    }`}
-                  >
-                    {t(s.label)}
-                  </a>
+                <li key={item.id}>
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      onClick={closeDrawer}
+                      className={className}
+                    >
+                      {t(item.label)}
+                    </Link>
+                  ) : (
+                    <a
+                      href={`#${item.id}`}
+                      onClick={closeDrawer}
+                      aria-current={active ? "true" : undefined}
+                      className={className}
+                    >
+                      {t(item.label)}
+                    </a>
+                  )}
                 </li>
               );
             })}
           </ul>
 
-          <div className="px-[22px] pt-4 pb-1.5 font-mono text-eyebrow tracking-[0.04em] text-p-ink-3">
-            {t("nav.external")}
-          </div>
+          <div className={groupLabelClass}>{t("nav.external")}</div>
           <ul className="px-[22px]">
             <li>
               <a
