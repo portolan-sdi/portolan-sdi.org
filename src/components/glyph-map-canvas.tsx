@@ -16,13 +16,21 @@ interface WorldRelief {
   y: number[];
   z: number[];
   b: number[];
+  /** Band contours. `s` runs six numbers to a segment. */
+  wire: { b: number; s: number[] }[];
 }
 
 type Vec3 = [number, number, number];
 
 /**
- * Elevation ramp. One neutral grey gradient, palest at the sea floor and
- * darkest at the peaks, so the map reads as a single ink on cream paper.
+ * Contour ramp. One blue gradient in the accent hue from globals.css, so the
+ * map reads as a single ink on cream paper.
+ *
+ * The index is a band, not a height ramp. Band 1 is the coastline and it holds
+ * 1,625 of the 3,201 segments, so it carries the shape of the map and takes
+ * --p-primary at full strength. Bands 3 to 8 are elevation contours. They step
+ * from a lighter tint up to --p-primary-ink, so relief reads without competing
+ * with the shoreline. Bands 0 and 2 carry no segments.
  *
  * Water covers about 68 percent of the grid, so bands 0 to 2 stay near the
  * page background. A strong tone over that much area buries the headline.
@@ -33,23 +41,23 @@ type Vec3 = [number, number, number];
  * step.
  */
 const BAND_COLORS = [
-  "#eeeeea",
-  "#e8e8e3",
-  "#e1e1dc",
-  "#8d8d85",
-  "#7c7c74",
-  "#6a6a63",
-  "#575751",
-  "#464640",
-  "#35352f",
+  "#8fa2e2",
+  "#4163cc",
+  "#8fa2e2",
+  "#8fa2e2",
+  "#7288d8",
+  "#5f78d0",
+  "#4e69c8",
+  "#3c57b6",
+  "#2d4aa8",
 ];
 
 /** Camera and light settings, from the reference glyphcss flat map. */
 const ROT_X = 40;
 const ROT_Y = 0;
-const ZOOM = 535.797293;
+const ZOOM = 474.716401;
 const RELIEF = 0.2;
-const DENSITY = 1.6;
+const DENSITY = 2.4;
 const LIGHT_AZ = 50;
 const LIGHT_EL = 50;
 const LIGHT_INTENSITY = 1.15;
@@ -59,13 +67,12 @@ const AMBIENT_INTENSITY = 0.4;
 const BASE_FONT_PX = 13;
 
 /**
- * Character encoding. The reference map runs the ASCII ramp on a black page,
- * where a sparse bright mark carries plenty of contrast. This page is cream,
- * and an ASCII mark inks only a fraction of its cell, so the same ramp renders
- * the continents as a pale wash whatever colour they carry. Half-block cells
- * fill, so the land reads as land.
+ * Character encoding. Braille cells carry a 2 by 4 dot grid, so a contour runs
+ * as a continuous curve instead of a staircase of box-drawing rules. The
+ * junction pass and the half-block cells are documented no-ops here, because
+ * both belong to the ASCII wireframe path and to solid mode.
  */
-const CHAR_MODE = "halfblock" as const;
+const CHAR_MODE = "braille" as const;
 
 /**
  * Width of one world, in CSS pixels.
@@ -103,22 +110,22 @@ function lightDirection(azDeg: number, elDeg: number): Vec3 {
   ];
 }
 
-/** Expand the grid into one quad per cell. */
-function buildPolygons(grid: WorldRelief) {
-  const { n, x, y, z, b } = grid;
-  const w = n + 1;
-  const polygons = new Array(n * n);
-  for (let iy = 0; iy < n; iy++) {
-    for (let ix = 0; ix < n; ix++) {
-      polygons[iy * n + ix] = {
-        vertices: [
-          [x[ix], y[iy], z[iy * w + ix]],
-          [x[ix + 1], y[iy], z[iy * w + ix + 1]],
-          [x[ix + 1], y[iy + 1], z[(iy + 1) * w + ix + 1]],
-          [x[ix], y[iy + 1], z[(iy + 1) * w + ix]],
-        ] as Vec3[],
-        color: BAND_COLORS[b[iy * n + ix]] ?? BAND_COLORS[0],
-      };
+/**
+ * Turn the band contours into drawable lines.
+ *
+ * The renderer takes polygons, so each segment becomes a degenerate triangle
+ * that runs out to its far end and back. Band 1 is the coastline. Bands 3 to 8
+ * are elevation contours, and each takes a darker step of the ramp.
+ */
+function buildContours(grid: WorldRelief) {
+  const polygons = [];
+  for (const band of grid.wire) {
+    const color = BAND_COLORS[band.b] ?? BAND_COLORS[0];
+    const s = band.s;
+    for (let i = 0; i + 5 < s.length; i += 6) {
+      const from: Vec3 = [s[i], s[i + 1], s[i + 2]];
+      const to: Vec3 = [s[i + 3], s[i + 4], s[i + 5]];
+      polygons.push({ vertices: [from, to, from], color });
     }
   }
   return polygons;
@@ -182,7 +189,7 @@ export default function GlyphMapCanvas({
       scene = createGlyphScene(stage, {
         camera,
         autoSize: true,
-        mode: "solid",
+        mode: "wireframe",
         charMode: CHAR_MODE,
         useColors: true,
         glyphPalette: "default",
@@ -194,11 +201,14 @@ export default function GlyphMapCanvas({
       });
       scene.output.style.fontSize = `${BASE_FONT_PX / DENSITY}px`;
       scene.output.style.fontFamily = "var(--p-mono)";
-      // Half-block cells fill their box, so any leading between rows shows up
-      // as white banding across the map.
+      // Braille dots are hairlines at this cell size. Weight carries the
+      // contour on a cream page, where a thin line disappears.
+      scene.output.style.fontWeight = "700";
+      // Cells butt against each other, so any leading between rows shows up as
+      // banding across the map.
       scene.output.style.lineHeight = "1";
       scene.fit();
-      scene.add(buildPolygons(grid), { scale: [1, 1, RELIEF] });
+      scene.add(buildContours(grid), { scale: [1, 1, RELIEF] });
       scene.rerender();
 
       // One tile per world, plus one so the trailing edge never enters view

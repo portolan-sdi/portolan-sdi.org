@@ -13,12 +13,19 @@
  *   NOAA ETOPO1 Global Relief Model. Public domain.
  *   https://www.ncei.noaa.gov/products/etopo-global-relief-model
  *
- * The tile ships three surfaces. This script keeps the solid one and drops
- * `coast` and `wire`, which the hero never renders. It then rewrites that
- * surface as a grid, because the tile stores every vertex coordinate as a
- * float even though the vertices sit on a regular 97 x 97 lattice. Storing the
- * 97 x and 97 y coordinates once, plus a flat elevation array and a flat band
- * array, is lossless. It costs about 7 KB over the wire instead of 134 KB.
+ * The tile ships three surfaces. This script keeps two of them.
+ *
+ * The solid surface becomes a grid, because the tile stores every vertex
+ * coordinate as a float even though the vertices sit on a regular 97 x 97
+ * lattice. Storing the 97 x and 97 y coordinates once, plus a flat elevation
+ * array and a flat band array, is lossless. It costs about 7 KB over the wire
+ * instead of 134 KB.
+ *
+ * The `wire` surface holds the band contours, which is what the hero draws.
+ * Band 1 is the coastline and bands 3 to 8 are elevation contours. Drawing the
+ * grid edges instead would render a uniform mesh over land and sea alike, which
+ * carries no coastline. `coast` is dropped, because the wire bands already
+ * carry the shoreline in 3D.
  *
  * The `x` axis carries latitude at Mercator spacing. The `y` axis carries
  * longitude at linear spacing. A land fraction histogram confirms this. The
@@ -101,6 +108,13 @@ function bake(tile) {
     throw new Error(`grid has holes: ${holesZ} elevations, ${holesB} bands`);
   }
 
+  // Band contours. Each entry holds a band index and a flat run of segment
+  // endpoints, six numbers to a segment.
+  const wire = (tile.wire ?? []).map((entry) => ({
+    b: entry.b,
+    s: entry.segs.map((v) => Math.round(v * 1e5) / 1e5),
+  }));
+
   return {
     _source:
       "NOAA ETOPO1 (public domain), via glyphcss (MIT, (c) 2025 Layoutit)",
@@ -110,6 +124,7 @@ function bake(tile) {
     y: ys,
     z,
     b,
+    wire,
   };
 }
 
@@ -120,8 +135,10 @@ await mkdir(path.dirname(OUT), { recursive: true });
 const json = JSON.stringify(grid);
 await writeFile(OUT, json + "\n");
 
+const segments = grid.wire.reduce((n, w) => n + w.s.length / 6, 0);
 console.log(
   `wrote ${OUT}: ${grid.z.length} elevations, ${grid.b.length} bands, ` +
+    `${segments} contour segments in ${grid.wire.length} bands, ` +
     `${json.length} bytes raw, ` +
     `${gzipSync(json, { level: 9 }).length} bytes gzip`
 );
