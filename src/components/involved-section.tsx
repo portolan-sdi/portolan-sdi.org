@@ -1,9 +1,10 @@
 import { useTranslations } from "next-intl";
 import { Ltr } from "./ui";
 
-// Credibility strip below the ecosystem section: a mix of users and
-// supporters, so there is no "Supported by" label. The logos stand alone, each
-// linking to its canonical site.
+// Credibility strip below "Who it's for": a mix of users and supporters, so
+// there is no "Supported by" label. The logos stand alone, each linking to its
+// canonical site. Some of these organizations build on Portolan and some
+// publish with it, and the strip does not say which is which.
 // Logos render as flat monochrome grey via CSS mask-image (see .logo-mono), so
 // any source (color SVG, or a PNG's alpha) recolors uniformly; reaching the
 // strip turns the row accent blue. `aspect` = intrinsic width/height; `h` is the px height.

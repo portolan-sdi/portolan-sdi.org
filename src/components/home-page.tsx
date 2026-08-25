@@ -223,7 +223,10 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   return (
     <SiteShell>
       {/* Hero */}
-      <section id="top" className="relative border-b border-p-line overflow-hidden">
+      {/* No bottom rule. Every following section carries its own top rule, so
+          a bottom rule here would stack with it and draw 2px where the rest of
+          the page draws 1px. */}
+      <section id="top" className="relative overflow-hidden">
         <GlyphMap className="absolute inset-0 w-full h-full" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
@@ -311,6 +314,12 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* Who it's for — the page's one reversed surface */}
       <WhoForSection />
 
+      {/* Users and supporters. Placed against "Who it's for" so the reader
+          meets the audience and then the organizations without a label saying
+          which logo is which. Some build on Portolan and some publish with it,
+          and the strip carries no heading that would separate the two. */}
+      <InvolvedSection />
+
       {/* How it works */}
       <section id="how" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
@@ -391,11 +400,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* Ecosystem — the Portolan projects plus the wider format ecosystem */}
       <EcosystemSection />
 
-      {/* Users and supporters — the organizations around that ecosystem. This
-          sits with the ecosystem rather than under the hero. Both answer what
-          surrounds Portolan, one in projects and formats, the other in the
-          organizations that publish with it. */}
-      <InvolvedSection />
 
       {/* Talks & demos */}
       <ResourcesSection />
