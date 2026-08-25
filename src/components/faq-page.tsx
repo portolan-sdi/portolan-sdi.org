@@ -34,12 +34,12 @@ const ROADMAP_URL = "https://github.com/portolan-sdi";
 const ITEMS = [
   { key: "standards", paras: 3 },
   { key: "servers", paras: 2 },
-  { key: "staticFiles", paras: 3 },
-  { key: "conformance", paras: 3 },
-  { key: "lockIn", paras: 4 },
+  { key: "capabilities", paras: 5 },
+  { key: "conformance", paras: 2 },
+  { key: "lockIn", paras: 2 },
   { key: "dataModel", paras: 2 },
   { key: "agents", paras: 3 },
-  { key: "gaps", paras: 4 },
+  { key: "gaps", paras: 2 },
 ] as const;
 
 const KEYS = new Set<string>(ITEMS.map((item) => item.key));
