@@ -10,7 +10,6 @@
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
     "index": "Índice",
-    "external": "Externo",
     "who": "Para quién es",
     "collapse": "Contraer el índice",
     "expand": "Índice",
@@ -35,9 +34,14 @@
   "footer": {
     "contentLicense": "El contenido del sitio tiene una licencia <cc><m>CC BY 4.0</m></cc>.",
     "sourceLicense": "El código fuente del sitio tiene una licencia <apache><m>Apache-2.0</m></apache>.",
-    "contact": "Contacto",
     "googleGroup": "Grupo de Google",
-    "slack": "Slack <m>#portolan</m>"
+    "slack": "Slack",
+    "community": "Comunidad",
+    "development": "Desarrollo",
+    "githubOrg": "Organización en GitHub",
+    "issues": "Incidencias abiertas",
+    "resources": "Recursos",
+    "repositories": "Repositorios"
   },
   "why": {
     "cards": {

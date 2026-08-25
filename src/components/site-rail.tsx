@@ -6,21 +6,20 @@ import { Link } from "@/i18n/navigation";
 import { PortolanLogo } from "./portolan-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { SiteFooter } from "./site-footer";
-import { DirArrow } from "./ui";
 
-// Primary navigation lives in a left rail (replaces the old minimal header +
-// footer nav). On md+ the rail is permanently pinned and the page is inset by
-// --p-rail. Below md the rail is an off-canvas drawer opened from a mono
-// "Index" button. Section labels reuse the existing section eyebrows so copy
-// stays in one place.
+// Primary navigation lives in a left rail (replaces the old minimal header).
+// On md+ the rail is permanently pinned and the page is inset by --p-rail.
+// Below md the rail is an off-canvas drawer opened from a mono "Index"
+// button. Section labels reuse the existing section eyebrows so copy stays in
+// one place.
+//
+// The rail indexes the page and nothing else. Every destination that leaves
+// the page (docs, GitHub, roadmap, issues) lives in SiteFooter instead.
 //
 // The item list is a prop so a standalone page can index its own contents
 // instead of the homepage's. An item with no `href` is an in-page anchor; an
 // item with one is a route, and routes use the locale-aware Link so /es and
 // /ar keep their prefix.
-
-const DOCS_URL = "https://portolan-sdi.github.io/portolan-cli";
-const GITHUB_URL = "https://github.com/portolan-sdi";
 
 export type RailItem = {
   /** Element id on the current page, and the React key. */
@@ -140,8 +139,6 @@ export function SiteShell({
 
   const navLinkBase =
     "flex items-center justify-between gap-2 py-[9px] text-body transition-colors";
-  const groupLabelClass =
-    "px-[22px] pt-4 pb-1.5 font-mono text-eyebrow tracking-[0.04em] text-p-ink-3";
 
   return (
     <div className="min-h-screen bg-p-bg font-sans">
@@ -199,26 +196,6 @@ export function SiteShell({
                 </li>
               );
             })}
-          </ul>
-
-          <div className={groupLabelClass}>{t("nav.external")}</div>
-          <ul className="px-[22px]">
-            <li>
-              <a
-                href={DOCS_URL}
-                className={`${navLinkBase} text-p-ink hover:text-p-primary`}
-              >
-                {t("nav.docs")} <DirArrow kind="external" />
-              </a>
-            </li>
-            <li>
-              <a
-                href={GITHUB_URL}
-                className={`${navLinkBase} text-p-ink hover:text-p-primary`}
-              >
-                GitHub <DirArrow kind="external" />
-              </a>
-            </li>
           </ul>
         </div>
 
