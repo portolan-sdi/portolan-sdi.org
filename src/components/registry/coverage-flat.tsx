@@ -14,7 +14,7 @@ import { useTranslations } from "next-intl";
  * whole world is on screen, and the only interaction is reading one cell.
  */
 
-const DATA_URL = "/data/a5-coverage-r4.json";
+const DATA_URL = "/data/a5-coverage-r5.json";
 
 const FILL_MIN_ALPHA = 0.16;
 const FILL_MAX_ALPHA = 0.85;
@@ -132,17 +132,29 @@ export default function CoverageFlat() {
   };
 
   if (!data) {
-    return <div className="w-full" style={{ aspectRatio: MAP_RATIO }} />;
+    return <div className="w-full flex-1" style={{ aspectRatio: MAP_RATIO }} />;
   }
 
   return (
-    <figure className="m-0">
+    <figure className="m-0 flex h-full w-full flex-col">
       {/* A picture of the world. It does not mirror, for the same reason the
-          hero map does not. The caption below it does follow the page. */}
-      <div ref={frameRef} dir="ltr" className="relative w-full">
+          hero map does not. The caption below it does follow the page.
+
+          The frame takes the drawing's own ratio where nothing constrains it,
+          and fills the height it is given where something does. Beside a
+          column of cards, the second rule makes the map end level with them at
+          every width. `slice` pays for that in longitude: the frame crops a
+          few degrees from each edge, which is open ocean and a handful of
+          Pacific island cells. */}
+      <div
+        ref={frameRef}
+        dir="ltr"
+        className="relative w-full min-h-0 flex-1 aspect-[1600/779] xl:aspect-auto overflow-hidden"
+      >
         <svg
           viewBox={`0 0 ${data.width} ${data.height}`}
-          className="block h-auto w-full"
+          preserveAspectRatio="xMidYMid slice"
+          className="block h-full w-full"
           role="img"
           aria-label={t("about")}
           onMouseMove={(event) => setHover(readAt(event))}

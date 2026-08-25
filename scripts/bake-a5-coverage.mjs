@@ -44,8 +44,15 @@ const outPath = (res) =>
  *   3 -> 960 cells worldwide, about 730 km across
  *   4 -> 3840 cells, about 365 km
  *   5 -> 15360 cells, about 180 km
+ *
+ * The site ships 5. At 4 a cell is wider than the Mediterranean, so a cell of
+ * open water touches Europe at one corner and Africa at another, and the land
+ * test below keeps it. Europe, Africa, and Asia then read as one landmass. A
+ * land-area threshold does not repair this, because 46 of the 48 cells the
+ * Mediterranean touches at resolution 4 do hold land. Only a finer cell
+ * separates the two coasts.
  */
-const RESOLUTIONS = (process.argv[2] ?? "4")
+const RESOLUTIONS = (process.argv[2] ?? "5")
   .split(",")
   .map((value) => Number(value.trim()));
 
