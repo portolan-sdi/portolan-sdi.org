@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
+import { COMMUNITY_LINKS } from "@/lib/site";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 import { monoChunk } from "./ui";
 
@@ -27,7 +28,6 @@ import { monoChunk } from "./ui";
 
 const SPEC_URL = "https://github.com/portolan-sdi/portolan-spec";
 const RASHID_URL = "https://github.com/portolan-sdi/rashid";
-const ROADMAP_URL = "https://github.com/portolan-sdi";
 
 // `paras` is the paragraph count for that answer, so each item renders exactly
 // the keys it has.
@@ -217,7 +217,7 @@ export function FaqPage() {
                         m: monoChunk,
                         spec: inlineLink(SPEC_URL),
                         rashid: inlineLink(RASHID_URL, true),
-                        roadmap: inlineLink(ROADMAP_URL),
+                        roadmap: inlineLink(COMMUNITY_LINKS.roadmap),
                       })}
                     </p>
                   ))}

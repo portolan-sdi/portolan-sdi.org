@@ -14,7 +14,18 @@ export const SITE_ORIGIN = "https://www.portolan-sdi.org";
 export const COMMUNITY_LINKS = {
   github: "https://github.com/portolan-sdi",
   googleGroup: "https://groups.google.com/g/portolan",
-  openIssues: "https://github.com/orgs/portolan-sdi/projects/1/views/2",
+  /**
+   * Every open issue across the org. Uses global search, not the
+   * `github.com/issues?q=` dashboard, which asks a logged-out reader to sign
+   * in before it shows anything.
+   */
+  issues:
+    "https://github.com/search?q=org%3Aportolan-sdi+is%3Aissue+is%3Aopen&type=issues",
+  /**
+   * The roadmap is a file in portolan-ops, not the org project board. That
+   * board is private, so a public page cannot link it.
+   */
+  roadmap: "https://github.com/portolan-sdi/portolan-ops/blob/main/ROADMAP.md",
   slack: "https://cloudnativegeo.slack.com/archives/C0A1JBH9529",
 } as const;
 

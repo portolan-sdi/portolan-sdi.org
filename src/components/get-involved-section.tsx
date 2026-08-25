@@ -69,7 +69,7 @@ export function GetInvolvedSection() {
               ),
               issues: (chunks) => (
                 <a
-                  href={COMMUNITY_LINKS.openIssues}
+                  href={COMMUNITY_LINKS.issues}
                   className={proseLink}
                   {...external}
                 >

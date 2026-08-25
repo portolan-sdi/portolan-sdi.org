@@ -6,11 +6,9 @@
   "nav": {
     "registry": "Registry",
     "why": "Why Portolan",
-    "docs": "Docs",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
     "index": "Index",
-    "external": "External",
     "who": "Who it's for",
     "collapse": "Collapse the index",
     "expand": "Index",
@@ -35,9 +33,13 @@
   "footer": {
     "contentLicense": "Site content is licensed under <cc><m>CC BY 4.0</m></cc>.",
     "sourceLicense": "Website source is licensed under <apache><m>Apache-2.0</m></apache>.",
-    "contact": "Contact",
     "googleGroup": "Google Group",
-    "slack": "Slack <m>#portolan</m>"
+    "slack": "Slack",
+    "community": "Community",
+    "development": "Development",
+    "resources": "Resources",
+    "roadmap": "Roadmap",
+    "github": "GitHub"
   },
   "why": {
     "cards": {

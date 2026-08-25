@@ -6,11 +6,9 @@
   "nav": {
     "registry": "السجل",
     "why": "لماذا Portolan",
-    "docs": "التوثيق",
     "homeAria": "الصفحة الرئيسية لـ Portolan",
     "languageAria": "تغيير اللغة",
     "index": "الفهرس",
-    "external": "روابط خارجية",
     "who": "لمن هو",
     "collapse": "طي الفهرس",
     "expand": "الفهرس",
@@ -35,9 +33,13 @@
   "footer": {
     "contentLicense": "محتوى الموقع مرخّص بموجب <cc><m>CC BY 4.0</m></cc>.",
     "sourceLicense": "مصدر الموقع مرخّص بموجب <apache><m>Apache-2.0</m></apache>.",
-    "contact": "التواصل",
     "googleGroup": "مجموعة Google",
-    "slack": "Slack <m>#portolan</m>"
+    "slack": "Slack",
+    "community": "المجتمع",
+    "development": "التطوير",
+    "resources": "الموارد",
+    "roadmap": "خارطة الطريق",
+    "github": "GitHub"
   },
   "why": {
     "cards": {

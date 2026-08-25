@@ -4,8 +4,12 @@ import { COMMUNITY_LINKS, LICENSE_LINKS } from "@/lib/site";
 import { PortolanLogo } from "./portolan-logo";
 import { Ltr, monoChunk } from "./ui";
 
-const licenseLink =
-  "underline underline-offset-2";
+const licenseLink = "underline underline-offset-2";
+
+const external = { target: "_blank", rel: "noopener noreferrer" } as const;
+
+const columnLabel = "mb-2 font-mono text-eyebrow text-p-ink-3";
+const footLink = "text-p-ink-2 transition-colors hover:text-p-primary";
 
 export function SiteFooter() {
   const t = useTranslations();
@@ -13,33 +17,86 @@ export function SiteFooter() {
   return (
     <footer className="px-[var(--p-pad-section-x)] pb-6 pt-10">
       <div className="mx-auto max-w-[1240px]">
-        <div className="flex flex-col items-start gap-6 sm:flex-row sm:gap-10">
-          <Link href="/" aria-label={t("nav.homeAria")} className="w-fit">
+        {/* Logo on the inline-start edge, the link columns beside it. The
+            rail indexes the page, so every destination that leaves the page
+            lives here instead. */}
+        <div className="flex flex-col items-start gap-8 sm:flex-row sm:gap-12 lg:gap-20">
+          <Link
+            href="/"
+            aria-label={t("nav.homeAria")}
+            className="block w-fit shrink-0"
+          >
             <PortolanLogo size={30} />
           </Link>
 
-          <div className="text-start text-small">
-            <p className="mb-2 font-mono text-eyebrow text-p-ink-3">
-              {t("footer.contact")}
-            </p>
-            <div className="flex flex-col items-start gap-1">
-              <a
-                href={COMMUNITY_LINKS.googleGroup}
-                className="text-p-ink-2 transition-colors hover:text-p-primary"
-              >
-                {t("footer.googleGroup")}
-              </a>
-              <a
-                href={COMMUNITY_LINKS.slack}
-                className="text-p-ink-2 transition-colors hover:text-p-primary"
-              >
-                <Ltr>{t.rich("footer.slack", { m: monoChunk })}</Ltr>
-              </a>
+          <div className="grid w-full grid-cols-1 gap-8 text-start text-small sm:grid-cols-3 sm:gap-10">
+            <div>
+              <p className={columnLabel}>{t("footer.development")}</p>
+              <ul className="flex flex-col items-start gap-1">
+                <li>
+                  <a
+                    href={COMMUNITY_LINKS.roadmap}
+                    {...external}
+                    className={footLink}
+                  >
+                    {t("footer.roadmap")}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={COMMUNITY_LINKS.github}
+                    {...external}
+                    className={footLink}
+                  >
+                    <Ltr>{t("footer.github")}</Ltr>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className={columnLabel}>{t("footer.community")}</p>
+              <ul className="flex flex-col items-start gap-1">
+                <li>
+                  <a
+                    href={COMMUNITY_LINKS.googleGroup}
+                    {...external}
+                    className={footLink}
+                  >
+                    {t("footer.googleGroup")}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={COMMUNITY_LINKS.slack}
+                    {...external}
+                    className={footLink}
+                  >
+                    <Ltr>{t("footer.slack")}</Ltr>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className={columnLabel}>{t("footer.resources")}</p>
+              <ul className="flex flex-col items-start gap-1">
+                <li>
+                  <Link href="/#resources" className={footLink}>
+                    {t("resources.title")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/faq" className={footLink}>
+                    {t("nav.faq")}
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <p className="mt-10 text-center text-small text-p-ink-3">
+        <p className="mt-12 text-center text-small text-p-ink-3">
           {t.rich("footer.contentLicense", {
             m: monoChunk,
             cc: (chunks) => (
