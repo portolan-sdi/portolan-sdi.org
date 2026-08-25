@@ -6,7 +6,6 @@
   "nav": {
     "registry": "Registry",
     "why": "Why Portolan",
-    "docs": "Docs",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
     "index": "Index",
@@ -38,10 +37,9 @@
     "slack": "Slack",
     "community": "Community",
     "development": "Development",
-    "githubOrg": "GitHub org",
-    "issues": "Open issues",
     "resources": "Resources",
-    "repositories": "Repositories"
+    "roadmap": "Roadmap",
+    "github": "GitHub"
   },
   "why": {
     "cards": {

@@ -6,7 +6,6 @@
   "nav": {
     "registry": "السجل",
     "why": "لماذا Portolan",
-    "docs": "التوثيق",
     "homeAria": "الصفحة الرئيسية لـ Portolan",
     "languageAria": "تغيير اللغة",
     "index": "الفهرس",
@@ -38,10 +37,9 @@
     "slack": "Slack",
     "community": "المجتمع",
     "development": "التطوير",
-    "githubOrg": "منظمة GitHub",
-    "issues": "المشكلات المفتوحة",
     "resources": "الموارد",
-    "repositories": "المستودعات"
+    "roadmap": "خارطة الطريق",
+    "github": "GitHub"
   },
   "why": {
     "cards": {

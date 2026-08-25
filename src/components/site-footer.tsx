@@ -35,11 +35,11 @@ export function SiteFooter() {
               <ul className="flex flex-col items-start gap-1">
                 <li>
                   <a
-                    href={COMMUNITY_LINKS.repositories}
+                    href={COMMUNITY_LINKS.roadmap}
                     {...external}
                     className={footLink}
                   >
-                    {t("footer.repositories")}
+                    {t("footer.roadmap")}
                   </a>
                 </li>
                 <li>
@@ -48,16 +48,7 @@ export function SiteFooter() {
                     {...external}
                     className={footLink}
                   >
-                    {t("footer.githubOrg")}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={COMMUNITY_LINKS.issues}
-                    {...external}
-                    className={footLink}
-                  >
-                    {t("footer.issues")}
+                    <Ltr>{t("footer.github")}</Ltr>
                   </a>
                 </li>
               </ul>
@@ -90,15 +81,6 @@ export function SiteFooter() {
             <div>
               <p className={columnLabel}>{t("footer.resources")}</p>
               <ul className="flex flex-col items-start gap-1">
-                <li>
-                  <a
-                    href={COMMUNITY_LINKS.docs}
-                    {...external}
-                    className={footLink}
-                  >
-                    {t("nav.docs")}
-                  </a>
-                </li>
                 <li>
                   <Link href="/#resources" className={footLink}>
                     {t("resources.title")}

@@ -217,7 +217,7 @@ export function FaqPage() {
                         m: monoChunk,
                         spec: inlineLink(SPEC_URL),
                         rashid: inlineLink(RASHID_URL, true),
-                        roadmap: inlineLink(COMMUNITY_LINKS.issues),
+                        roadmap: inlineLink(COMMUNITY_LINKS.roadmap),
                       })}
                     </p>
                   ))}
