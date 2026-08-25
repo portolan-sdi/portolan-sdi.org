@@ -20,13 +20,7 @@
     "titleAccent": "easy to share and use.",
     "description": "Portolan combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale. This makes data easier to find, understand, and analyze in new ways.",
     "howItWorks": "How it works",
-    "browseCatalogs": "Browse catalogs",
-    "stats": {
-      "catalogs": "catalogs",
-      "collections": "collections",
-      "features": "features",
-      "live": "live from the registry"
-    }
+    "browseCatalogs": "Browse catalogs"
   },
   "involved": {
     "ariaLabel": "Users and supporters"

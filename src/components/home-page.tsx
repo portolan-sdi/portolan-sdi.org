@@ -114,27 +114,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   const isValidSubmitEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(submitEmail.trim());
   const canSubmit = isValidSubmitUrl && isValidSubmitEmail;
 
-  // Live registry totals shown in the hero stats row. Latin digits in every
-  // locale per the translation contract.
-  const heroStats = useMemo(() => {
-    if (catalogs.length === 0) return null;
-    const format = new Intl.NumberFormat(locale === "ar" ? "ar-u-nu-latn" : locale, {
-      notation: "compact",
-      maximumFractionDigits: 1,
-    });
-    return [
-      { key: "catalogs", value: format.format(catalogs.length) },
-      {
-        key: "collections",
-        value: format.format(catalogs.reduce((sum, c) => sum + (c.collection_count ?? 0), 0)),
-      },
-      {
-        key: "features",
-        value: format.format(catalogs.reduce((sum, c) => sum + (c.feature_count ?? 0), 0)),
-      },
-    ];
-  }, [catalogs, locale]);
-
   // The registry does not export whether a catalog is the official copy or a
   // mirror yet, so every entry reports null and this set stays empty. The
   // control appears on its own once the export carries the field.
@@ -248,18 +227,33 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">
-            <h1 className="text-hero font-extrabold tracking-[-0.035em] text-balance">
+            <h1 className="text-hero font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] text-balance">
               {t("hero.title")} <br />
               {t("hero.titleAccent")}
             </h1>
             <div className="mt-[clamp(2rem,4vw,3rem)]">
-              <p className="text-lead leading-relaxed max-w-[56ch]">
+              {/* 72ch tracks the h1 measure: the paragraph runs to about 85%
+                  of the widest headline line instead of stopping at 66%, which
+                  read as truncated. It stays inside the 75ch readability bound.
+                  80ch and wider leaves the Arabic paragraph a 49px stub on its
+                  last line. */}
+              <p className="text-lead leading-relaxed max-w-[72ch]">
                 {t.rich("hero.description", { m: monoChunk })}
               </p>
-              {/* Stacked below sm, so both CTAs start on the column edge.
-                  The ghost variant carries no inline padding, so no negative
-                  margin is needed to pull it back into line. */}
-              <div className="flex flex-col items-start gap-4 mt-9 sm:flex-row sm:items-center sm:gap-6">
+              {/* The gap before this row is the largest in the hero, wider
+                  than the h1-to-lead gap above it. The reader stops reading
+                  and starts acting here, so the action block gets the most
+                  air. A tighter value inverts that: the prose gets more space
+                  than the buttons, and the row reads as cramped.
+
+                  Every element in this column shares one inline-start edge:
+                  the h1, the lead, and both CTA boxes. The filled variant
+                  keeps its px-6, so its label sits inset inside the block.
+                  That is the block's own padding, not a misalignment. Do not
+                  pull the box start-ward to make the label line up. The blue
+                  block edge is the alignment signal the eye reads, and a
+                  negative margin makes it overhang the column. */}
+              <div className="flex flex-col items-start gap-4 mt-[clamp(2.25rem,4vw,3.25rem)] sm:flex-row sm:items-center sm:gap-6">
                 <Link href="/#how">
                   <Btn variant="primary" size="lg">
                     {t("hero.howItWorks")} <DirArrow />
@@ -275,20 +269,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   </Btn>
                 </Link>
               </div>
-              {heroStats && (
-                <p className="mt-10 font-mono text-small text-p-ink-3">
-                  {heroStats.map((stat) => (
-                    <span key={stat.key}>
-                      <span className="text-p-primary">
-                        <Ltr>{stat.value}</Ltr>
-                      </span>{" "}
-                      {t(`hero.stats.${stat.key}`)}
-                      {" · "}
-                    </span>
-                  ))}
-                  {t("hero.stats.live")}
-                </p>
-              )}
             </div>
           </div>
         </div>
