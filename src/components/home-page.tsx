@@ -275,9 +275,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         </div>
       </section>
 
-      {/* Who's involved — credibility strip; placeholder wordmarks until logo assets land */}
-      <InvolvedSection />
-
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
@@ -393,6 +390,12 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Ecosystem — the Portolan projects plus the wider format ecosystem */}
       <EcosystemSection />
+
+      {/* Users and supporters — the organizations around that ecosystem. This
+          sits with the ecosystem rather than under the hero. Both answer what
+          surrounds Portolan, one in projects and formats, the other in the
+          organizations that publish with it. */}
+      <InvolvedSection />
 
       {/* Talks & demos */}
       <ResourcesSection />

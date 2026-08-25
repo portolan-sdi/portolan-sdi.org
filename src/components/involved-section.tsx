@@ -1,16 +1,18 @@
 import { useTranslations } from "next-intl";
 import { Ltr } from "./ui";
 
-// Credibility strip under the hero: a mix of users and supporters, so there is
-// no "Supported by" label — just the logos, each linking to its canonical site.
+// Credibility strip below the ecosystem section: a mix of users and
+// supporters, so there is no "Supported by" label. The logos stand alone, each
+// linking to its canonical site.
 // Logos render as flat monochrome grey via CSS mask-image (see .logo-mono), so
-// any source (color SVG, or a PNG's alpha) recolors uniformly; on hover they
-// darken to full ink. `aspect` = intrinsic width/height; `h` is the px height.
+// any source (color SVG, or a PNG's alpha) recolors uniformly; reaching the
+// strip turns the row accent blue. `aspect` = intrinsic width/height; `h` is the px height.
 // An org with no usable mark falls back to `text: true`, a grey text link.
 //
-// The strip auto-scrolls as a seamless marquee (see .logo-marquee): the list is
-// rendered twice so the pair loops without a seam. Hover or focus pauses it;
-// reduced-motion drops the clone and wraps the row flat.
+// The strip holds still until a pointer or the keyboard reaches it (see
+// .logo-marquee), then scrolls as a seamless marquee: the list is rendered
+// twice so the pair loops without a seam. Reaching it also lights the row in
+// the accent blue. Reduced-motion drops the clone and wraps the row flat.
 type Org =
   | { name: string; href: string; text: true }
   | { name: string; href: string; file: string; h: number; aspect: number };
@@ -43,7 +45,7 @@ function LogoLink({ org, clone }: { org: Org; clone: boolean }) {
       className="logo-link inline-flex items-center"
     >
       {"text" in org ? (
-        <span className="text-lead font-bold tracking-[-0.02em] text-p-ink-3 transition-colors hover:text-p-ink">
+        <span className="logo-word text-lead font-bold tracking-[-0.02em] text-p-ink-3 transition-colors">
           <Ltr>{org.name}</Ltr>
         </span>
       ) : (
@@ -68,7 +70,7 @@ export function InvolvedSection() {
   return (
     <section
       aria-label={t("ariaLabel")}
-      className="logo-strip overflow-hidden py-[clamp(2rem,4vw,3.5rem)]"
+      className="logo-strip overflow-hidden border-t border-p-line py-[clamp(2rem,4vw,3.5rem)]"
     >
       <div className="logo-marquee">
         {[false, true].map((clone) => (

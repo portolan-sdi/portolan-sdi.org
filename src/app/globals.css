@@ -441,9 +441,24 @@ body {
   -webkit-mask-size: contain;
   mask-size: contain;
 }
+/* Reaching the strip lights the whole row in the accent, so the set reads as
+   one group rather than as ten separate marks. The logo actually under the
+   pointer goes a step darker, so it still resolves out of the row. */
+.logo-strip:hover .logo-mono,
+.logo-strip:focus-within .logo-mono {
+  background-color: var(--p-primary);
+}
 .logo-link:hover .logo-mono,
 .logo-link:focus-visible .logo-mono {
-  background-color: var(--p-ink);
+  background-color: var(--p-primary-ink);
+}
+.logo-strip:hover .logo-word,
+.logo-strip:focus-within .logo-word {
+  color: var(--p-primary);
+}
+.logo-link:hover .logo-word,
+.logo-link:focus-visible .logo-word {
+  color: var(--p-primary-ink);
 }
 
 /* --- Hero glyph map drift ----------------------------------------------
@@ -501,15 +516,14 @@ body {
   display: flex;
   width: max-content;
   animation: logo-scroll 42s linear infinite;
-  /* Runs against the hero glyph map above it. Both strips once travelled the
-     same way, so the pair read as one coupled mechanism. Opposing them sets
-     the two apart as separate layers. The shorthand above resets the
-     direction, so this has to follow it. */
-  animation-direction: reverse;
+  /* At rest the strip holds still. The page carries one moving element, the
+     hero map, and a second ticker running on its own only competes with it.
+     Pointer or keyboard starts this one. */
+  animation-play-state: paused;
 }
 .logo-strip:hover .logo-marquee,
 .logo-strip:focus-within .logo-marquee {
-  animation-play-state: paused;
+  animation-play-state: running;
 }
 .logo-track {
   display: flex;
@@ -527,9 +541,7 @@ body {
   }
 }
 [dir="rtl"] .logo-marquee {
-  /* Back to normal, which is the mirror of the reverse set above. The map
-     flips on an RTL page too, so the two stay opposed in both directions. */
-  animation-direction: normal;
+  animation-direction: reverse;
 }
 
 /* --- Ecosystem project cards -------------------------------------------- */
