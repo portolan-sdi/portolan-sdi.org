@@ -53,26 +53,27 @@ const CONTOUR_COLORS = [
 ];
 
 /**
- * Surface ramp, for the solid render. Here the band index is a height.
+ * Surface ramp, for the solid render. The band index is a height.
  *
- * Bands 0 to 2 are water and cover about 68 percent of the grid, so they stay
- * near the page. A saturated tone over that much area buries the headline.
+ * Band 0 alone is water. It holds 67.8 percent of the cells and its mean
+ * elevation is 0.0002, against 0.0016 and up for every other band. Bands 1 to
+ * 8 are land and together they hold 32.2 percent, which matches the real land
+ * fraction. Bands 1 and 2 are lowland and they alone carry 58 percent of the
+ * land, so painting them as water erases most of every continent.
  *
- * The ramp breaks hard at band 3 rather than climbing evenly. Bands 3 to 5
- * hold 15.7 percent of the cells and bands 6 to 8 hold only 1.5 percent, so an
- * even climb renders nearly every continent in its palest step and the
- * coastline stops reading. Land starts at the accent blue instead.
+ * Water sits just off the page colour, the way the reference map sets its sea
+ * just off its own near-black page. Land then darkens with height.
  */
 const SURFACE_COLORS = [
-  "#eef1fb",
-  "#e6ebf8",
-  "#dbe3f5",
-  "#4d6dd0",
-  "#4163cc",
-  "#3a5abd",
-  "#3351ae",
-  "#2d4aa8",
-  "#263f8f",
+  "#e9edf7",
+  "#a9b8e6",
+  "#93a5de",
+  "#7d91d5",
+  "#6a80cb",
+  "#5870c1",
+  "#4761b4",
+  "#3a52a3",
+  "#24387a",
 ];
 
 /**
@@ -94,22 +95,21 @@ const RENDER: "wire" | "solid" = "solid";
 /**
  * Camera and light settings, from the reference glyphcss flat map.
  *
- * The key and the ambient run below the reference. The reference lights a
- * black page, where 1.15 and 0.4 spread the ramp. On this plane the same pair
- * sums past full, so every cell clamps to the densest glyph and the map
- * renders as one repeated character. Relief runs above the reference for the
- * same reason: a flatter plane returns one surface normal, so the shading
- * carries no terrain and the ramp never varies.
+ * These match the reference exactly. The shaded render carries almost no glyph
+ * variety, and it is not supposed to: a capture of the reference returns 30,770
+ * `@` out of about 34,000 cells and only six distinct characters in total.
+ * Colour carries the shading and the glyph is a uniform fill. Driving the light
+ * down to spread the character ramp instead only adds noise.
  */
 const ROT_X = 40;
 const ROT_Y = 0;
-const ZOOM = 474.716401;
-const RELIEF = 0.45;
-const DENSITY = 1.4;
+const ZOOM = 550;
+const RELIEF = 0.2;
+const DENSITY = 2;
 const LIGHT_AZ = 50;
 const LIGHT_EL = 50;
-const LIGHT_INTENSITY = 0.85;
-const AMBIENT_INTENSITY = 0.12;
+const LIGHT_INTENSITY = 1.15;
+const AMBIENT_INTENSITY = 0.4;
 
 /** Glyph cell size in pixels before the density divisor. */
 const BASE_FONT_PX = 13;
@@ -262,9 +262,9 @@ export default function GlyphMapCanvas({
       });
       scene.output.style.fontSize = `${BASE_FONT_PX / DENSITY}px`;
       scene.output.style.fontFamily = "var(--p-mono)";
-      // Braille dots are hairlines at this cell size. Weight carries the
-      // contour on a cream page, where a thin line disappears.
-      scene.output.style.fontWeight = "700";
+      // Weight only applies to the contour render. A braille dot is a
+      // hairline, and a shaded cell is already a filled glyph.
+      scene.output.style.fontWeight = RENDER === "wire" ? "700" : "400";
       // Cells butt against each other, so any leading between rows shows up as
       // banding across the map.
       scene.output.style.lineHeight = "1";
