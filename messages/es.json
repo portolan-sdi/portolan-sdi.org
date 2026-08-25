@@ -20,13 +20,7 @@
     "titleAccent": "sean fáciles de compartir y usar.",
     "description": "Portolan combina formatos de archivo nativos de la nube con metadatos y documentación claros, para que personas y agentes puedan publicar y usar datos a cualquier escala. Así los datos son más fáciles de encontrar, de entender y de analizar de formas nuevas.",
     "howItWorks": "Cómo funciona",
-    "browseCatalogs": "Explorar catálogos",
-    "stats": {
-      "catalogs": "catálogos",
-      "collections": "colecciones",
-      "features": "entidades",
-      "live": "en directo del registro"
-    }
+    "browseCatalogs": "Explorar catálogos"
   },
   "involved": {
     "ariaLabel": "Usuarios y colaboradores"

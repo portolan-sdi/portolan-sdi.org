@@ -29,11 +29,14 @@ const sizePadding: Record<BtnSize, string> = {
 const variantClasses: Record<BtnVariant, string> = {
   primary: "bg-p-primary text-p-on-primary hover:bg-p-primary-ink",
   secondary: "bg-p-paper text-p-ink border border-p-line hover:bg-p-bg-soft",
-  // The rule is visible at rest so the control reads as a control beside a
-  // solid primary block, and darkens to full ink on hover. It spans the label
-  // exactly, so no inline padding.
+  // The rule is near-black ink at rest so the control reads as a control
+  // beside a solid primary block. The soft tier failed WCAG 1.4.11 at 1.46:1
+  // and is reserved for interior separators. Hover thickens the rule rather
+  // than darkening it, because rest is already full ink. The pb compensation
+  // holds the baseline when the border grows from 2px to 4px. It spans the
+  // label exactly, so no inline padding.
   ghost:
-    "bg-transparent text-p-ink rounded-none border-b-2 border-p-line-soft hover:border-p-ink",
+    "bg-transparent text-p-ink rounded-none border-b-2 border-p-line hover:border-b-4 hover:pb-[calc(0.75rem_-_2px)]",
 };
 
 export const Btn = forwardRef<HTMLButtonElement, BtnProps>(

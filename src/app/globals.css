@@ -121,7 +121,7 @@
   --text-feature--line-height: 1.2;
   --text-section: clamp(30px, 4vw + 8px, 46px);
   --text-section--line-height: 1.1;
-  --text-hero: clamp(40px, 7vw, 84px);
+  --text-hero: clamp(32px, 6vw, 64px);
   --text-hero--line-height: 1.02;
 }
 
