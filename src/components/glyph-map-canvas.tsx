@@ -16,44 +16,12 @@ interface WorldRelief {
   y: number[];
   z: number[];
   b: number[];
-  /** Band contours. `s` runs six numbers to a segment. */
-  wire: { b: number; s: number[] }[];
 }
 
 type Vec3 = [number, number, number];
 
 /**
- * Contour ramp, for the wire render. One blue gradient in the accent hue from
- * globals.css, so the map reads as a single ink on cream paper.
- *
- * The index is a band, not a height ramp. Band 1 is the coastline and it holds
- * 1,625 of the 3,201 segments, so it carries the shape of the map and takes
- * --p-primary at full strength. Bands 3 to 8 are elevation contours. They step
- * from a lighter tint up to --p-primary-ink, so relief reads without competing
- * with the shoreline. Bands 0 and 2 carry no segments.
- *
- * Water covers about 68 percent of the grid, so bands 0 to 2 stay near the
- * page background. A strong tone over that much area buries the headline.
- *
- * Land starts at a mid grey rather than a pale one. Bands 3 to 5 hold 15.7
- * percent of the cells and bands 6 to 8 hold only 1.5 percent, so a ramp that
- * darkens evenly across all six renders nearly every continent in its palest
- * step.
- */
-const CONTOUR_COLORS = [
-  "#8fa2e2",
-  "#4163cc",
-  "#8fa2e2",
-  "#8fa2e2",
-  "#7288d8",
-  "#5f78d0",
-  "#4e69c8",
-  "#3c57b6",
-  "#2d4aa8",
-];
-
-/**
- * Surface ramp, for the solid render. The band index is a height.
+ * Elevation ramp. The band index is a height.
  *
  * Band 0 alone is water. It holds 67.8 percent of the cells and its mean
  * elevation is 0.0002, against 0.0016 and up for every other band. Bands 1 to
@@ -69,7 +37,7 @@ const CONTOUR_COLORS = [
  * blue and the peaks land near navy, so the coastline has an edge and the
  * relief has somewhere to travel.
  */
-const SURFACE_COLORS = [
+const BAND_COLORS = [
   "#dfe6f5",
   "#93a6e4",
   "#7b8fdb",
@@ -80,22 +48,6 @@ const SURFACE_COLORS = [
   "#26358a",
   "#1b2870",
 ];
-
-/**
- * How the map draws.
- *
- * "wire" traces the band contours, so the page shows a coastline and elevation
- * lines. "solid" shades the terrain surface, so the page shows filled land and
- * sea. Each mode reads the band index differently, so each has its own ramp.
- *
- * The character encoding follows the mode. Braille cells carry a 2 by 4 dot
- * grid, so a contour runs as a continuous curve rather than a staircase of
- * box-drawing rules. Half-block cells fill their box, which solid shading
- * needs. An ASCII mark inks only part of its cell, so it renders a solid
- * surface as a pale wash whatever colour it carries. Each encoding is a
- * documented no-op in the other mode.
- */
-const RENDER: "wire" | "solid" = "solid";
 
 /**
  * Camera and light settings, from the reference glyphcss flat map.
@@ -160,8 +112,8 @@ function lightDirection(azDeg: number, elDeg: number): Vec3 {
   ];
 }
 
-/** Expand the grid into one quad per cell, for the solid render. */
-function buildSurface(grid: WorldRelief) {
+/** Expand the grid into one quad per cell. */
+function buildPolygons(grid: WorldRelief) {
   const { n, x, y, z, b } = grid;
   const w = n + 1;
   const polygons = new Array(n * n);
@@ -174,29 +126,8 @@ function buildSurface(grid: WorldRelief) {
           [x[ix + 1], y[iy + 1], z[(iy + 1) * w + ix + 1]],
           [x[ix], y[iy + 1], z[(iy + 1) * w + ix]],
         ] as Vec3[],
-        color: SURFACE_COLORS[b[iy * n + ix]] ?? SURFACE_COLORS[0],
+        color: BAND_COLORS[b[iy * n + ix]] ?? BAND_COLORS[0],
       };
-    }
-  }
-  return polygons;
-}
-
-/**
- * Turn the band contours into drawable lines.
- *
- * The renderer takes polygons, so each segment becomes a degenerate triangle
- * that runs out to its far end and back. Band 1 is the coastline. Bands 3 to 8
- * are elevation contours, and each takes a darker step of the ramp.
- */
-function buildContours(grid: WorldRelief) {
-  const polygons = [];
-  for (const band of grid.wire) {
-    const color = CONTOUR_COLORS[band.b] ?? CONTOUR_COLORS[0];
-    const s = band.s;
-    for (let i = 0; i + 5 < s.length; i += 6) {
-      const from: Vec3 = [s[i], s[i + 1], s[i + 2]];
-      const to: Vec3 = [s[i + 3], s[i + 4], s[i + 5]];
-      polygons.push({ vertices: [from, to, from], color });
     }
   }
   return polygons;
@@ -260,8 +191,8 @@ export default function GlyphMapCanvas({
       scene = createGlyphScene(stage, {
         camera,
         autoSize: true,
-        mode: RENDER === "wire" ? "wireframe" : "solid",
-        charMode: RENDER === "wire" ? "braille" : "ascii",
+        mode: "solid",
+        charMode: "ascii",
         useColors: true,
         glyphPalette: "default",
         // Rasterize at 2x and average down. The map is drawn once and then
@@ -276,17 +207,11 @@ export default function GlyphMapCanvas({
       });
       scene.output.style.fontSize = `${BASE_FONT_PX / DENSITY}px`;
       scene.output.style.fontFamily = "var(--p-mono)";
-      // Weight only applies to the contour render. A braille dot is a
-      // hairline, and a shaded cell is already a filled glyph.
-      scene.output.style.fontWeight = RENDER === "wire" ? "700" : "400";
       // Cells butt against each other, so any leading between rows shows up as
       // banding across the map.
       scene.output.style.lineHeight = "1";
       scene.fit();
-      scene.add(
-        RENDER === "wire" ? buildContours(grid) : buildSurface(grid),
-        { scale: [1, 1, RELIEF] }
-      );
+      scene.add(buildPolygons(grid), { scale: [1, 1, RELIEF] });
       scene.rerender();
 
       // One tile per world, plus one so the trailing edge never enters view
