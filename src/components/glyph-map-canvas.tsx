@@ -63,17 +63,22 @@ const CONTOUR_COLORS = [
  *
  * Water sits just off the page colour, the way the reference map sets its sea
  * just off its own near-black page. Land then darkens with height.
+ *
+ * The ramp runs the full range on purpose. A band set of mid tints gives the
+ * map nothing to anchor on and it reads as flat. Lowland starts at a clear
+ * blue and the peaks land near navy, so the coastline has an edge and the
+ * relief has somewhere to travel.
  */
 const SURFACE_COLORS = [
-  "#e9edf7",
-  "#a9b8e6",
-  "#93a5de",
-  "#7d91d5",
-  "#6a80cb",
-  "#5870c1",
-  "#4761b4",
-  "#3a52a3",
-  "#24387a",
+  "#dfe6f5",
+  "#93a6e4",
+  "#7b8fdb",
+  "#6478d2",
+  "#5064c6",
+  "#3f53b6",
+  "#3244a1",
+  "#26358a",
+  "#1b2870",
 ];
 
 /**
@@ -133,11 +138,16 @@ const BASE_FONT_PX = 13;
 const WORLD_PX = Math.round(ZOOM * 2);
 
 /**
- * Drift speed, matched to the supporter logo marquee below the hero. That
- * marquee moves one 1405 px track in 42 s. The two strips sit close together
- * and a mismatch reads as a mistake.
+ * Drift speed.
+ *
+ * The supporter logo marquee below the hero moves a 1405 px track in 42 s, so
+ * 33.45 px/s. The map ran at that same rate and the two strips then read as one
+ * coupled mechanism, because nothing separated them. The map is the layer
+ * behind, so it travels slower. The ratio is deliberately not a simple
+ * fraction, so the two never settle into step.
  */
-const DEFAULT_PX_PER_SECOND = 1405 / 42;
+const MARQUEE_PX_PER_SECOND = 1405 / 42;
+const DEFAULT_PX_PER_SECOND = MARQUEE_PX_PER_SECOND * 0.38;
 
 /** Unit vector toward the light, from azimuth and elevation in degrees. */
 function lightDirection(azDeg: number, elDeg: number): Vec3 {
