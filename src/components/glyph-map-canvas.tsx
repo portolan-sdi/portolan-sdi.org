@@ -23,8 +23,8 @@ interface WorldRelief {
 type Vec3 = [number, number, number];
 
 /**
- * Contour ramp. One blue gradient in the accent hue from globals.css, so the
- * map reads as a single ink on cream paper.
+ * Contour ramp, for the wire render. One blue gradient in the accent hue from
+ * globals.css, so the map reads as a single ink on cream paper.
  *
  * The index is a band, not a height ramp. Band 1 is the coastline and it holds
  * 1,625 of the 3,201 segments, so it carries the shape of the map and takes
@@ -40,7 +40,7 @@ type Vec3 = [number, number, number];
  * darkens evenly across all six renders nearly every continent in its palest
  * step.
  */
-const BAND_COLORS = [
+const CONTOUR_COLORS = [
   "#8fa2e2",
   "#4163cc",
   "#8fa2e2",
@@ -52,27 +52,67 @@ const BAND_COLORS = [
   "#2d4aa8",
 ];
 
-/** Camera and light settings, from the reference glyphcss flat map. */
+/**
+ * Surface ramp, for the solid render. Here the band index is a height.
+ *
+ * Bands 0 to 2 are water and cover about 68 percent of the grid, so they stay
+ * near the page. A saturated tone over that much area buries the headline.
+ *
+ * The ramp breaks hard at band 3 rather than climbing evenly. Bands 3 to 5
+ * hold 15.7 percent of the cells and bands 6 to 8 hold only 1.5 percent, so an
+ * even climb renders nearly every continent in its palest step and the
+ * coastline stops reading. Land starts at the accent blue instead.
+ */
+const SURFACE_COLORS = [
+  "#eef1fb",
+  "#e6ebf8",
+  "#dbe3f5",
+  "#4d6dd0",
+  "#4163cc",
+  "#3a5abd",
+  "#3351ae",
+  "#2d4aa8",
+  "#263f8f",
+];
+
+/**
+ * How the map draws.
+ *
+ * "wire" traces the band contours, so the page shows a coastline and elevation
+ * lines. "solid" shades the terrain surface, so the page shows filled land and
+ * sea. Each mode reads the band index differently, so each has its own ramp.
+ *
+ * The character encoding follows the mode. Braille cells carry a 2 by 4 dot
+ * grid, so a contour runs as a continuous curve rather than a staircase of
+ * box-drawing rules. Half-block cells fill their box, which solid shading
+ * needs. An ASCII mark inks only part of its cell, so it renders a solid
+ * surface as a pale wash whatever colour it carries. Each encoding is a
+ * documented no-op in the other mode.
+ */
+const RENDER: "wire" | "solid" = "solid";
+
+/**
+ * Camera and light settings, from the reference glyphcss flat map.
+ *
+ * The key and the ambient run below the reference. The reference lights a
+ * black page, where 1.15 and 0.4 spread the ramp. On this plane the same pair
+ * sums past full, so every cell clamps to the densest glyph and the map
+ * renders as one repeated character. Relief runs above the reference for the
+ * same reason: a flatter plane returns one surface normal, so the shading
+ * carries no terrain and the ramp never varies.
+ */
 const ROT_X = 40;
 const ROT_Y = 0;
 const ZOOM = 474.716401;
-const RELIEF = 0.2;
-const DENSITY = 2.4;
+const RELIEF = 0.45;
+const DENSITY = 1.4;
 const LIGHT_AZ = 50;
 const LIGHT_EL = 50;
-const LIGHT_INTENSITY = 1.15;
-const AMBIENT_INTENSITY = 0.4;
+const LIGHT_INTENSITY = 0.85;
+const AMBIENT_INTENSITY = 0.12;
 
 /** Glyph cell size in pixels before the density divisor. */
 const BASE_FONT_PX = 13;
-
-/**
- * Character encoding. Braille cells carry a 2 by 4 dot grid, so a contour runs
- * as a continuous curve instead of a staircase of box-drawing rules. The
- * junction pass and the half-block cells are documented no-ops here, because
- * both belong to the ASCII wireframe path and to solid mode.
- */
-const CHAR_MODE = "braille" as const;
 
 /**
  * Width of one world, in CSS pixels.
@@ -110,6 +150,27 @@ function lightDirection(azDeg: number, elDeg: number): Vec3 {
   ];
 }
 
+/** Expand the grid into one quad per cell, for the solid render. */
+function buildSurface(grid: WorldRelief) {
+  const { n, x, y, z, b } = grid;
+  const w = n + 1;
+  const polygons = new Array(n * n);
+  for (let iy = 0; iy < n; iy++) {
+    for (let ix = 0; ix < n; ix++) {
+      polygons[iy * n + ix] = {
+        vertices: [
+          [x[ix], y[iy], z[iy * w + ix]],
+          [x[ix + 1], y[iy], z[iy * w + ix + 1]],
+          [x[ix + 1], y[iy + 1], z[(iy + 1) * w + ix + 1]],
+          [x[ix], y[iy + 1], z[(iy + 1) * w + ix]],
+        ] as Vec3[],
+        color: SURFACE_COLORS[b[iy * n + ix]] ?? SURFACE_COLORS[0],
+      };
+    }
+  }
+  return polygons;
+}
+
 /**
  * Turn the band contours into drawable lines.
  *
@@ -120,7 +181,7 @@ function lightDirection(azDeg: number, elDeg: number): Vec3 {
 function buildContours(grid: WorldRelief) {
   const polygons = [];
   for (const band of grid.wire) {
-    const color = BAND_COLORS[band.b] ?? BAND_COLORS[0];
+    const color = CONTOUR_COLORS[band.b] ?? CONTOUR_COLORS[0];
     const s = band.s;
     for (let i = 0; i + 5 < s.length; i += 6) {
       const from: Vec3 = [s[i], s[i + 1], s[i + 2]];
@@ -189,8 +250,8 @@ export default function GlyphMapCanvas({
       scene = createGlyphScene(stage, {
         camera,
         autoSize: true,
-        mode: "wireframe",
-        charMode: CHAR_MODE,
+        mode: RENDER === "wire" ? "wireframe" : "solid",
+        charMode: RENDER === "wire" ? "braille" : "ascii",
         useColors: true,
         glyphPalette: "default",
         directionalLight: {
@@ -208,7 +269,10 @@ export default function GlyphMapCanvas({
       // banding across the map.
       scene.output.style.lineHeight = "1";
       scene.fit();
-      scene.add(buildContours(grid), { scale: [1, 1, RELIEF] });
+      scene.add(
+        RENDER === "wire" ? buildContours(grid) : buildSurface(grid),
+        { scale: [1, 1, RELIEF] }
+      );
       scene.rerender();
 
       // One tile per world, plus one so the trailing edge never enters view
