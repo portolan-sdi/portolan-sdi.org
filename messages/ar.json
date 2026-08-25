@@ -31,6 +31,19 @@
   "involved": {
     "ariaLabel": "المستخدمون والداعمون"
   },
+  "getInvolved": {
+    "title": "شارك",
+    "priority": "أسهل طريقة للبدء الآن هي <publish>نشر بياناتك في كتالوج Portolan</publish> وإخبارنا بالنتيجة. تفيدنا دائما ملاحظاتك عما يعمل وما لا يعمل وكيف يمكن تحسين Portolan، خاصة إذا اختلف تنفيذك عن الكتالوجات الحالية.",
+    "contributions": "نرحب أيضا بالمساهمات في <github>معيار Portolan وأدواته</github> من خلال تقارير الأخطاء وطلبات الميزات وPRs. نرحب بشكل خاص بـ PRs. راجع <issues>المسائل المفتوحة</issues> للبدء.",
+    "community": "Portolan مشروع مجتمعي مفتوح المصدر ونرحب بالمستخدمين والمساهمين الجدد. انضم إلى قناة <slack><m>#portolan</m> على Slack</slack> وتابع <group>مجموعة Portolan على Google</group> لمعرفة تفاصيل اجتماعاتنا الأسبوعية."
+  },
+  "footer": {
+    "contentLicense": "محتوى الموقع مرخّص بموجب <cc><m>CC BY 4.0</m></cc>.",
+    "sourceLicense": "مصدر الموقع مرخّص بموجب <apache><m>Apache-2.0</m></apache>.",
+    "contact": "التواصل",
+    "googleGroup": "مجموعة Google",
+    "slack": "Slack <m>#portolan</m>"
+  },
   "why": {
     "cards": {
       "open": {
