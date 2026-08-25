@@ -12,14 +12,15 @@
     "who": "Para quién es",
     "collapse": "Contraer el índice",
     "expand": "Índice",
-    "faq": "Preguntas frecuentes"
+    "faq": "Preguntas frecuentes",
+    "coverage": "Explorar catálogos"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
     "titleAccent": "sean fáciles de compartir y usar.",
     "description": "Portolan combina formatos de archivo nativos de la nube con metadatos y documentación claros, para que personas y agentes puedan publicar y usar datos a cualquier escala. Así los datos son más fáciles de encontrar, de entender y de analizar de formas nuevas.",
     "howItWorks": "Cómo funciona",
-    "browseCatalogs": "Explorar catálogos"
+    "exploreCatalogs": "Explorar catálogos"
   },
   "involved": {
     "ariaLabel": "Usuarios y colaboradores"
@@ -122,7 +123,40 @@
       "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos."
     }
   },
+  "coverage": {
+    "title": "Explorar catálogos",
+    "blurb": "Consulta catálogos geoespaciales alojados de forma independiente por publicadores de todo el mundo.",
+    "cta": "Explorar el registro",
+    "featuredLabel": "Catálogos destacados",
+    "featured": {
+      "global-data": {
+        "title": "Límites de parcelas agrícolas",
+        "publisher": "Fields of the World",
+        "place": "Todo el mundo"
+      },
+      "portolan-nl": {
+        "title": "Geodatos nacionales de los Países Bajos",
+        "publisher": "Portolan NL",
+        "place": "Países Bajos"
+      },
+      "trimet": {
+        "title": "Datos de transporte regional",
+        "publisher": "TriMet",
+        "place": "Portland, Oregón"
+      }
+    },
+    "about": "Este mapa muestra dónde hay datos disponibles en el registro de Portolan. Cada hexágono se sombrea según el número de catálogos distintos que tienen al menos una colección sobre esa zona.",
+    "cell": {
+      "catalogs": "{count, plural, one {# catálogo} other {# catálogos}}"
+    },
+    "caption": "Cobertura mundial de los catálogos Portolan",
+    "legend": "catálogos por celda"
+  },
   "registry": {
+    "meta": {
+      "title": "Registro",
+      "description": "Todos los catálogos Portolan que sigue el registro. Explóralos en un mapa o como tarjetas, mira cuándo se comprobó cada uno y envía el tuyo."
+    },
     "title": "Explora {count} catálogos",
     "search": {
       "placeholder": "Buscar catálogos...",

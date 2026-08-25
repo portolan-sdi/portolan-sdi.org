@@ -35,10 +35,11 @@ const HOME_ITEMS: RailItem[] = [
   { id: "why", label: "nav.why" },
   { id: "who", label: "nav.who" },
   { id: "how", label: "howItWorks.eyebrow" },
+  { id: "coverage", label: "nav.coverage" },
   { id: "ecosystem", label: "ecosystem.eyebrow" },
   { id: "resources", label: "resources.title" },
   { id: "involved", label: "getInvolved.title" },
-  { id: "registry", label: "nav.registry" },
+  { id: "registry", label: "nav.registry", href: "/registry" },
   { id: "faq", label: "nav.faq", href: "/faq" },
 ];
 

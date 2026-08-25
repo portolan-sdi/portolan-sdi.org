@@ -3,5 +3,6 @@ export { GlyphMap } from "./glyph-map";
 export { LiveCount } from "./live-count";
 export { HomePage } from "./home-page";
 export { FaqPage } from "./faq-page";
+export { RegistryPage } from "./registry-page";
 export { SiteShell } from "./site-rail";
 export * from "./ui";
