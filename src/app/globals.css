@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Hero legibility scrim over the dither map — light enough that the map
+  /* Hero legibility scrim over the glyph map — light enough that the map
      stays visible. The opaque end must sit under the headline, which is
      text-start in every locale, so the RTL block below flips the direction.
      Logical keywords (`to inline-end`) do not resolve in any current engine,
@@ -289,7 +289,7 @@ body {
   /* The margin is not animated. Only the rail's transform is, which the
      compositor handles on its own layer. Easing the margin instead would
      relayout <main> on every frame for 280ms, and <main> holds the MapLibre
-     canvas and the three.js dither map, both of which resize on reflow. The
+     canvas and the hero glyph map, both of which resize on reflow. The
      content reflows once, then the rail slides away over it. */
   .site-main {
     margin-inline-start: var(--p-rail);
@@ -441,17 +441,68 @@ body {
   -webkit-mask-size: contain;
   mask-size: contain;
 }
+/* Reaching the strip lights the whole row in the accent, so the set reads as
+   one group rather than as ten separate marks. The logo actually under the
+   pointer goes a step darker, so it still resolves out of the row. */
+.logo-strip:hover .logo-mono,
+.logo-strip:focus-within .logo-mono {
+  background-color: var(--p-primary);
+}
 .logo-link:hover .logo-mono,
 .logo-link:focus-visible .logo-mono {
-  background-color: var(--p-ink);
+  background-color: var(--p-primary-ink);
+}
+.logo-strip:hover .logo-word,
+.logo-strip:focus-within .logo-word {
+  color: var(--p-primary);
+}
+.logo-link:hover .logo-word,
+.logo-link:focus-visible .logo-word {
+  color: var(--p-primary-ink);
+}
+
+/* --- Hero glyph map drift ----------------------------------------------
+   The map rasterizes once, then drifts as a ticker, on the same principle
+   as the logo marquee below it. Identical tiles sit side by side and the
+   track translates by exactly one tile, so the loop has no seam.
+
+   The transform runs on the compositor. Re-rendering the glyph grid each
+   frame cannot look smooth at this speed: the drift covers about 33 px per
+   second and a character cell is about 6.5 px wide, so the raster would
+   step only five times a second whatever the frame rate.
+
+   The distance and the duration come from the component, which measures a
+   world span after layout. Direction-aware, to match the marquee. Under
+   reduced motion the track holds still. */
+.glyph-drift {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+}
+.glyph-drift[data-drifting="true"] {
+  animation: glyph-drift var(--glyph-drift-duration, 40s) linear infinite;
+}
+@keyframes glyph-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-1 * var(--glyph-drift-distance, 0px)));
+  }
+}
+[dir="rtl"] .glyph-drift[data-drifting="true"] {
+  animation-direction: reverse;
 }
 
 /* --- Supporter logo marquee --------------------------------------------
    The strip auto-scrolls as a seamless ticker: two identical tracks sit
    side by side and the pair translates by exactly one track width, so the
    loop has no seam. Hover or focus pauses it; both inline edges fade so
-   logos drift in and out instead of clipping. Direction-aware (reversed in
-   RTL) — the logos themselves never mirror, only the track translates.
+   logos drift in and out instead of clipping. The track runs against the hero
+   glyph map above it, and both flip on an RTL page, so the two stay opposed in
+   either direction. The logos themselves never mirror, only the track
+   translates.
    Under reduced-motion the clone is dropped and the single row wraps flat. */
 .logo-strip {
   --logo-gap: clamp(1.75rem, 4vw, 3.5rem);
@@ -465,10 +516,14 @@ body {
   display: flex;
   width: max-content;
   animation: logo-scroll 42s linear infinite;
+  /* At rest the strip holds still. The page carries one moving element, the
+     hero map, and a second ticker running on its own only competes with it.
+     Pointer or keyboard starts this one. */
+  animation-play-state: paused;
 }
 .logo-strip:hover .logo-marquee,
 .logo-strip:focus-within .logo-marquee {
-  animation-play-state: paused;
+  animation-play-state: running;
 }
 .logo-track {
   display: flex;

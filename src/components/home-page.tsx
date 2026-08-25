@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { DitherMap } from "./dither-map";
+import { GlyphMap } from "./glyph-map";
 import { SiteShell } from "./site-rail";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
@@ -223,8 +223,11 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
   return (
     <SiteShell>
       {/* Hero */}
-      <section id="top" className="relative border-b border-p-line overflow-hidden">
-        <DitherMap className="absolute inset-0 w-full h-full opacity-80" />
+      {/* No bottom rule. Every following section carries its own top rule, so
+          a bottom rule here would stack with it and draw 2px where the rest of
+          the page draws 1px. */}
+      <section id="top" className="relative overflow-hidden">
+        <GlyphMap className="absolute inset-0 w-full h-full" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
           <div className="max-w-[1240px] mx-auto">
@@ -275,9 +278,6 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
         </div>
       </section>
 
-      {/* Who's involved — credibility strip; placeholder wordmarks until logo assets land */}
-      <InvolvedSection />
-
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
         <div className="max-w-[1240px] mx-auto">
@@ -313,6 +313,12 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Who it's for — the page's one reversed surface */}
       <WhoForSection />
+
+      {/* Users and supporters. Placed against "Who it's for" so the reader
+          meets the audience and then the organizations without a label saying
+          which logo is which. Some build on Portolan and some publish with it,
+          and the strip carries no heading that would separate the two. */}
+      <InvolvedSection />
 
       {/* How it works */}
       <section id="how" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">
@@ -393,6 +399,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Ecosystem — the Portolan projects plus the wider format ecosystem */}
       <EcosystemSection />
+
 
       {/* Talks & demos */}
       <ResourcesSection />

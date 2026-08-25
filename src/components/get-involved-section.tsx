@@ -11,10 +11,13 @@ const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 export function GetInvolvedSection() {
   const t = useTranslations("getInvolved");
 
+  // Bottom rule only. The talks section above already draws a bottom rule, and
+  // a top rule here would stack with it into 2px. The bottom rule stays,
+  // because the registry section below carries no top rule.
   return (
     <section
       id="involved"
-      className="border-y border-p-line px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]"
+      className="border-b border-p-line px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]"
     >
       <div className="mx-auto max-w-[1240px]">
         <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
