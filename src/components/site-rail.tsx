@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { PortolanLogo } from "./portolan-logo";
 import { LocaleSwitcher } from "./locale-switcher";
+import { SiteFooter } from "./site-footer";
 import { DirArrow } from "./ui";
 
 // Primary navigation lives in a left rail (replaces the old minimal header +
@@ -23,6 +24,7 @@ const SECTIONS = [
   { id: "how", label: "howItWorks.eyebrow" },
   { id: "ecosystem", label: "ecosystem.eyebrow" },
   { id: "resources", label: "resources.title" },
+  { id: "involved", label: "getInvolved.title" },
   { id: "registry", label: "nav.registry" },
 ] as const;
 
@@ -207,7 +209,10 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         </button>
       </div>
 
-      <main className="site-main">{children}</main>
+      <div className="site-main">
+        <main>{children}</main>
+        <SiteFooter />
+      </div>
     </div>
   );
 }

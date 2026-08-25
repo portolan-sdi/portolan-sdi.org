@@ -9,6 +9,7 @@ import { SiteShell } from "./site-rail";
 import { ResourcesSection } from "./resources-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
+import { GetInvolvedSection } from "./get-involved-section";
 import { WhoForSection } from "./who-for-section";
 import { PipelineFigure } from "./pipeline-figure";
 import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
@@ -415,6 +416,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Talks & demos */}
       <ResourcesSection />
+
+      {/* Community contribution paths */}
+      <GetInvolvedSection />
 
       {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (

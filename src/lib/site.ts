@@ -8,6 +8,23 @@ import { routing } from "@/i18n/routing";
 export const SITE_ORIGIN = "https://www.portolan-sdi.org";
 
 /**
+ * Canonical community and license destinations used by the homepage close.
+ * Keep these aligned with portolan-ops/copy/urls.md.
+ */
+export const COMMUNITY_LINKS = {
+  github: "https://github.com/portolan-sdi",
+  googleGroup: "https://groups.google.com/g/portolan",
+  openIssues: "https://github.com/orgs/portolan-sdi/projects/1/views/2",
+  slack: "https://cloudnativegeo.slack.com/archives/C0A1JBH9529",
+} as const;
+
+export const LICENSE_LINKS = {
+  content: "https://creativecommons.org/licenses/by/4.0/",
+  source:
+    "https://github.com/portolan-sdi/portolan-sdi.org/blob/main/LICENSE",
+} as const;
+
+/**
  * Path for a locale under `localePrefix: "as-needed"`: the default locale is
  * served unprefixed, every other locale carries its prefix.
  */
