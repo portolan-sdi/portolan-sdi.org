@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useRevealed } from "@/hooks/use-revealed";
 import { DirArrow, Ltr, monoChunk } from "./ui";
 
@@ -81,10 +82,19 @@ export function ResourcesSection() {
       />
 
       <div className="mx-auto max-w-[1240px]">
-        <header className="mb-[clamp(2.5rem,5vw,4rem)]">
+        {/* The FAQ sits on the end side of this row rather than in the wall
+            below it. The five cards are external talks carrying a screenshot,
+            and a page on this site is neither. */}
+        <header className="mb-[clamp(2.5rem,5vw,4rem)] flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
           <h2 className="text-section font-extrabold leading-[1.05] tracking-[-0.03em]">
             {t("title")}
           </h2>
+          <Link
+            href="/faq"
+            className="inline-flex shrink-0 items-center gap-2 font-mono text-small text-p-ink transition-colors hover:text-p-primary sm:pb-1"
+          >
+            {t("faqLink")} <DirArrow />
+          </Link>
         </header>
 
         <div style={{ "--tk-step": "clamp(36px,5vw,72px)" } as React.CSSProperties}

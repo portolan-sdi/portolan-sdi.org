@@ -13,7 +13,8 @@
     "external": "Externo",
     "who": "Para quién es",
     "collapse": "Contraer el índice",
-    "expand": "Índice"
+    "expand": "Índice",
+    "faq": "Preguntas frecuentes"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
@@ -242,6 +243,61 @@
         "attribution": "Open Geodag",
         "description": "Estima el coste de publicar tus datos como un catálogo Portolan.",
         "alt": "La calculadora, que compara costos mensuales de almacenamiento y salida en tres proveedores."
+      }
+    },
+    "faqLink": "Leer las preguntas frecuentes"
+  },
+  "faq": {
+    "meta": {
+      "title": "Preguntas frecuentes",
+      "description": "Respuestas a las preguntas habituales sobre Portolan. Cómo se relaciona con STAC y los formatos optimizados para la nube, por qué no necesita una capa de servicio, qué garantiza la conformidad y qué no puede hacer todavía."
+    },
+    "title": "Preguntas frecuentes",
+    "items": {
+      "standards": {
+        "q": "¿No es Portolan simplemente STAC y formatos optimizados para la nube?",
+        "p1": "Portolan se construye directamente sobre STAC, GeoParquet, COG, PMTiles y estándares relacionados. La diferencia es que esos estándares dejan abiertas muchas decisiones de implementación de forma deliberada, mientras que Portolan define y valida un nivel mínimo de calidad para publicar bien datos espaciales.",
+        "p2": "Por ejemplo, Portolan exige que GeoParquet esté ordenado espacialmente e incluya estadísticas espaciales que permitan a los clientes omitir los grupos de filas irrelevantes. Exige que los COG incluyan overviews útiles y estadísticas embebidas, y exige que los recursos alojados admitan solicitudes por rango de HTTP y acceso desde el navegador mediante CORS. El objetivo no es solo usar formatos nativos de la nube de nombre, sino usarlos de maneras que entreguen de forma fiable el rendimiento y la ergonomía que se supone que ofrecen.",
+        "p3": "Consulta la <spec>especificación de Portolan</spec> y <rashid>rashid</rashid>, el validador de Portolan."
+      },
+      "servers": {
+        "q": "¿Por qué no usar simplemente GeoServer, PostGIS o una OGC API?",
+        "p1": "Para datos públicos con mucha lectura, Portolan parte de la idea de que una capa de servicio dedicada suele ser innecesaria.",
+        "p2": "Los clientes modernos pueden trabajar directamente con archivos optimizados para la nube. DuckDB puede consultar Parquet y GeoParquet remotos con filtrado, uniones y operaciones espaciales. QGIS, BigQuery, Sedona y otras herramientas pueden trabajar con los mismos datos subyacentes. Portolan también puede publicar PMTiles y estilos para que los mapas web interactivos no necesiten un servidor de teselas bajo demanda. Aún puedes poner una API, una base de datos o un servicio de aplicación encima cuando un caso de uso concreto lo requiera. Portolan elimina el requisito de que cada conjunto de datos dependa de uno solo para ser accesible."
+      },
+      "capabilities": {
+        "q": "¿Qué pueden hacer los archivos nativos de la nube que antes exigía una API?",
+        "p1": "Bastante.",
+        "p2": "Los formatos optimizados para la nube están diseñados para el acceso parcial eficiente a través de la red. En lugar de descargar un conjunto de datos entero o de pasar cada solicitud por un servicio de subconjuntos en el servidor, los clientes pueden traer solo las partes del archivo que necesitan y trabajar con ellas directamente.",
+        "p3": "Eso significa que muchas capacidades asociadas tradicionalmente con las APIs pueden ocurrir sobre los propios archivos. Herramientas como DuckDB, BigQuery y Sedona pueden filtrar, unir, subconjuntar y analizar Parquet y GeoParquet directamente. Los lectores de COG pueden pedir solo las teselas y las resoluciones de ráster que necesita una vista concreta, mientras que PMTiles puede servir mapas interactivos sin un servidor de teselas bajo demanda.",
+        "p4": "Portolan está diseñado en torno a este modelo. Publica los datos en formatos que admiten el acceso directo eficiente y deja que cada persona elija las herramientas con las que los consulta, analiza o visualiza. Todavía se puede añadir un servicio cuando un flujo de trabajo necesita de verdad un comportamiento en el servidor, pero ya no tiene que situarse entre cada usuario y cada conjunto de datos.",
+        "p5": "Los datos con control de acceso están previstos para la v1.0 de Portolan. La edición transaccional todavía no se admite."
+      },
+      "conformance": {
+        "q": "¿Qué garantiza en realidad la conformidad con Portolan?",
+        "p1": "Un catálogo no es conforme por el mero hecho de declarar la extensión de Portolan. Solo es conforme si pasa el validador de Portolan, que comprueba la estructura STAC, los requisitos de metadatos de Portolan y los requisitos que solo pueden verificarse al inspeccionar los propios datos.",
+        "p2": "Eso incluye cuestiones como el orden espacial de GeoParquet, las estadísticas por grupo de filas y las estadísticas embebidas de COG. Por tanto, la conformidad significa más que metadatos válidos y da a las personas usuarias y al software una garantía más fuerte de que los datos están estructurados, alojados, documentados y optimizados de maneras predecibles."
+      },
+      "lockIn": {
+        "q": "¿Portolan sustituye una plataforma propietaria por otra?",
+        "p1": "Evitarlo es una parte central de la arquitectura. Portolan estandariza el catálogo publicado, no el proveedor de nube, el flujo de publicación, la interfaz de usuario, el motor analítico ni el proveedor comercial que lo rodea.",
+        "p2": "Si un producto comercial crea y gestiona un catálogo Portolan y más adelante dejas de usar ese producto, el catálogo publicado sigue funcionando y otra herramienta, otro proveedor u otro fabricante puede tomar el relevo. El objetivo es un ecosistema de implementaciones que compitan y sean interoperables, en lugar de una plataforma Portolan integrada verticalmente."
+      },
+      "dataModel": {
+        "q": "¿Portolan estandariza mi modelo de datos?",
+        "p1": "No. Portolan estandariza cómo se empaquetan, documentan, alojan y consultan los datos. No prescribe un esquema universal para carreteras, edificios, parcelas, límites administrativos u otros datos temáticos.",
+        "p2": "Los estándares semánticos y los esquemas compartidos pueden situarse encima de Portolan cuando resulten útiles. Portolan aborda otra capa de la interoperabilidad y hace que conjuntos de datos producidos de formas distintas sean de manera consistente localizables, consultables, documentados y utilizables con herramientas comunes."
+      },
+      "agents": {
+        "q": "¿Por qué los agentes forman parte de un estándar de publicación de datos?",
+        "p1": "Los agentes se están convirtiendo en otra clase importante de usuario de datos, y eso cambia algunos de los supuestos que hay detrás de la infraestructura de datos pública.",
+        "p2": "Los agentes pueden inspeccionar y consultar muchos conjuntos de datos con rapidez, así que Portolan asume que los catálogos se consumirán de forma programática y a escala. Por eso cada catálogo y cada colección incluye un archivo <m>AGENTS.md</m> que puede documentar patrones de acceso, consultas útiles, notas sobre la calidad de los datos, convenciones de esquema y otras indicaciones que ayudan al software a usar los datos correctamente.",
+        "p3": "No hace falta un agente para publicar ni para consumir datos de Portolan. La CLI ofrece un flujo de publicación determinista, y las herramientas estándar pueden usar directamente los catálogos resultantes. Estar listo para agentes es un requisito de diseño, no una dependencia de ningún sistema de IA concreto."
+      },
+      "gaps": {
+        "q": "¿Qué no puede hacer Portolan todavía?",
+        "p1": "Portolan está aún en una fase temprana, y la especificación y las herramientas evolucionan a medida que las probamos con más publicadores, más conjuntos de datos y más casos de uso. Entre las carencias actuales están los datos con control de acceso, los flujos de edición transaccional y el soporte normativo para formatos como Zarr y COPC.",
+        "p2": "Nuestro foco a corto plazo es ampliar el conjunto de catálogos de referencia, estabilizar la especificación central y llegar a una CLI v1.0 estable. Hasta entonces siguen siendo posibles los cambios incompatibles, así que ahora mismo Portolan encaja mejor con quienes adoptan pronto. Consulta la <roadmap>hoja de ruta del proyecto</roadmap> para ver el trabajo actual y las incidencias enlazadas."
       }
     }
   }

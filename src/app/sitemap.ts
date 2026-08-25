@@ -2,17 +2,29 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
-// One entry per locale home page. The site is a single route, so the sitemap
-// stays flat; each entry declares the full hreflang set so the three locales
-// are read as translations of one page rather than as duplicates.
-export default function sitemap(): MetadataRoute.Sitemap {
-  const languages = alternateLanguages();
+// Every route, crossed by every locale. Each entry declares the hreflang set
+// for its own path, so the three copies of a page are read as translations of
+// one another rather than as duplicates.
+//
+// `priority` ranks the home page above the rest, and the default locale above
+// its translations.
+const ROUTES = [
+  { path: "/", priority: 1, changeFrequency: "weekly" as const },
+  { path: "/faq", priority: 0.7, changeFrequency: "monthly" as const },
+];
 
-  return routing.locales.map((locale) => ({
-    url: localeUrl(locale),
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: locale === routing.defaultLocale ? 1 : 0.8,
-    alternates: { languages },
-  }));
+export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
+
+  return ROUTES.flatMap(({ path, priority, changeFrequency }) => {
+    const languages = alternateLanguages(path);
+
+    return routing.locales.map((locale) => ({
+      url: localeUrl(locale, path),
+      lastModified,
+      changeFrequency,
+      priority: locale === routing.defaultLocale ? priority : priority * 0.8,
+      alternates: { languages },
+    }));
+  });
 }
