@@ -15,7 +15,7 @@ export function SiteFooter() {
   const t = useTranslations();
 
   return (
-    <footer className="px-[var(--p-pad-section-x)] pb-6 pt-10">
+    <footer className="border-t border-p-line px-[var(--p-pad-section-x)] pb-6 pt-10">
       <div className="mx-auto max-w-[1240px]">
         {/* Logo on the inline-start edge, the link columns beside it. The
             rail indexes the page, so every destination that leaves the page
@@ -82,8 +82,8 @@ export function SiteFooter() {
               <p className={columnLabel}>{t("footer.resources")}</p>
               <ul className="flex flex-col items-start gap-1">
                 <li>
-                  <Link href="/#resources" className={footLink}>
-                    {t("resources.title")}
+                  <Link href="/talks" className={footLink}>
+                    {t("nav.talks")}
                   </Link>
                 </li>
                 <li>

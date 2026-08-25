@@ -11,6 +11,7 @@ import { alternateLanguages, localeUrl } from "@/lib/site";
 const ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
   { path: "/registry", priority: 0.8, changeFrequency: "weekly" as const },
+  { path: "/talks", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/faq", priority: 0.7, changeFrequency: "monthly" as const },
 ];
 

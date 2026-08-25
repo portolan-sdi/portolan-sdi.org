@@ -13,7 +13,11 @@
     "collapse": "Collapse the index",
     "expand": "Index",
     "faq": "FAQ",
-    "coverage": "Explore catalogs"
+    "coverage": "Explore catalogs",
+    "overview": "Overview",
+    "resources": "Resources",
+    "talks": "Talks & demos",
+    "toggleGroup": "{section} links"
   },
   "hero": {
     "title": "Portolan makes geospatial data",
@@ -247,42 +251,6 @@
     },
     "lastChecked": "Last checked: {date}"
   },
-  "resources": {
-    "title": "Talks & demos",
-    "items": {
-      "yharbyTalk": {
-        "title": "Portolan: An SDI Without Servers",
-        "attribution": "Youssef Harby · Cloud Native Geospatial Japan 2026",
-        "description": "Builds the path to Portolan one layer at a time, from range requests on object storage to one <m>STAC</m> catalog that software, people, and agents read the same way.",
-        "alt": "Opening slide of the talk, with the title in English and Japanese above the event and the speaker."
-      },
-      "holmesTalk": {
-        "title": "A Cloud-Native Upgrade for Spatial Data Infrastructure",
-        "attribution": "Chris Holmes · Open Geodag 2026",
-        "description": "How <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m>, <m>STAC</m>, and other cloud-native formats can improve how spatial data infrastructures work.",
-        "alt": "Opening slide of the talk, with the title and a link to the Dutch portal demo."
-      },
-      "nextSdi": {
-        "title": "The Next SDI",
-        "attribution": "Javier de la Torre · OGC Connect Helsinki",
-        "description": "How an SDI can work as trusted infrastructure for people and agents while keeping data under its publisher's control.",
-        "alt": "Opening slide of the talk, over a map of street density."
-      },
-      "finlandDemo": {
-        "title": "Finland.SDI agent demo",
-        "attribution": "CARTO",
-        "description": "Watch an agent answer questions using Finland's national SDI, reading directly from the catalog without an API.",
-        "alt": "The demo home screen, inviting a question about Finland's data."
-      },
-      "costCalc": {
-        "title": "Cost calculator",
-        "attribution": "Open Geodag",
-        "description": "Estimate the cost of publishing your data as a Portolan catalog.",
-        "alt": "The calculator, comparing monthly storage and egress costs across three providers."
-      }
-    },
-    "faqLink": "Read the FAQ"
-  },
   "faq": {
     "meta": {
       "title": "Frequently asked questions",
@@ -334,6 +302,45 @@
         "q": "What can’t Portolan do yet?",
         "p1": "Portolan is still early-stage, and the specification and tooling are evolving as we test them against more publishers, datasets, and use cases. Current gaps include access-controlled data, transactional editing workflows, and normative support for formats such as Zarr and COPC.",
         "p2": "Our near-term focus is to expand the set of reference catalogs, stabilize the core specification, and reach a stable v1.0 CLI. Breaking changes remain possible until then, so Portolan is currently best suited to early adopters. See the <roadmap>project roadmap</roadmap> for current work and linked issues."
+      }
+    }
+  },
+  "talks": {
+    "meta": {
+      "title": "Talks & demos",
+      "description": "Conference talks and live demos that show Portolan in use. Slides from Cloud Native Geospatial Japan, Open Geodag, and OGC Connect Helsinki, plus an agent demo and a storage cost calculator."
+    },
+    "title": "Talks & demos",
+    "items": {
+      "yharbyTalk": {
+        "title": "Portolan: An SDI Without Servers",
+        "attribution": "Youssef Harby · Cloud Native Geospatial Japan 2026",
+        "description": "Builds the path to Portolan one layer at a time, from range requests on object storage to one <m>STAC</m> catalog that software, people, and agents read the same way.",
+        "alt": "Opening slide of the talk, with the title in English and Japanese above the event and the speaker."
+      },
+      "holmesTalk": {
+        "title": "A Cloud-Native Upgrade for Spatial Data Infrastructure",
+        "attribution": "Chris Holmes · Open Geodag 2026",
+        "description": "How <m>GeoParquet</m>, <m>COG</m>, <m>PMTiles</m>, <m>STAC</m>, and other cloud-native formats can improve how spatial data infrastructures work.",
+        "alt": "Opening slide of the talk, with the title and a link to the Dutch portal demo."
+      },
+      "nextSdi": {
+        "title": "The Next SDI",
+        "attribution": "Javier de la Torre · OGC Connect Helsinki",
+        "description": "How an SDI can work as trusted infrastructure for people and agents while keeping data under its publisher's control.",
+        "alt": "Opening slide of the talk, over a map of street density."
+      },
+      "finlandDemo": {
+        "title": "Finland.SDI agent demo",
+        "attribution": "CARTO",
+        "description": "Watch an agent answer questions using Finland's national SDI, reading directly from the catalog without an API.",
+        "alt": "The demo home screen, inviting a question about Finland's data."
+      },
+      "costCalc": {
+        "title": "Cost calculator",
+        "attribution": "Open Geodag",
+        "description": "Estimate the cost of publishing your data as a Portolan catalog.",
+        "alt": "The calculator, comparing monthly storage and egress costs across three providers."
       }
     }
   }
