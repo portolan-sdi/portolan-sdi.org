@@ -38,6 +38,7 @@ const HOME_ITEMS: RailItem[] = [
   { id: "ecosystem", label: "ecosystem.eyebrow" },
   { id: "resources", label: "resources.title" },
   { id: "involved", label: "getInvolved.title" },
+  { id: "coverage", label: "nav.coverage" },
   { id: "registry", label: "nav.registry" },
   { id: "faq", label: "nav.faq", href: "/faq" },
 ];

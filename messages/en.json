@@ -12,7 +12,8 @@
     "who": "Who it's for",
     "collapse": "Collapse the index",
     "expand": "Index",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "coverage": "Coverage"
   },
   "hero": {
     "title": "Portolan makes geospatial data",
@@ -121,6 +122,15 @@
       "browser": "A web interface for browsing and exploring Portolan catalogs.",
       "skills": "Agent skills for creating and working with Portolan catalogs."
     }
+  },
+  "coverage": {
+    "cta": "Explore the registry",
+    "about": "This map shows where data in the Portolan registry is available. Each hexagon is shaded by the number of distinct catalogs with at least one collection covering that area.",
+    "cell": {
+      "catalogs": "{count, plural, one {# catalog} other {# catalogs}}"
+    },
+    "caption": "Global coverage of Portolan catalogs",
+    "legend": "catalogs per cell"
   },
   "registry": {
     "title": "Browse {count} catalogs",

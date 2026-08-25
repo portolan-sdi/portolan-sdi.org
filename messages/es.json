@@ -12,7 +12,8 @@
     "who": "Para quién es",
     "collapse": "Contraer el índice",
     "expand": "Índice",
-    "faq": "Preguntas frecuentes"
+    "faq": "Preguntas frecuentes",
+    "coverage": "Cobertura"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
@@ -121,6 +122,15 @@
       "browser": "Una interfaz web para navegar y explorar catálogos Portolan.",
       "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos."
     }
+  },
+  "coverage": {
+    "cta": "Explorar el registro",
+    "about": "Este mapa muestra dónde hay datos disponibles en el registro de Portolan. Cada hexágono se sombrea según el número de catálogos distintos que tienen al menos una colección sobre esa zona.",
+    "cell": {
+      "catalogs": "{count, plural, one {# catálogo} other {# catálogos}}"
+    },
+    "caption": "Cobertura mundial de los catálogos Portolan",
+    "legend": "catálogos por celda"
   },
   "registry": {
     "title": "Explora {count} catálogos",

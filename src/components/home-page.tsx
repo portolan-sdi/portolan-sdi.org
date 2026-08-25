@@ -11,6 +11,7 @@ import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
 import { GetInvolvedSection } from "./get-involved-section";
 import { WhoForSection } from "./who-for-section";
+import { CoverageSection } from "./coverage-section";
 import { PipelineFigure } from "./pipeline-figure";
 import { Btn, DirArrow, Ltr, SectionHead, monoChunk } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
@@ -406,6 +407,10 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
       {/* Community contribution paths */}
       <GetInvolvedSection />
+
+      {/* Coverage density, binned from collection bboxes. A prototype that
+          sits above the registry section and leaves it untouched. */}
+      {catalogs.length > 0 && <CoverageSection catalogs={catalogs} />}
 
       {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (
