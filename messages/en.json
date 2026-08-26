@@ -110,6 +110,15 @@
       }
     }
   },
+  "demo": {
+    "navLabel": "Demo",
+    "caption": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
+    "play": "Play the demo",
+    "pause": "Pause the demo",
+    "fullscreen": "Show the demo full screen",
+    "exitFullscreen": "Leave full screen",
+    "seek": "Seek in the demo"
+  },
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "Ecosystem",
