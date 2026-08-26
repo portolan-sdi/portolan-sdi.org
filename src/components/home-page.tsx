@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlyphMap } from "./glyph-map";
 import { SiteShell } from "./site-rail";
+import { DemoSection } from "./demo-section";
 import { EcosystemSection } from "./ecosystem-section";
 import { InvolvedSection } from "./involved-section";
 import { GetInvolvedSection } from "./get-involved-section";
@@ -85,6 +86,10 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* The recorded demo. It answers the hero before the page explains
+          itself: one run from a source portal to a published catalog. */}
+      <DemoSection />
 
       {/* Why Portolan */}
       <section id="why" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line">

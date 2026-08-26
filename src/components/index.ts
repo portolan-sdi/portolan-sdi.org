@@ -2,6 +2,7 @@ export { PortolanLogo } from "./portolan-logo";
 export { GlyphMap } from "./glyph-map";
 export { PageHero } from "./page-hero";
 export { LiveCount } from "./live-count";
+export { DemoSection } from "./demo-section";
 export { HomePage } from "./home-page";
 export { FaqPage } from "./faq-page";
 export { TalksPage } from "./talks-page";

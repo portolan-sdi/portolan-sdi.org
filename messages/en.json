@@ -110,6 +110,11 @@
       }
     }
   },
+  "demo": {
+    "eyebrow": "Demo",
+    "title": "Watch a catalog get built",
+    "caption": "End-to-end extraction of Philadelphia housing data from OpenDataPhilly to a complete <catalog>Portolan catalog</catalog>, hosted on <sc>Source Cooperative</sc>."
+  },
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "Ecosystem",

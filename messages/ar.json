@@ -110,6 +110,11 @@
       }
     }
   },
+  "demo": {
+    "eyebrow": "عرض توضيحي",
+    "title": "شاهد كيف يُبنى الفهرس",
+    "caption": "استخراج كامل لبيانات الإسكان في فيلادلفيا من OpenDataPhilly إلى <catalog>فهرس Portolan</catalog> متكامل، مستضاف على <sc>Source Cooperative</sc>."
+  },
   "ecosystem": {
     "eyebrow": "المنظومة",
     "title": "المنظومة",

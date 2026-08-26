@@ -110,6 +110,11 @@
       }
     }
   },
+  "demo": {
+    "eyebrow": "Demo",
+    "title": "Mira cómo se construye un catálogo",
+    "caption": "Extracción de extremo a extremo de datos de vivienda de Filadelfia desde OpenDataPhilly hasta un <catalog>catálogo de Portolan</catalog> completo, alojado en <sc>Source Cooperative</sc>."
+  },
   "ecosystem": {
     "eyebrow": "Ecosistema",
     "title": "Ecosistema",
