@@ -116,6 +116,7 @@
     "play": "Reproducir la demo",
     "pause": "Pausar la demo",
     "fullscreen": "Ver la demo en pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
     "seek": "Avanzar en la demo"
   },
   "ecosystem": {

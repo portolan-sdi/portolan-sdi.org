@@ -608,6 +608,55 @@ body {
   outline-offset: 3px;
 }
 
+/* The reserved ratio lives on a custom property rather than an inline style,
+   so the full-screen rules below can override it by normal specificity. */
+.demo-media {
+  aspect-ratio: var(--demo-ratio);
+}
+
+/* Full screen. The frame itself goes full screen so our own bar survives, and
+   that makes the frame responsible for fitting the picture. Left alone, the
+   reserved ratio scales the video to the screen width and runs its height well
+   past the bottom edge. The stage takes the leftover height and the video
+   contains itself inside it.
+
+   Each vendor pseudo-class needs its own rule. One invalid selector in a list
+   drops the whole rule. */
+.demo-frame:fullscreen {
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  box-shadow: none;
+  background: var(--p-bg);
+}
+.demo-frame:fullscreen .demo-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.demo-frame:fullscreen .demo-media {
+  aspect-ratio: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.demo-frame:-webkit-full-screen {
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  box-shadow: none;
+  background: var(--p-bg);
+}
+.demo-frame:-webkit-full-screen .demo-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.demo-frame:-webkit-full-screen .demo-media {
+  aspect-ratio: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 /* --- Ecosystem project cards -------------------------------------------- */
 /* Cards rest raised on a hard blue offset shadow; hover presses them flush,
    as if the card were clicked. Direction-aware so the shadow sits on the

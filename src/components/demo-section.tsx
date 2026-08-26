@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { useTranslations } from "next-intl";
 
 /**
@@ -65,6 +66,7 @@ export function DemoSection() {
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [full, setFull] = useState(false);
 
   const toggle = useCallback(() => {
     const video = videoRef.current;
@@ -87,7 +89,25 @@ export function DemoSection() {
   const fullscreen = useCallback(() => {
     // The wrapper, not the video: full screen on the element keeps our own bar
     // on screen. Full screen on the video hands control back to the browser.
-    void frameRef.current?.requestFullscreen?.();
+    // The frame then has to fit the picture itself, which globals.css does.
+    if (document.fullscreenElement) {
+      void document.exitFullscreen?.();
+      return;
+    }
+    const frame = frameRef.current as
+      | (HTMLDivElement & { webkitRequestFullscreen?: () => void })
+      | null;
+    if (!frame) return;
+    if (frame.requestFullscreen) void frame.requestFullscreen();
+    else frame.webkitRequestFullscreen?.();
+  }, []);
+
+  // The reader can also leave full screen with Escape or the browser's own
+  // control, so the button label follows the document rather than the click.
+  useEffect(() => {
+    const onChange = () => setFull(document.fullscreenElement === frameRef.current);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
   }, []);
 
   // The element is the source of truth. It also changes state on its own, from
@@ -144,15 +164,15 @@ export function DemoSection() {
           dir="ltr"
           className="demo-frame border border-p-line bg-p-paper"
         >
-          <div className="relative">
+          <div className="demo-stage relative">
             <video
               ref={videoRef}
               playsInline
               preload="none"
               poster="/video/portolan-demo-one.jpg"
               onClick={toggle}
-              style={{ aspectRatio: DEMO_RATIO }}
-              className="block w-full h-auto cursor-pointer bg-p-paper"
+              style={{ "--demo-ratio": DEMO_RATIO } as CSSProperties}
+              className="demo-media block w-full h-auto cursor-pointer bg-p-paper"
             >
               <source src="/video/portolan-demo-one.mp4" type="video/mp4" />
             </video>
@@ -211,10 +231,10 @@ export function DemoSection() {
               <button
                 type="button"
                 onClick={fullscreen}
-                aria-label={t("fullscreen")}
+                aria-label={full ? t("exitFullscreen") : t("fullscreen")}
                 className="shrink-0 text-p-ink transition-colors duration-150 hover:text-p-primary cursor-pointer"
               >
-                <FullscreenGlyph />
+                <FullscreenGlyph exit={full} />
               </button>
             </div>
           )}
@@ -256,7 +276,7 @@ function PauseGlyph() {
   );
 }
 
-function FullscreenGlyph() {
+function FullscreenGlyph({ exit = false }: { exit?: boolean }) {
   return (
     <svg
       width="14"
@@ -267,7 +287,11 @@ function FullscreenGlyph() {
       stroke="currentColor"
       strokeWidth="1.6"
     >
-      <path d="M1 5V1h4M13 9v4H9M9 1h4v4M5 13H1V9" />
+      {exit ? (
+        <path d="M5 1v4H1M9 13V9h4M13 5H9V1M1 9h4v4" />
+      ) : (
+        <path d="M1 5V1h4M13 9v4H9M9 1h4v4M5 13H1V9" />
+      )}
     </svg>
   );
 }
