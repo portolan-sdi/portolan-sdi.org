@@ -210,7 +210,6 @@
       "info": "Créditos del mapa",
       "label": "Mapa de la cobertura de los catálogos",
       "cluster": "{count} catálogos aquí",
-      "broad": "{count} colecciones demasiado amplias para ubicar",
       "reset": "Restablecer vista",
       "place": "lugar {index} de {total}"
     },

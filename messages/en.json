@@ -210,7 +210,6 @@
       "info": "Map credits",
       "label": "Map of catalog coverage",
       "cluster": "{count} catalogs here",
-      "broad": "{count} collections too broad to place",
       "reset": "Reset view",
       "place": "place {index} of {total}"
     },
