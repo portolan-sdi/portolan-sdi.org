@@ -41,7 +41,7 @@ export type RailItem = {
 
 // The homepage sections, in document order.
 const OVERVIEW_CHILDREN: RailItem[] = [
-  { id: "demo", label: "demo.eyebrow" },
+  { id: "demo", label: "demo.navLabel" },
   { id: "why", label: "nav.why" },
   { id: "who", label: "nav.who" },
   { id: "how", label: "howItWorks.eyebrow" },

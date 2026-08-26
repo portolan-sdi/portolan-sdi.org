@@ -556,6 +556,58 @@ body {
   animation-direction: reverse;
 }
 
+/* --- Demo video frame ---------------------------------------------------- */
+/* The same hard blue offset the ecosystem cards rest on, held static. The
+   cards press flush on hover because a card is a link. This frame holds a
+   video, so the shadow must not move while somebody watches it. */
+.demo-frame {
+  box-shadow: 5px 5px 0 var(--p-primary);
+}
+[dir="rtl"] .demo-frame {
+  box-shadow: -5px 5px 0 var(--p-primary);
+}
+
+/* The scrub track. A native range input carries the keyboard behaviour for
+   free, so the work here is stripping the platform chrome down to two square
+   marks: a 2px rule and a hard block for the thumb. The filled portion is an
+   inline background gradient the component updates as the video plays. */
+.demo-scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+}
+.demo-scrub::-webkit-slider-runnable-track {
+  height: 2px;
+  background: transparent;
+}
+.demo-scrub::-moz-range-track {
+  height: 2px;
+  background: transparent;
+}
+.demo-scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 3px;
+  height: 14px;
+  margin-top: -6px;
+  border: 0;
+  border-radius: 0;
+  background: var(--p-ink);
+}
+.demo-scrub::-moz-range-thumb {
+  width: 3px;
+  height: 14px;
+  border: 0;
+  border-radius: 0;
+  background: var(--p-ink);
+}
+.demo-scrub:focus-visible {
+  outline: 2px solid var(--p-primary);
+  outline-offset: 3px;
+}
+
 /* --- Ecosystem project cards -------------------------------------------- */
 /* Cards rest raised on a hard blue offset shadow; hover presses them flush,
    as if the card were clicked. Direction-aware so the shadow sits on the

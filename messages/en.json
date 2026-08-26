@@ -111,9 +111,12 @@
     }
   },
   "demo": {
-    "eyebrow": "Demo",
-    "title": "Watch a catalog get built",
-    "caption": "End-to-end extraction of Philadelphia housing data from OpenDataPhilly to a complete <catalog>Portolan catalog</catalog>, hosted on <sc>Source Cooperative</sc>."
+    "navLabel": "Demo",
+    "caption": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
+    "play": "Play the demo",
+    "pause": "Pause the demo",
+    "fullscreen": "Show the demo full screen",
+    "seek": "Seek in the demo"
   },
   "ecosystem": {
     "eyebrow": "Ecosystem",

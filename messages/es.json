@@ -111,9 +111,12 @@
     }
   },
   "demo": {
-    "eyebrow": "Demo",
-    "title": "Mira cómo se construye un catálogo",
-    "caption": "Extracción de extremo a extremo de datos de vivienda de Filadelfia desde OpenDataPhilly hasta un <catalog>catálogo de Portolan</catalog> completo, alojado en <sc>Source Cooperative</sc>."
+    "navLabel": "Demo",
+    "caption": "Creando <catalog>un catálogo de Portolan</catalog> de principio a fin a partir de datos de vivienda de Filadelfia.",
+    "play": "Reproducir la demo",
+    "pause": "Pausar la demo",
+    "fullscreen": "Ver la demo en pantalla completa",
+    "seek": "Avanzar en la demo"
   },
   "ecosystem": {
     "eyebrow": "Ecosistema",
