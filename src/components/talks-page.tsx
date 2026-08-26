@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useRevealed } from "@/hooks/use-revealed";
+import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 import { DirArrow, Ltr, monoChunk } from "./ui";
 
@@ -15,8 +16,8 @@ import { DirArrow, Ltr, monoChunk } from "./ui";
 // lifts a card off the page.
 //
 // This was a homepage section until the site went multi-page. It now owns a
-// route, so the heading is an h1, the section carries no id (the rail entry is
-// named by activeId), and the rule under the rail is the only one it needs.
+// route, so the page header band above carries the h1 and this section carries
+// no id (the rail entry is named by activeId).
 
 type Item = {
   key: string;
@@ -73,23 +74,23 @@ export function TalksPage() {
 
   return (
     <SiteShell navItems={AWAY_ITEMS} activeId="talks">
+      <PageHero title={t("title")} />
+
       <section
         ref={ref}
         data-in={revealed}
-        className="tk-wall relative isolate overflow-hidden px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]"
+        className="tk-wall relative isolate overflow-hidden px-[var(--p-pad-section-x)] pb-[var(--p-pad-section-y)] pt-[clamp(28px,3.5vw,48px)]"
       >
         {/* The band is positioned as a share of the section, so it keeps
-            sitting behind the wall as translations change the header height. */}
+            sitting behind the wall as translations change the card heights.
+            The headline moved to the page header band above, so the wall now
+            starts at the top of this section and the band sits higher. */}
         <div
           aria-hidden
-          className="tk-band absolute inset-x-0 top-[44%] -z-10 h-[clamp(150px,16vw,210px)] bg-p-primary"
+          className="tk-band absolute inset-x-0 top-[38%] -z-10 h-[clamp(150px,16vw,210px)] bg-p-primary"
         />
 
         <div className="mx-auto max-w-[1240px]">
-          <h1 className="mb-[clamp(2.5rem,5vw,4rem)] text-section font-extrabold leading-[1.05] tracking-[-0.03em] text-balance">
-            {t("title")}
-          </h1>
-
           <div style={{ "--tk-step": "clamp(36px,5vw,72px)" } as React.CSSProperties}
             className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 sm:pb-[var(--tk-step)] xl:grid-cols-5">
             {ITEMS.map((item, i) => {

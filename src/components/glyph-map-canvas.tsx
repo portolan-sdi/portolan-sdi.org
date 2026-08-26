@@ -5,8 +5,14 @@ import { createGlyphScene, createGlyphOrthographicCamera } from "glyphcss";
 
 interface GlyphMapCanvasProps {
   className?: string;
-  /** Drift speed in CSS pixels per second. */
+  /** Drift speed in CSS pixels per second. Ignored when `still` is set. */
   pxPerSecond?: number;
+  /**
+   * Hold the map still. The page header band uses this: the homepage carries
+   * the one moving element on the site, and repeating that drift above every
+   * other page would make the motion ordinary rather than a moment.
+   */
+  still?: boolean;
 }
 
 /** The baked elevation grid written by scripts/bake-world-map.mjs. */
@@ -136,6 +142,7 @@ function buildPolygons(grid: WorldRelief) {
 export default function GlyphMapCanvas({
   className = "",
   pxPerSecond = DEFAULT_PX_PER_SECOND,
+  still = false,
 }: GlyphMapCanvasProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -217,7 +224,7 @@ export default function GlyphMapCanvas({
       // One tile per world, plus one so the trailing edge never enters view
       // at the end of a loop.
       const width = frame.getBoundingClientRect().width || WORLD_PX;
-      const tiles = Math.ceil(width / WORLD_PX) + 1;
+      const tiles = Math.ceil(width / WORLD_PX) + (still ? 0 : 1);
       const source = scene.output;
       source.style.margin = "0";
 
@@ -235,7 +242,7 @@ export default function GlyphMapCanvas({
         "--glyph-drift-duration",
         `${(WORLD_PX / pxPerSecond).toFixed(2)}s`
       );
-      track.dataset.drifting = reducedMotion ? "false" : "true";
+      track.dataset.drifting = reducedMotion || still ? "false" : "true";
     }
 
     async function start() {
@@ -295,7 +302,7 @@ export default function GlyphMapCanvas({
       stopObserving();
       scene?.destroy();
     };
-  }, [pxPerSecond]);
+  }, [pxPerSecond, still]);
 
   if (failed) return null;
 
