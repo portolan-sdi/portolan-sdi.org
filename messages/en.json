@@ -159,30 +159,18 @@
   "registry": {
     "meta": {
       "title": "Registry",
-      "description": "Every Portolan catalog the registry tracks. Browse them on a map or as cards, see when each one was last checked, and submit your own."
+      "description": "Every Portolan catalog the registry tracks. Explore them on the map, search them, and submit your own."
     },
-    "title": "Browse {count} catalogs",
+    "title": "Portolan registry",
+    "intro": "The <reg>Portolan registry</reg> is a catalog of independently hosted catalogs and a first step toward a federated network for geospatial data. It makes interoperable catalogs from many publishers searchable in one place while the underlying data remain distributed and are queried directly from the source.",
     "search": {
       "placeholder": "Search catalogs...",
-      "noResults": "No catalogs match your search",
-      "clearFilters": "Clear filters"
-    },
-    "filters": {
-      "tags": "Tags",
-      "access": "Access",
-      "kind": "Catalog type",
-      "allKinds": "All types"
-    },
-    "access": {
-      "public": "Public",
-      "authenticated": "Authenticated"
+      "noResults": "No catalogs match your search"
     },
     "validation": {
       "unvalidated": "Unvalidated"
     },
     "card": {
-      "maintainer": "Maintained by",
-      "submitted": "Submitted",
       "viewCatalog": "View catalog",
       "collections": "{count} collections",
       "licenses": "{count} licenses",
@@ -193,17 +181,13 @@
       "updated": "updated {date}",
       "copyUrl": "Copy address",
       "copied": "Copied",
-      "noLocation": "No location reported",
-      "showDetails": "Details",
-      "hideDetails": "Hide details"
+      "noLocation": "No location reported"
     },
     "cta": {
       "title": "Have a catalog to share?",
-      "description": "Submit your Portolan catalog to the registry.",
-      "button": "Submit your catalog"
+      "description": "Submit your Portolan catalog to the registry."
     },
     "submit": {
-      "title": "Submit a catalog",
       "urlError": "URL must end with catalog.json",
       "emailPlaceholder": "you@example.org",
       "emailError": "Enter an email address",
@@ -211,29 +195,24 @@
       "submit": "Submit",
       "submitting": "Submitting...",
       "successTitle": "Submitted!",
-      "successDescription": "Your catalog will appear after review.",
       "viewPr": "View submission",
       "submitAnother": "Submit another",
       "failedError": "Submission failed",
       "genericError": "Something went wrong"
     },
-    "view": {
-      "cards": "Cards",
-      "map": "Map"
-    },
     "map": {
       "searchPlaceholder": "Search for a region...",
       "searchLabel": "Search regions",
-      "noSearchResults": "No places found",
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out",
-      "reset": "Reset view",
-      "closeDetails": "Close details",
       "noLocation": "{count} without location",
       "loading": "Loading map...",
-      "info": "Map credits"
+      "info": "Map credits",
+      "label": "Map of catalog coverage",
+      "cluster": "{count} catalogs here",
+      "reset": "Reset view",
+      "place": "place {index} of {total}"
     },
-    "generated": "Last updated: {date}",
     "kind": {
       "official": "Official",
       "mirror": "Mirror"
@@ -241,15 +220,17 @@
     "status": {
       "stale": "Stale"
     },
-    "global": {
-      "title": "Global datasets"
-    },
     "pagination": {
       "prev": "Previous page",
       "next": "Next page",
       "status": "{page} / {total}"
     },
-    "lastChecked": "Last checked: {date}"
+    "lastChecked": "Last checked: {date}",
+    "results": {
+      "all": "{count} catalogs",
+      "inView": "{count} catalogs in this view",
+      "global": "{count} global"
+    }
   },
   "faq": {
     "meta": {

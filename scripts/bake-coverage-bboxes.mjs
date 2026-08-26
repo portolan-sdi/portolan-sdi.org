@@ -122,13 +122,16 @@ function splitBbox(bbox) {
 /**
  * Walk one catalog tree and collect every collection bbox it holds.
  *
+ * Each record keeps the collection that reported the bbox. The registry
+ * explorer draws one map point per record and names its parent catalog.
+ *
  * A child link points at a sub-catalog or at a collection. The script reads the
  * fetched document's `type` field to tell them apart, because the href alone
  * does not say.
  */
 async function walkCatalog(rootUrl, stats) {
   const visited = new Set();
-  const bboxes = [];
+  const records = [];
   let collections = 0;
   let skipped = 0;
 
@@ -149,7 +152,11 @@ async function walkCatalog(rootUrl, stats) {
       // STAC puts the overall extent first. Later entries refine it.
       const bbox = normalizeBbox(doc.extent?.spatial?.bbox?.[0]);
       if (bbox) {
-        bboxes.push(...splitBbox(bbox));
+        const id = typeof doc.id === "string" ? doc.id : url;
+        const title = typeof doc.title === "string" && doc.title ? doc.title : id;
+        for (const part of splitBbox(bbox)) {
+          records.push({ id, title, bbox: part });
+        }
       } else {
         skipped++;
       }
@@ -169,20 +176,20 @@ async function walkCatalog(rootUrl, stats) {
   }
 
   await visit(rootUrl, 0);
-  return { bboxes, collections, skipped };
+  return { records, collections, skipped };
 }
 
 // Two collections often share one bbox, and a mirror repeats its source's
 // extents. The map counts catalogs, not collections, so a duplicate adds work
 // and changes nothing.
-function dedupe(bboxes) {
+function dedupe(records) {
   const seen = new Set();
   const out = [];
-  for (const bbox of bboxes) {
-    const key = bbox.join(",");
+  for (const record of records) {
+    const key = record.bbox.join(",");
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push(bbox);
+    out.push(record);
   }
   return out;
 }
@@ -204,8 +211,8 @@ async function main() {
   for (const link of children) {
     const id = link["portolan_registry:id"];
     const rootUrl = new URL(link.href, REGISTRY_URL).toString();
-    const { bboxes, collections, skipped } = await walkCatalog(rootUrl, stats);
-    const unique = dedupe(bboxes);
+    const { records, collections, skipped } = await walkCatalog(rootUrl, stats);
+    const unique = dedupe(records);
 
     totalCollections += collections;
     totalSkipped += skipped;
@@ -217,7 +224,7 @@ async function main() {
     );
 
     if (unique.length > 0) {
-      catalogs.push({ id, collections, bboxes: unique });
+      catalogs.push({ id, collection_count: collections, collections: unique });
     }
   }
 
@@ -232,7 +239,7 @@ async function main() {
   await writeFile(OUT_PATH, JSON.stringify(payload), "utf8");
 
   const bytes = JSON.stringify(payload).length;
-  const totalBboxes = catalogs.reduce((sum, c) => sum + c.bboxes.length, 0);
+  const totalBboxes = catalogs.reduce((sum, c) => sum + c.collections.length, 0);
 
   console.log(
     `\nWrote ${OUT_PATH}` +

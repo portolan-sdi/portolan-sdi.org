@@ -2,12 +2,17 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { RegistryPage } from "@/components";
 import { getCatalogs } from "@/lib/catalogs";
+import { parseExplorerParams } from "@/lib/explorer-url";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
 const ROUTE = "/registry";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
+  // The explorer keeps its extent, query, and page in the URL. Reading them
+  // here renders a shared link's results on the first paint, which also makes
+  // this route render per request.
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 // The locale layout sets a canonical of the home page for the whole segment,
@@ -16,7 +21,7 @@ interface PageProps {
 // reason.
 export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> {
+}: Pick<PageProps, "params">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "registry.meta" });
   const title = t("title");
@@ -45,9 +50,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function Registry({ params }: PageProps) {
+export default async function Registry({ params, searchParams }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  const initial = parseExplorerParams(await searchParams);
 
   let catalogs: Awaited<ReturnType<typeof getCatalogs>>["catalogs"] = [];
   try {
@@ -57,5 +64,5 @@ export default async function Registry({ params }: PageProps) {
     console.error("Failed to fetch catalogs:", err);
   }
 
-  return <RegistryPage catalogs={catalogs} />;
+  return <RegistryPage catalogs={catalogs} initial={initial} />;
 }

@@ -159,30 +159,18 @@
   "registry": {
     "meta": {
       "title": "السجل",
-      "description": "كل كتالوجات Portolan التي يتابعها السجل. تصفّحها على خريطة أو كبطاقات، واطّلع على آخر فحص لكل واحد، وأرسل كتالوجك."
+      "description": "كل كتالوجات Portolan التي يتابعها السجل. استكشفها على الخريطة وابحث فيها وأرسل كتالوجك."
     },
-    "title": "تصفّح {count} كتالوج",
+    "title": "سجل Portolan",
+    "intro": "<reg>سجل Portolan</reg> هو كتالوج لكتالوجات مستضافة بشكل مستقل وخطوة أولى نحو شبكة اتحادية للبيانات الجغرافية المكانية. يتيح البحث في مكان واحد عن كتالوجات قابلة للتشغيل البيني من ناشرين كثيرين، بينما تبقى البيانات الأساسية موزعة ويجري الاستعلام عنها مباشرة من المصدر.",
     "search": {
       "placeholder": "ابحث في الكتالوجات...",
-      "noResults": "لا توجد كتالوجات تطابق بحثك",
-      "clearFilters": "مسح عوامل التصفية"
-    },
-    "filters": {
-      "tags": "الوسوم",
-      "access": "الوصول",
-      "kind": "نوع الكتالوج",
-      "allKinds": "كل الأنواع"
-    },
-    "access": {
-      "public": "عام",
-      "authenticated": "مصادق عليه"
+      "noResults": "لا توجد كتالوجات تطابق بحثك"
     },
     "validation": {
       "unvalidated": "غير موثق"
     },
     "card": {
-      "maintainer": "يديره",
-      "submitted": "أُرسل",
       "viewCatalog": "عرض الكتالوج",
       "collections": "{count} مجموعة",
       "licenses": "{count} رخصة",
@@ -193,17 +181,13 @@
       "updated": "حُدّث في {date}",
       "copyUrl": "نسخ العنوان",
       "copied": "تم النسخ",
-      "noLocation": "لا يوجد موقع مُعلن",
-      "showDetails": "التفاصيل",
-      "hideDetails": "إخفاء التفاصيل"
+      "noLocation": "لا يوجد موقع مُعلن"
     },
     "cta": {
       "title": "هل لديك كتالوج لمشاركته؟",
-      "description": "أرسل كتالوج Portolan الخاص بك إلى السجل.",
-      "button": "أرسل كتالوجك"
+      "description": "أرسل كتالوج Portolan الخاص بك إلى السجل."
     },
     "submit": {
-      "title": "إرسال كتالوج",
       "urlError": "يجب أن ينتهي الرابط بـ catalog.json",
       "emailPlaceholder": "you@example.org",
       "emailError": "أدخل عنوان بريد إلكتروني",
@@ -211,29 +195,24 @@
       "submit": "إرسال",
       "submitting": "جارٍ الإرسال...",
       "successTitle": "تم الإرسال!",
-      "successDescription": "سيظهر كتالوجك بعد المراجعة.",
       "viewPr": "عرض الإرسال",
       "submitAnother": "إرسال آخر",
       "failedError": "تعذّر الإرسال",
       "genericError": "حدث خطأ ما"
     },
-    "view": {
-      "cards": "بطاقات",
-      "map": "خريطة"
-    },
     "map": {
       "searchPlaceholder": "ابحث عن منطقة...",
       "searchLabel": "البحث عن المناطق",
-      "noSearchResults": "لم يتم العثور على أماكن",
       "zoomIn": "تكبير",
       "zoomOut": "تصغير",
-      "reset": "إعادة ضبط العرض",
-      "closeDetails": "إغلاق التفاصيل",
       "noLocation": "{count} بدون موقع",
       "loading": "جارٍ تحميل الخريطة...",
-      "info": "حقوق الخريطة"
+      "info": "حقوق الخريطة",
+      "label": "خريطة تغطية الكتالوجات",
+      "cluster": "{count} كتالوج هنا",
+      "reset": "إعادة ضبط العرض",
+      "place": "الموقع {index} من {total}"
     },
-    "generated": "آخر تحديث {date}",
     "kind": {
       "official": "رسمي",
       "mirror": "نسخة مرآة"
@@ -241,15 +220,17 @@
     "status": {
       "stale": "قديم"
     },
-    "global": {
-      "title": "بيانات عالمية"
-    },
     "pagination": {
       "prev": "الصفحة السابقة",
       "next": "الصفحة التالية",
       "status": "{page} / {total}"
     },
-    "lastChecked": "آخر مراجعة {date}"
+    "lastChecked": "آخر مراجعة {date}",
+    "results": {
+      "all": "{count} كتالوج",
+      "inView": "{count} كتالوج في هذا العرض",
+      "global": "{count} عالمية"
+    }
   },
   "faq": {
     "meta": {

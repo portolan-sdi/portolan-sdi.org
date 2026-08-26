@@ -37,8 +37,8 @@ function MetaRow({ children }: { children: ReactNode[] }) {
   );
 }
 
-/** Logo, title, and any exception badge. Shared by the card front and the map panel. */
-export function CatalogHeader({ catalog }: CatalogProps) {
+/** Logo, title, and any exception badge. */
+function CatalogHeader({ catalog, onSelect }: CatalogProps & { onSelect?: () => void }) {
   const t = useTranslations("registry");
   const [logoBroken, setLogoBroken] = useState(false);
   const logo = logoBroken ? null : catalog.logo;
@@ -61,7 +61,21 @@ export function CatalogHeader({ catalog }: CatalogProps) {
         />
       )}
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-card-title font-semibold line-clamp-3">{catalog.title}</h3>
+        {/* The title doubles as the selection control, so the card needs no
+            extra button to point the map at this catalog. */}
+        <h3 className="text-card-title font-semibold line-clamp-3">
+          {onSelect ? (
+            <button
+              type="button"
+              onClick={onSelect}
+              className="text-start hover:text-p-primary transition-colors cursor-pointer"
+            >
+              {catalog.title}
+            </button>
+          ) : (
+            catalog.title
+          )}
+        </h3>
         {/* Badge the exceptions only. A tag that reads the same on every card
             is chrome, not information. */}
         <div className="flex shrink-0 flex-col items-end gap-1">
@@ -74,8 +88,8 @@ export function CatalogHeader({ catalog }: CatalogProps) {
   );
 }
 
-/** Everything the crawl measured. Shared by the card back and the map panel. */
-export function CatalogFacts({ catalog }: CatalogProps) {
+/** Everything the crawl measured. */
+function CatalogFacts({ catalog }: CatalogProps) {
   const t = useTranslations("registry");
   const locale = useLocale();
 
@@ -116,29 +130,26 @@ export function CatalogFacts({ catalog }: CatalogProps) {
   );
 }
 
-/**
- * Copy the address, or open the catalog in the browser. `tabbable` is false on
- * a card face that is turned away, so its controls leave the tab order while
- * they are invisible.
- */
-export function CatalogActions({
-  catalog,
-  tabbable = true,
-}: CatalogProps & { tabbable?: boolean }) {
+/** Copy the address, or open the catalog in the browser. */
+function CatalogActions({ catalog }: CatalogProps) {
   const t = useTranslations("registry");
-  const tabIndex = tabbable ? 0 : -1;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-      <CopyUrlButton url={catalog.url} tabIndex={tabIndex} />
+    <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-1">
+      <CopyUrlButton url={catalog.url} />
+      {/* The arrow arrives on hover, the way the landing page's catalog and
+          ecosystem cards reveal theirs. The card opens the publisher's own
+          browser, so it takes the external mark. */}
       <a
         href={getBrowserUrl(catalog.url)}
         target="_blank"
         rel="noopener noreferrer"
-        tabIndex={tabIndex}
-        className="text-small text-p-primary hover:underline"
+        className="flex items-center gap-1.5 text-small text-p-primary hover:underline"
       >
-        {t("card.viewCatalog")} <DirArrow />
+        {t("card.viewCatalog")}
+        <span className="opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 rtl:translate-x-1 rtl:group-hover:translate-x-0">
+          <DirArrow kind="external" />
+        </span>
       </a>
     </div>
   );
@@ -154,101 +165,30 @@ function collectionLabel(
     : t("card.collections", { count: formatCount(catalog.collection_count, locale) });
 }
 
-// The front carries identity and the primary action, the back carries the
-// measurements. Both faces stay in the accessibility tree, so a screen reader
-// reads the whole card without turning it. The hidden face's controls leave
-// the tab order, which keeps invisible buttons unreachable.
+// One face. The card carries identity, every measurement the crawl made, and
+// both actions at once. Nothing is hidden, so nothing has to leave the tab
+// order and nothing has to animate to be read.
 //
-// Height is fixed rather than derived from content. The faces are absolutely
-// positioned, so the card needs a height, and a uniform grid keeps the page
-// from reflowing as cards turn.
-export function CatalogCard({ catalog }: CatalogProps) {
-  const t = useTranslations("registry");
-  const locale = useLocale();
-  const [flipped, setFlipped] = useState(false);
-  const updated = formatDate(catalog.updated, locale);
-
-  // The same link on both faces. Only the face you can see is tabbable.
-  const viewCatalog = (tabIndex: number) => (
-    <a
-      href={getBrowserUrl(catalog.url)}
-      target="_blank"
-      rel="noopener noreferrer"
-      tabIndex={tabIndex}
-      className="text-small text-p-primary hover:underline"
-    >
-      {t("card.viewCatalog")} <DirArrow />
-    </a>
-  );
+// Selecting a card tells the map which points to highlight. The title is the
+// control, so the card gains no chrome to say so.
+export function CatalogCard({
+  catalog,
+  selected = false,
+  onSelect,
+}: CatalogProps & { selected?: boolean; onSelect?: (id: string) => void }) {
+  const select = onSelect ? () => onSelect(catalog.id) : undefined;
 
   return (
-    <div
-      className="tk-flip tk-flip--manual"
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFlipped(false);
-      }}
+    <article
+      data-catalog-id={catalog.id}
+      aria-current={selected ? "true" : undefined}
+      className={`ec-card group flex h-full flex-col gap-3 border border-p-line bg-p-paper p-5 ${
+        selected ? "outline outline-2 -outline-offset-2 outline-p-primary" : ""
+      }`}
     >
-      <div className="tk-flip__inner relative h-[260px] w-full" data-flipped={flipped}>
-        <div className="tk-flip__face absolute inset-0 flex flex-col gap-3 border border-p-line bg-p-paper p-5">
-          <CatalogHeader catalog={catalog} />
-          <MetaRow>
-            {collectionLabel(catalog, t, locale)}
-            {updated && t("card.updated", { date: updated })}
-          </MetaRow>
-
-          {/* Anchored to the same corner as the back's copy of this link. The
-              card turns as the pointer arrives, and the target does not move. */}
-          <div className="mt-auto flex justify-end">{viewCatalog(flipped ? -1 : 0)}</div>
-
-          {/* Turns the card where there is no pointer to hover with. Sits under
-              the action row so it never swallows a tap meant for the link. */}
-          <button
-            type="button"
-            aria-expanded={flipped}
-            tabIndex={-1}
-            aria-hidden="true"
-            onClick={() => setFlipped(true)}
-            className="absolute inset-x-0 top-0 bottom-14 cursor-pointer"
-          />
-
-          {/* Keyboard-only route to the back. Invisible until focused, so
-              pointer users never see a control they do not need. */}
-          <button
-            type="button"
-            aria-expanded={flipped}
-            onFocus={() => setFlipped(true)}
-            onClick={() => setFlipped(true)}
-            className="sr-only focus:not-sr-only focus:absolute focus:bottom-5 focus:start-5 focus:z-10 focus:border focus:border-p-line focus:bg-p-paper focus:px-2 focus:py-1 focus:font-mono focus:text-small"
-          >
-            {t("card.showDetails")}
-          </button>
-        </div>
-
-        <div className="tk-flip__back tk-flip__face absolute inset-0 flex flex-col gap-2 border border-p-line bg-p-bg-soft p-5">
-          <CatalogFacts catalog={catalog} />
-
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-            <CopyUrlButton url={catalog.url} tabIndex={flipped ? 0 : -1} />
-            {viewCatalog(flipped ? 0 : -1)}
-          </div>
-
-          {/* Only devices without hover need a way back. A pointer just leaves. */}
-          <button
-            type="button"
-            onClick={() => setFlipped(false)}
-            tabIndex={flipped ? 0 : -1}
-            className="absolute top-3 end-3 hidden text-p-ink-3 transition-colors hover:text-p-ink cursor-pointer [@media(hover:none)]:block"
-            aria-label={t("card.hideDetails")}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+      <CatalogHeader catalog={catalog} onSelect={select} />
+      <CatalogFacts catalog={catalog} />
+      <CatalogActions catalog={catalog} />
+    </article>
   );
 }

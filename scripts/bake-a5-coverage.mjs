@@ -238,9 +238,9 @@ async function bakeResolution(index, mask, RESOLUTION) {
   const worldwide = [];
 
   for (const catalog of index.catalogs) {
-    const local = catalog.bboxes.filter(
-      (bbox) => worldFraction(bbox) <= MAX_BBOX_WORLD_FRACTION,
-    );
+    const local = catalog.collections
+      .map((collection) => collection.bbox)
+      .filter((bbox) => worldFraction(bbox) <= MAX_BBOX_WORLD_FRACTION);
     if (local.length === 0) {
       worldwide.push(catalog.id);
       continue;
