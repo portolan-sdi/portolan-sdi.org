@@ -1,5 +1,6 @@
 export { PortolanLogo } from "./portolan-logo";
 export { GlyphMap } from "./glyph-map";
+export { PageHero } from "./page-hero";
 export { LiveCount } from "./live-count";
 export { HomePage } from "./home-page";
 export { FaqPage } from "./faq-page";

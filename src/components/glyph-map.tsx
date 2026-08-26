@@ -11,14 +11,17 @@ interface GlyphMapProps {
   className?: string;
   /** Drift speed in CSS pixels per second. Defaults to the marquee speed. */
   pxPerSecond?: number;
+  /** Hold the map still. Used by the page header band. */
+  still?: boolean;
 }
 
-export function GlyphMap({ className = "", pxPerSecond }: GlyphMapProps) {
+export function GlyphMap({ className = "", pxPerSecond, still }: GlyphMapProps) {
   return (
     <div className={className}>
       <GlyphMapCanvas
         className="absolute inset-0 w-full h-full"
         pxPerSecond={pxPerSecond}
+        still={still}
       />
     </div>
   );

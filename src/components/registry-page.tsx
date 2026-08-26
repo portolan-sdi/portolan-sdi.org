@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
+import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
-import { DirArrow, SectionHead } from "./ui";
+import { DirArrow } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { MapState } from "./registry/catalog-map";
 import type { Catalog } from "@/lib/catalogs";
@@ -326,17 +327,19 @@ export function RegistryPage({
 
   return (
     <SiteShell navItems={AWAY_ITEMS} activeId="registry">
-      {catalogs.length > 0 && (
-        <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
-          <div className="max-w-[1240px] mx-auto">
-            {/* No eyebrow and no subtitle: the title already names the section. */}
-            <SectionHead title={t("registry.title")} wide />
+      {/* The header band renders whether or not the listing loaded, so a
+          failed fetch still returns a page with a title. */}
+      <PageHero title={t("registry.title")}>
+        {/* What the registry is, in two sentences. The name links to the
+            repository the listing comes from. */}
+        <p className="mt-6 text-lead text-p-ink-2">
+          {t.rich("registry.intro", { reg: registryLink })}
+        </p>
+      </PageHero>
 
-            {/* What the registry is, in two sentences. The name links to the
-                repository the listing comes from. */}
-            <p className="-mt-[clamp(1.5rem,3vw,2.5rem)] mb-8 text-lead text-p-ink-2">
-              {t.rich("registry.intro", { reg: registryLink })}
-            </p>
+      {catalogs.length > 0 && (
+        <section id="registry" className="px-[var(--p-pad-section-x)] pb-[var(--p-pad-section-y)] pt-[clamp(28px,3.5vw,48px)]">
+          <div className="max-w-[1240px] mx-auto">
 
             {/* The map. It filters the results below it as it moves. */}
             {index ? (

@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 import { COMMUNITY_LINKS } from "@/lib/site";
+import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 import { monoChunk } from "./ui";
 
@@ -177,15 +178,13 @@ export function FaqPage() {
 
   return (
     <SiteShell navItems={AWAY_ITEMS} activeId="faq">
-      <section className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
-        <div className="mx-auto max-w-[1240px]">
-          <h1 className="text-section font-extrabold leading-[1.05] tracking-[-0.03em] text-balance">
-            {t("title")}
-          </h1>
+      <PageHero title={t("title")} />
 
+      <section className="px-[var(--p-pad-section-x)] pb-[var(--p-pad-section-y)] pt-[clamp(28px,3.5vw,48px)]">
+        <div className="mx-auto max-w-[1240px]">
           {/* The rows run the full content column, like every other section
               on the site. */}
-          <div className="mt-[clamp(2.5rem,5vw,4rem)] border-t border-p-line">
+          <div className="border-t border-p-line">
             {ITEMS.map(({ key, paras }) => (
               <details
                 key={key}
