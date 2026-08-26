@@ -15,7 +15,16 @@ export default getRequestConfig(async ({ requestLocale }) => {
     // stats, and dates stay copy-paste friendly and never shape to ٠١٢٣.
     formats: {
       number: { decimal: { numberingSystem: "latn" } },
-      dateTime: { short: { numberingSystem: "latn" } },
+      dateTime: {
+        short: { numberingSystem: "latn" },
+        // Blog post dates. Latin digits for the same reason as `short`.
+        postDate: {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          numberingSystem: "latn",
+        },
+      },
     },
   };
 });

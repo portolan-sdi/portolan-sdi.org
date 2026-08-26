@@ -63,6 +63,7 @@ const HOME_ITEMS: RailItem[] = [
     id: "resources",
     label: "nav.resources",
     children: [
+      { id: "blog", label: "nav.blog", href: "/blog" },
       { id: "talks", label: "nav.talks", href: "/talks" },
       { id: "faq", label: "nav.faq", href: "/faq" },
     ],

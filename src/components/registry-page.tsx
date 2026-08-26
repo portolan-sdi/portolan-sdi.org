@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
-import { DirArrow } from "./ui";
+import { DirArrow, PROSE_LINK } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { MapState } from "./registry/catalog-map";
 import type { Catalog } from "@/lib/catalogs";
@@ -50,7 +50,7 @@ function registryLink(chunks: ReactNode) {
       href={REGISTRY_REPO}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+      className={PROSE_LINK}
     >
       {chunks}
     </a>

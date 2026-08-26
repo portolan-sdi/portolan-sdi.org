@@ -82,6 +82,11 @@ export function SiteFooter() {
               <p className={columnLabel}>{t("footer.resources")}</p>
               <ul className="flex flex-col items-start gap-1">
                 <li>
+                  <Link href="/blog" className={footLink}>
+                    {t("nav.blog")}
+                  </Link>
+                </li>
+                <li>
                   <Link href="/talks" className={footLink}>
                     {t("nav.talks")}
                   </Link>

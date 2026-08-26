@@ -17,7 +17,8 @@
     "overview": "Overview",
     "resources": "Resources",
     "talks": "Talks & demos",
-    "toggleGroup": "{section} links"
+    "toggleGroup": "{section} links",
+    "blog": "Blog"
   },
   "hero": {
     "title": "Portolan makes geospatial data",
@@ -303,6 +304,18 @@
         "p2": "Our near-term focus is to expand the set of reference catalogs, stabilize the core specification, and reach a stable v1.0 CLI. Breaking changes remain possible until then, so Portolan is currently best suited to early adopters. See the <roadmap>project roadmap</roadmap> for current work and linked issues."
       }
     }
+  },
+  "blog": {
+    "meta": {
+      "title": "Blog",
+      "description": "Writing from the Portolan project on serverless spatial data infrastructure, the specification, and the tools that build on it."
+    },
+    "title": "Blog",
+    "intro": "Notes from the Portolan project on the specification, the tooling, and what we learn from publishing real catalogs.",
+    "backToIndex": "All posts",
+    "englishNotice": "This post is available in English only. The rest of the site is translated.",
+    "figureLabel": "Fig. {n}",
+    "figurePending": "Asset pending"
   },
   "talks": {
     "meta": {

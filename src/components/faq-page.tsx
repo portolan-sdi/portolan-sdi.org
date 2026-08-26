@@ -11,7 +11,7 @@ import { useTranslations } from "next-intl";
 import { COMMUNITY_LINKS } from "@/lib/site";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
-import { monoChunk } from "./ui";
+import { monoChunk, PROSE_LINK } from "./ui";
 
 // Frequently asked questions.
 //
@@ -52,9 +52,7 @@ function inlineLink(href: string, mono = false) {
     return (
       <a
         href={href}
-        className={`text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink ${
-          mono ? "font-mono" : ""
-        }`}
+        className={`${PROSE_LINK} ${mono ? "font-mono" : ""}`}
       >
         {chunks}
       </a>
