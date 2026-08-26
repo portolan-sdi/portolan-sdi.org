@@ -159,30 +159,18 @@
   "registry": {
     "meta": {
       "title": "Registro",
-      "description": "Todos los catálogos Portolan que sigue el registro. Explóralos en un mapa o como tarjetas, mira cuándo se comprobó cada uno y envía el tuyo."
+      "description": "Todos los catálogos Portolan que el registro sigue. Explóralos en el mapa, búscalos y envía el tuyo."
     },
-    "title": "Explora {count} catálogos",
+    "title": "Registro de Portolan",
+    "intro": "El <reg>registro de Portolan</reg> es un catálogo de catálogos alojados de forma independiente y un primer paso hacia una red federada de datos geoespaciales. Permite buscar en un solo lugar catálogos interoperables de muchos publicadores, mientras los datos subyacentes siguen distribuidos y se consultan directamente en la fuente.",
     "search": {
       "placeholder": "Buscar catálogos...",
-      "noResults": "Ningún catálogo coincide con tu búsqueda",
-      "clearFilters": "Limpiar filtros"
-    },
-    "filters": {
-      "tags": "Etiquetas",
-      "access": "Acceso",
-      "kind": "Tipo de catálogo",
-      "allKinds": "Todos los tipos"
-    },
-    "access": {
-      "public": "Público",
-      "authenticated": "Autenticado"
+      "noResults": "Ningún catálogo coincide con tu búsqueda"
     },
     "validation": {
       "unvalidated": "Sin validar"
     },
     "card": {
-      "maintainer": "Mantenido por",
-      "submitted": "Enviado",
       "viewCatalog": "Ver catálogo",
       "collections": "{count} colecciones",
       "licenses": "{count} licencias",
@@ -193,17 +181,13 @@
       "updated": "actualizado el {date}",
       "copyUrl": "Copiar dirección",
       "copied": "Copiado",
-      "noLocation": "Sin ubicación declarada",
-      "showDetails": "Detalles",
-      "hideDetails": "Ocultar detalles"
+      "noLocation": "Sin ubicación declarada"
     },
     "cta": {
       "title": "¿Tienes un catálogo para compartir?",
-      "description": "Envía tu catálogo Portolan al registro.",
-      "button": "Enviar tu catálogo"
+      "description": "Envía tu catálogo Portolan al registro."
     },
     "submit": {
-      "title": "Enviar un catálogo",
       "urlError": "La URL debe terminar en catalog.json",
       "emailPlaceholder": "tu@ejemplo.org",
       "emailError": "Introduce una dirección de correo",
@@ -211,29 +195,25 @@
       "submit": "Enviar",
       "submitting": "Enviando...",
       "successTitle": "¡Enviado!",
-      "successDescription": "Tu catálogo aparecerá después de la revisión.",
       "viewPr": "Ver envío",
       "submitAnother": "Enviar otro",
       "failedError": "Error al enviar",
       "genericError": "Algo salió mal"
     },
-    "view": {
-      "cards": "Tarjetas",
-      "map": "Mapa"
-    },
     "map": {
       "searchPlaceholder": "Buscar una región...",
       "searchLabel": "Buscar regiones",
-      "noSearchResults": "No se encontraron lugares",
       "zoomIn": "Acercar",
       "zoomOut": "Alejar",
-      "reset": "Restablecer vista",
-      "closeDetails": "Cerrar detalles",
       "noLocation": "{count} sin ubicación",
       "loading": "Cargando mapa...",
-      "info": "Créditos del mapa"
+      "info": "Créditos del mapa",
+      "label": "Mapa de la cobertura de los catálogos",
+      "cluster": "{count} catálogos aquí",
+      "broad": "{count} colecciones demasiado amplias para ubicar",
+      "reset": "Restablecer vista",
+      "place": "lugar {index} de {total}"
     },
-    "generated": "Última actualización {date}",
     "kind": {
       "official": "Oficial",
       "mirror": "Espejo"
@@ -241,15 +221,17 @@
     "status": {
       "stale": "Obsoleto"
     },
-    "global": {
-      "title": "Datos globales"
-    },
     "pagination": {
       "prev": "Página anterior",
       "next": "Página siguiente",
       "status": "{page} / {total}"
     },
-    "lastChecked": "Última revisión {date}"
+    "lastChecked": "Última revisión {date}",
+    "results": {
+      "all": "{count} catálogos",
+      "inView": "{count} catálogos en esta vista",
+      "global": "{count} globales"
+    }
   },
   "faq": {
     "meta": {

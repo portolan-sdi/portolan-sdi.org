@@ -1,33 +1,62 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
-import { DirArrow, Ltr, SectionHead } from "./ui";
+import { DirArrow, SectionHead } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
-import type { Catalog, CatalogKind } from "@/lib/catalogs";
-import { formatDate, getCoverageTier } from "@/lib/catalogs";
+import type { MapState } from "./registry/catalog-map";
+import type { Catalog } from "@/lib/catalogs";
+import { formatDate } from "@/lib/catalogs";
+import {
+  EMPTY_EXPLORER_STATE,
+  explorerParamString,
+  type ExplorerState,
+} from "@/lib/explorer-url";
+import {
+  buildIndex,
+  catalogsInViewport,
+  fetchCoverage,
+  type CoverageIndex,
+} from "@/lib/collection-points";
 
 // The registry, on its own route.
 //
-// The homepage keeps the coverage map, which shows where the data sits, and
-// links here. This page holds the map of catalog extents, the card grid, the
-// filters, and the submission form.
+// The page reads top to bottom: what the registry is, where the data sits, and
+// which catalogs answer the place you are looking at. The map is the entry
+// point, and the cards below it are the result.
 //
-// The rail keeps the site index and highlights its own registry entry.
+// The map draws collection centroids. The results match on collection bboxes.
+// Those are different geometries on purpose: a centroid says where to draw a
+// point, and only a bbox can say whether a catalog reaches the view.
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
-// Two rows of three on a wide screen. Small enough that the control is real
-// at the registry's current size rather than appearing only after it doubles.
+// Two rows of three on a wide screen.
 const CARDS_PER_PAGE = 6;
 
-// The global block sits under the map and stays one row on a wide screen.
-const GLOBAL_PER_PAGE = 3;
+// How long the URL waits after the last pan, keystroke, or page change.
+const URL_DEBOUNCE_MS = 300;
 
-// Page control shared by the card grid and the global block. Mirrors the arrows
-// on the talks row rather than introducing a second pagination idiom.
+const REGISTRY_REPO = "https://github.com/portolan-sdi/portolan-registry";
+
+// The <reg> tag is part of the message contract and carries the same text span
+// in every locale.
+function registryLink(chunks: ReactNode) {
+  return (
+    <a
+      href={REGISTRY_REPO}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+    >
+      {chunks}
+    </a>
+  );
+}
+
+// Page control shared by the card grid and the talks row idiom.
 function Pager({
   page,
   pageCount,
@@ -72,18 +101,17 @@ function Pager({
   );
 }
 
-// Placeholder shown while the deck.gl/maplibre chunk loads on first map view.
+// Placeholder shown while the maplibre chunk and the bbox index load.
 function MapSkeleton() {
   const t = useTranslations("registry");
   return (
-    <div className="h-[440px] md:h-[520px] border border-p-line bg-p-bg-soft animate-pulse flex items-center justify-center">
+    <div className="h-[440px] md:h-[540px] border border-p-line bg-p-bg-soft animate-pulse flex items-center justify-center">
       <span className="text-small text-p-ink-3 font-mono">{t("map.loading")}</span>
     </div>
   );
 }
 
-// registry-page is already a Client Component, so ssr:false is legal here. The
-// chunk only loads the first time the map view renders.
+// registry-page is already a Client Component, so ssr:false is legal here.
 const CatalogMap = dynamic(() => import("./registry/catalog-map"), {
   ssr: false,
   loading: () => <MapSkeleton />,
@@ -91,17 +119,31 @@ const CatalogMap = dynamic(() => import("./registry/catalog-map"), {
 
 interface RegistryPageProps {
   catalogs?: Catalog[];
+  /** Explorer state the request URL carried, read on the server. */
+  initial?: ExplorerState;
 }
 
-export function RegistryPage({ catalogs = [] }: RegistryPageProps) {
+/** Write the explorer state back, without touching the history stack. */
+function writeExplorerUrl(state: ExplorerState) {
+  const query = explorerParamString(state);
+  window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
+}
+
+export function RegistryPage({
+  catalogs = [],
+  initial = EMPTY_EXPLORER_STATE,
+}: RegistryPageProps) {
   const t = useTranslations();
   const locale = useLocale();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [kindFilter, setKindFilter] = useState<"all" | CatalogKind>("all");
-  const [registryView, setRegistryView] = useState<"cards" | "map">("map");
-  const [rawPage, setPage] = useState(0);
-  const [rawGlobalPage, setGlobalPage] = useState(0);
+  const [index, setIndex] = useState<CoverageIndex | null>(null);
+  const [mapState, setMapState] = useState<MapState | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // The server read the URL, so the first paint already shows the shared
+  // search. Reading it on the client instead would make the two disagree.
+  const [searchQuery, setSearchQuery] = useState(initial.query);
+  const [rawPage, setPage] = useState(initial.page);
 
   const [submitUrl, setSubmitUrl] = useState("");
   const [submitEmail, setSubmitEmail] = useState("");
@@ -115,41 +157,63 @@ export function RegistryPage({ catalogs = [] }: RegistryPageProps) {
   const isValidSubmitEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(submitEmail.trim());
   const canSubmit = isValidSubmitUrl && isValidSubmitEmail;
 
-  // The registry does not export whether a catalog is the official copy or a
-  // mirror yet, so every entry reports null and this set stays empty. The
-  // control appears on its own once the export carries the field.
-  const availableKinds = useMemo(() => {
-    return Array.from(
-      new Set(catalogs.map((c) => c.kind).filter((k): k is CatalogKind => k !== null))
-    );
-  }, [catalogs]);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchCoverage(controller.signal)
+      .then((data) => setIndex(buildIndex(data)))
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load collection extents:", err);
+      });
+    return () => controller.abort();
+  }, []);
 
+  // Catalogs the crawl could place. The rest are named under the map.
+  const locatedIds = useMemo(
+    () => new Set((index?.catalogs ?? []).map((catalog) => catalog.id)),
+    [index]
+  );
+
+  const titles = useMemo(
+    () => new Map(catalogs.map((catalog) => [catalog.id, catalog.title])),
+    [catalogs]
+  );
+
+  // viewport -> collection bbox overlap -> unique catalogs.
+  const geoIds = useMemo(() => {
+    if (!index || !mapState) return null;
+    return catalogsInViewport(index, mapState.viewport);
+  }, [index, mapState]);
+
+  // A catalog the crawl could not place cannot be ruled out by geography, so
+  // the viewport never hides it. A global catalog answers here through its own
+  // bboxes, which overlap every view, even though the map draws no point for it.
+  const inView = useMemo(
+    () =>
+      geoIds
+        ? catalogs.filter(
+            (catalog) => geoIds.has(catalog.id) || !locatedIds.has(catalog.id)
+          )
+        : catalogs,
+    [catalogs, geoIds, locatedIds]
+  );
+
+  // The opening view holds every catalog, so it reads as no filter at all.
+  // Mercator never shows the poles, so asking whether the viewport covers the
+  // world would answer no even there.
+  const geoActive = inView.length < catalogs.length;
+
+  // Search runs inside the geographic set, never across it.
   const filteredCatalogs = useMemo(() => {
-    return catalogs.filter((catalog) => {
-      const query = searchQuery.trim().toLowerCase();
-      const matchesSearch =
-        query === "" ||
+    const query = searchQuery.trim().toLowerCase();
+    if (query === "") return inView;
+    return inView.filter(
+      (catalog) =>
         catalog.title.toLowerCase().includes(query) ||
         catalog.id.toLowerCase().includes(query) ||
-        Object.keys(catalog.licenses).some((id) => id.toLowerCase().includes(query));
-
-      const matchesKind = kindFilter === "all" || catalog.kind === kindFilter;
-
-      return matchesSearch && matchesKind;
-    });
-  }, [catalogs, searchQuery, kindFilter]);
-
-  // A catalog claiming most of the globe would cover every located one beneath
-  // it and drag the initial map fit out to the whole world. Those get their own
-  // block under the map, where their titles are readable.
-  const { mappableCatalogs, globalCatalogs } = useMemo(() => {
-    const mappable: Catalog[] = [];
-    const global: Catalog[] = [];
-    for (const catalog of filteredCatalogs) {
-      (getCoverageTier(catalog.bbox) === "global" ? global : mappable).push(catalog);
-    }
-    return { mappableCatalogs: mappable, globalCatalogs: global };
-  }, [filteredCatalogs]);
+        Object.keys(catalog.licenses).some((id) => id.toLowerCase().includes(query))
+    );
+  }, [inView, searchQuery]);
 
   const pageCount = Math.max(1, Math.ceil(filteredCatalogs.length / CARDS_PER_PAGE));
   // Filtering can shrink the list under the current page.
@@ -159,22 +223,68 @@ export function RegistryPage({ catalogs = [] }: RegistryPageProps) {
     page * CARDS_PER_PAGE + CARDS_PER_PAGE
   );
 
-  const globalPageCount = Math.max(1, Math.ceil(globalCatalogs.length / GLOBAL_PER_PAGE));
-  const globalPage = Math.min(rawGlobalPage, globalPageCount - 1);
-  const pagedGlobalCatalogs = globalCatalogs.slice(
-    globalPage * GLOBAL_PER_PAGE,
-    globalPage * GLOBAL_PER_PAGE + GLOBAL_PER_PAGE
+  const handleMove = useCallback((state: MapState) => {
+    setMapState(state);
+    setPage(0);
+  }, []);
+
+  const handleSearch = useCallback((value: string) => {
+    setSearchQuery(value);
+    setPage(0);
+  }, []);
+
+  // Selecting from the map has to bring the card into view, which can mean
+  // turning to the page that holds it.
+  const handleSelect = useCallback(
+    (id: string | null) => {
+      setSelectedId((current) => (current === id ? null : id));
+      if (!id) return;
+      const at = filteredCatalogs.findIndex((catalog) => catalog.id === id);
+      if (at >= 0) setPage(Math.floor(at / CARDS_PER_PAGE));
+    },
+    [filteredCatalogs]
   );
 
-  const handleClearFilters = () => {
-    setSearchQuery("");
-    setKindFilter("all");
-    setPage(0);
-  };
+  useEffect(() => {
+    if (!selectedId) return;
+    const card = document.querySelector(`[data-catalog-id="${CSS.escape(selectedId)}"]`);
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [selectedId, page]);
 
-  const hasActiveFilters = searchQuery !== "" || kindFilter !== "all";
+  // Escape drops the selection, alongside clicking the point again, clicking
+  // the card title again, and clicking empty ground on the map.
+  useEffect(() => {
+    if (!selectedId) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedId(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedId]);
+
+  // The URL follows the explorer, once the moving stops.
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      writeExplorerUrl({
+        view: mapState
+          ? { zoom: mapState.zoom, latitude: mapState.latitude, longitude: mapState.longitude }
+          : null,
+        query: searchQuery,
+        page,
+      });
+    }, URL_DEBOUNCE_MS);
+    return () => window.clearTimeout(id);
+  }, [mapState, searchQuery, page]);
 
   const crawledAt = formatDate(catalogs[0]?.last_crawled ?? null, locale);
+
+  // Catalogs the map draws no point for. Either every extent is too broad to
+  // stand for a place, or the crawl found no extent at all. Both still answer
+  // the viewport filter and both still appear in the results.
+  const offMapCount = useMemo(() => {
+    const drawn = new Set(index?.points.map((point) => point.catalogId) ?? []);
+    return catalogs.filter((catalog) => !drawn.has(catalog.id)).length;
+  }, [catalogs, index]);
 
   const handleSubmitCatalog = async () => {
     if (!canSubmit || submitState === "submitting") return;
@@ -216,24 +326,46 @@ export function RegistryPage({ catalogs = [] }: RegistryPageProps) {
 
   return (
     <SiteShell navItems={AWAY_ITEMS} activeId="registry">
-      {/* Registry — the living proof, deliberately the last section */}
       {catalogs.length > 0 && (
         <section id="registry" className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]">
           <div className="max-w-[1240px] mx-auto">
-            {/* No eyebrow and no subtitle: the title ("Browse N catalogs")
-                already names the section. */}
-            <SectionHead title={t("registry.title", { count: catalogs.length })} wide />
+            {/* No eyebrow and no subtitle: the title already names the section. */}
+            <SectionHead title={t("registry.title")} wide />
 
-            {/* Where the listing comes from and when it was last read. */}
-            <p className="-mt-[clamp(1.5rem,3vw,2.5rem)] mb-8 flex flex-wrap items-center gap-x-1.5 font-mono text-eyebrow text-p-ink-3">
-              <a
-                href="https://github.com/portolan-sdi/portolan-registry"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-p-primary hover:underline"
-              >
-                <Ltr>portolan-registry</Ltr> ↗
-              </a>
+            {/* What the registry is, in two sentences. The name links to the
+                repository the listing comes from. */}
+            <p className="-mt-[clamp(1.5rem,3vw,2.5rem)] mb-8 text-lead text-p-ink-2">
+              {t.rich("registry.intro", { reg: registryLink })}
+            </p>
+
+            {/* The map. It filters the results below it as it moves. */}
+            {index ? (
+              <CatalogMap
+                index={index}
+                titles={titles}
+                selectedId={selectedId}
+                onSelect={handleSelect}
+                onMove={handleMove}
+                initialView={initial.view ?? null}
+              />
+            ) : (
+              <MapSkeleton />
+            )}
+
+            {/* What matches, what the map cannot draw, and when the registry
+                last read the catalogs. The count follows the map. */}
+            <p className="mt-3 flex flex-wrap items-center gap-x-1.5 font-mono text-small text-p-ink-3">
+              <span className="text-p-primary">
+                {geoActive
+                  ? t("registry.results.inView", { count: filteredCatalogs.length })
+                  : t("registry.results.all", { count: filteredCatalogs.length })}
+              </span>
+              {index && offMapCount > 0 && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{t("registry.results.global", { count: offMapCount })}</span>
+                </>
+              )}
               {crawledAt && (
                 <>
                   <span aria-hidden="true">·</span>
@@ -242,136 +374,37 @@ export function RegistryPage({ catalogs = [] }: RegistryPageProps) {
               )}
             </p>
 
-            {/* Filters */}
-            <div className="space-y-4 mb-8">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t("registry.search.placeholder")}
-                  className="flex-1 bg-p-paper border border-p-line px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary transition-colors"
-                />
-                {/* Only rendered once the export distinguishes official copies
-                    from mirrors. A control with one option filters nothing. */}
-                {availableKinds.length > 1 && (
-                  <div className="relative">
-                    <select
-                      value={kindFilter}
-                      onChange={(e) => setKindFilter(e.target.value as typeof kindFilter)}
-                      className="appearance-none bg-p-paper border border-p-line ps-3 pe-8 py-2.5 text-body text-p-ink focus:outline-none focus:border-p-primary transition-colors cursor-pointer"
-                      aria-label={t("registry.filters.kind")}
-                    >
-                      <option value="all">{t("registry.filters.allKinds")}</option>
-                      {availableKinds.map((kind) => (
-                        <option key={kind} value={kind}>
-                          {t(`registry.kind.${kind}`)}
-                        </option>
-                      ))}
-                    </select>
-                    <svg className="absolute end-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-p-ink-3 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+            {/* Results */}
+            <div className="mt-10 border-t border-p-line pt-8">
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder={t("registry.search.placeholder")}
+                aria-label={t("registry.search.placeholder")}
+                className="w-full bg-p-paper border border-p-line px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none focus:border-p-primary transition-colors sm:max-w-[360px]"
+              />
+
+              {filteredCatalogs.length > 0 ? (
+                <>
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
+                    {pagedCatalogs.map((catalog) => (
+                      <CatalogCard
+                        key={catalog.id}
+                        catalog={catalog}
+                        selected={catalog.id === selectedId}
+                        onSelect={handleSelect}
+                      />
+                    ))}
                   </div>
-                )}
-
-                {/* Cards | Map view toggle */}
-                <div className="flex items-stretch border border-p-line overflow-hidden self-start sm:self-auto sm:ms-auto">
-                  {(["cards", "map"] as const).map((view, i) => {
-                    const isActive = registryView === view;
-                    return (
-                      <button
-                        key={view}
-                        type="button"
-                        onClick={() => setRegistryView(view)}
-                        aria-pressed={isActive}
-                        className={`inline-flex items-center justify-center font-mono text-small px-4 py-2.5 transition-colors ${
-                          i > 0 ? "border-s border-p-line" : ""
-                        } ${
-                          isActive
-                            ? "bg-[color-mix(in_oklab,var(--p-primary)_12%,transparent)] text-p-primary-ink"
-                            : "bg-p-paper text-p-ink-3 hover:text-p-ink-2"
-                        }`}
-                      >
-                        {t(`registry.view.${view}`)}
-                      </button>
-                    );
-                  })}
+                  <Pager page={page} pageCount={pageCount} onChange={setPage} />
+                </>
+              ) : (
+                <div className="py-12 text-center">
+                  <p className="text-body text-p-ink-2">{t("registry.search.noResults")}</p>
                 </div>
-              </div>
-
-
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={handleClearFilters}
-                  className="text-small text-p-ink-3 hover:text-p-ink-2 underline underline-offset-2"
-                >
-                  {t("registry.search.clearFilters")}
-                </button>
               )}
             </div>
-
-            {/* Catalog view: map or grid */}
-            {registryView === "map" ? (
-              <>
-                <CatalogMap catalogs={mappableCatalogs} />
-                {globalCatalogs.length > 0 && (
-                  <div className="mt-10 border-t border-p-line pt-8">
-                    <h3 className="text-feature font-semibold">
-                      {t("registry.global.title")}
-                    </h3>
-                    {/* One row on a wide screen. Three cards in two columns
-                        wrap to two rows at md, so that height is reserved
-                        instead. */}
-                    <div
-                      className={`mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ${
-                        globalPageCount > 1 ? "md:min-h-[540px] lg:min-h-[260px]" : ""
-                      }`}
-                    >
-                      {pagedGlobalCatalogs.map((catalog) => (
-                        <CatalogCard key={catalog.id} catalog={catalog} />
-                      ))}
-                    </div>
-                    <Pager
-                      page={globalPage}
-                      pageCount={globalPageCount}
-                      onChange={setGlobalPage}
-                    />
-                  </div>
-                )}
-              </>
-            ) : filteredCatalogs.length > 0 ? (
-              <>
-                {/* A short last page must not shrink the grid, or everything
-                    below it jumps when you change page. Cards are 260px with a
-                    20px gap, so two rows reserve 540 and three reserve 820.
-                    Single-column screens are left alone: reserving six rows
-                    there would leave a screenful of blank under a short page,
-                    and the whole grid is taller than the viewport anyway. */}
-                <div
-                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ${
-                    pageCount > 1 ? "md:min-h-[820px] lg:min-h-[540px]" : ""
-                  }`}
-                >
-                  {pagedCatalogs.map((catalog) => (
-                    <CatalogCard key={catalog.id} catalog={catalog} />
-                  ))}
-                </div>
-                <Pager page={page} pageCount={pageCount} onChange={setPage} />
-              </>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-body text-p-ink-2">{t("registry.search.noResults")}</p>
-                <button
-                  type="button"
-                  onClick={handleClearFilters}
-                  className="mt-3 text-small text-p-primary hover:underline"
-                >
-                  {t("registry.search.clearFilters")}
-                </button>
-              </div>
-            )}
 
             {/* Inline Submit */}
             <div className="mt-10 bg-p-paper border border-p-line rounded-[var(--p-r-lg)] p-6">

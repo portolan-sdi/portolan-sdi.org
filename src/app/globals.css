@@ -234,6 +234,19 @@ body {
 .pd-march {
   animation: pd-march 0.9s linear infinite;
 }
+/* The registry map's hover label. MapLibre's own popup is rounded, shadowed,
+   and pointed; the site's is a square-cornered ruled block. */
+.registry-popup .maplibregl-popup-content {
+  border: 1px solid var(--p-line);
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--p-paper);
+  padding: 8px 10px;
+}
+.registry-popup .maplibregl-popup-tip {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pd-src,
   .pd-flow,
@@ -568,52 +581,8 @@ body {
   transform: translate(0, 0);
 }
 
-/* Registry catalog cards turn to reveal their back face; the card itself is
-   the link. */
-.tk-flip {
-  perspective: 1200px;
-}
-.tk-flip__inner {
-  transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.tk-flip:hover .tk-flip__inner,
-.tk-flip:focus-within .tk-flip__inner {
-  transform: rotateY(180deg);
-}
-/* Catalog cards carry controls on both faces, so React owns their turn rather
-   than CSS: it has to know which face is showing to keep the hidden one out of
-   the tab order. Hover, tap, and keyboard focus all set data-flipped. The two
-   rules below drop the shared hover behaviour and read that attribute instead.
-   Order matters, since the data-flipped rule has to come after the hover reset
-   to win when a pointer is over a card that is already turned. */
-.tk-flip--manual:hover .tk-flip__inner,
-.tk-flip--manual:focus-within .tk-flip__inner {
-  transform: none;
-}
-.tk-flip--manual .tk-flip__inner[data-flipped="true"] {
-  transform: rotateY(180deg);
-}
-.tk-flip__face {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-/* Also cull every descendant of a face — otherwise a positioned/z-indexed
-   child can be promoted to its own layer and bleed through mirrored when the
-   card is flipped. */
-.tk-flip__face * {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.tk-flip__back {
-  transform: rotateY(180deg);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ec-card {
-    transition: none;
-  }
-  .tk-flip__inner {
     transition: none;
   }
   .logo-marquee {
