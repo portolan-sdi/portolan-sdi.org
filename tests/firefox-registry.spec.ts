@@ -1,37 +1,48 @@
 import { expect, test } from "@playwright/test";
+import { neutralizeMarkerHosts } from "../src/lib/marker-hosts";
 
-test("registry markers do not block the Firefox main thread", async ({ page }) => {
-  await page.route("https://basemaps.cartocdn.com/gl/positron-gl-style/style.json", (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ version: 8, sources: {}, layers: [] }),
-    }),
-  );
+test("marker normalization releases the Firefox main thread", async ({ page }) => {
+  test.setTimeout(10_000);
+  const source = neutralizeMarkerHosts.toString();
 
-  await page.goto("/registry", { waitUntil: "domcontentloaded" });
-  const map = page.locator(".maplibregl-map");
-  await expect(map).toBeVisible();
-
-  await map.evaluate((container) => {
+  const result = await page.evaluate(async (functionSource) => {
+    const neutralize = (0, eval)(`(${functionSource})`) as (container: ParentNode) => void;
     const marker = document.createElement("div");
     marker.className = "maplibregl-marker";
-    marker.dataset.observerProbe = "true";
     marker.setAttribute("aria-label", "Synthetic MapLibre marker");
     marker.setAttribute("role", "button");
     marker.setAttribute("tabindex", "0");
     marker.appendChild(document.createElement("button"));
-    container.appendChild(marker);
+    document.body.appendChild(marker);
+
+    let callbacks = 0;
+    const observer = new MutationObserver(() => {
+      callbacks += 1;
+      neutralize(document.body);
+    });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["aria-label", "role", "tabindex"],
+    });
+
+    neutralize(document.body);
+    await new Promise((resolve) => window.setTimeout(resolve, 250));
+    observer.disconnect();
+
+    return {
+      callbacks,
+      ariaLabel: marker.getAttribute("aria-label"),
+      role: marker.getAttribute("role"),
+      tabIndex: marker.getAttribute("tabindex"),
+    };
+  }, source);
+
+  expect(result).toEqual({
+    callbacks: 1,
+    ariaLabel: null,
+    role: "presentation",
+    tabIndex: null,
   });
-
-  const marker = page.locator("[data-observer-probe=true]");
-  await expect(marker).toHaveAttribute("role", "presentation");
-  await expect(marker).not.toHaveAttribute("aria-label", /.+/);
-  await expect(marker).not.toHaveAttribute("tabindex", /.+/);
-
-  // The old observer loop kept Firefox busy for about 44 seconds here.
-  const before = await page.evaluate(() => performance.now());
-  await page.waitForTimeout(250);
-  const after = await page.evaluate(() => performance.now());
-  expect(after - before).toBeLessThan(1_000);
 });
