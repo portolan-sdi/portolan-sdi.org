@@ -39,8 +39,9 @@ export function PostFigure({
   const t = useTranslations("blog");
 
   return (
-    <figure dir="ltr" className="my-10 border border-p-line bg-p-paper">
-      {src ? (
+    <figure dir="ltr" className="post-figure my-10">
+      <div className="post-media-frame overflow-hidden border border-p-line bg-p-paper">
+        {src ? (
         // The site does not use next/image anywhere. Remote and local assets
         // both render as a plain img, as in Shot (talks-page.tsx).
         // eslint-disable-next-line @next/next/no-img-element
@@ -64,9 +65,10 @@ export function PostFigure({
             <span className="font-mono text-small text-p-ink-3">{pending}</span>
           )}
         </div>
-      )}
+        )}
+      </div>
 
-      <figcaption className="flex items-baseline gap-3 border-t border-p-line px-4 py-3">
+      <figcaption className="flex items-baseline gap-3 border border-p-line px-4 py-3">
         <span className="shrink-0 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3">
           {t("figureLabel", { n })}
         </span>

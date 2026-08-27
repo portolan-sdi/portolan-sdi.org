@@ -529,6 +529,31 @@ body {
   box-shadow: -5px 5px 0 var(--p-primary);
 }
 
+/* Blog figures reuse the demo frame and place their caption in the
+   available inline space on wide screens. */
+.post-media-frame {
+  box-shadow: 5px 5px 0 var(--p-primary);
+}
+[dir="rtl"] .post-media-frame {
+  box-shadow: -5px 5px 0 var(--p-primary);
+}
+@media (min-width: 1024px) {
+  .post-figure {
+    display: grid;
+    grid-template-columns: minmax(0, 68ch) minmax(14rem, 18rem);
+    gap: 1.5rem;
+    width: min(calc(68ch + 18rem + 1.5rem), calc(100vw - 2 * var(--p-pad-section-x)));
+  }
+  .post-figure > figcaption {
+    align-self: center;
+    margin-top: 0;
+  }
+  .post-figure > .post-media-frame,
+  .post-figure > .demo-frame {
+    min-width: 0;
+  }
+}
+
 /* The scrub track. A native range input carries the keyboard behaviour for
    free, so the work here is stripping the platform chrome down to two square
    marks: a 2px rule and a hard block for the thumb. The filled portion is an
