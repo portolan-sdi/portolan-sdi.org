@@ -9,7 +9,7 @@ const licenseLink = "underline underline-offset-2";
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 const columnLabel = "mb-2 font-mono text-eyebrow text-p-ink-3";
-const footLink = "text-p-ink-2 transition-colors hover:text-p-primary";
+const footLink = "inline-flex min-h-6 items-center text-p-ink-2 transition-colors hover:text-p-primary";
 
 export function SiteFooter() {
   const t = useTranslations();

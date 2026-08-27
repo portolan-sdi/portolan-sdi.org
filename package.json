@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:a11y": "playwright test"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -23,6 +24,8 @@
     "supercluster": "^9.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.0",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^20",

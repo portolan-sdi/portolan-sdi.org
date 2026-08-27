@@ -70,22 +70,22 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   block edge is the alignment signal the eye reads, and a
                   negative margin makes it overhang the column. */}
               <div className="flex flex-col items-start gap-4 mt-[clamp(2.25rem,4vw,3.25rem)] sm:flex-row sm:items-center sm:gap-6">
-                <Link href="/#how">
-                  <Btn variant="primary" size="lg">
+                <Btn asChild variant="primary" size="lg">
+                  <Link href="/#how">
                     {t("hero.howItWorks")} <DirArrow />
-                  </Btn>
-                </Link>
+                  </Link>
+                </Btn>
                 {/* The catalogs section on this page, not the registry.
                     Both hero buttons now point into the page, in the order
                     the page runs: how it works, then the catalogs that come
                     out of it. That section carries the link onward to the
                     registry, so the reader meets the examples before the
                     full list. */}
-                <Link href="/#coverage">
-                  <Btn variant="ghost" size="lg">
+                <Btn asChild variant="ghost" size="lg">
+                  <Link href="/#coverage">
                     {t("hero.exploreCatalogs")} <DirArrow />
-                  </Btn>
-                </Link>
+                  </Link>
+                </Btn>
               </div>
             </div>
           </div>
@@ -188,6 +188,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               src="/video/portolan-demo-one.mp4"
               poster="/video/portolan-demo-one.jpg"
               ratio={DEMO_ONE_RATIO}
+              description={t("demo.transcriptPhiladelphia")}
               caption={t.rich("demo.captionPhiladelphia", {
                 catalog: (chunks) => (
                   <a

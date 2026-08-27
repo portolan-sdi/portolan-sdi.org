@@ -2,7 +2,7 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import Supercluster from "supercluster";
 import {
@@ -107,7 +107,7 @@ function clusterSize(count: number): number {
   if (count >= 8) return 34;
   if (count >= 4) return 30;
   if (count >= 2) return 26;
-  return 22;
+  return 24;
 }
 
 function clusterHover(
@@ -289,6 +289,30 @@ export default function CatalogMap({
     [cluster]
   );
 
+  useEffect(() => {
+    const mapContainer = mapRef.current?.getContainer();
+    if (!mapContainer) return;
+
+    const neutralizeMarkerHosts = () => {
+      mapContainer.querySelectorAll<HTMLElement>(".maplibregl-marker").forEach((marker) => {
+        marker.removeAttribute("aria-label");
+        marker.setAttribute("role", "presentation");
+        marker.removeAttribute("tabindex");
+      });
+    };
+
+    neutralizeMarkerHosts();
+    const observer = new MutationObserver(neutralizeMarkerHosts);
+    observer.observe(mapContainer, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["aria-label", "role", "tabindex"],
+    });
+
+    return () => observer.disconnect();
+  }, [rendered]);
+
   return (
     <div
       dir="ltr"
@@ -314,11 +338,11 @@ export default function CatalogMap({
               key={`c-${item.id}`}
               longitude={item.lng}
               latitude={item.lat}
-              onClick={() => expandCluster(item.id, item.lng, item.lat)}
             >
               <button
                 type="button"
                 aria-label={t("map.cluster", { count: String(item.ids.length) })}
+                onClick={() => expandCluster(item.id, item.lng, item.lat)}
                 onMouseEnter={() => setHover(clusterHover(item, titles))}
                 onFocus={() => setHover(clusterHover(item, titles))}
                 onMouseLeave={() => setHover(null)}
@@ -341,23 +365,28 @@ export default function CatalogMap({
               key={`p-${item.point.key}`}
               longitude={item.point.lng}
               latitude={item.point.lat}
-              onClick={() => onSelect(item.point.catalogId)}
             >
               <button
                 type="button"
                 aria-label={pointLabel(item.point)}
+                onClick={() => onSelect(item.point.catalogId)}
                 onMouseEnter={() => setHover(pointHover(item.point, titles, placeLabel))}
                 onFocus={() => setHover(pointHover(item.point, titles, placeLabel))}
                 onMouseLeave={() => setHover(null)}
                 onBlur={() => setHover(null)}
-                className={`block cursor-pointer border transition-colors ${
-                  item.selected
-                    ? "h-3.5 w-3.5 border-p-ink bg-p-ink"
-                    : `h-2.5 w-2.5 border-p-primary bg-p-primary hover:border-p-ink hover:bg-p-ink ${
-                        item.dimmed ? "opacity-30" : ""
-                      }`
-                }`}
-              />
+                className="relative flex h-6 w-6 cursor-pointer items-center justify-center border-0 p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-p-ink"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`block border transition-colors ${
+                    item.selected
+                      ? "h-3.5 w-3.5 border-p-ink bg-p-ink"
+                      : `h-2.5 w-2.5 border-p-primary bg-p-primary hover:border-p-ink hover:bg-p-ink ${
+                          item.dimmed ? "opacity-30" : ""
+                        }`
+                  }`}
+                />
+              </button>
             </Marker>
           )
         )}
