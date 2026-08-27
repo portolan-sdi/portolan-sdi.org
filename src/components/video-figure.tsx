@@ -47,9 +47,8 @@ interface VideoFigureProps {
    */
   caption?: ReactNode;
   /**
-   * A text equivalent for the video-only recording. It is exposed in a
-   * disclosure so readers can follow the terminal session without sight of
-   * the video.
+   * A text equivalent for the video-only recording. It is exposed as a
+   * programmatically associated description for readers who cannot see it.
    */
   description?: ReactNode;
   /**
@@ -264,12 +263,9 @@ export function VideoFigure({
       )}
 
       {description && (
-        <details id={descriptionId} className="mt-4 border border-p-line px-4 py-3 text-small leading-relaxed text-p-ink-2">
-          <summary className="cursor-pointer font-mono text-eyebrow text-p-ink">
-            {t("transcriptLabel")}
-          </summary>
-          <div className="mt-3 max-w-[72ch] text-start">{description}</div>
-        </details>
+        <p id={descriptionId} className="sr-only">
+          {description}
+        </p>
       )}
     </figure>
   );

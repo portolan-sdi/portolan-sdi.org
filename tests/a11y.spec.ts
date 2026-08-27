@@ -158,6 +158,9 @@ test("video-only demos expose localized text alternatives", async ({ page }) => 
   for (let index = 0; index < 2; index += 1) {
     const describedBy = await videos.nth(index).getAttribute("aria-describedby");
     expect(describedBy, `video ${index + 1} needs a text equivalent`).toBeTruthy();
-    await expect(page.locator(`[id="${describedBy}"]`)).toBeAttached();
+    const description = page.locator("[id=\"" + describedBy + "\"]");
+    await expect(description).toBeAttached();
+    await expect(description).toHaveClass(/sr-only/);
   }
+  await expect(page.locator("figure details")).toHaveCount(0);
 });
