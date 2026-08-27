@@ -454,7 +454,7 @@ export function RegistryPage({
                     className="lg:w-auto w-full">
                     <div className="flex flex-col lg:flex-row gap-2">
                     <div className="flex-1 lg:min-w-[260px]">
-                      <label htmlFor="registry-submit-url" className="mb-1 block font-mono text-small text-p-ink-2">{t("registry.submit.urlLabel")}</label>
+                      <label htmlFor="registry-submit-url" className="sr-only">{t("registry.submit.urlLabel")}</label>
                       <input
                         id="registry-submit-url"
                         type="url"
@@ -474,7 +474,7 @@ export function RegistryPage({
                       )}
                     </div>
                     <div className="lg:w-[200px]">
-                      <label htmlFor="registry-submit-email" className="mb-1 block font-mono text-small text-p-ink-2">{t("registry.submit.emailInputLabel")}</label>
+                      <label htmlFor="registry-submit-email" className="sr-only">{t("registry.submit.emailInputLabel")}</label>
                       <input
                         id="registry-submit-email"
                         type="email"
