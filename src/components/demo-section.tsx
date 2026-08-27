@@ -86,6 +86,7 @@ export function DemoSection() {
             src="/video/portolan-demo-two.mp4"
             poster="/video/portolan-demo-two.jpg"
             ratio={DEMO_RATIO}
+            description={t("transcriptFloodRisk")}
             className="w-full max-w-[620px] justify-self-center xl:order-1 xl:justify-self-start"
           />
         </div>

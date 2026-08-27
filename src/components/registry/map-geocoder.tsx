@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useGeocode, type GeocodeSuggestion } from "@/hooks/use-geocode";
 
@@ -10,6 +10,9 @@ interface MapGeocoderProps {
 
 export function MapGeocoder({ onSelect }: MapGeocoderProps) {
   const t = useTranslations("registry.map");
+  const geocoderId = useId().replace(/:/g, "");
+  const listboxId = `${geocoderId}-suggestions`;
+  const statusId = `${geocoderId}-status`;
 
   const [searchValue, setSearchValue] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -21,6 +24,13 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
 
   // Derived from focus + results so we never set "open" state inside an effect.
   const isOpen = isFocused && suggestions.length > 0;
+  const statusMessage = isLoading
+    ? t("searching")
+    : isFocused && searchValue.trim() !== ""
+      ? suggestions.length > 0
+        ? t("resultsCount", { count: String(suggestions.length) })
+        : t("noResults")
+      : "";
 
   const handleSelect = useCallback(
     (suggestion: GeocodeSuggestion) => {
@@ -35,6 +45,14 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setHighlightedIndex(-1);
+        clear();
+        inputRef.current?.blur();
+        return;
+      }
+
       if (suggestions.length === 0) return;
 
       switch (e.key) {
@@ -50,19 +68,23 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
             prev > 0 ? prev - 1 : suggestions.length - 1,
           );
           break;
+        case "Home":
+          e.preventDefault();
+          setHighlightedIndex(0);
+          break;
+        case "End":
+          e.preventDefault();
+          setHighlightedIndex(suggestions.length - 1);
+          break;
         case "Enter":
           e.preventDefault();
           if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
             handleSelect(suggestions[highlightedIndex]);
           }
           break;
-        case "Escape":
-          setHighlightedIndex(-1);
-          inputRef.current?.blur();
-          break;
       }
     },
-    [suggestions, highlightedIndex, handleSelect],
+    [suggestions, highlightedIndex, handleSelect, clear],
   );
 
   useEffect(() => {
@@ -74,6 +96,9 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
 
   return (
     <div className="relative w-[260px] max-w-[calc(100vw-2rem)]">
+      <span id={statusId} role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {statusMessage}
+      </span>
       <input
         ref={inputRef}
         type="text"
@@ -94,7 +119,14 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-controls="map-geocoder-suggestions"
+        aria-controls={isOpen ? listboxId : undefined}
+        aria-activedescendant={
+          highlightedIndex >= 0 && suggestions[highlightedIndex]
+            ? `${listboxId}-option-${highlightedIndex}`
+            : undefined
+        }
+        aria-autocomplete="list"
+        aria-busy={isLoading}
         autoComplete="off"
         className="w-full bg-p-paper border border-p-line rounded-[var(--p-r-md)] px-3 py-2 text-small text-p-ink placeholder:text-p-ink-3 shadow-[var(--p-shadow-md)] focus:outline-none focus:border-p-primary transition-colors"
       />
@@ -105,13 +137,14 @@ export function MapGeocoder({ onSelect }: MapGeocoderProps) {
       {isOpen && suggestions.length > 0 && (
         <ul
           ref={listRef}
-          id="map-geocoder-suggestions"
+          id={listboxId}
           role="listbox"
           className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-p-paper border border-p-line rounded-[var(--p-r-md)] shadow-[var(--p-shadow-md)]"
         >
           {suggestions.map((suggestion, index) => (
             <li
               key={suggestion.id}
+              id={`${listboxId}-option-${index}`}
               role="option"
               aria-selected={index === highlightedIndex}
               dir="auto"

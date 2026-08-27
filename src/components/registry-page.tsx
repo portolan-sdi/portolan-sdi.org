@@ -411,7 +411,7 @@ export function RegistryPage({
 
             {/* Inline Submit */}
             <div className="mt-10 bg-p-paper border border-p-line rounded-[var(--p-r-lg)] p-6">
-              <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                 <div className="flex-1">
                   <h3 className="text-card-title font-semibold text-p-ink">{t("registry.cta.title")}</h3>
                   <p className="text-body text-p-ink-2 mt-1">{t("registry.cta.description")}</p>
@@ -443,47 +443,60 @@ export function RegistryPage({
                     </button>
                   </div>
                 ) : (
-                  <div className="md:w-auto w-full">
-                    <div className="flex flex-col sm:flex-row gap-2">
-                    <div className="flex-1 sm:min-w-[260px]">
+                  <form
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      void handleSubmitCatalog();
+                    }}
+                    noValidate
+                    aria-busy={submitState === "submitting"}
+                    aria-describedby={submitError ? "registry-submit-error" : undefined}
+                    className="lg:w-auto w-full">
+                    <div className="flex flex-col lg:flex-row gap-2">
+                    <div className="flex-1 lg:min-w-[260px]">
+                      <label htmlFor="registry-submit-url" className="mb-1 block font-mono text-small text-p-ink-2">{t("registry.submit.urlLabel")}</label>
                       <input
+                        id="registry-submit-url"
                         type="url"
                         value={submitUrl}
                         onChange={(e) => setSubmitUrl(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && canSubmit && handleSubmitCatalog()}
-                        placeholder="https://...catalog.json"
+                        placeholder={t("registry.submit.urlPlaceholder")}
+                        required
+                        aria-invalid={submitUrl !== "" && !isValidSubmitUrl}
+                        aria-describedby={submitUrl !== "" && !isValidSubmitUrl ? "registry-submit-url-error" : undefined}
                         disabled={submitState === "submitting"}
                         className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
                           submitUrl && !isValidSubmitUrl ? "border-p-danger" : "border-p-line focus:border-p-primary"
                         }`}
                       />
                       {submitUrl && !isValidSubmitUrl && (
-                        <p className="text-small text-p-danger mt-1">{t("registry.submit.urlError")}</p>
+                        <p id="registry-submit-url-error" className="text-small text-p-danger mt-1" role="alert">{t("registry.submit.urlError")}</p>
                       )}
                     </div>
-                    <div className="sm:w-[200px]">
+                    <div className="lg:w-[200px]">
+                      <label htmlFor="registry-submit-email" className="mb-1 block font-mono text-small text-p-ink-2">{t("registry.submit.emailInputLabel")}</label>
                       <input
+                        id="registry-submit-email"
                         type="email"
                         value={submitEmail}
                         onChange={(e) => setSubmitEmail(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && canSubmit && handleSubmitCatalog()}
                         placeholder={t("registry.submit.emailPlaceholder")}
-                        aria-label={t("registry.submit.emailLabel")}
-                        title={t("registry.submit.emailLabel")}
+                        required
+                        aria-describedby={submitEmail !== "" && !isValidSubmitEmail ? "registry-submit-email-error" : undefined}
+                        aria-invalid={submitEmail !== "" && !isValidSubmitEmail}
                         disabled={submitState === "submitting"}
                         className={`w-full bg-p-bg border rounded-[var(--p-r-md)] px-4 py-2.5 text-body text-p-ink placeholder:text-p-ink-3 focus:outline-none transition-colors disabled:opacity-50 ${
                           submitEmail && !isValidSubmitEmail ? "border-p-danger" : "border-p-line focus:border-p-primary"
                         }`}
                       />
                       {submitEmail && !isValidSubmitEmail && (
-                        <p className="text-small text-p-danger mt-1">{t("registry.submit.emailError")}</p>
+                        <p id="registry-submit-email-error" className="text-small text-p-danger mt-1" role="alert">{t("registry.submit.emailError")}</p>
                       )}
                     </div>
                     <button
-                      type="button"
-                      onClick={handleSubmitCatalog}
+                      type="submit"
                       disabled={!canSubmit || submitState === "submitting"}
-                      className={`px-5 py-2.5 rounded-[var(--p-r-md)] text-body font-semibold transition-colors whitespace-nowrap sm:self-start ${
+                      className={`px-5 py-2.5 rounded-[var(--p-r-md)] text-body font-semibold transition-colors whitespace-nowrap lg:self-start ${
                         canSubmit && submitState !== "submitting"
                           ? "bg-p-primary text-p-on-primary hover:bg-p-primary-ink"
                           : "bg-p-line text-p-ink-3 cursor-not-allowed"
@@ -493,9 +506,9 @@ export function RegistryPage({
                     </button>
                     </div>
                     {submitError && (
-                      <p className="text-small text-p-danger mt-1">{submitError}</p>
+                      <p id="registry-submit-error" className="text-small text-p-danger mt-1" role="alert" aria-live="assertive" tabIndex={-1}>{submitError}</p>
                     )}
-                  </div>
+                  </form>
                 )}
               </div>
             </div>

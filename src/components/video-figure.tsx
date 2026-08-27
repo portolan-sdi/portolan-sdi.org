@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
@@ -47,6 +47,12 @@ interface VideoFigureProps {
    */
   caption?: ReactNode;
   /**
+   * A text equivalent for the video-only recording. It is exposed in a
+   * disclosure so readers can follow the terminal session without sight of
+   * the video.
+   */
+  description?: ReactNode;
+  /**
    * Classes on the `figure`. The caller owns the width and the gaps, because
    * one player centers at a fixed 620px and the other fills a grid column.
    */
@@ -67,9 +73,11 @@ export function VideoFigure({
   poster,
   ratio,
   caption,
+  description,
   className = "",
 }: VideoFigureProps) {
   const t = useTranslations("demo");
+  const descriptionId = useId();
   const videoRef = useRef<HTMLVideoElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
 
@@ -180,6 +188,7 @@ export function VideoFigure({
             poster={poster}
             onClick={toggle}
             style={{ "--demo-ratio": ratio } as CSSProperties}
+            aria-describedby={description ? descriptionId : undefined}
             className="demo-media block w-full h-auto cursor-pointer bg-p-paper"
           >
             <source src={src} type="video/mp4" />
@@ -252,6 +261,15 @@ export function VideoFigure({
         <figcaption className="mt-6 text-small leading-relaxed text-p-ink-2 text-pretty text-center text-balance">
           {caption}
         </figcaption>
+      )}
+
+      {description && (
+        <details id={descriptionId} className="mt-4 border border-p-line px-4 py-3 text-small leading-relaxed text-p-ink-2">
+          <summary className="cursor-pointer font-mono text-eyebrow text-p-ink">
+            {t("transcriptLabel")}
+          </summary>
+          <div className="mt-3 max-w-[72ch] text-start">{description}</div>
+        </details>
       )}
     </figure>
   );

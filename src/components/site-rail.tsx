@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { PortolanLogo } from "./portolan-logo";
@@ -129,8 +129,18 @@ export function SiteShell({
   // A group the reader opened or shut by hand. Absent means the group follows
   // the route. The choice survives client navigation on purpose.
   const [toggled, setToggled] = useState<Record<string, boolean>>({});
+  const drawerRef = useRef<HTMLElement>(null);
+  const drawerTriggerRef = useRef<HTMLButtonElement>(null);
+  const collapseButtonRef = useRef<HTMLButtonElement>(null);
+  const restoreButtonRef = useRef<HTMLButtonElement>(null);
+  const previousCollapsed = useRef(false);
 
-  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+  const closeDrawer = useCallback((restoreFocus = false) => {
+    setDrawerOpen(false);
+    if (restoreFocus) {
+      window.requestAnimationFrame(() => drawerTriggerRef.current?.focus());
+    }
+  }, []);
 
   const spyOn = activeIdProp === undefined;
   const activeId = spyOn ? spiedId : activeIdProp;
@@ -192,13 +202,70 @@ export function SiteShell({
     return () => obs.disconnect();
   }, [anchorKey, spyOn]);
 
-  // Close the mobile drawer on Escape.
+  // The mobile rail behaves as a modal navigation surface. Move focus into
+  // it on open, keep Tab within it, and return focus to its trigger on close.
   useEffect(() => {
     if (!drawerOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeDrawer();
+    const drawer = drawerRef.current;
+    if (!drawer) return;
+
+    const getFocusable = () =>
+      Array.from(
+        drawer.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => !element.hidden && element.getClientRects().length > 0);
+
+    const frame = window.requestAnimationFrame(() => getFocusable()[0]?.focus());
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeDrawer(true);
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusable = getFocusable();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (!drawer.contains(active)) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [drawerOpen, closeDrawer]);
+
+  // A desktop collapse removes the focused control from the rail. Transfer
+  // focus to the newly visible restore handle, and back to the collapse button.
+  useEffect(() => {
+    if (isDesktop && collapsed && !previousCollapsed.current) {
+      window.requestAnimationFrame(() => restoreButtonRef.current?.focus());
+    } else if (isDesktop && !collapsed && previousCollapsed.current) {
+      window.requestAnimationFrame(() => collapseButtonRef.current?.focus());
+    }
+    previousCollapsed.current = collapsed;
+  }, [collapsed, isDesktop]);
+
+  // The mobile drawer should not remain open across a breakpoint change.
+  useEffect(() => {
+    if (!isDesktop || !drawerOpen) return;
+    const frame = window.requestAnimationFrame(() => setDrawerOpen(false));
+    return () => window.cancelAnimationFrame(frame);
+  }, [isDesktop, drawerOpen]);
 
   const railOffCanvas = isDesktop ? collapsed : !drawerOpen;
   const railStateClass = isDesktop
@@ -240,7 +307,7 @@ export function SiteShell({
     return item.href ? (
       <Link
         href={item.href}
-        onClick={closeDrawer}
+        onClick={() => closeDrawer()}
         aria-current={active ? "page" : undefined}
         className={className}
       >
@@ -249,7 +316,7 @@ export function SiteShell({
     ) : (
       <a
         href={`#${item.id}`}
-        onClick={closeDrawer}
+        onClick={() => closeDrawer()}
         aria-current={active ? "true" : undefined}
         className={className}
       >
@@ -277,7 +344,7 @@ export function SiteShell({
             {item.href ? (
               <Link
                 href={item.href}
-                onClick={closeDrawer}
+                onClick={() => closeDrawer()}
                 aria-current={active ? "page" : undefined}
                 className={`flex-1 ${rowBase} ${tone(active)}`}
               >
@@ -304,7 +371,7 @@ export function SiteShell({
             </button>
             <Link
               href={item.href}
-              onClick={closeDrawer}
+              onClick={() => closeDrawer()}
               aria-current={active ? "page" : undefined}
               className={`flex-1 ${rowBase} ${tone(active)}`}
             >
@@ -345,7 +412,7 @@ export function SiteShell({
     <div className="min-h-screen bg-p-bg font-sans">
       {/* Mobile drawer scrim */}
       <div
-        onClick={closeDrawer}
+        onClick={() => closeDrawer(true)}
         aria-hidden="true"
         className={`fixed inset-0 z-[39] bg-[rgba(22,23,15,0.32)] transition-opacity md:hidden ${
           drawerOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -354,6 +421,8 @@ export function SiteShell({
 
       {/* The rail */}
       <nav
+        id="site-rail"
+        ref={drawerRef}
         aria-label={t("nav.homeAria")}
         inert={railOffCanvas || undefined}
         className={`site-rail ${railStateClass} fixed inset-y-0 start-0 z-40 flex flex-col w-[min(86vw,320px)] md:w-[var(--p-rail)] bg-p-bg border-e border-p-line`}
@@ -361,7 +430,7 @@ export function SiteShell({
         <Link
           href="/"
           aria-label={t("nav.homeAria")}
-          onClick={closeDrawer}
+          onClick={() => closeDrawer()}
           className="flex items-center px-[22px] py-5 border-b border-p-line"
         >
           <PortolanLogo size={26} />
@@ -381,8 +450,11 @@ export function SiteShell({
         <div className="border-t border-p-line px-[22px] py-3.5 flex items-center justify-between gap-2">
           <LocaleSwitcher />
           <button
+            ref={collapseButtonRef}
             type="button"
             onClick={() => setCollapsed(true)}
+            aria-controls="site-rail"
+            aria-expanded={!collapsed}
             aria-label={t("nav.collapse")}
             title={t("nav.collapse")}
             className="hidden md:inline-flex items-center justify-center h-8 px-2 font-mono text-small text-p-ink-3 transition-colors hover:bg-p-bg-soft hover:text-p-ink"
@@ -399,8 +471,11 @@ export function SiteShell({
           the rail is off-canvas on desktop. */}
       {isDesktop && collapsed && (
         <button
+          ref={restoreButtonRef}
           type="button"
           onClick={() => setCollapsed(false)}
+          aria-controls="site-rail"
+          aria-expanded={false}
           className="fixed top-5 start-0 z-40 hidden md:inline-flex items-center gap-1.5 border border-s-0 border-p-line bg-p-bg px-3 py-1.5 font-mono text-eyebrow uppercase tracking-[0.1em] rtl:tracking-normal text-p-ink hover:bg-p-bg-soft"
         >
           <span aria-hidden="true">&#187;</span>
@@ -414,8 +489,10 @@ export function SiteShell({
           <PortolanLogo size={24} />
         </Link>
         <button
+          ref={drawerTriggerRef}
           type="button"
           onClick={() => setDrawerOpen(true)}
+          aria-controls="site-rail"
           aria-expanded={drawerOpen}
           className="font-mono text-eyebrow uppercase tracking-[0.1em] border border-p-line px-3 py-1.5 text-p-ink hover:bg-p-bg-soft"
         >
@@ -423,7 +500,7 @@ export function SiteShell({
         </button>
       </div>
 
-      <div className="site-main">
+      <div className="site-main" inert={drawerOpen || undefined}>
         <main>{children}</main>
         <SiteFooter />
       </div>
