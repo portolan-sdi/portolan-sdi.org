@@ -1,36 +1,21 @@
-import { getCoverageTier } from "./catalogs";
+import {
+  getCoverageTier,
+  type Bbox,
+  type CatalogCoverage,
+  type CollectionRecord,
+  type CoverageBboxes,
+} from "./catalogs";
 
 /**
  * The geometry behind the registry explorer.
  *
- * scripts/bake-coverage-bboxes.mjs crawls every registered catalog and writes
- * one record per collection extent. The same file feeds the landing page's A5
- * coverage bake, so the crawl runs once and both maps read its output.
+ * The registry exports one record per collection extent. The route reads that
+ * export through the same tagged server cache as the catalog list.
  *
  * The explorer spends the records two ways. It draws a centroid point per
  * collection, and it matches a catalog to the viewport when any of that
  * catalog's bboxes overlaps it. A centroid never decides a result.
  */
-
-export type Bbox = [number, number, number, number];
-
-export interface CollectionRecord {
-  id: string;
-  title: string;
-  bbox: Bbox;
-}
-
-export interface CatalogCoverage {
-  id: string;
-  collection_count: number;
-  collections: CollectionRecord[];
-}
-
-export interface CoverageBboxes {
-  generated: string;
-  registry_generated: string | null;
-  catalogs: CatalogCoverage[];
-}
 
 /**
  * One drawable point. A broad extent never becomes one, and neither does a
@@ -70,14 +55,6 @@ export interface CoverageIndex {
   points: CollectionPoint[];
   /** Collections whose extent is too broad to place a point on. */
   broadCount: number;
-}
-
-const DATA_URL = "/data/coverage-bboxes.json";
-
-export async function fetchCoverage(signal?: AbortSignal): Promise<CoverageBboxes> {
-  const res = await fetch(DATA_URL, { signal });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return (await res.json()) as CoverageBboxes;
 }
 
 /**

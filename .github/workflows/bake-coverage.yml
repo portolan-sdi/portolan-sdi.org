@@ -1,0 +1,117 @@
+name: Bake Coverage
+
+on:
+  repository_dispatch:
+    types: [registry-export-updated]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 4 * * 1'
+
+permissions:
+  contents: read
+
+# A dispatch and the weekly fallback can arrive together. Keep one writer on
+# the stable bot branch so a later run cannot replace a push in flight.
+concurrency:
+  group: coverage-bake
+  cancel-in-progress: false
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Bake coverage
+        run: |
+          set -o pipefail
+          node scripts/bake-a5-coverage.mjs 5 | tee "$RUNNER_TEMP/bake.log"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet -- public/data/a5-coverage-r5.json; then
+            echo "Coverage unchanged"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # GITHUB_TOKEN cannot raise the pull_request event that runs required
+      # checks. Use the registry bot so the generated pull request can pass.
+      - name: Create bot token
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: token
+        with:
+          client-id: ${{ secrets.REGISTRY_BOT_APP_CLIENT_ID }}
+          private-key: ${{ secrets.REGISTRY_BOT_APP_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Open or update the coverage pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          BRANCH: bot/coverage
+          EXPORT_URL: https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/coverage-bboxes.json
+        run: |
+          git config user.name "portolan-registry-bot[bot]"
+          git config user.email \
+            "portolan-registry-bot[bot]@users.noreply.github.com"
+          git remote set-url origin \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          git checkout -B "$BRANCH"
+          git add public/data/a5-coverage-r5.json
+          git commit -m "chore: refresh coverage data"
+          git push --force origin "$BRANCH"
+
+          body="$RUNNER_TEMP/coverage-pr.md"
+          {
+            echo "## What changed"
+            echo
+            echo "Refresh the homepage coverage cells from the current registry export."
+            echo
+            echo "## Why"
+            echo
+            echo "The registry export changed, so the committed coverage map is stale. Issue #78 defines this update path."
+            echo
+            echo "## Verification"
+            echo
+            echo "The workflow read \`$EXPORT_URL\`."
+            echo
+            echo '```console'
+            echo '$ node scripts/bake-a5-coverage.mjs 5'
+            cat "$RUNNER_TEMP/bake.log"
+            echo '```'
+          } > "$body"
+
+          open=$(gh pr list --head "$BRANCH" --state open \
+            --json number --jq '.[0].number // empty')
+
+          if [ -n "$open" ]; then
+            gh pr edit "$open" --body-file "$body"
+            echo "Updated open pull request #${open}"
+          else
+            gh pr create --head "$BRANCH" --base main \
+              --title "chore: refresh coverage data" \
+              --body-file "$body"
+          fi

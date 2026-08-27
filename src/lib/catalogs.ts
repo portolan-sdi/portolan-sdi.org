@@ -61,6 +61,26 @@ export interface CatalogsResponse {
   catalogs: Catalog[];
 }
 
+export type Bbox = [number, number, number, number];
+
+export interface CollectionRecord {
+  id: string;
+  title: string;
+  bbox: Bbox;
+}
+
+export interface CatalogCoverage {
+  id: string;
+  collection_count: number;
+  collections: CollectionRecord[];
+}
+
+export interface CoverageBboxes {
+  generated: string;
+  registry_generated: string | null;
+  catalogs: CatalogCoverage[];
+}
+
 // The registry publishes its export as a STAC Catalog: one `rel="child"` link
 // per registered catalog, carrying the crawl's findings under a
 // `portolan_registry:` prefix. Schema:
@@ -97,6 +117,8 @@ interface RegistryExport {
 
 const CATALOGS_URL =
   "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/catalogs.json";
+const COVERAGE_URL =
+  "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/coverage-bboxes.json";
 
 // Tag the registry fetch so the registry CI can invalidate it on demand
 // (POST /api/revalidate) the moment a new export is published, instead of
@@ -160,6 +182,18 @@ export async function getCatalogs(): Promise<CatalogsResponse> {
     count: catalogs.length,
     catalogs,
   };
+}
+
+export async function getCoverageBboxes(): Promise<CoverageBboxes> {
+  const res = await fetch(COVERAGE_URL, {
+    next: { revalidate: 3600, tags: [CATALOGS_CACHE_TAG] },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch collection coverage: ${res.status}`);
+  }
+
+  return (await res.json()) as CoverageBboxes;
 }
 
 // The Portolan browser opens any catalog.json via a hash route that carries the

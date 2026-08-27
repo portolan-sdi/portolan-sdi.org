@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { RegistryPage } from "@/components";
-import { getCatalogs } from "@/lib/catalogs";
+import {
+  getCatalogs,
+  getCoverageBboxes,
+  type Catalog,
+  type CoverageBboxes,
+} from "@/lib/catalogs";
 import { parseExplorerParams } from "@/lib/explorer-url";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
@@ -56,13 +61,25 @@ export default async function Registry({ params, searchParams }: PageProps) {
 
   const initial = parseExplorerParams(await searchParams);
 
-  let catalogs: Awaited<ReturnType<typeof getCatalogs>>["catalogs"] = [];
-  try {
-    const data = await getCatalogs();
-    catalogs = data.catalogs;
-  } catch (err) {
-    console.error("Failed to fetch catalogs:", err);
+  const [catalogResult, coverageResult] = await Promise.allSettled([
+    getCatalogs(),
+    getCoverageBboxes(),
+  ]);
+
+  let catalogs: Catalog[] = [];
+  let coverage: CoverageBboxes | null = null;
+
+  if (catalogResult.status === "fulfilled") {
+    catalogs = catalogResult.value.catalogs;
+  } else {
+    console.error("Failed to fetch catalogs:", catalogResult.reason);
   }
 
-  return <RegistryPage catalogs={catalogs} initial={initial} />;
+  if (coverageResult.status === "fulfilled") {
+    coverage = coverageResult.value;
+  } else {
+    console.error("Failed to fetch collection coverage:", coverageResult.reason);
+  }
+
+  return <RegistryPage catalogs={catalogs} coverage={coverage} initial={initial} />;
 }
