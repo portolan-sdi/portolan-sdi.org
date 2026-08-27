@@ -295,9 +295,12 @@ export default function CatalogMap({
 
     const neutralizeMarkerHosts = () => {
       mapContainer.querySelectorAll<HTMLElement>(".maplibregl-marker").forEach((marker) => {
-        marker.removeAttribute("aria-label");
-        marker.setAttribute("role", "presentation");
-        marker.removeAttribute("tabindex");
+        // Firefox reports unchanged attribute writes as new mutations.
+        if (marker.hasAttribute("aria-label")) marker.removeAttribute("aria-label");
+        if (marker.getAttribute("role") !== "presentation") {
+          marker.setAttribute("role", "presentation");
+        }
+        if (marker.hasAttribute("tabindex")) marker.removeAttribute("tabindex");
       });
     };
 
