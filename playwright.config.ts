@@ -31,6 +31,12 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: "**/firefox-registry.spec.ts",
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+      testMatch: "**/firefox-registry.spec.ts",
     },
   ],
 });
