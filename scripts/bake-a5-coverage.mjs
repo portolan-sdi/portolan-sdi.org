@@ -34,6 +34,7 @@ import { lonLatToCell, cellToBoundary, cellArea } from "a5-js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BBOX_URL =
+  process.env.COVERAGE_BBOX_URL ??
   "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/coverage-bboxes.json";
 const MASK_PATH = resolve(HERE, "../public/data/land-mask.json");
 const outPath = (res) =>
@@ -69,6 +70,26 @@ const MAX_BBOX_WORLD_FRACTION = 1;
 
 const EARTH_RADIUS_KM = 6371;
 const EARTH_AREA_KM2 = 4 * Math.PI * EARTH_RADIUS_KM * EARTH_RADIUS_KM;
+const FETCH_TIMEOUT_MS = 20_000;
+const FETCH_RETRIES = 1;
+
+async function fetchJson(url) {
+  let lastError;
+  for (let attempt = 0; attempt <= FETCH_RETRIES; attempt++) {
+    try {
+      const response = await fetch(url, {
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw new Error(`Failed to fetch collection coverage from ${url}: ${lastError}`);
+}
 
 /** Share of the globe a bbox covers, by area on the sphere. */
 function worldFraction([west, south, east, north]) {
@@ -282,7 +303,6 @@ async function bakeResolution(index, mask, RESOLUTION) {
     max,
     width: VIEW_WIDTH,
     height: VIEW_HEIGHT,
-    generated: index.generated,
     // Catalogs whose every bbox covers the world. They shade nothing, so the
     // page names them rather than letting them vanish.
     worldwide,
@@ -305,11 +325,7 @@ async function bakeResolution(index, mask, RESOLUTION) {
 
 async function main() {
   console.log(`Reading ${BBOX_URL}`);
-  const response = await fetch(BBOX_URL);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch collection coverage: HTTP ${response.status}`);
-  }
-  const index = await response.json();
+  const index = await fetchJson(BBOX_URL);
   const mask = decodeMask(JSON.parse(await readFile(MASK_PATH, "utf8")));
   for (const resolution of RESOLUTIONS) {
     await bakeResolution(index, mask, resolution);

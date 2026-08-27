@@ -8,7 +8,7 @@ import { AWAY_ITEMS, SiteShell } from "./site-rail";
 import { DirArrow } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { MapState } from "./registry/catalog-map";
-import type { Catalog, CoverageBboxes } from "@/lib/catalogs";
+import type { Catalog } from "@/lib/catalogs";
 import { formatDate } from "@/lib/catalogs";
 import {
   EMPTY_EXPLORER_STATE,
@@ -18,6 +18,7 @@ import {
 import {
   buildIndex,
   catalogsInViewport,
+  fetchCoverage,
   type CoverageIndex,
 } from "@/lib/collection-points";
 
@@ -119,7 +120,6 @@ const CatalogMap = dynamic(() => import("./registry/catalog-map"), {
 
 interface RegistryPageProps {
   catalogs?: Catalog[];
-  coverage?: CoverageBboxes | null;
   /** Explorer state the request URL carried, read on the server. */
   initial?: ExplorerState;
 }
@@ -132,16 +132,12 @@ function writeExplorerUrl(state: ExplorerState) {
 
 export function RegistryPage({
   catalogs = [],
-  coverage = null,
   initial = EMPTY_EXPLORER_STATE,
 }: RegistryPageProps) {
   const t = useTranslations();
   const locale = useLocale();
 
-  const index = useMemo<CoverageIndex | null>(
-    () => (coverage ? buildIndex(coverage) : null),
-    [coverage]
-  );
+  const [index, setIndex] = useState<CoverageIndex | null>(null);
   const [mapState, setMapState] = useState<MapState | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -161,6 +157,17 @@ export function RegistryPage({
   // catalog stops validating, so an entry without one is rejected at its gate.
   const isValidSubmitEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(submitEmail.trim());
   const canSubmit = isValidSubmitUrl && isValidSubmitEmail;
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchCoverage(controller.signal)
+      .then((data) => setIndex(buildIndex(data)))
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load collection extents:", err);
+      });
+    return () => controller.abort();
+  }, []);
 
   // Catalogs the crawl could place. The rest are named under the map.
   const locatedIds = useMemo(

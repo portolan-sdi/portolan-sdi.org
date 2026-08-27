@@ -15,6 +15,7 @@ permissions:
 concurrency:
   group: coverage-bake
   cancel-in-progress: false
+  queue: max
 
 jobs:
   bake:
@@ -22,6 +23,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -37,7 +41,27 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Resolve registry source
+        id: source
+        env:
+          DISPATCH_SHA: ${{ github.event.client_payload.registry_sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha="$DISPATCH_SHA"
+          if [ -z "$sha" ]; then
+            sha=$(gh api repos/portolan-sdi/portolan-registry/commits/main --jq .sha)
+          fi
+          if ! [[ "$sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid registry commit: $sha" >&2
+            exit 1
+          fi
+          url="https://raw.githubusercontent.com/portolan-sdi/portolan-registry/${sha}/exports/coverage-bboxes.json"
+          echo "registry_sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "export_url=$url" >> "$GITHUB_OUTPUT"
+
       - name: Bake coverage
+        env:
+          COVERAGE_BBOX_URL: ${{ steps.source.outputs.export_url }}
         run: |
           set -o pipefail
           node scripts/bake-a5-coverage.mjs 5 | tee "$RUNNER_TEMP/bake.log"
@@ -55,7 +79,6 @@ jobs:
       # GITHUB_TOKEN cannot raise the pull_request event that runs required
       # checks. Use the registry bot so the generated pull request can pass.
       - name: Create bot token
-        if: steps.changes.outputs.changed == 'true'
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: token
         with:
@@ -67,12 +90,24 @@ jobs:
           permission-pull-requests: write
 
       - name: Open or update the coverage pull request
-        if: steps.changes.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ steps.token.outputs.token }}
           BRANCH: bot/coverage
-          EXPORT_URL: https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/coverage-bboxes.json
+          CHANGED: ${{ steps.changes.outputs.changed }}
+          EXPORT_URL: ${{ steps.source.outputs.export_url }}
+          REGISTRY_SHA: ${{ steps.source.outputs.registry_sha }}
         run: |
+          open=$(gh pr list --head "$BRANCH" --state open \
+            --json number --jq '.[0].number // empty')
+
+          if [ "$CHANGED" != "true" ]; then
+            if [ -n "$open" ]; then
+              gh pr close "$open" --delete-branch
+              echo "Closed unchanged pull request #${open}"
+            fi
+            exit 0
+          fi
+
           git config user.name "portolan-registry-bot[bot]"
           git config user.email \
             "portolan-registry-bot[bot]@users.noreply.github.com"
@@ -97,15 +132,13 @@ jobs:
             echo "## Verification"
             echo
             echo "The workflow read \`$EXPORT_URL\`."
+            echo "The registry source commit is \`$REGISTRY_SHA\`."
             echo
             echo '```console'
             echo '$ node scripts/bake-a5-coverage.mjs 5'
             cat "$RUNNER_TEMP/bake.log"
             echo '```'
           } > "$body"
-
-          open=$(gh pr list --head "$BRANCH" --state open \
-            --json number --jq '.[0].number // empty')
 
           if [ -n "$open" ]; then
             gh pr edit "$open" --body-file "$body"
