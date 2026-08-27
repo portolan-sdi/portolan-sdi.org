@@ -1,4 +1,5 @@
 import { PostFigure } from "@/components/blog/post-figure";
+import { PostVideoFigure } from "@/components/blog/post-video-figure";
 import { ProseLink } from "@/components/ui";
 import { COMMUNITY_LINKS } from "@/lib/site";
 
@@ -73,9 +74,10 @@ paying to operate a dedicated geospatial service.
 
 <PostFigure
   n={1}
-  ratio="16 / 9"
-  pending="fields-of-the-world.png"
-  caption="The Global Fields of the World dataset is published as a Portolan catalog on Source Cooperative, contains 369 TB of data, and saw more than 167 TB of data transfer in the last twenty-eight days at the time of writing."
+  src="/img/blog/fields-of-the-world.png"
+  alt="The Global Fields of the World catalog on Source Cooperative, including its public status and 28-day download statistics."
+  ratio="1719 / 1324"
+  caption="The Global Fields of the World dataset is published as a Portolan catalog on Source Cooperative, contains 369 TB of data, and served 106.6 TB in the 28 days ending August 27, 2026."
 />
 
 The same shift matters at the other end of the spectrum. Many city governments,
@@ -121,11 +123,13 @@ folder of files, a WFS endpoint, an Esri service, or another published dataset,
 then work through catalog structure, conversion, documentation, visualization,
 validation, and publication.
 
-<PostFigure
+<PostVideoFigure
   n={2}
-  ratio="16 / 10"
-  pending="portolan-bootstrap-demo.gif"
-  caption="portolan-bootstrap taking a source dataset through conversion, documentation, validation, and publication."
+  src="/video/portolan-demo-one.mp4"
+  poster="/video/portolan-demo-one.jpg"
+  ratio="1454 / 1118"
+  caption="An agent creates and publishes a Portolan catalog from Philadelphia housing data."
+  description="A terminal recording shows an agent create and publish a Portolan catalog from ten Open Data Philly housing datasets. It converts source data, adds documentation and map styles, validates the catalog, and publishes the finished files."
 />
 
 Because Portolan catalogs are built from existing standards, using them doesn't
@@ -137,11 +141,13 @@ agents consuming Portolan data, with guidance on navigating STAC metadata,
 querying GeoParquet and COG efficiently, joining datasets, and building
 analyses or applications from the results.
 
-<PostFigure
+<PostVideoFigure
   n={3}
-  ratio="16 / 10"
-  pending="pdok-demo.gif"
-  caption="Working with the PDOK catalog, the Dutch national mapping agency's data published as a Portolan catalog."
+  src="/video/portolan-demo-two.mp4"
+  poster="/video/portolan-demo-two.jpg"
+  ratio="1194 / 1078"
+  caption="An agent uses catalogs in the Portolan registry to assess flood risk in Chisinau, Moldova."
+  description="A terminal recording shows an agent search the Portolan registry for Moldova flood data, inspect related catalogs, estimate exposed buildings and population, and rank planning corridors."
 />
 
 ## Built for people and agents
