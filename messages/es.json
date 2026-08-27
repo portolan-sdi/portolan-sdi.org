@@ -86,33 +86,34 @@
     "eyebrow": "Cómo funciona",
     "title": "Cómo funciona",
     "intro": "Usa la <cli>CLI de Portolan</cli> o las <skills>habilidades de agente</skills> para transformar tus datos existentes en un catálogo Portolan.",
-    "figAlt": "Los archivos y servicios existentes entran en portolan-cli, que envía un catálogo al almacenamiento de objetos. QGIS, Python y los agentes lo leen directamente.",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convertir",
-        "description": "Tus datos existentes se convierten a formatos nativos de la nube. Trabajes con Shapefiles y GeoPackages, con un endpoint WFS o con un servidor Esri, acabarás con <m>GeoParquet</m> para vectores y <m>COG</m> para ráster."
+        "description": "Trabajes con Shapefiles y GeoPackages, con un endpoint WFS o con un servidor Esri, tus datos acaban como <m>GeoParquet</m> para vectores y <m>COG</m> para ráster."
       },
       "catalog": {
         "id": "02",
         "title": "Catalogar",
-        "description": "Tus datos optimizados para la nube se organizan como un catálogo <m>STAC</m> con metadatos y documentación claros, incluidos READMEs y <m>AGENTS.md</m>. Así el catálogo es fácil de encontrar, de explorar y de usar, tanto para personas como para agentes."
+        "description": "Tus datos optimizados para la nube se organizan como un catálogo <m>STAC</m> con metadatos y documentación claros, lo que hace que el catálogo sea fácil de encontrar, de entender y de usar para personas y agentes."
       },
       "publish": {
         "id": "03",
         "title": "Publicar",
-        "description": "Tu catálogo se publica en cualquier almacenamiento compatible con S3, como AWS, GCS, Hetzner o MinIO. No hay servidores ni APIs que configurar. Compartirlo significa enviarle la URL a alguien."
+        "description": "Tu catálogo se publica en cualquier almacenamiento compatible con S3, como AWS, GCS, Hetzner o MinIO, sin servidores ni APIs que configurar."
       },
       "use": {
         "id": "04",
         "title": "Usar",
-        "description": "Ya puedes usar los datos directamente en herramientas como QGIS, ArcGIS o Python, o pasar la URL del catálogo a un agente para que se ponga a trabajar con la habilidad de consumo de Portolan."
+        "description": "Ya puedes llevar tus datos directamente a herramientas como QGIS, ArcGIS o Python, o pasar la URL del catálogo a un agente para que se ponga a trabajar."
       }
     }
   },
   "demo": {
     "navLabel": "Demo",
-    "caption": "Creando <catalog>un catálogo de Portolan</catalog> de principio a fin a partir de datos de vivienda de Filadelfia.",
+    "title": "Una mejor forma de trabajar con datos geoespaciales",
+    "blurb": "Mira a un agente responder preguntas en lenguaje natural sobre el riesgo de inundación en Moldavia usando datos del <registry>registro de Portolan</registry>.",
+    "captionPhiladelphia": "Creando <catalog>un catálogo de Portolan</catalog> de principio a fin a partir de datos de vivienda de Filadelfia.",
     "play": "Reproducir la demo",
     "pause": "Pausar la demo",
     "fullscreen": "Ver la demo en pantalla completa",

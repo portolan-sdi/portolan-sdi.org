@@ -86,33 +86,34 @@
     "eyebrow": "How it works",
     "title": "How it works",
     "intro": "Use the <cli>Portolan CLI</cli> or <skills>agent skills</skills> to transform your existing data into a Portolan catalog.",
-    "figAlt": "Existing files and services flow into portolan-cli, which pushes a catalog to object storage. QGIS, Python, and agents read it directly.",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Your existing data are converted to cloud-native formats. Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, you'll end up with <m>GeoParquet</m> for vector and <m>COG</m> for raster."
+        "description": "Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, your data end up as <m>GeoParquet</m> for vector and <m>COG</m> for raster."
       },
       "catalog": {
         "id": "02",
         "title": "Catalog",
-        "description": "Your cloud-optimized data are organized as a <m>STAC</m> catalog with clear metadata and docs, including READMEs and <m>AGENTS.md</m>. This makes the catalog easy to find, explore, and use, for both people and agents."
+        "description": "Your cloud-optimized data are organized as a <m>STAC</m> catalog with clear metadata and docs, making the catalog easy to find, understand, and use for people and agents."
       },
       "publish": {
         "id": "03",
         "title": "Publish",
-        "description": "Your catalog is published to any S3-compatible storage, like AWS, GCS, Hetzner, or MinIO. There are no servers or APIs to set up. Sharing it means sending someone the URL."
+        "description": "Your catalog is published to any S3-compatible storage, such as AWS, GCS, Hetzner, or MinIO, with no servers or APIs to set up."
       },
       "use": {
         "id": "04",
         "title": "Use",
-        "description": "The data can now be used directly in tools like QGIS, ArcGIS, or Python, or you can pass the catalog URL to an agent and let it get to work with the Portolan consume skill."
+        "description": "Your data can now be dropped directly into tools like QGIS, ArcGIS, or Python, or you can pass the catalog URL to an agent and let it get to work."
       }
     }
   },
   "demo": {
     "navLabel": "Demo",
-    "caption": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
+    "title": "A better way to work with geospatial data",
+    "blurb": "Watch an agent answer natural language questions about flood risk in Moldova using data from the <registry>Portolan registry</registry>.",
+    "captionPhiladelphia": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
     "play": "Play the demo",
     "pause": "Pause the demo",
     "fullscreen": "Show the demo full screen",

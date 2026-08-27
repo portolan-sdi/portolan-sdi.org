@@ -204,36 +204,6 @@ body {
   font-family: var(--p-mono);
 }
 
-/* Pipeline figure (PipelineFigure): packet writes, marching reads, arrival
-   glow. Solid curves + traveling packets = writes; dashed marching = reads. */
-@keyframes pd-src {
-  0% {
-    stroke-dashoffset: 10;
-  }
-  45%,
-  100% {
-    stroke-dashoffset: -100;
-  }
-}
-@keyframes pd-flow {
-  to {
-    stroke-dashoffset: -14;
-  }
-}
-@keyframes pd-march {
-  to {
-    stroke-dashoffset: -11;
-  }
-}
-.pd-src {
-  animation: pd-src 3.6s linear infinite;
-}
-.pd-flow {
-  animation: pd-flow 0.6s linear infinite;
-}
-.pd-march {
-  animation: pd-march 0.9s linear infinite;
-}
 /* The registry map's hover label. MapLibre's own popup is rounded, shadowed,
    and pointed; the site's is a square-cornered ruled block. */
 .registry-popup .maplibregl-popup-content {
@@ -245,14 +215,6 @@ body {
 }
 .registry-popup .maplibregl-popup-tip {
   display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pd-src,
-  .pd-flow,
-  .pd-march {
-    animation: none;
-  }
 }
 
 
