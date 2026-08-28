@@ -169,7 +169,7 @@ portolan-ops. The rules below cover how this site spends them.
   code blocks stay `dir="ltr"`.
 - Wrap pure-Latin standalone values (names, versions, license, repo) in `<Ltr>` so they
   stay correctly ordered inside Arabic text.
-- Arabic always renders in Cairo (Archivo has no Arabic glyphs). On RTL pages the
+- Arabic always renders in Cairo (Hanken Grotesk has no Arabic glyphs). On RTL pages the
   `--p-sans` token re-points to Cairo in `globals.css`, so body, headings, and the
   `font-sans` utility all resolve to Cairo. Cairo is also the Arabic-glyph fallback in
   the base sans stack, so stray Arabic on an LTR page (for example the language switcher)
@@ -178,3 +178,40 @@ portolan-ops. The rules below cover how this site spends them.
   with `rtl:tracking-normal` because letterspacing breaks Arabic's connected script.
 - `<html lang dir>` is set per locale in `src/app/[locale]/layout.tsx` via
   `getDirection(locale)`. Do not reintroduce `<html>` into the root layout.
+
+
+<claude-mem-context>
+# Memory Context
+
+# [portolan] recent context, 2026-08-27 5:45pm GMT+2
+
+Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
+Format: ID TIME TYPE TITLE
+Fetch details: get_observations([IDs]) | Search: mem-search skill
+
+Stats: 10 obs (3,019t read) | 24,238t work | 88% savings
+
+### Aug 27, 2026
+S9970 Fix style picker sparse-column handling; finalize Overture defect documentation strategy; re-pick all collections (Aug 27, 3:36 PM)
+S9971 Update ETA and risk assessment for completing style picker fixes and catalog validation (Aug 27, 3:39 PM)
+S9972 Monitor style re-pick progress; assess fix effectiveness and identify visual edge cases (Aug 27, 3:42 PM)
+S9974 Complete style picker workflow; prepare for Gate 2 visual review with thumbnail re-render (Aug 27, 3:50 PM)
+S9975 Validate Portolan Overture catalog with styles and thumbnails in place; review Gate 2 thumbnail cards for rendering issues (Aug 27, 3:56 PM)
+S9973 Complete style picker workflow; prepare for Gate 2 visual review with thumbnail re-render (Aug 27, 3:56 PM)
+S9976 Improve thumbnails in nlebovits/overture-portolan Portolan catalog (feat/all-collections branch) — 15 collections with generated styles and rendered tiles need visual refinement. (Aug 27, 3:57 PM)
+S9977 Complete and submit Codex's thumbnail art direction work; polish and finalize the full Overture catalog for merge and deployment (Aug 27, 4:01 PM)
+S9978 Complete Codex's thumbnail art direction work and finalize the full Overture catalog for merge and deployment (Aug 27, 5:29 PM)
+25657 5:34p ✅ Live Gate Fixed: Switched from portolan-cli to rashid; CORS Headers Now Present
+25658 " 🔵 Discrepancy: PTL-LIV-004/005 Present Locally, Absent in Deployed Version
+25659 " 🔵 JSON Structure Mismatch: Gate Expects report.data.findings, Rashid Provides report.findings
+25656 " 🔵 Registry coverage endpoint missing cache in production
+25661 5:36p 🔵 Workflow Out of Sync: Pages Workflow Still Installs portolan-cli, Test Expects rashid
+25662 " ✅ GitHub Pages Workflow Updated to Install Rashid from requirements-ci.txt
+25663 " ✅ Commit: Fix Live Gate Validator; Switch from portolan-cli to rashid
+25665 " ✅ PR Body Revision: Writing Issues Reduced from 3 to 1 Blocking
+25666 " ✅ Pull Request #6 Opened: Fix for Live Gate Validator
+S9979 Fix live hosting gate failures and verify deployment; diagnose and resolve two bugs preventing live validation from passing in CI environment (Aug 27, 5:36 PM)
+25667 5:38p 🔴 Registry coverage endpoint cache regression fixed with force-static
+
+Access 24k tokens of past work via get_observations([IDs]) or mem-search skill.
+</claude-mem-context>

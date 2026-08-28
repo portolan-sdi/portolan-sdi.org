@@ -174,7 +174,7 @@ body {
   }
 }
 
-/* Arabic (RTL): the whole page renders in Cairo, which Archivo cannot render.
+/* Arabic (RTL): the whole page renders in Cairo, which Hanken Grotesk cannot render.
    Re-pointing the sans token (used by body, headings, and the font-sans utility)
    keeps prose, headings, and content wrappers in Cairo. Latin product names
    render in Cairo too. */
