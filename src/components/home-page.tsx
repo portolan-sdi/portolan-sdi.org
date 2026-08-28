@@ -29,7 +29,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
 
   // Four principles, one ledger row each: title, body, mono tag. Order is
   // deliberate, not ranked (no numbers, no bullets).
-  const whyCards = ["open", "simple", "agents"] as const;
+  const whyCards = ["agents", "open", "cost", "sovereign"] as const;
 
   const howSteps = ["convert", "catalog", "publish", "use"] as const;
 

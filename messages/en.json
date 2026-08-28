@@ -20,9 +20,9 @@
     "toggleGroup": "{section} links"
   },
   "hero": {
-    "title": "Portolan makes geospatial data",
-    "titleAccent": "easy to share and use.",
-    "description": "Portolan is an open-source specification and toolkit that combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale.",
+    "title": "Portolan is an open specification",
+    "titleAccent": "for publishing geospatial data.",
+    "description": "A catalog is plain files in your own storage, described so that people and agents can find the data, understand it, and query it directly. The specification is open, and the CLI, validator, and registry are open-source tools that implement it.",
     "howItWorks": "How it works",
     "exploreCatalogs": "Explore catalogs"
   },
@@ -48,17 +48,21 @@
   },
   "why": {
     "cards": {
+      "agents": {
+        "title": "Ready for people and agents",
+        "description": "A catalog describes its data, schema, and useful queries in plain text and structured metadata. An agent reads that and queries the files directly, no API or credentials needed. Its answer comes from the data and carries a query anyone can re-run, instead of a guess from the model's memory."
+      },
       "open": {
         "title": "Open and interoperable",
         "description": "Portolan builds on open standards like <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog>, and <stac><m>STAC</m></stac> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery."
       },
-      "simple": {
-        "title": "Simple, cheap, scalable, sovereign",
-        "description": "With Portolan, your data live in any <m>S3</m>-compatible cloud storage, in any jurisdiction you choose. Scale from megabytes to petabytes with no servers, databases, or custom APIs. Your only costs are what you pay your cloud provider."
+      "cost": {
+        "title": "Cost-effective and scalable",
+        "description": "Publishing spatial data normally means GeoServer or an Esri stack, with servers and staff to keep them up. A Portolan catalog is static files, with nothing running and nothing to maintain. Your only costs are storage and egress, paid to your cloud provider, at any scale."
       },
-      "agents": {
-        "title": "Built for people and agents",
-        "description": "Portolan catalogs are well-structured, well-formatted, and well-documented, so people and agents can find, understand, and use them. Browse the registry yourself to discover new data, or point an agent at the registry and see what it can do."
+      "sovereign": {
+        "title": "Sovereign",
+        "description": "You choose where the data lives, including providers in your own country: AWS, Azure, GCS, MinIO, Hetzner, Scaleway, or any <m>S3</m>-compatible storage. No one sits between your organization and its data, and no vendor can lock you in."
       }
     }
   },
@@ -130,6 +134,10 @@
     "legendCore": "core",
     "legendCommunity": "community",
     "submit": "Submit a tool",
+    "commercial": {
+      "title": "Commercial products on the open core",
+      "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO</carto> is building the first commercial layer: private catalogs with access control, usage analytics, and <m>WFS</m> and <m>WMS</m> bridges for existing GIS clients. If a product goes away, the catalog keeps working and another tool can take over."
+    },
     "projects": {
       "spec": "The standard that defines a Portolan catalog.",
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
@@ -177,7 +185,7 @@
     "intro": "The <reg>Portolan registry</reg> is a catalog of independently hosted catalogs and a first step toward a federated network for geospatial data. It makes interoperable catalogs from many publishers searchable in one place while the underlying data remain distributed and are queried directly from the source.",
     "search": {
       "placeholder": "Search catalogs...",
-    "noResults": "No catalogs match your search"
+      "noResults": "No catalogs match your search"
     },
     "validation": {
       "unvalidated": "Unvalidated"
@@ -201,10 +209,10 @@
     },
     "submit": {
       "urlError": "URL must end with catalog.json",
-    "urlLabel": "Catalog URL",
-    "urlPlaceholder": "https://...catalog.json",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://...catalog.json",
       "emailPlaceholder": "you@example.org",
-    "emailInputLabel": "Email address",
+      "emailInputLabel": "Email address",
       "emailError": "Enter an email address",
       "emailLabel": "We email you at this address if your catalog stops validating",
       "submit": "Submit",
@@ -218,9 +226,9 @@
     "map": {
       "searchPlaceholder": "Search for a region...",
       "searchLabel": "Search regions",
-    "searching": "Searching regions",
-    "noResults": "No regions found",
-    "resultsCount": "{count} regions found",
+      "searching": "Searching regions",
+      "noResults": "No regions found",
+      "resultsCount": "{count} regions found",
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out",
       "noLocation": "{count} without location",

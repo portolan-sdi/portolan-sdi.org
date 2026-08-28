@@ -20,9 +20,9 @@
     "toggleGroup": "Enlaces de {section}"
   },
   "hero": {
-    "title": "Portolan hace que los datos geoespaciales",
-    "titleAccent": "sean fáciles de compartir y usar.",
-    "description": "Portolan es una especificación y un conjunto de herramientas de código abierto que combinan formatos de archivo diseñados para la nube con metadatos y documentación claros para que personas y agentes puedan publicar y usar datos a cualquier escala.",
+    "title": "Portolan es una especificación abierta",
+    "titleAccent": "para publicar datos geoespaciales.",
+    "description": "Un catálogo son archivos planos en tu propio almacenamiento, descritos para que personas y agentes puedan encontrar los datos, entenderlos y consultarlos directamente. La especificación es abierta, y la CLI, el validador y el registro son herramientas de código abierto que la implementan.",
     "howItWorks": "Cómo funciona",
     "exploreCatalogs": "Explorar catálogos"
   },
@@ -48,17 +48,21 @@
   },
   "why": {
     "cards": {
+      "agents": {
+        "title": "Listo para personas y agentes",
+        "description": "Un catálogo describe sus datos, su esquema y consultas útiles en texto plano y metadatos estructurados. Un agente lee eso y consulta los archivos directamente, sin API ni credenciales. Su respuesta sale de los datos y lleva una consulta que cualquiera puede repetir, en lugar de una suposición sacada de la memoria del modelo."
+      },
       "open": {
         "title": "Abierto e interoperable",
         "description": "Portolan se apoya en estándares abiertos como <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog> y <stac><m>STAC</m></stac>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, Pandas o BigQuery."
       },
-      "simple": {
-        "title": "Simple, barato, escalable, soberano",
-        "description": "Con Portolan, tus datos viven en cualquier almacenamiento en la nube compatible con <m>S3</m>, en cualquier jurisdicción que elijas. Escala de megabytes a petabytes sin servidores, bases de datos ni APIs personalizadas. Tus únicos costes son lo que le pagas a tu proveedor de nube."
+      "cost": {
+        "title": "Rentable y escalable",
+        "description": "Publicar datos espaciales normalmente exige GeoServer o una pila de Esri, con servidores y personal para mantenerlos. Un catálogo Portolan son archivos estáticos, sin nada en ejecución y sin mantenimiento. Tus únicos costes son almacenamiento y salida de datos, pagados a tu proveedor de nube, a cualquier escala."
       },
-      "agents": {
-        "title": "Hecho para personas y agentes",
-        "description": "Los catálogos Portolan están bien estructurados, bien formateados y bien documentados, así que personas y agentes pueden encontrarlos, entenderlos y usarlos. Explora el registro tú mismo para descubrir datos nuevos, o apunta un agente al registro y mira lo que puede hacer."
+      "sovereign": {
+        "title": "Soberano",
+        "description": "Tú eliges dónde viven los datos, incluidos proveedores de tu propio país, como AWS, Azure, GCS, MinIO, Hetzner, Scaleway o cualquier almacenamiento compatible con <m>S3</m>. Nadie se interpone entre tu organización y sus datos, y ningún proveedor puede atarte a su plataforma."
       }
     }
   },
@@ -130,6 +134,10 @@
     "legendCore": "núcleo",
     "legendCommunity": "comunidad",
     "submit": "Proponer una herramienta",
+    "commercial": {
+      "title": "Productos comerciales sobre el núcleo abierto",
+      "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO</carto> está construyendo la primera capa comercial, con catálogos privados con control de acceso, analítica de uso y puentes <m>WFS</m> y <m>WMS</m> para clientes GIS existentes. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo."
+    },
     "projects": {
       "spec": "El estándar que define un catálogo Portolan.",
       "rashid": "El validador que comprueba si un catálogo cumple la especificación Portolan.",
@@ -177,7 +185,7 @@
     "intro": "El <reg>registro de Portolan</reg> es un catálogo de catálogos alojados de forma independiente y un primer paso hacia una red federada de datos geoespaciales. Permite buscar en un solo lugar catálogos interoperables de muchos publicadores, mientras los datos subyacentes siguen distribuidos y se consultan directamente en la fuente.",
     "search": {
       "placeholder": "Buscar catálogos...",
-    "noResults": "Ningún catálogo coincide con tu búsqueda"
+      "noResults": "Ningún catálogo coincide con tu búsqueda"
     },
     "validation": {
       "unvalidated": "Sin validar"
@@ -201,10 +209,10 @@
     },
     "submit": {
       "urlError": "La URL debe terminar en catalog.json",
-    "urlLabel": "URL del catálogo",
-    "urlPlaceholder": "https://...catalog.json",
+      "urlLabel": "URL del catálogo",
+      "urlPlaceholder": "https://...catalog.json",
       "emailPlaceholder": "tu@ejemplo.org",
-    "emailInputLabel": "Correo electrónico",
+      "emailInputLabel": "Correo electrónico",
       "emailError": "Introduce una dirección de correo",
       "emailLabel": "Te escribimos a esta dirección si tu catálogo deja de validarse",
       "submit": "Enviar",
@@ -218,9 +226,9 @@
     "map": {
       "searchPlaceholder": "Buscar una región...",
       "searchLabel": "Buscar regiones",
-    "searching": "Buscando regiones",
-    "noResults": "No se encontraron regiones",
-    "resultsCount": "{count} regiones encontradas",
+      "searching": "Buscando regiones",
+      "noResults": "No se encontraron regiones",
+      "resultsCount": "{count} regiones encontradas",
       "zoomIn": "Acercar",
       "zoomOut": "Alejar",
       "noLocation": "{count} sin ubicación",

@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { DirArrow, Ltr } from "./ui";
+import { DirArrow, Ltr, monoChunk } from "./ui";
 
 // The Portolan projects — and only these. Interoperable tools (query engines,
 // desktop GIS, libraries) are NOT part of Portolan and live in How-it-works.
@@ -176,6 +176,33 @@ export function EcosystemSection() {
           >
             {t("submit")} <DirArrow kind="external" />
           </a>
+        </div>
+
+        {/* The commercial layer. The grid above is the open core; this row
+            names what the standard deliberately leaves to vendors, and the
+            first vendor building it. Anatomy mirrors the "Why Portolan"
+            ledger rows (narrow title column, wide body), so the page does
+            not gain a third card grid. The lock-in sentence restates the
+            FAQ answer: the catalog outlives any product that manages it. */}
+        <div className="mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 gap-2 border-t border-p-line pt-7 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:gap-12">
+          <h3 className="text-card-title font-bold tracking-[-0.02em]">
+            {t("commercial.title")}
+          </h3>
+          <p className="text-body text-p-ink-2 leading-relaxed text-pretty max-w-[72ch]">
+            {t.rich("commercial.body", {
+              m: monoChunk,
+              carto: (chunks) => (
+                <a
+                  href="https://carto.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
+          </p>
         </div>
       </div>
     </section>
