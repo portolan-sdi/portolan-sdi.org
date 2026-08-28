@@ -24,6 +24,8 @@ interface PostFigureProps {
   alt?: string;
   /** CSS aspect-ratio for the frame. */
   ratio?: string;
+  /** Optional destination for a linked figure. */
+  href?: string;
   /** What belongs here. Shown in the placeholder only. */
   pending?: string;
 }
@@ -34,37 +36,48 @@ export function PostFigure({
   src,
   alt,
   ratio = "16 / 9",
+  href,
   pending,
 }: PostFigureProps) {
   const t = useTranslations("blog");
 
   return (
     <figure dir="ltr" className="post-figure my-10">
-      <div className="post-media-frame overflow-hidden border border-p-line bg-p-paper">
+      <div className="post-media-frame relative overflow-hidden border border-p-line bg-p-paper">
+        {href && (
+          <a
+            href={href}
+            className="absolute inset-0 z-10 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-p-primary"
+          >
+            <span className="sr-only">{caption}</span>
+          </a>
+        )}
         {src ? (
-        // The site does not use next/image anywhere. Remote and local assets
-        // both render as a plain img, as in Shot (talks-page.tsx).
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={src}
-          alt={alt ?? caption}
-          loading="lazy"
-          decoding="async"
-          className="block w-full"
-          style={{ aspectRatio: ratio, objectFit: "cover" }}
-        />
-      ) : (
-        <div
-          className="flex flex-col items-center justify-center gap-2 bg-p-bg-soft p-6 text-center"
-          style={{ aspectRatio: ratio }}
-        >
-          <span className="font-mono text-eyebrow uppercase tracking-[0.08em] text-p-primary">
-            {t("figurePending")}
-          </span>
-          {pending && (
-            <span className="font-mono text-small text-p-ink-3">{pending}</span>
-          )}
-        </div>
+          // The site does not use next/image anywhere. Remote and local assets
+          // both render as a plain img, as in Shot (talks-page.tsx).
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={src}
+            alt={alt ?? caption}
+            loading="lazy"
+            decoding="async"
+            className="block w-full"
+            style={{ aspectRatio: ratio, objectFit: "cover" }}
+          />
+        ) : (
+          <div
+            className="flex flex-col items-center justify-center gap-2 bg-p-bg-soft p-6 text-center"
+            style={{ aspectRatio: ratio }}
+          >
+            <span className="font-mono text-eyebrow uppercase tracking-[0.08em] text-p-primary">
+              {t("figurePending")}
+            </span>
+            {pending && (
+              <span className="font-mono text-small text-p-ink-3">
+                {pending}
+              </span>
+            )}
+          </div>
         )}
       </div>
 
