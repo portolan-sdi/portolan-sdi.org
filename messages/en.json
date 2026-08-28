@@ -54,11 +54,11 @@
       },
       "simple": {
         "title": "Simple, cheap, scalable, sovereign",
-        "description": "A Portolan catalog lives in your cloud storage and requires no servers, databases, or APIs. Your data lives in storage you control, in the jurisdiction you choose, with any <m>S3</m>-compatible provider, from AWS to Hetzner to MinIO. It scales from megabytes to petabytes. Your only costs are what you pay your cloud provider."
+        "description": "With Portolan, your data live in any <m>S3</m>-compatible cloud storage, in any jurisdiction you choose. Scale from megabytes to petabytes with no servers, databases, or custom APIs. Your only costs are what you pay your cloud provider."
       },
       "agents": {
         "title": "Built for people and agents",
-        "description": "Portolan catalogs are well-structured, well-formatted, and well-documented, so people and agents can find, understand, and use them. Browse the registry yourself to discover new data, or point an agent at the registry and see what it can find and do."
+        "description": "Portolan catalogs are well-structured, well-formatted, and well-documented, so people and agents can find, understand, and use them. Browse the registry yourself to discover new data, or point an agent at the registry and see what it can do."
       }
     }
   },

@@ -54,11 +54,11 @@
       },
       "simple": {
         "title": "Simple, barato, escalable, soberano",
-        "description": "Un catálogo Portolan vive en tu almacenamiento en la nube y no necesita servidores, bases de datos ni APIs. Tus datos viven en un almacenamiento que controlas, en la jurisdicción que eliges, con cualquier proveedor compatible con <m>S3</m>, desde AWS hasta Hetzner y MinIO. Escala de megabytes a petabytes. Tus únicos costes son lo que le pagas a tu proveedor de nube."
+        "description": "Con Portolan, tus datos viven en cualquier almacenamiento en la nube compatible con <m>S3</m>, en cualquier jurisdicción que elijas. Escala de megabytes a petabytes sin servidores, bases de datos ni APIs personalizadas. Tus únicos costes son lo que le pagas a tu proveedor de nube."
       },
       "agents": {
         "title": "Hecho para personas y agentes",
-        "description": "Los catálogos Portolan están bien estructurados, bien formateados y bien documentados, así que personas y agentes pueden encontrarlos, entenderlos y usarlos. Explora el registro tú mismo para descubrir datos nuevos, o apunta un agente al registro y mira lo que puede encontrar y hacer."
+        "description": "Los catálogos Portolan están bien estructurados, bien formateados y bien documentados, así que personas y agentes pueden encontrarlos, entenderlos y usarlos. Explora el registro tú mismo para descubrir datos nuevos, o apunta un agente al registro y mira lo que puede hacer."
       }
     }
   },
