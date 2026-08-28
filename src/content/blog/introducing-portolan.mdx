@@ -11,9 +11,9 @@ is becoming less and less sustainable.
 
 Over the past several years, the cloud-native geospatial community has laid the
 groundwork for a different way of building SDIs. Cloud-optimized file formats
-and STAC metadata make it possible to organize petabyte-scale datasets in
-object storage and efficiently access them with standard tools like QGIS and
-Python. In other words, an SDI can now be files in S3-compatible cloud
+and [`STAC`](https://stacspec.org/en/) metadata make it possible to
+organize petabyte-scale datasets in object storage and efficiently access them
+with standard tools like QGIS and Python. In other words, an SDI can now be files in S3-compatible cloud
 storage, with no servers, databases, or custom APIs. Today, we're launching
 Portolan, an open-source specification and toolkit for publishing geospatial
 data this way.
@@ -29,9 +29,11 @@ any Portolan catalog should be a good experience.
 
 Portolan deliberately builds on existing standards rather than reinventing
 them. Cloud-optimized file formats provide the foundation: Portolan uses
-`GeoParquet` and `PMTiles` for vector data, and `COG` for raster, with future
-support planned for formats like `Zarr` and `COPC`. These formats make it
-possible for publishers to cheaply host and share petabyte-scale datasets in
+[`GeoParquet`](https://geoparquet.org/) and
+[`PMTiles`](https://docs.protomaps.com/pmtiles/) for vector data, and
+[`COG`](https://cogeo.org/) for raster, with future support planned for formats
+like `Zarr` and [`COPC`](https://copc.io/). These formats make it possible
+for publishers to cheaply host and share petabyte-scale datasets in
 object storage while allowing users to efficiently access just the bytes they
 need.
 
@@ -101,8 +103,8 @@ QGIS, ArcGIS, [DuckDB](https://duckdb.org/), and Python, but cloud-optimized
 formats permit much faster access than WFS endpoints or Esri servers ever
 could.
 Portolan catalogs also necessarily include the metadata and documentation
-needed to understand what the data contain and how they should be used. The registry
-adds a common place to discover public catalogs.
+needed to understand what the data contain and how they should be used. The
+[registry](/registry) adds a common place to discover public catalogs.
 
 ## Portolan in Practice
 
@@ -115,14 +117,15 @@ requirements and warnings against SHOULD requirements, and outputs
 agent-friendly JSON that makes it straightforward for a person or agent to
 bring a catalog into conformance.
 
-The [Portolan CLI](https://github.com/portolan-sdi/portolan) handles the
+The [Portolan CLI](https://cli.portolan-sdi.org/) handles the
 deterministic work underneath the broader publishing workflow, including
 ingesting source data, converting it into cloud-optimized formats, managing
 catalog structure and metadata, and publishing finished catalogs to object
 storage.
 
-On top of those tools, we provide agent skills that can orchestrate publication
-from start to finish.
+On top of those tools, we provide
+[agent skills](https://github.com/portolan-sdi/portolan-skills) that can
+orchestrate publication from start to finish.
 [`portolan-bootstrap`](https://github.com/portolan-sdi/portolan-skills/tree/main/skills/portolan-bootstrap),
 for example, can start with a folder of files, a WFS endpoint, an Esri service,
 or another published dataset, then work through catalog structure, conversion,
@@ -197,7 +200,7 @@ same basic shape, datasets can remain distributed across thousands of
 publishers while becoming consistently searchable and directly usable across
 organizational and geographic boundaries.
 
-The [Portolan registry](/registry) is the first step toward that network. It's
+The Portolan registry is the first step toward that network. It's
 deliberately simple—just a catalog of independently hosted catalogs. Publishers
 submit a public Portolan catalog, the registry validates it, and conformant
 catalogs become discoverable alongside data from other publishers without
