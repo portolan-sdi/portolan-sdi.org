@@ -13,6 +13,7 @@ import { WhoForSection } from "./who-for-section";
 import { CoverageSection } from "./coverage-section";
 import { Btn, DirArrow, monoChunk } from "./ui";
 import type { Catalog } from "@/lib/catalogs";
+import { FORMAT_LINKS } from "@/lib/site";
 
 /** Aspect ratio of the encoded catalog-build recording, 1454x1118. It
  *  reserves the box before metadata loads, so the poster does not shift the
@@ -123,7 +124,41 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   {t(`why.cards.${key}.title`)}
                 </h3>
                 <p className="text-body text-p-ink-2 leading-relaxed text-pretty">
-                  {t.rich(`why.cards.${key}.description`, { m: monoChunk })}
+                  {t.rich(`why.cards.${key}.description`, {
+                    m: monoChunk,
+                    geoparquet: (chunks) => (
+                      <a
+                        href={FORMAT_LINKS.geoParquet}
+                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                    pmtiles: (chunks) => (
+                      <a
+                        href={FORMAT_LINKS.pmtiles}
+                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                    cog: (chunks) => (
+                      <a
+                        href={FORMAT_LINKS.cog}
+                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                    stac: (chunks) => (
+                      <a
+                        href={FORMAT_LINKS.stac}
+                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                  })}
                 </p>
               </div>
             ))}

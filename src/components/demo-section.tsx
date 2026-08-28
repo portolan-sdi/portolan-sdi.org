@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { VideoFigure } from "./video-figure";
 
 /**
@@ -56,7 +55,7 @@ export function DemoSection() {
           <div className="grid grid-cols-1 items-center gap-10 xl:grid-cols-[minmax(0,52fr)_minmax(0,48fr)] xl:gap-10">
           {/* The text stays first in the DOM so a narrow screen reads the
               claim before it meets a 340px player, and so the keyboard
-              reaches the two links before the video controls. From xl the
+              reaches the video controls after the claim. From xl the
               order flips and the run takes the start column. */}
           <div className="xl:order-2">
             <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05] text-balance">
@@ -66,19 +65,10 @@ export function DemoSection() {
                 short last line, and the 48ch cap keeps the measure readable
                 in a column this narrow.
 
-                The one link carries the section's only colour and takes
-                the reader where the section points, which is the registry. */}
+                The measure keeps the approved caption readable beside the
+                recording. */}
             <p className="mt-6 max-w-[52ch] text-lead leading-relaxed text-p-ink-2 text-balance">
-              {t.rich("blurb", {
-                registry: (chunks) => (
-                  <Link
-                    href="/registry"
-                    className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
-                  >
-                    {chunks}
-                  </Link>
-                ),
-              })}
+              {t("blurb")}
             </p>
           </div>
 
