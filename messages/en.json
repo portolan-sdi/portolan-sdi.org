@@ -5,7 +5,7 @@
   },
   "nav": {
     "registry": "Registry",
-    "why": "Why Portolan",
+    "why": "Philosophy",
     "homeAria": "Portolan home",
     "languageAria": "Change language",
     "index": "Index",
@@ -55,6 +55,12 @@
     "github": "GitHub"
   },
   "why": {
+    "title": "Portolan philosophy",
+    "intro": {
+      "p1": "Spatial data infrastructure has usually meant serving data through APIs, with servers someone has to run, pay for, and keep alive. Cloud-native formats invert that cost. Publishing drops to the price of storage, and computation moves to the reader's side, in whatever engine they already use.",
+      "p2": "AI removes the next layer. With structured metadata and clear documentation, an agent can find a catalog, understand it, and query it directly, so no portal or specialist sits between a question and the data. <m>STAC</m> provides that metadata, and Portolan holds it to a higher bar.",
+      "p3": "Portolan invents as little as possible. It composes proven pieces like <m>STAC</m>, <m>GeoParquet</m>, <m>COG</m>, and <m>PMTiles</m>, and standardizes how a great catalog uses them. Where a gap remains, it proposes a STAC extension instead of a new standard, like the early extension that links catalogs to <ossie>Apache Ossie</ossie> semantic models. Every publisher who joins makes the network more useful, because an agent can answer from all registered catalogs, not just one."
+    },
     "cards": {
       "cost": {
         "title": "Cost-effective and scalable",

@@ -145,9 +145,40 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
               ledger rule. Left empty, those two rules sit in the same ink
               with the section padding stranded between them, and the ledger
               reads as a table that arrived without a title. */}
-          <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05] mb-[clamp(2.5rem,5vw,4rem)]">
-            {t("nav.why")}
-          </h2>
+          <div className="mb-[clamp(2.5rem,5vw,4rem)]">
+            <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
+              {t("why.title")}
+            </h2>
+            {/* The philosophy, three paragraphs, one idea each: the cost
+                inversion, de-intermediation by agents, and composing proven
+                standards instead of inventing new ones. The ledger below
+                substantiates the properties that fall out of this story, so
+                the intro stays at three paragraphs. The deep version lives in
+                the FAQ, not here. */}
+            <div className="mt-5 space-y-4 max-w-[72ch]">
+              <p className="text-lead leading-relaxed text-p-ink-2">
+                {t.rich("why.intro.p1", { m: monoChunk })}
+              </p>
+              <p className="text-lead leading-relaxed text-p-ink-2">
+                {t.rich("why.intro.p2", { m: monoChunk })}
+              </p>
+              <p className="text-lead leading-relaxed text-p-ink-2">
+                {t.rich("why.intro.p3", {
+                  m: monoChunk,
+                  ossie: (chunks) => (
+                    <a
+                      href="https://github.com/portolan-sdi/stac-osi-extension"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                    >
+                      {chunks}
+                    </a>
+                  ),
+                })}
+              </p>
+            </div>
+          </div>
           {/* Ledger: three principles, one row each. Near-black top rule, soft
               interior rules. Rows nudge start-ward + tint faintly on hover. */}
           <div className="border-t border-p-line overflow-clip">

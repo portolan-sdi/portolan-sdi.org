@@ -5,7 +5,7 @@
   },
   "nav": {
     "registry": "Registro",
-    "why": "Por qué Portolan",
+    "why": "Filosofía",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
     "index": "Índice",
@@ -55,6 +55,12 @@
     "github": "GitHub"
   },
   "why": {
+    "title": "La filosofía de Portolan",
+    "intro": {
+      "p1": "La infraestructura de datos espaciales ha significado casi siempre servir datos a través de APIs, con servidores que alguien tiene que operar, pagar y mantener vivos. Los formatos nativos de la nube invierten ese coste. Publicar cuesta lo que cuesta el almacenamiento, y el cómputo pasa al lado del lector, en el motor que ya use.",
+      "p2": "La IA elimina la siguiente capa. Con metadatos estructurados y documentación clara, un agente puede encontrar un catálogo, entenderlo y consultarlo directamente, así que ningún portal ni especialista se interpone entre una pregunta y los datos. <m>STAC</m> aporta esos metadatos, y Portolan les exige un listón más alto.",
+      "p3": "Portolan inventa lo menos posible. Compone piezas probadas como <m>STAC</m>, <m>GeoParquet</m>, <m>COG</m> y <m>PMTiles</m>, y estandariza cómo las usa un buen catálogo. Donde queda un hueco, propone una extensión de STAC en lugar de un estándar nuevo, como la extensión temprana que enlaza catálogos con los modelos semánticos de <ossie>Apache Ossie</ossie>. Cada publicador que se suma hace la red más útil, porque un agente puede responder con todos los catálogos registrados, no con uno solo."
+    },
     "cards": {
       "cost": {
         "title": "Económico y escalable",
