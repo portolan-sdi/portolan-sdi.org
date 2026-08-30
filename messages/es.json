@@ -147,14 +147,16 @@
   "ecosystem": {
     "eyebrow": "Ecosistema",
     "title": "Ecosistema",
-    "intro": "El núcleo de código abierto de Portolan y las herramientas aportadas por la comunidad.",
+    "intro": "El núcleo de código abierto de Portolan, las herramientas de la comunidad y las empresas que extienden el estándar con productos comerciales.",
     "count": "{count} proyectos",
     "legendCore": "núcleo",
     "legendCommunity": "comunidad",
+    "legendCommercial": "comercial",
+    "proprietary": "Comercial",
     "submit": "Proponer una herramienta",
     "commercial": {
       "title": "Productos comerciales sobre el núcleo abierto",
-      "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO</carto> está construyendo la primera capa comercial, con catálogos privados con control de acceso, analítica de uso y puentes <m>WFS</m> y <m>WMS</m> para clientes GIS existentes. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo."
+      "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO SDI</carto> extiende Portolan para organizaciones con conjuntos de datos privados, gobernanza y auditorías, comercialización de datos y conjuntos de datos escribibles. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo."
     },
     "projects": {
       "spec": "El estándar que define un catálogo Portolan.",
@@ -162,7 +164,8 @@
       "cli": "Una herramienta de línea de comandos para crear, comprobar y publicar catálogos Portolan.",
       "registry": "Un registro central de catálogos Portolan públicos.",
       "browser": "Una interfaz web para navegar y explorar catálogos Portolan.",
-      "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos."
+      "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos.",
+      "cartosdi": "Una infraestructura de datos espaciales para organizaciones, construida sobre Portolan."
     }
   },
   "coverage": {
