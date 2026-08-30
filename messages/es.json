@@ -141,7 +141,7 @@
   },
   "coverage": {
     "title": "Explorar catálogos",
-    "blurb": "Consulta catálogos geoespaciales alojados de forma independiente por publicadores de todo el mundo.",
+    "blurb": "Consulta catálogos geoespaciales alojados de forma independiente por publicadores y espejos comunitarios de todo el mundo.",
     "cta": "Explorar el registro",
     "featuredLabel": "Catálogos destacados",
     "featured": {
@@ -175,6 +175,7 @@
     },
     "title": "Registro de Portolan",
     "intro": "El <reg>registro de Portolan</reg> es un catálogo de catálogos alojados de forma independiente y un primer paso hacia una red federada de datos geoespaciales. Permite buscar en un solo lugar catálogos interoperables de muchos publicadores, mientras los datos subyacentes siguen distribuidos y se consultan directamente en la fuente.",
+    "mirrors": "No todos los catálogos vienen de la organización que produce los datos. Una comunidad creciente de voluntarios y organizaciones replica fuentes oficiales en Portolan. Cada espejo nombra a quien lo mantiene y apunta a la fuente que copia, y el registro lo marca como espejo. A medida que los publicadores adoptan el estándar, esperamos que sus catálogos oficiales sustituyan a los espejos.",
     "search": {
       "placeholder": "Buscar catálogos...",
     "noResults": "Ningún catálogo coincide con tu búsqueda"

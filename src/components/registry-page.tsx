@@ -335,6 +335,13 @@ export function RegistryPage({
         <p className="mt-6 text-lead text-p-ink-2">
           {t.rich("registry.intro", { reg: registryLink })}
         </p>
+        {/* The mirror story: who runs the copies that are not official, and
+            what the community expects to happen to them. It sits in the hero
+            because the Official/Mirror badges on the cards below need this
+            context before they make sense. */}
+        <p className="mt-4 text-body text-p-ink-2 leading-relaxed max-w-[72ch]">
+          {t("registry.mirrors")}
+        </p>
       </PageHero>
 
       {catalogs.length > 0 && (
