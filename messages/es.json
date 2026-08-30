@@ -68,7 +68,7 @@
       "large": {
         "title": "Grandes publicadores",
         "today": "Los archivos grandes, como las imágenes satelitales o los geoportales de escala nacional, son caros de almacenar y difíciles de mantener.",
-        "change": "Portolan permite publicar esos datos <cost>al menor coste posible</cost>, sin servidores, bases de datos ni APIs, y hace que sean más fáciles de descubrir y de usar."
+        "change": "Portolan permite publicar esos datos <cost>al menor coste posible</cost>, sin servidores, bases de datos ni APIs. Un catálogo que se describe a sí mismo también llega a más usuarios, porque los analistas lo consultan directamente con herramientas estándar y los agentes trabajan con él sin supervisión."
       },
       "small": {
         "title": "Pequeños publicadores",
@@ -78,7 +78,7 @@
       "users": {
         "title": "Usuarios de datos",
         "today": "La mayoría de los datos geoespaciales están dispersos, mal documentados y guardados de formas que dificultan su uso.",
-        "change": "Portolan exige metadatos y documentación claros, usa formatos pensados para el acceso directo y ofrece un <reg>registro central</reg> de catálogos públicos. Dedicas menos tiempo a buscar, descargar y adaptar datos, y más tiempo a usarlos."
+        "change": "Portolan exige metadatos y documentación claros, usa formatos pensados para el acceso directo y ofrece un <reg>registro central</reg> de catálogos públicos. Dedicas menos tiempo a buscar, descargar y adaptar datos. También puedes darle una pregunta a un agente y dejar que encuentre los catálogos relevantes, los consulte y devuelva una respuesta."
       }
     }
   },
