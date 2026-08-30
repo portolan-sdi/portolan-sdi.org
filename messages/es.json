@@ -20,9 +20,17 @@
     "toggleGroup": "Enlaces de {section}"
   },
   "hero": {
-    "title": "Portolan es una especificación abierta",
-    "titleAccent": "para publicar datos geoespaciales.",
-    "description": "Un catálogo son archivos planos en tu propio almacenamiento, descritos para que personas y agentes puedan encontrar los datos, entenderlos y consultarlos directamente. La especificación es abierta, y la CLI, el validador y el registro son herramientas de código abierto que la implementan.",
+    "title": "Portolan hace que los datos geoespaciales",
+    "titleAccent": "sean fáciles de compartir y usar.",
+    "description": "Portolan es una especificación abierta que combina formatos de archivo nativos de la nube como <m>GeoParquet</m> y <m>COG</m> con metadatos y documentación claros, para que personas y agentes puedan publicar y usar datos a cualquier escala.",
+    "principles": {
+      "cost": "económico",
+      "ai": "listo para IA",
+      "interop": "interoperable",
+      "discover": "descubrible",
+      "sovereign": "soberano"
+    },
+    "registry": "Un <reg>registro</reg> global conecta todos los catálogos, para que personas y agentes puedan descubrir datos de muchos publicadores y consultarlos juntos, directamente desde el almacenamiento.",
     "howItWorks": "Cómo funciona",
     "exploreCatalogs": "Explorar catálogos"
   },
@@ -48,6 +56,10 @@
   },
   "why": {
     "cards": {
+      "cost": {
+        "title": "Económico y escalable",
+        "description": "Publicar datos espaciales normalmente exige GeoServer o una pila de Esri, con servidores y personal para mantenerlos. Un catálogo Portolan son archivos estáticos, sin nada en ejecución y sin mantenimiento. Tus únicos costes son almacenamiento y salida de datos, pagados a tu proveedor de nube, a cualquier escala."
+      },
       "agents": {
         "title": "Listo para personas y agentes",
         "description": "Un catálogo describe sus datos, su esquema y consultas útiles en texto plano y metadatos estructurados. Un agente lee eso y consulta los archivos directamente, sin API ni credenciales. Su respuesta sale de los datos y lleva una consulta que cualquiera puede repetir, en lugar de una suposición sacada de la memoria del modelo."
@@ -56,9 +68,9 @@
         "title": "Abierto e interoperable",
         "description": "Portolan se apoya en estándares abiertos como <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog> y <stac><m>STAC</m></stac>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, Pandas o BigQuery."
       },
-      "cost": {
-        "title": "Rentable y escalable",
-        "description": "Publicar datos espaciales normalmente exige GeoServer o una pila de Esri, con servidores y personal para mantenerlos. Un catálogo Portolan son archivos estáticos, sin nada en ejecución y sin mantenimiento. Tus únicos costes son almacenamiento y salida de datos, pagados a tu proveedor de nube, a cualquier escala."
+      "discover": {
+        "title": "Descubrible",
+        "description": "El registro es un catálogo de catálogos, JSON plano en un repositorio público de GitHub. Da a la búsqueda un punto de entrada único, así que una persona o un agente puede encontrar cada conjunto de datos registrado y seguir su procedencia hasta el publicador."
       },
       "sovereign": {
         "title": "Soberano",

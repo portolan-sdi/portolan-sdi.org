@@ -27,9 +27,14 @@ interface HomePageProps {
 export function HomePage({ catalogs = [] }: HomePageProps) {
   const t = useTranslations();
 
-  // Four principles, one ledger row each: title, body, mono tag. Order is
-  // deliberate, not ranked (no numbers, no bullets).
-  const whyCards = ["agents", "open", "cost", "sovereign"] as const;
+  // Five principles, one ledger row each: title, body, mono tag. Order is
+  // deliberate, not ranked (no numbers, no bullets), and mirrors the hero's
+  // claim index one-to-one.
+  const whyCards = ["cost", "agents", "open", "discover", "sovereign"] as const;
+
+  // The hero claim index. Same order as whyCards: each word is substantiated
+  // by its ledger row in "Why Portolan" ("AI-ready" maps to the agents row).
+  const principles = ["cost", "ai", "interop", "discover", "sovereign"] as const;
 
   const howSteps = ["convert", "catalog", "publish", "use"] as const;
 
@@ -56,6 +61,40 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   last line. */}
               <p className="text-lead leading-relaxed max-w-[72ch]">
                 {t.rich("hero.description", { m: monoChunk })}
+              </p>
+              {/* Claim index: the five properties the spec holds publishing
+                  to, in the exact order of the "Why Portolan" ledger below,
+                  which substantiates them row by row. A plain mono line, not
+                  Tag pills: five bordered chips over the map read as buttons,
+                  and nothing here is clickable. Dots separate, in the soft
+                  ink, so the words carry the weight. */}
+              <p className="mt-[clamp(1.25rem,2vw,1.75rem)] flex flex-wrap items-baseline gap-x-3 gap-y-1.5 font-mono text-small text-p-ink-2">
+                {principles.map((key, i) => (
+                  <span key={key} className="inline-flex items-baseline gap-x-3">
+                    {i > 0 && (
+                      <span aria-hidden="true" className="text-p-ink-3">
+                        ·
+                      </span>
+                    )}
+                    {t(`hero.principles.${key}`)}
+                  </span>
+                ))}
+              </p>
+              {/* The registry line: the proof behind "discoverable", and the
+                  one place the hero names a Portolan part. Body voice, under
+                  the lead's measure, so it reads as a supporting note rather
+                  than a second lead. */}
+              <p className="mt-[clamp(1rem,1.5vw,1.5rem)] text-body text-p-ink-2 leading-relaxed max-w-[72ch]">
+                {t.rich("hero.registry", {
+                  reg: (chunks) => (
+                    <Link
+                      href="/registry"
+                      className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                    >
+                      {chunks}
+                    </Link>
+                  ),
+                })}
               </p>
               {/* The gap before this row is the largest in the hero, wider
                   than the h1-to-lead gap above it. The reader stops reading

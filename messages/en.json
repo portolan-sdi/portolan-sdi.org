@@ -20,9 +20,17 @@
     "toggleGroup": "{section} links"
   },
   "hero": {
-    "title": "Portolan is an open specification",
-    "titleAccent": "for publishing geospatial data.",
-    "description": "A catalog is plain files in your own storage, described so that people and agents can find the data, understand it, and query it directly. The specification is open, and the CLI, validator, and registry are open-source tools that implement it.",
+    "title": "Portolan makes geospatial data",
+    "titleAccent": "easy to share and use.",
+    "description": "Portolan is an open specification that combines cloud-native file formats like <m>GeoParquet</m> and <m>COG</m> with clear metadata and documentation, so people and agents can publish and use data at any scale.",
+    "principles": {
+      "cost": "cost-effective",
+      "ai": "AI-ready",
+      "interop": "interoperable",
+      "discover": "discoverable",
+      "sovereign": "sovereign"
+    },
+    "registry": "A global <reg>registry</reg> connects every catalog, so people and agents can discover data across publishers and query it together, live from storage.",
     "howItWorks": "How it works",
     "exploreCatalogs": "Explore catalogs"
   },
@@ -48,6 +56,10 @@
   },
   "why": {
     "cards": {
+      "cost": {
+        "title": "Cost-effective and scalable",
+        "description": "Publishing spatial data normally means GeoServer or an Esri stack, with servers and staff to keep them up. A Portolan catalog is static files, with nothing running and nothing to maintain. Your only costs are storage and egress, paid to your cloud provider, at any scale."
+      },
       "agents": {
         "title": "Ready for people and agents",
         "description": "A catalog describes its data, schema, and useful queries in plain text and structured metadata. An agent reads that and queries the files directly, no API or credentials needed. Its answer comes from the data and carries a query anyone can re-run, instead of a guess from the model's memory."
@@ -56,9 +68,9 @@
         "title": "Open and interoperable",
         "description": "Portolan builds on open standards like <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog>, and <stac><m>STAC</m></stac> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery."
       },
-      "cost": {
-        "title": "Cost-effective and scalable",
-        "description": "Publishing spatial data normally means GeoServer or an Esri stack, with servers and staff to keep them up. A Portolan catalog is static files, with nothing running and nothing to maintain. Your only costs are storage and egress, paid to your cloud provider, at any scale."
+      "discover": {
+        "title": "Discoverable",
+        "description": "The registry is a catalog of catalogs, plain JSON in a public GitHub repository. It gives search one entry point, so a person or an agent can find every registered dataset and follow its provenance back to the publisher."
       },
       "sovereign": {
         "title": "Sovereign",
