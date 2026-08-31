@@ -22,7 +22,7 @@
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
     "titleAccent": "sean fáciles de compartir y usar.",
-    "description": "Portolan es una especificación abierta que combina formatos de archivo nativos de la nube como <m>GeoParquet</m> y <m>COG</m> con metadatos y documentación claros, para que personas y agentes puedan publicar y usar datos a cualquier escala.",
+    "description": "Portolan es una <spec>especificación abierta</spec> que combina formatos de archivo nativos de la nube como <m>GeoParquet</m> y <m>COG</m> con metadatos y documentación claros, para que personas y agentes puedan publicar y usar datos a cualquier escala.",
     "principles": {
       "cost": "económico",
       "ai": "listo para IA",
