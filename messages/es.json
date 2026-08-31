@@ -72,7 +72,7 @@
       },
       "open": {
         "title": "Abierto e interoperable",
-        "description": "Portolan se apoya en estándares abiertos como <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog> y <stac><m>STAC</m></stac>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, Pandas o BigQuery."
+        "description": "Portolan se apoya en estándares abiertos como <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog> y <stac><m>STAC</m></stac>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, CARTO, Pandas o BigQuery."
       },
       "discover": {
         "title": "Descubrible",
