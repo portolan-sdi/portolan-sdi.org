@@ -54,7 +54,7 @@
       },
       "simple": {
         "title": "Simple, barato, escalable, soberano",
-        "description": "Con Portolan, tus datos viven en cualquier almacenamiento en la nube compatible con <m>S3</m>, en cualquier jurisdicción que elijas. Escala de megabytes a petabytes sin servidores, bases de datos ni APIs personalizadas. Tus únicos costes son lo que le pagas a tu proveedor de nube."
+        "description": "Con Portolan, tus datos son solo archivos en un bucket en la nube. Guárdalos con cualquier proveedor compatible con <m>S3</m>, en cualquier jurisdicción que elijas. Tus únicos costes son el almacenamiento y la salida de datos. Escala de megabytes a petabytes sin servidores, bases de datos ni APIs personalizadas."
       },
       "agents": {
         "title": "Hecho para personas y agentes",
@@ -112,7 +112,7 @@
   "demo": {
     "navLabel": "Demo",
     "title": "Una mejor forma de trabajar con datos geoespaciales",
-    "blurb": "Empieza con preguntas reales, no con un guion. Mira a un agente responder preguntas complejas en lenguaje natural sobre el riesgo de inundación en Moldavia al trabajar directamente con catálogos Portolan.",
+    "blurb": "Empieza con preguntas reales, no con un guion. Mira cómo un agente encuentra catálogos relevantes en el registro de Portolan y responde preguntas complejas en lenguaje natural sobre el riesgo de inundación en Moldavia.",
     "captionPhiladelphia": "Creando <catalog>un catálogo de Portolan</catalog> de principio a fin a partir de datos de vivienda de Filadelfia.",
     "transcriptPhiladelphia": "Una grabación solo de terminal muestra a un agente crear y publicar un catálogo Portolan con diez conjuntos de datos de Open Data Philly. La solicitud nombra parcelas, uso del suelo, distritos base y superposiciones de zonificación, descripciones de zonificación, indicadores de propiedades vacantes, distritos del Ayuntamiento, huellas de edificios y producción de viviendas asequibles. El agente carga la habilidad de arranque de Portolan, investiga y descarga las fuentes, mejora los metadatos, crea miniaturas y estilos de mapa, valida el catálogo y lo publica. La terminal informa de unos 1,78 millones de entidades y confirma que todas las comprobaciones del catálogo pasan. También registra campos de origen sin resolver, detalles de licencia y problemas de herramientas antes de sincronizar los archivos y las guías de agentes publicados.",
     "transcriptFloodRisk": "Una grabación solo de terminal muestra a un agente encontrar datos sobre el riesgo de inundación en Chisináu a través del registro activo de Portolan. Inspecciona el catálogo de datos geoespaciales de Moldavia y otros catálogos relacionados para buscar extensiones y profundidad de inundación, edificios, población, cobertura del suelo, hidrografía, carreteras, servicios y límites. Informa de escenarios de inundación de Moldavia con probabilidades anuales del 1%, 0,5% y 0,1%, extensiones por rotura de presas, capas de profundidad JRC GLOFAS y cuadrículas de población GHSL. Después calcula estimaciones de cribado de edificios y población expuestos y clasifica varios corredores de planificación. El resultado indica que las estimaciones no incluyen profundidad local, velocidad, tiempo de llegada ni datos de vulnerabilidad de edificios.",
@@ -125,7 +125,7 @@
   "ecosystem": {
     "eyebrow": "Ecosistema",
     "title": "Ecosistema",
-    "intro": "El núcleo de código abierto de Portolan y las herramientas aportadas por la comunidad.",
+    "intro": "La especificación de Portolan se puede implementar de muchas maneras. Esta es una lista de herramientas del núcleo, aportadas por la comunidad y comerciales para facilitar la publicación y el uso de datos de Portolan.",
     "count": "{count} proyectos",
     "legendCore": "núcleo",
     "legendCommunity": "comunidad",
@@ -175,9 +175,10 @@
     },
     "title": "Registro de Portolan",
     "intro": "El <reg>registro de Portolan</reg> es un catálogo de catálogos alojados de forma independiente y un primer paso hacia una red federada de datos geoespaciales. Permite buscar en un solo lugar catálogos interoperables de muchos publicadores, mientras los datos subyacentes siguen distribuidos y se consultan directamente en la fuente.",
+    "note": "Algunos de estos catálogos son réplicas no oficiales mantenidas por voluntarios. Esperamos que los catálogos oficiales sustituyan a las réplicas a medida que los publicadores adopten la especificación de Portolan.",
     "search": {
       "placeholder": "Buscar catálogos...",
-    "noResults": "Ningún catálogo coincide con tu búsqueda"
+      "noResults": "Ningún catálogo coincide con tu búsqueda"
     },
     "validation": {
       "unvalidated": "Sin validar"
@@ -201,10 +202,10 @@
     },
     "submit": {
       "urlError": "La URL debe terminar en catalog.json",
-    "urlLabel": "URL del catálogo",
-    "urlPlaceholder": "https://...catalog.json",
+      "urlLabel": "URL del catálogo",
+      "urlPlaceholder": "https://...catalog.json",
       "emailPlaceholder": "tu@ejemplo.org",
-    "emailInputLabel": "Correo electrónico",
+      "emailInputLabel": "Correo electrónico",
       "emailError": "Introduce una dirección de correo",
       "emailLabel": "Te escribimos a esta dirección si tu catálogo deja de validarse",
       "submit": "Enviar",
@@ -218,9 +219,9 @@
     "map": {
       "searchPlaceholder": "Buscar una región...",
       "searchLabel": "Buscar regiones",
-    "searching": "Buscando regiones",
-    "noResults": "No se encontraron regiones",
-    "resultsCount": "{count} regiones encontradas",
+      "searching": "Buscando regiones",
+      "noResults": "No se encontraron regiones",
+      "resultsCount": "{count} regiones encontradas",
       "zoomIn": "Acercar",
       "zoomOut": "Alejar",
       "noLocation": "{count} sin ubicación",

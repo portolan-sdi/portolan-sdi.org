@@ -54,7 +54,7 @@
       },
       "simple": {
         "title": "Simple, cheap, scalable, sovereign",
-        "description": "With Portolan, your data live in any <m>S3</m>-compatible cloud storage, in any jurisdiction you choose. Scale from megabytes to petabytes with no servers, databases, or custom APIs. Your only costs are what you pay your cloud provider."
+        "description": "With Portolan, your data are just files in a cloud bucket. Store them with any <m>S3</m>-compatible provider, in any jurisdiction you choose. Your only costs are storage and egress. Scale from megabytes to petabytes with no servers, databases, or custom APIs."
       },
       "agents": {
         "title": "Built for people and agents",
@@ -112,7 +112,7 @@
   "demo": {
     "navLabel": "Demo",
     "title": "A better way to work with geospatial data",
-    "blurb": "Start with real questions, not a script. Watch an agent answer complex, natural-language questions about flood risk in Moldova by working directly with Portolan catalogs.",
+    "blurb": "Start with real questions, not a script. Watch an agent find relevant catalogs in the Portolan registry and answer complex, natural-language questions about flood risk in Moldova.",
     "captionPhiladelphia": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
     "transcriptPhiladelphia": "A terminal-only recording shows an agent create and publish a Portolan catalog from ten Open Data Philly datasets. The request names property parcels, land use, zoning base districts and overlays, zoning descriptions, vacant-property indicators, City Council districts, building footprints, and affordable housing production. The agent loads the Portolan bootstrap skill, researches and downloads the sources, enriches metadata, creates thumbnails and map styles, validates the catalog, and publishes it. The terminal reports about 1.78 million features and that all catalog gates pass. It also records unresolved source fields, license details, and upstream tool issues before it syncs the published catalog files and agent guides.",
     "transcriptFloodRisk": "A terminal-only recording shows an agent find data about flood risk in Chisinau through the live Portolan registry. It inspects the Moldova geodata catalog and related catalogs for flood extents, flood depth, buildings, population, land cover, hydrography, roads, utilities, and boundaries. It reports Moldova flood scenarios for 1%, 0.5%, and 0.1% annual probabilities, dam-breach extents, JRC GLOFAS depth layers, and GHSL population grids. It then calculates screening estimates for exposed buildings and population, and ranks several planning corridors. The result notes that the estimates lack local depth, velocity, arrival time, and building-vulnerability data.",
@@ -125,7 +125,7 @@
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "Ecosystem",
-    "intro": "Portolan's open source core and community-contributed tools.",
+    "intro": "The Portolan specification can be implemented in a number of ways. Here is a list of core, community-contributed, and commercial tools to make publishing and working with Portolan data easy.",
     "count": "{count} projects",
     "legendCore": "core",
     "legendCommunity": "community",
@@ -175,9 +175,10 @@
     },
     "title": "Portolan registry",
     "intro": "The <reg>Portolan registry</reg> is a catalog of independently hosted catalogs and a first step toward a federated network for geospatial data. It makes interoperable catalogs from many publishers searchable in one place while the underlying data remain distributed and are queried directly from the source.",
+    "note": "Some of these catalogs are unofficial mirrors maintained by volunteers. We expect mirrors to be replaced by official catalogs as publishers adopt the Portolan specification.",
     "search": {
       "placeholder": "Search catalogs...",
-    "noResults": "No catalogs match your search"
+      "noResults": "No catalogs match your search"
     },
     "validation": {
       "unvalidated": "Unvalidated"
@@ -201,10 +202,10 @@
     },
     "submit": {
       "urlError": "URL must end with catalog.json",
-    "urlLabel": "Catalog URL",
-    "urlPlaceholder": "https://...catalog.json",
+      "urlLabel": "Catalog URL",
+      "urlPlaceholder": "https://...catalog.json",
       "emailPlaceholder": "you@example.org",
-    "emailInputLabel": "Email address",
+      "emailInputLabel": "Email address",
       "emailError": "Enter an email address",
       "emailLabel": "We email you at this address if your catalog stops validating",
       "submit": "Submit",
@@ -218,9 +219,9 @@
     "map": {
       "searchPlaceholder": "Search for a region...",
       "searchLabel": "Search regions",
-    "searching": "Searching regions",
-    "noResults": "No regions found",
-    "resultsCount": "{count} regions found",
+      "searching": "Searching regions",
+      "noResults": "No regions found",
+      "resultsCount": "{count} regions found",
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out",
       "noLocation": "{count} without location",
