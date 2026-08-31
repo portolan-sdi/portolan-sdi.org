@@ -72,7 +72,7 @@
       },
       "open": {
         "title": "Open and interoperable",
-        "description": "Portolan builds on open standards like <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog>, and <stac><m>STAC</m></stac> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery."
+        "description": "Portolan builds on open standards like <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog>, and <stac><m>STAC</m></stac> so that data can be dropped right into tools like QGIS, ArcGIS, CARTO, Pandas, or BigQuery."
       },
       "discover": {
         "title": "Discoverable",

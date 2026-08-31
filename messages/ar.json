@@ -72,7 +72,7 @@
       },
       "open": {
         "title": "مفتوح وقابل للتشغيل البيني",
-        "description": "يبني Portolan على معايير مفتوحة مثل <geoparquet><m>GeoParquet</m></geoparquet> و<pmtiles><m>PMTiles</m></pmtiles> و<cog><m>COG</m></cog> و<stac><m>STAC</m></stac>، فتدخل البيانات مباشرة إلى أدوات مثل QGIS وArcGIS وPandas وBigQuery."
+        "description": "يبني Portolan على معايير مفتوحة مثل <geoparquet><m>GeoParquet</m></geoparquet> و<pmtiles><m>PMTiles</m></pmtiles> و<cog><m>COG</m></cog> و<stac><m>STAC</m></stac>، فتدخل البيانات مباشرة إلى أدوات مثل QGIS وArcGIS وCARTO وPandas وBigQuery."
       },
       "discover": {
         "title": "قابل للاكتشاف",
