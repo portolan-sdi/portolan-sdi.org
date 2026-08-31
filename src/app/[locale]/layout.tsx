@@ -8,6 +8,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { routing } from "@/i18n/routing";
 import { getDirection } from "@/i18n/direction";
 import { SITE_ORIGIN, alternateLanguages, localeUrl } from "@/lib/site";
+import { siteJsonLd } from "@/lib/structured-data";
+import { JsonLd } from "@/components/json-ld";
 
 const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
@@ -43,7 +45,9 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE_ORIGIN),
-    title,
+    // Child routes set a bare page title, such as "Registry". The template
+    // appends the brand so a result for any page names the project.
+    title: { default: title, template: "%s · Portolan" },
     description,
     icons: { icon: "/logo-mark.svg" },
     alternates: {
@@ -81,6 +85,8 @@ export default async function LocaleLayout({
 
   const dir = getDirection(locale);
   const messages = await getMessages();
+  const t = await getTranslations({ locale, namespace: "meta" });
+  const description = t("description");
 
   return (
     <html
@@ -90,6 +96,7 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen antialiased">
+        <JsonLd data={siteJsonLd({ locale, description })} />
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

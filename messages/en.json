@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Portolan: An opinionated standard for cloud-native geospatial catalogs",
-    "description": "Portolan publishes geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets a person or an agent read a catalog and query it directly. The standard sets the quality bar, a validator enforces it, tools make catalogs cheap to build, and a registry connects them into a network anyone can search."
+    "title": "Portolan makes geospatial data easy to share and use",
+    "description": "Portolan is an open standard for publishing geospatial data as plain files in your own storage. No servers, no databases. Browse the catalog registry."
   },
   "nav": {
     "registry": "Registry",

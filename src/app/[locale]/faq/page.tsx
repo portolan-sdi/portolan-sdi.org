@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { FaqPage } from "@/components";
 import { alternateLanguages, localeUrl } from "@/lib/site";
+import { FAQ_ITEMS } from "@/lib/faq";
+import { faqJsonLd, plainText } from "@/lib/structured-data";
+import { JsonLd } from "@/components/json-ld";
 
 const ROUTE = "/faq";
 
@@ -48,5 +51,18 @@ export default async function Faq({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <FaqPage />;
+  const t = await getTranslations({ locale, namespace: "faq" });
+  const questions = FAQ_ITEMS.map(({ key, paras }) => ({
+    question: plainText(t(`items.${key}.q`)),
+    answer: Array.from({ length: paras }, (_, i) =>
+      plainText(t(`items.${key}.p${i + 1}`)),
+    ).join(" "),
+  }));
+
+  return (
+    <>
+      <JsonLd data={faqJsonLd({ locale, route: ROUTE, questions })} />
+      <FaqPage />
+    </>
+  );
 }
