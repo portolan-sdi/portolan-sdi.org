@@ -1,12 +1,12 @@
 /*
  * bake-a5-coverage.mjs — bake the flat Equal Earth coverage map.
  *
- * Run it by hand, after bake-coverage-bboxes.mjs and bake-land-mask.mjs:
+ * Run it by hand, after bake-land-mask.mjs:
  *   node scripts/bake-a5-coverage.mjs
  *
- * The script reads the collection bboxes, bins them into A5 pentagonal cells,
- * and counts the distinct catalogs that reach each cell. A catalog counts once
- * per cell, however many collections it holds there.
+ * The script fetches the registry's collection bboxes, bins them into A5
+ * pentagonal cells, and counts the distinct catalogs that reach each cell. A
+ * catalog counts once per cell, however many collections it holds there.
  *
  * The output carries one ready-drawn SVG path per cell, already projected
  * through Equal Earth. The browser loads no A5 code, no projection maths, and
@@ -33,7 +33,9 @@ import { gzipSync } from "node:zlib";
 import { lonLatToCell, cellToBoundary, cellArea } from "a5-js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BBOX_PATH = resolve(HERE, "../public/data/coverage-bboxes.json");
+const BBOX_URL =
+  process.env.COVERAGE_BBOX_URL ??
+  "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/coverage-bboxes.json";
 const MASK_PATH = resolve(HERE, "../public/data/land-mask.json");
 const outPath = (res) =>
   resolve(HERE, `../public/data/a5-coverage-r${res}.json`);
@@ -68,6 +70,26 @@ const MAX_BBOX_WORLD_FRACTION = 1;
 
 const EARTH_RADIUS_KM = 6371;
 const EARTH_AREA_KM2 = 4 * Math.PI * EARTH_RADIUS_KM * EARTH_RADIUS_KM;
+const FETCH_TIMEOUT_MS = 20_000;
+const FETCH_RETRIES = 1;
+
+async function fetchJson(url) {
+  let lastError;
+  for (let attempt = 0; attempt <= FETCH_RETRIES; attempt++) {
+    try {
+      const response = await fetch(url, {
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw new Error(`Failed to fetch collection coverage from ${url}: ${lastError}`);
+}
 
 /** Share of the globe a bbox covers, by area on the sphere. */
 function worldFraction([west, south, east, north]) {
@@ -238,9 +260,14 @@ async function bakeResolution(index, mask, RESOLUTION) {
   const worldwide = [];
 
   for (const catalog of index.catalogs) {
-    const local = catalog.collections
-      .map((collection) => collection.bbox)
-      .filter((bbox) => worldFraction(bbox) <= MAX_BBOX_WORLD_FRACTION);
+    const local = [
+      ...new Map(
+        catalog.collections
+          .map((collection) => collection.bbox)
+          .filter((bbox) => worldFraction(bbox) <= MAX_BBOX_WORLD_FRACTION)
+          .map((bbox) => [bbox.join(","), bbox]),
+      ).values(),
+    ];
     if (local.length === 0) {
       worldwide.push(catalog.id);
       continue;
@@ -276,7 +303,6 @@ async function bakeResolution(index, mask, RESOLUTION) {
     max,
     width: VIEW_WIDTH,
     height: VIEW_HEIGHT,
-    generated: index.generated,
     // Catalogs whose every bbox covers the world. They shade nothing, so the
     // page names them rather than letting them vanish.
     worldwide,
@@ -298,7 +324,8 @@ async function bakeResolution(index, mask, RESOLUTION) {
 }
 
 async function main() {
-  const index = JSON.parse(await readFile(BBOX_PATH, "utf8"));
+  console.log(`Reading ${BBOX_URL}`);
+  const index = await fetchJson(BBOX_URL);
   const mask = decodeMask(JSON.parse(await readFile(MASK_PATH, "utf8")));
   for (const resolution of RESOLUTIONS) {
     await bakeResolution(index, mask, resolution);

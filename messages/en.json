@@ -23,7 +23,7 @@
   "hero": {
     "title": "Portolan makes geospatial data",
     "titleAccent": "easy to share and use.",
-    "description": "Portolan combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale. This makes data easier to find, understand, and analyze in new ways.",
+    "description": "Portolan is an open-source specification and toolkit that combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale.",
     "howItWorks": "How it works",
     "exploreCatalogs": "Explore catalogs"
   },
@@ -51,15 +51,15 @@
     "cards": {
       "open": {
         "title": "Open and interoperable",
-        "description": "Portolan builds on existing OGC-compliant formats like <m>GeoParquet</m>, <m>COG</m>, and <m>STAC</m> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery with no disruptions or difficulties."
+        "description": "Portolan builds on open standards like <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog>, and <stac><m>STAC</m></stac> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery."
       },
       "simple": {
         "title": "Simple, cheap, scalable, sovereign",
-        "description": "A Portolan catalog lives in your cloud storage and requires no servers, databases, or APIs. It works with any <m>S3</m>-compatible cloud provider in any location, whether you use AWS or Azure, Hetzner or MinIO, and scales from megabytes to petabytes. Your only costs are what you pay your cloud provider."
+        "description": "With Portolan, your data live in any <m>S3</m>-compatible cloud storage, in any jurisdiction you choose. Scale from megabytes to petabytes with no servers, databases, or custom APIs. Your only costs are what you pay your cloud provider."
       },
       "agents": {
         "title": "Built for people and agents",
-        "description": "Portolan catalogs are well-structured, well-formatted, and well-documented, so people and agents can find, understand, and use them. Browse the registry yourself to discover new data, or point an agent at the registry and see what it can find and do."
+        "description": "Portolan catalogs are well-structured, well-formatted, and well-documented, so people and agents can find, understand, and use them. Browse the registry yourself to discover new data, or point an agent at the registry and see what it can do."
       }
     }
   },
@@ -91,7 +91,7 @@
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, your data end up as <m>GeoParquet</m> for vector and <m>COG</m> for raster."
+        "description": "Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, your data end up as <m>GeoParquet</m> and <m>PMTiles</m> for vector and <m>COG</m> for raster."
       },
       "catalog": {
         "id": "02",
@@ -113,10 +113,10 @@
   "demo": {
     "navLabel": "Demo",
     "title": "A better way to work with geospatial data",
-    "blurb": "Watch an agent answer natural language questions about flood risk in Moldova using data from the <registry>Portolan registry</registry>.",
+    "blurb": "Start with real questions, not a script. Watch an agent answer complex, natural-language questions about flood risk in Moldova by working directly with Portolan catalogs.",
     "captionPhiladelphia": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
     "transcriptPhiladelphia": "A terminal-only recording shows an agent create and publish a Portolan catalog from ten Open Data Philly datasets. The request names property parcels, land use, zoning base districts and overlays, zoning descriptions, vacant-property indicators, City Council districts, building footprints, and affordable housing production. The agent loads the Portolan bootstrap skill, researches and downloads the sources, enriches metadata, creates thumbnails and map styles, validates the catalog, and publishes it. The terminal reports about 1.78 million features and that all catalog gates pass. It also records unresolved source fields, license details, and upstream tool issues before it syncs the published catalog files and agent guides.",
-    "transcriptFloodRisk": "A terminal-only recording shows an agent search the live Portolan registry for data about flood risk in Chisinau. It inspects the Moldova geodata catalog and related catalogs for flood extents, flood depth, buildings, population, land cover, hydrography, roads, utilities, and boundaries. It reports Moldova flood scenarios for 1%, 0.5%, and 0.1% annual probabilities, dam-breach extents, JRC GLOFAS depth layers, and GHSL population grids. It then calculates screening estimates for exposed buildings and population, and ranks several planning corridors. The result notes that the estimates lack local depth, velocity, arrival time, and building-vulnerability data.",
+    "transcriptFloodRisk": "A terminal-only recording shows an agent find data about flood risk in Chisinau through the live Portolan registry. It inspects the Moldova geodata catalog and related catalogs for flood extents, flood depth, buildings, population, land cover, hydrography, roads, utilities, and boundaries. It reports Moldova flood scenarios for 1%, 0.5%, and 0.1% annual probabilities, dam-breach extents, JRC GLOFAS depth layers, and GHSL population grids. It then calculates screening estimates for exposed buildings and population, and ranks several planning corridors. The result notes that the estimates lack local depth, velocity, arrival time, and building-vulnerability data.",
     "play": "Play the demo",
     "pause": "Pause the demo",
     "fullscreen": "Show the demo full screen",
@@ -178,7 +178,7 @@
     "intro": "The <reg>Portolan registry</reg> is a catalog of independently hosted catalogs and a first step toward a federated network for geospatial data. It makes interoperable catalogs from many publishers searchable in one place while the underlying data remain distributed and are queried directly from the source.",
     "search": {
       "placeholder": "Search catalogs...",
-      "noResults": "No catalogs match your search"
+    "noResults": "No catalogs match your search"
     },
     "validation": {
       "unvalidated": "Unvalidated"

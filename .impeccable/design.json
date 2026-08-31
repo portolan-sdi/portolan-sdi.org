@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-28T13:50:50Z",
+  "title": "Design System: Portolan",
+  "extensions": {
+    "_source": "The palette, the type families, and the logo files come from brand.json in portolan-ops. This sidecar records what the website adds on top.",
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Portolan blue",
+        "canonical": "#4163cc",
+        "tonalRamp": [
+          "#101b3c",
+          "#1d306a",
+          "#294498",
+          "#3559c6",
+          "#617dd5",
+          "#8fa3e1",
+          "#bdc9ed",
+          "#ebeefa"
+        ]
+      },
+      "primary-ink": {
+        "role": "primary",
+        "displayName": "Portolan blue ink",
+        "canonical": "#2d4aa8",
+        "tonalRamp": [
+          "#101b3c",
+          "#1c2f6a",
+          "#294398",
+          "#3557c6",
+          "#617cd5",
+          "#8fa2e1",
+          "#bdc8ed",
+          "#ebeefa"
+        ]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Cream paper",
+        "canonical": "#fcfcfa",
+        "tonalRamp": [
+          "#30301d",
+          "#545433",
+          "#797948",
+          "#9d9d5e",
+          "#b4b482",
+          "#cacaa6",
+          "#e0e0cb",
+          "#f5f5ef"
+        ]
+      },
+      "bg-soft": {
+        "role": "neutral",
+        "displayName": "Soft ground",
+        "canonical": "#f5f5f1",
+        "tonalRamp": [
+          "#2d2d20",
+          "#4f4f38",
+          "#717150",
+          "#939369",
+          "#acac8a",
+          "#c4c4ac",
+          "#dcdcce",
+          "#f4f4f0"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Near-black ink",
+        "canonical": "#16170f",
+        "tonalRamp": [
+          "#2c2e1e",
+          "#4e5235",
+          "#70754c",
+          "#929863",
+          "#abb086",
+          "#c3c7a9",
+          "#dcdecc",
+          "#f4f5f0"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#3d3f33",
+        "tonalRamp": [
+          "#292a22",
+          "#484a3c",
+          "#676b56",
+          "#868b70",
+          "#a2a590",
+          "#bdbfb0",
+          "#d8dad1",
+          "#f3f4f1"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "#74766a",
+        "tonalRamp": [
+          "#282824",
+          "#464740",
+          "#64665b",
+          "#828477",
+          "#9ea095",
+          "#bbbcb4",
+          "#d7d7d3",
+          "#f3f3f2"
+        ]
+      },
+      "line-soft": {
+        "role": "neutral",
+        "displayName": "Soft rule",
+        "canonical": "#d6d5ca",
+        "tonalRamp": [
+          "#2b2a21",
+          "#4c4b3b",
+          "#6d6b54",
+          "#8e8b6e",
+          "#a8a58e",
+          "#c1c0af",
+          "#dadad0",
+          "#f4f4f1"
+        ]
+      },
+      "success": {
+        "role": "state",
+        "displayName": "Success",
+        "canonical": "#2f7d63",
+        "tonalRamp": [
+          "#15382c",
+          "#25624e",
+          "#358c6f",
+          "#45b791",
+          "#6dc8aa",
+          "#98d8c3",
+          "#c2e8db",
+          "#ecf8f4"
+        ]
+      },
+      "warn": {
+        "role": "state",
+        "displayName": "Warn",
+        "canonical": "#b06e2a",
+        "tonalRamp": [
+          "#3e270f",
+          "#6d441a",
+          "#9c6125",
+          "#cb7f30",
+          "#d89c5d",
+          "#e4b98c",
+          "#efd5bb",
+          "#faf2ea"
+        ]
+      },
+      "warn-ink": {
+        "role": "state",
+        "displayName": "Warn ink",
+        "canonical": "#8a5418",
+        "tonalRamp": [
+          "#41280b",
+          "#734614",
+          "#a4641d",
+          "#d68225",
+          "#e19f54",
+          "#eabb86",
+          "#f3d7b8",
+          "#fbf3e9"
+        ]
+      },
+      "danger": {
+        "role": "state",
+        "displayName": "Danger",
+        "canonical": "#a3271f",
+        "tonalRamp": [
+          "#400f0c",
+          "#711b16",
+          "#a2271f",
+          "#d33328",
+          "#df5f57",
+          "#e88d88",
+          "#f2bcb9",
+          "#fbebea"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "eyebrow": {
+        "displayName": "Eyebrow",
+        "purpose": "Mono kickers, tags, and labels"
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Secondary text and button labels"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Body prose"
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Supporting copy under a heading"
+      },
+      "card-title": {
+        "displayName": "Card title",
+        "purpose": "Card and list-item titles"
+      },
+      "feature": {
+        "displayName": "Feature",
+        "purpose": "Sub-section headings"
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Section headings"
+      },
+      "hero": {
+        "displayName": "Hero",
+        "purpose": "The page h1"
+      }
+    },
+    "elevation": {
+      "_rule": "The system has no elevation. Depth comes from rules and fill.",
+      "shadow-sm": "none",
+      "shadow-md": "0 1px 0 #16170f"
+    },
+    "motion": {
+      "control": "150ms on background-color, border-color, and color only",
+      "_rule": "No transform-based motion on controls. The hero glyph map is the one moving element on the site."
+    },
+    "breakpoints": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "_rail": "The side rail pins from md up and insets content by 264px."
+    },
+    "components": [
+      {
+        "name": "button-primary",
+        "html": "<button class=\"ds-btn ds-btn-primary\">Read the spec</button>",
+        "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;font-size:13px;line-height:1.5;padding:10px 20px;cursor:pointer;white-space:nowrap;transition:background-color .15s,border-color .15s,color .15s;}.ds-btn-primary{background:#4163cc;color:#fff;border:1px solid #4163cc;}.ds-btn-primary:hover{background:#2d4aa8;border-color:#2d4aa8;}"
+      },
+      {
+        "name": "button-secondary",
+        "html": "<button class=\"ds-btn ds-btn-secondary\">Browse catalogs</button>",
+        "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;font-size:13px;line-height:1.5;padding:10px 20px;cursor:pointer;white-space:nowrap;transition:background-color .15s,border-color .15s,color .15s;}.ds-btn-secondary{background:#fff;color:#16170f;border:1px solid #16170f;}.ds-btn-secondary:hover{background:#f5f5f1;}"
+      },
+      {
+        "name": "button-ghost",
+        "html": "<button class=\"ds-btn ds-btn-ghost\">See the registry</button>",
+        "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;font-size:13px;line-height:1.5;padding:10px 20px;cursor:pointer;white-space:nowrap;transition:background-color .15s,border-color .15s,color .15s;}.ds-btn-ghost{background:transparent;color:#16170f;border:0;border-bottom:2px solid #16170f;padding-left:0;padding-right:0;}.ds-btn-ghost:hover{border-bottom-width:4px;padding-bottom:calc(10px - 2px);}"
+      },
+      {
+        "name": "tag-default",
+        "html": "<span class=\"ds-tag ds-tag-default\">GeoParquet</span>",
+        "css": ".ds-tag{display:inline-flex;align-items:center;gap:8px;border-radius:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;line-height:1.4;text-transform:uppercase;letter-spacing:0.02em;padding:4px 10px;border-width:1px;border-style:solid;}.ds-tag-default{background:#f5f5f1;color:#3d3f33;border-color:#16170f;}"
+      },
+      {
+        "name": "tag-primary",
+        "html": "<span class=\"ds-tag ds-tag-primary\">Verified</span>",
+        "css": ".ds-tag{display:inline-flex;align-items:center;gap:8px;border-radius:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;line-height:1.4;text-transform:uppercase;letter-spacing:0.02em;padding:4px 10px;border-width:1px;border-style:solid;}.ds-tag-primary{background:rgba(65,99,204,.12);color:#2d4aa8;border-color:rgba(65,99,204,.25);}"
+      },
+      {
+        "name": "tag-warn",
+        "html": "<span class=\"ds-tag ds-tag-warn\">Stale</span>",
+        "css": ".ds-tag{display:inline-flex;align-items:center;gap:8px;border-radius:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;line-height:1.4;text-transform:uppercase;letter-spacing:0.02em;padding:4px 10px;border-width:1px;border-style:solid;}.ds-tag-warn{background:rgba(176,110,42,.18);color:#8a5418;border-color:rgba(176,110,42,.35);}"
+      },
+      {
+        "name": "section-head",
+        "html": "<div class=\"ds-sec-head\"><div><div class=\"ds-kicker\">Registry</div><h2 class=\"ds-sec-title\">Every catalog in one index</h2></div><p class=\"ds-sec-sub\">Each entry links to a catalog you can query directly.</p></div>",
+        "css": ".ds-sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,46ch);gap:48px;align-items:end;}.ds-kicker{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;line-height:1.4;color:#74766a;letter-spacing:0.04em;}.ds-sec-title{font-family:'Hanken Grotesk',sans-serif;font-size:46px;font-weight:800;letter-spacing:-0.03em;line-height:1.05;color:#16170f;margin:12px 0 0;}.ds-sec-sub{font-family:'Hanken Grotesk',sans-serif;font-size:18px;line-height:1.6;color:#3d3f33;margin:0;}"
+      },
+      {
+        "name": "logo-horizontal",
+        "html": "<span class=\"ds-logo\"><svg viewBox=\"0 0 32 32\" width=\"28\" height=\"28\" aria-hidden=\"true\"><g fill=\"#4163cc\"><path d=\"M2.83 18.247l26.34-9.124L2.83 0z\"/><path d=\"M29.17 32V13.753L2.83 22.877z\"/></g></svg><span class=\"ds-logo-word\">Portolan</span></span>",
+        "css": ".ds-logo{display:inline-flex;align-items:center;gap:10px;color:#16170f;}.ds-logo-word{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:24px;letter-spacing:-0.015em;}"
+      }
+    ],
+    "narrative": {
+      "_note": "No metaphor. The system is described by its constraints.",
+      "constraints": [
+        "Light mode only. No [data-theme] switch and no dark token block.",
+        "Every radius token is 0px.",
+        "Shadow tokens resolve to none or to a single 1px rule.",
+        "One accent color, #4163cc. There is no second accent.",
+        "Structural rules use #16170f, the same value as body text.",
+        "No element uses a gradient."
+      ],
+      "dos": [
+        "Use the named type utilities from the eight-step scale.",
+        "Separate content with a 1px #16170f rule.",
+        "Start every layout at grid-cols-1 and step up.",
+        "Use logical properties in shared UI.",
+        "Put every user-facing string in messages/ under the same key in en, es, and ar.",
+        "Keep digits Latin in every locale."
+      ],
+      "donts": [
+        "Don't add a dark theme or a theme toggle.",
+        "Don't use a gradient anywhere.",
+        "Don't round a corner.",
+        "Don't add a drop shadow, a glassy blur, or a soft background band.",
+        "Don't use an arbitrary font size such as text-[13px].",
+        "Don't add a step back to the type scale.",
+        "Don't add a border-p-line-strong tier. Thicken the border instead.",
+        "Don't inline header or footer markup. Navigation is the rail.",
+        "Don't use a compass rose or a rhumb line.",
+        "Don't add a terminal or code-session mockup.",
+        "Don't add an emoji. The permitted marks are the arrow glyphs and the middle dot.",
+        "Don't give every card in a grid the same anatomy.",
+        "Don't letterspace Arabic.",
+        "Don't mirror the logo, the map canvas, or a code block in RTL."
+      ]
+    }
+  }
+}

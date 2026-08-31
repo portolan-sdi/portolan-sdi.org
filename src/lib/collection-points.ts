@@ -1,36 +1,21 @@
-import { getCoverageTier } from "./catalogs";
+import {
+  getCoverageTier,
+  type Bbox,
+  type CatalogCoverage,
+  type CollectionRecord,
+  type CoverageBboxes,
+} from "./catalogs";
 
 /**
  * The geometry behind the registry explorer.
  *
- * scripts/bake-coverage-bboxes.mjs crawls every registered catalog and writes
- * one record per collection extent. The same file feeds the landing page's A5
- * coverage bake, so the crawl runs once and both maps read its output.
+ * The registry exports one record per collection extent. A tagged server route
+ * deduplicates that export before the browser reads it.
  *
  * The explorer spends the records two ways. It draws a centroid point per
  * collection, and it matches a catalog to the viewport when any of that
  * catalog's bboxes overlaps it. A centroid never decides a result.
  */
-
-export type Bbox = [number, number, number, number];
-
-export interface CollectionRecord {
-  id: string;
-  title: string;
-  bbox: Bbox;
-}
-
-export interface CatalogCoverage {
-  id: string;
-  collection_count: number;
-  collections: CollectionRecord[];
-}
-
-export interface CoverageBboxes {
-  generated: string;
-  registry_generated: string | null;
-  catalogs: CatalogCoverage[];
-}
 
 /**
  * One drawable point. A broad extent never becomes one, and neither does a
@@ -72,12 +57,33 @@ export interface CoverageIndex {
   broadCount: number;
 }
 
-const DATA_URL = "/data/coverage-bboxes.json";
+const DATA_URL = "/api/registry-coverage";
 
 export async function fetchCoverage(signal?: AbortSignal): Promise<CoverageBboxes> {
   const res = await fetch(DATA_URL, { signal });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return (await res.json()) as CoverageBboxes;
+}
+
+function uniqueRecords(records: CollectionRecord[]): CollectionRecord[] {
+  const seen = new Set<string>();
+  return records.filter((record) => {
+    const key = record.bbox.join(",");
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+/** Keep one named record for each catalog bbox, as the explorer contract expects. */
+export function dedupeCoverage(data: CoverageBboxes): CoverageBboxes {
+  return {
+    ...data,
+    catalogs: data.catalogs.map((catalog) => ({
+      ...catalog,
+      collections: uniqueRecords(catalog.collections),
+    })),
+  };
 }
 
 /**
@@ -247,17 +253,18 @@ function placesFor(records: CollectionRecord[]): CollectionPoint[] {
 }
 
 export function buildIndex(data: CoverageBboxes): CoverageIndex {
+  const unique = dedupeCoverage(data);
   const points: CollectionPoint[] = [];
   let broadCount = 0;
 
-  for (const catalog of data.catalogs) {
+  for (const catalog of unique.catalogs) {
     broadCount += catalog.collections.filter((c) => isBroadExtent(c.bbox)).length;
     placesFor(catalog.collections).forEach((place, i) => {
       points.push({ ...place, catalogId: catalog.id, key: `${catalog.id}-${i}` });
     });
   }
 
-  return { catalogs: data.catalogs, points, broadCount };
+  return { catalogs: unique.catalogs, points, broadCount };
 }
 
 /**

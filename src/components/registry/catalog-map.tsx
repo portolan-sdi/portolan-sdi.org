@@ -13,6 +13,7 @@ import {
   type MapRef,
 } from "react-map-gl/maplibre";
 import type { CollectionPoint, CoverageIndex, Viewport } from "@/lib/collection-points";
+import { neutralizeMarkerHosts } from "@/lib/marker-hosts";
 import { MapGeocoder } from "./map-geocoder";
 import type { GeocodeSuggestion } from "@/hooks/use-geocode";
 
@@ -293,16 +294,9 @@ export default function CatalogMap({
     const mapContainer = mapRef.current?.getContainer();
     if (!mapContainer) return;
 
-    const neutralizeMarkerHosts = () => {
-      mapContainer.querySelectorAll<HTMLElement>(".maplibregl-marker").forEach((marker) => {
-        marker.removeAttribute("aria-label");
-        marker.setAttribute("role", "presentation");
-        marker.removeAttribute("tabindex");
-      });
-    };
-
-    neutralizeMarkerHosts();
-    const observer = new MutationObserver(neutralizeMarkerHosts);
+    const neutralize = () => neutralizeMarkerHosts(mapContainer);
+    neutralize();
+    const observer = new MutationObserver(neutralize);
     observer.observe(mapContainer, {
       childList: true,
       subtree: true,
