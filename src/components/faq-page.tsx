@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { COMMUNITY_LINKS } from "@/lib/site";
+import { COMMUNITY_LINKS, SPEC_URL } from "@/lib/site";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 import { monoChunk } from "./ui";
@@ -27,7 +27,6 @@ import { monoChunk } from "./ui";
 // eight questions there restated the page and told the reader nothing the page
 // did not already show.
 
-const SPEC_URL = "https://github.com/portolan-sdi/portolan-spec";
 const RASHID_URL = "https://github.com/portolan-sdi/rashid";
 
 // `paras` is the paragraph count for that answer, so each item renders exactly

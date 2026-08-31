@@ -13,7 +13,7 @@ import { WhoForSection } from "./who-for-section";
 import { CoverageSection } from "./coverage-section";
 import { Btn, DirArrow, monoChunk } from "./ui";
 import type { Catalog } from "@/lib/catalogs";
-import { FORMAT_LINKS } from "@/lib/site";
+import { FORMAT_LINKS, SPEC_URL } from "@/lib/site";
 
 /** Aspect ratio of the encoded catalog-build recording, 1454x1118. It
  *  reserves the box before metadata loads, so the poster does not shift the
@@ -59,8 +59,27 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   read as truncated. It stays inside the 75ch readability bound.
                   80ch and wider leaves the Arabic paragraph a 49px stub on its
                   last line. */}
+              {/* "open specification" carries the link to the spec repo. The
+                  spec is ground truth for the standard, and this sentence is
+                  where the page first names it, so the link belongs on the
+                  first mention. Without it the hero linked the registry one
+                  line below while the main subject stayed dead text. The
+                  spec lives outside this site, so the link opens a new tab,
+                  unlike the internal registry link below. */}
               <p className="text-lead leading-relaxed max-w-[72ch]">
-                {t.rich("hero.description", { m: monoChunk })}
+                {t.rich("hero.description", {
+                  m: monoChunk,
+                  spec: (chunks) => (
+                    <a
+                      href={SPEC_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                    >
+                      {chunks}
+                    </a>
+                  ),
+                })}
               </p>
               {/* Claim index: the five properties the spec holds publishing
                   to, in the exact order of the "Why Portolan" ledger below,
