@@ -45,6 +45,8 @@ export interface Catalog {
   kind: CatalogKind | null;
   /** Who made the data, in the order the catalog names them. */
   producers: CatalogParty[];
+  /** Who derived this copy from the source. Often the mirror's own author. */
+  processors: CatalogParty[];
   /** Who serves this copy. Null when no collection names a host. */
   host: CatalogParty | null;
   /** Portolan spec version the catalog declares. Null for plain STAC. */
@@ -107,6 +109,7 @@ interface ChildLink {
   "portolan_registry:id": string;
   "portolan_registry:kind"?: string | null;
   "portolan_registry:producers"?: CatalogParty[] | null;
+  "portolan_registry:processors"?: CatalogParty[] | null;
   "portolan_registry:host"?: CatalogParty | null;
   "portolan_registry:spec_version"?: string | null;
   "portolan_registry:logo"?: CatalogLogo | null;
@@ -159,6 +162,10 @@ function toParty(value: unknown): CatalogParty | null {
   return typeof url === "string" && url ? { name, url } : { name };
 }
 
+function toParties(value: CatalogParty[] | null | undefined): CatalogParty[] {
+  return (value ?? []).map(toParty).filter((p): p is CatalogParty => p !== null);
+}
+
 function toCatalog(link: ChildLink): Catalog {
   const logo = link["portolan_registry:logo"];
 
@@ -167,9 +174,8 @@ function toCatalog(link: ChildLink): Catalog {
     url: link.href,
     title: link.title ?? link["portolan_registry:id"],
     kind: toKind(link["portolan_registry:kind"]),
-    producers: (link["portolan_registry:producers"] ?? [])
-      .map(toParty)
-      .filter((p): p is CatalogParty => p !== null),
+    producers: toParties(link["portolan_registry:producers"]),
+    processors: toParties(link["portolan_registry:processors"]),
     host: toParty(link["portolan_registry:host"]),
     spec_version: link["portolan_registry:spec_version"] ?? null,
     bbox: isBbox(link.bbox) ? link.bbox : null,

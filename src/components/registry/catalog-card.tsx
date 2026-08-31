@@ -3,7 +3,7 @@
 import { Fragment, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Tag, DirArrow, Ltr } from "../ui";
-import type { Catalog, CatalogParty } from "@/lib/catalogs";
+import type { Catalog, CatalogKind, CatalogParty } from "@/lib/catalogs";
 import {
   formatBytes,
   formatCount,
@@ -88,6 +88,30 @@ function CatalogHeader({ catalog, onSelect }: CatalogProps & { onSelect?: () => 
   );
 }
 
+/** One labelled row of the detail panel. */
+function CreditRow({
+  label,
+  value,
+  first = false,
+}: {
+  label: string;
+  value: string;
+  first?: boolean;
+}) {
+  return (
+    <>
+      <span
+        className={`block text-p-ink-3 ${first ? "" : "mt-2 border-t border-p-line-soft pt-2"}`}
+      >
+        {label}
+      </span>
+      <span className="block text-p-ink">
+        <Ltr>{value}</Ltr>
+      </span>
+    </>
+  );
+}
+
 // Who made the data, from the `producer` role on the catalog's own STAC
 // providers. Its own line rather than a run of facts: an agency name can be
 // longer than the two dotted rows below hold, and this is attribution, not
@@ -95,21 +119,88 @@ function CatalogHeader({ catalog, onSelect }: CatalogProps & { onSelect?: () => 
 //
 // Names stay Latin-ordered on the Arabic page, the way format and license
 // names do. Two registered catalogs name no producer, and they print nothing.
-function CatalogCredit({ producers }: { producers: CatalogParty[] }) {
+function CatalogCredit({
+  producers,
+  processors,
+  host,
+  kind,
+}: {
+  producers: CatalogParty[];
+  processors: CatalogParty[];
+  host: CatalogParty | null;
+  kind: CatalogKind | null;
+}) {
   const t = useTranslations("registry");
   const [first, ...rest] = producers;
   if (!first) return null;
 
+  // The face of the card names one party. The rest of the provenance opens on
+  // hover or focus, under labels that say which role each party holds.
+  //
+  // A panel rather than more lines on the face. Naming the producer answers
+  // "whose data is this", which is the question a card has room for. The other
+  // two roles matter once a reader is already interested, and 14 of the 19
+  // catalogs are mirrors, so more visible lines would land on most cards and
+  // flatten the grid.
+  //
+  // The host line appears for a mirror only. On an official catalog the host
+  // is the producer, so the line would repeat the one above it. `kind` decides
+  // that, not a comparison of the two names: planet-disasterdata is official
+  // and writes its producer "Planet Labs PBC" against its host "Planet Crisis
+  // Response Program", so the names differ where the organization does not.
+  //
+  // "Hosted by", not "maintained by", although the specification defines the
+  // host as the party that maintains the copy. Seven of the fourteen mirrors
+  // put a storage vendor in that field instead, which core.md forbids by name,
+  // so today the value answers "who serves this" and not "who runs this".
+  const serves = kind === "mirror" ? host : null;
+
+  // A processor already named as the producer or the host is dropped: the row
+  // would repeat a row beside it. What survives is the party a catalog names
+  // nowhere else, which is who actually built the copy. Four catalogs are in
+  // that position, catalog-1781203130384 among them, where the producer is an
+  // Argentine agency, the host is a storage platform, and only the processor
+  // names the person who converted the data.
+  const named = new Set(
+    [...producers, ...(host ? [host] : [])].map((p) => p.name.trim().toLowerCase())
+  );
+  const derived = processors.filter((p) => !named.has(p.name.trim().toLowerCase()));
+
+  const hasDetail = rest.length > 0 || derived.length > 0 || serves !== null;
+
   return (
-    <p
-      className="text-small text-p-ink-3 font-mono"
-      // The rest of the producers, for a catalog that credits several. A
-      // native tooltip rather than a control: the card names the lead party
-      // and gains no chrome to expand a list.
-      title={rest.length > 0 ? producers.map((p) => p.name).join(", ") : undefined}
-    >
-      {t("card.createdBy")} <Ltr>{first.name}</Ltr>
-      {rest.length > 0 && ` ${t("card.createdByMore", { count: String(rest.length) })}`}
+    <p className="group/credit relative text-small text-p-ink-3 font-mono">
+      {/* Focusable so the detail is reachable without a pointer. */}
+      <span tabIndex={hasDetail ? 0 : undefined} className="outline-p-primary">
+        {t("card.dataSourceProducer")}{" "}
+        {/* The name takes the darker ink so the eye splits it from the label. */}
+        <span className="text-p-ink">
+          <Ltr>{first.name}</Ltr>
+          {rest.length > 0 && ` ${t("card.moreProducers", { count: String(rest.length) })}`}
+        </span>
+      </span>
+      {hasDetail && (
+        // Flat paper on a black rule, square, no shadow, the way every other
+        // surface on the site reads. It opens toward the inline start so it
+        // mirrors with the page instead of running off the edge in Arabic.
+        <span
+          role="tooltip"
+          className="pointer-events-none absolute start-0 top-full z-30 mt-1 hidden w-max max-w-[17rem] border border-p-line bg-p-paper p-2 text-start group-hover/credit:block group-focus-within/credit:block"
+        >
+          <CreditRow
+            first
+            label={t("card.dataSourceProducer")}
+            value={producers.map((p) => p.name).join(", ")}
+          />
+          {derived.length > 0 && (
+            <CreditRow
+              label={t("card.processedBy")}
+              value={derived.map((p) => p.name).join(", ")}
+            />
+          )}
+          {serves && <CreditRow label={t("card.hostedBy")} value={serves.name} />}
+        </span>
+      )}
     </p>
   );
 }
@@ -208,12 +299,21 @@ export function CatalogCard({
     <article
       data-catalog-id={catalog.id}
       aria-current={selected ? "true" : undefined}
-      className={`ec-card group flex h-full flex-col gap-3 border border-p-line bg-p-paper p-5 ${
+      // `.ec-card` carries a transform, which opens a stacking context and
+      // traps the credit detail behind whichever card follows in the DOM. The
+      // hovered card rises so its own overlay wins. Grid items take z-index
+      // without needing `position`.
+      className={`ec-card group relative flex h-full flex-col gap-3 border border-p-line bg-p-paper p-5 hover:z-20 focus-within:z-20 ${
         selected ? "outline outline-2 -outline-offset-2 outline-p-primary" : ""
       }`}
     >
       <CatalogHeader catalog={catalog} onSelect={select} />
-      <CatalogCredit producers={catalog.producers} />
+      <CatalogCredit
+        producers={catalog.producers}
+        processors={catalog.processors}
+        host={catalog.host}
+        kind={catalog.kind}
+      />
       <CatalogFacts catalog={catalog} />
       <CatalogActions catalog={catalog} />
     </article>

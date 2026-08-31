@@ -184,8 +184,10 @@
     },
     "card": {
       "viewCatalog": "Ver catálogo",
-      "createdBy": "creado por",
-      "createdByMore": "+{count} más",
+      "moreProducers": "+{count} más",
+      "dataSourceProducer": "Productor de la fuente de datos",
+      "processedBy": "Procesado por",
+      "hostedBy": "Alojado por",
       "collections": "{count} colecciones",
       "licenses": "{count} licencias",
       "collection": "1 colección",

@@ -184,8 +184,10 @@
     },
     "card": {
       "viewCatalog": "عرض الكتالوج",
-      "createdBy": "أنشأه",
-      "createdByMore": "و{count} أخرى",
+      "moreProducers": "و{count} أخرى",
+      "dataSourceProducer": "منتج مصدر البيانات",
+      "processedBy": "عالجه",
+      "hostedBy": "يستضيفه",
       "collections": "{count} مجموعة",
       "licenses": "{count} رخصة",
       "collection": "مجموعة واحدة",
