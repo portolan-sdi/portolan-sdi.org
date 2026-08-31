@@ -59,7 +59,7 @@
     "intro": {
       "p1": "Spatial data infrastructure has usually meant serving data through APIs, with servers someone has to run, pay for, and keep alive. Cloud-native formats invert that cost. Publishing drops to the price of storage, and computation moves to the reader's side, in whatever engine they already use.",
       "p2": "AI removes the next layer. With structured metadata and clear documentation, an agent can find a catalog, understand it, and query it directly, so no portal or specialist sits between a question and the data. <m>STAC</m> provides that metadata, and Portolan holds it to a higher bar.",
-      "p3": "Portolan invents as little as possible. It composes proven pieces like <m>STAC</m>, <m>GeoParquet</m>, <m>COG</m>, and <m>PMTiles</m>, and standardizes how a great catalog uses them. Where a gap remains, it proposes a STAC extension instead of a new standard, like the early extension that links catalogs to <ossie>Apache Ossie</ossie> semantic models. Every publisher who joins makes the network more useful, because an agent can answer from all registered catalogs, not just one."
+      "p3": "Portolan invents as little as possible. It composes proven pieces like <m>STAC</m>, <m>GeoParquet</m>, <m>COG</m>, and <m>PMTiles</m>, and standardizes how a great catalog uses them. Where a gap remains, it proposes a STAC extension instead of a new standard, like the early extension that links catalogs to <ossie>Apache Ossie</ossie> semantic models. Every publisher who joins makes the network more useful, because an agent can answer from every registered catalog at once."
     },
     "cards": {
       "cost": {
@@ -68,7 +68,7 @@
       },
       "agents": {
         "title": "Ready for people and agents",
-        "description": "A catalog describes its data, schema, and useful queries in plain text and structured metadata. An agent reads that and queries the files directly, no API or credentials needed. Its answer comes from the data and carries a query anyone can re-run, instead of a guess from the model's memory."
+        "description": "A catalog describes its data, schema, and useful queries in plain text and structured metadata. An agent reads that and queries the files directly, no API or credentials needed. Its answer comes from the data and carries a query anyone can re-run."
       },
       "open": {
         "title": "Open and interoperable",
@@ -147,25 +147,18 @@
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "Ecosystem",
-    "intro": "Portolan's open-source core, community tools, and the companies that extend the standard with commercial products.",
+    "intro": "Portolan's open source core and community-contributed tools.",
     "count": "{count} projects",
     "legendCore": "core",
     "legendCommunity": "community",
-    "legendCommercial": "commercial",
-    "proprietary": "Commercial",
     "submit": "Submit a tool",
-    "commercial": {
-      "title": "Commercial products on the open core",
-      "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over."
-    },
     "projects": {
       "spec": "The standard that defines a Portolan catalog.",
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
       "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
       "registry": "A central registry of public Portolan catalogs.",
       "browser": "A web interface for browsing and exploring Portolan catalogs.",
-      "skills": "Agent skills for creating and working with Portolan catalogs.",
-      "cartosdi": "A spatial data infrastructure for organizations, built on Portolan."
+      "skills": "Agent skills for creating and working with Portolan catalogs."
     }
   },
   "coverage": {
@@ -204,7 +197,7 @@
     },
     "title": "Portolan registry",
     "intro": "The <reg>Portolan registry</reg> is a catalog of independently hosted catalogs and a first step toward a federated network for geospatial data. It makes interoperable catalogs from many publishers searchable in one place while the underlying data remain distributed and are queried directly from the source.",
-    "mirrors": "Not every catalog comes from the organization that produces the data. A growing community of volunteers and organizations mirrors official sources into Portolan. Each mirror names its maintainer and points back to the source it copies, and the registry marks it as a mirror. As publishers adopt the standard, we expect their official catalogs to replace the mirrors.",
+    "mirrors": "Some of these catalogs are mirrors. Volunteers and organizations copy official sources into Portolan and keep the copies current. Each mirror names its maintainer and points back to the source it copies. As publishers adopt the standard, we expect their official catalogs to replace the mirrors.",
     "search": {
       "placeholder": "Search catalogs...",
       "noResults": "No catalogs match your search"

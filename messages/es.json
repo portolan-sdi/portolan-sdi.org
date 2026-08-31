@@ -59,7 +59,7 @@
     "intro": {
       "p1": "La infraestructura de datos espaciales ha significado casi siempre servir datos a través de APIs, con servidores que alguien tiene que operar, pagar y mantener vivos. Los formatos nativos de la nube invierten ese coste. Publicar cuesta lo que cuesta el almacenamiento, y el cómputo pasa al lado del lector, en el motor que ya use.",
       "p2": "La IA elimina la siguiente capa. Con metadatos estructurados y documentación clara, un agente puede encontrar un catálogo, entenderlo y consultarlo directamente, así que ningún portal ni especialista se interpone entre una pregunta y los datos. <m>STAC</m> aporta esos metadatos, y Portolan les exige un listón más alto.",
-      "p3": "Portolan inventa lo menos posible. Compone piezas probadas como <m>STAC</m>, <m>GeoParquet</m>, <m>COG</m> y <m>PMTiles</m>, y estandariza cómo las usa un buen catálogo. Donde queda un hueco, propone una extensión de STAC en lugar de un estándar nuevo, como la extensión temprana que enlaza catálogos con los modelos semánticos de <ossie>Apache Ossie</ossie>. Cada publicador que se suma hace la red más útil, porque un agente puede responder con todos los catálogos registrados, no con uno solo."
+      "p3": "Portolan inventa lo menos posible. Compone piezas probadas como <m>STAC</m>, <m>GeoParquet</m>, <m>COG</m> y <m>PMTiles</m>, y estandariza cómo las usa un buen catálogo. Donde queda un hueco, propone una extensión de STAC en lugar de un estándar nuevo, como la extensión temprana que enlaza catálogos con los modelos semánticos de <ossie>Apache Ossie</ossie>. Cada publicador que se suma hace la red más útil, porque un agente puede responder con todos los catálogos registrados a la vez."
     },
     "cards": {
       "cost": {
@@ -68,7 +68,7 @@
       },
       "agents": {
         "title": "Listo para personas y agentes",
-        "description": "Un catálogo describe sus datos, su esquema y consultas útiles en texto plano y metadatos estructurados. Un agente lee eso y consulta los archivos directamente, sin API ni credenciales. Su respuesta sale de los datos y lleva una consulta que cualquiera puede repetir, en lugar de una suposición sacada de la memoria del modelo."
+        "description": "Un catálogo describe sus datos, su esquema y consultas útiles en texto plano y metadatos estructurados. Un agente lee eso y consulta los archivos directamente, sin API ni credenciales. Su respuesta sale de los datos y lleva una consulta que cualquiera puede repetir."
       },
       "open": {
         "title": "Abierto e interoperable",
@@ -147,25 +147,18 @@
   "ecosystem": {
     "eyebrow": "Ecosistema",
     "title": "Ecosistema",
-    "intro": "El núcleo de código abierto de Portolan, las herramientas de la comunidad y las empresas que extienden el estándar con productos comerciales.",
+    "intro": "El núcleo de código abierto de Portolan y las herramientas aportadas por la comunidad.",
     "count": "{count} proyectos",
     "legendCore": "núcleo",
     "legendCommunity": "comunidad",
-    "legendCommercial": "comercial",
-    "proprietary": "Comercial",
     "submit": "Proponer una herramienta",
-    "commercial": {
-      "title": "Productos comerciales sobre el núcleo abierto",
-      "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO SDI</carto> extiende Portolan para organizaciones con conjuntos de datos privados, gobernanza y auditorías, comercialización de datos y conjuntos de datos escribibles. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo."
-    },
     "projects": {
       "spec": "El estándar que define un catálogo Portolan.",
       "rashid": "El validador que comprueba si un catálogo cumple la especificación Portolan.",
       "cli": "Una herramienta de línea de comandos para crear, comprobar y publicar catálogos Portolan.",
       "registry": "Un registro central de catálogos Portolan públicos.",
       "browser": "Una interfaz web para navegar y explorar catálogos Portolan.",
-      "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos.",
-      "cartosdi": "Una infraestructura de datos espaciales para organizaciones, construida sobre Portolan."
+      "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos."
     }
   },
   "coverage": {
@@ -204,7 +197,7 @@
     },
     "title": "Registro de Portolan",
     "intro": "El <reg>registro de Portolan</reg> es un catálogo de catálogos alojados de forma independiente y un primer paso hacia una red federada de datos geoespaciales. Permite buscar en un solo lugar catálogos interoperables de muchos publicadores, mientras los datos subyacentes siguen distribuidos y se consultan directamente en la fuente.",
-    "mirrors": "No todos los catálogos vienen de la organización que produce los datos. Una comunidad creciente de voluntarios y organizaciones replica fuentes oficiales en Portolan. Cada espejo nombra a quien lo mantiene y apunta a la fuente que copia, y el registro lo marca como espejo. A medida que los publicadores adoptan el estándar, esperamos que sus catálogos oficiales sustituyan a los espejos.",
+    "mirrors": "Algunos de estos catálogos son espejos. Voluntarios y organizaciones copian fuentes oficiales en Portolan y mantienen las copias al día. Cada espejo nombra a quien lo mantiene y apunta a la fuente que copia. A medida que los publicadores adoptan el estándar, esperamos que sus catálogos oficiales sustituyan a los espejos.",
     "search": {
       "placeholder": "Buscar catálogos...",
       "noResults": "Ningún catálogo coincide con tu búsqueda"
