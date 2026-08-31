@@ -335,6 +335,11 @@ export function RegistryPage({
         <p className="mt-6 text-lead text-p-ink-2">
           {t.rich("registry.intro", { reg: registryLink })}
         </p>
+        {/* Mirrors are a transition state, so the note sits with the
+            description rather than beside the listing it qualifies. */}
+        <p className="mt-4 text-body italic text-p-ink-3">
+          {t("registry.note")}
+        </p>
       </PageHero>
 
       {catalogs.length > 0 && (
