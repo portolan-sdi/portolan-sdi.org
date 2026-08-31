@@ -202,6 +202,10 @@
     },
     "card": {
       "viewCatalog": "View catalog",
+      "moreProducers": "+{count} more",
+      "dataSourceProducer": "Data source producer",
+      "processedBy": "Processed by",
+      "hostedBy": "Hosted by",
       "collections": "{count} collections",
       "licenses": "{count} licenses",
       "collection": "1 collection",

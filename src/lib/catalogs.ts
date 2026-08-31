@@ -24,16 +24,31 @@ export interface CatalogLogo {
 }
 
 // Whether the publisher runs the authoritative copy or re-hosts someone
-// else's. The registry does not export this yet, so it is null for every
-// catalog today and the UI hides the control that filters on it. See
-// https://github.com/portolan-sdi/portolan-registry/issues (kind field).
+// else's. The registry derives this from each collection's STAC `providers`
+// rather than reading a declared field: portolan-spec (core.md, Source
+// Provenance) defines a catalog as official when its producer and host are
+// the same organization. Null when a catalog's providers name no producer or
+// no host, which two registered catalogs do today.
 export type CatalogKind = "official" | "mirror";
+
+// One organization a catalog names. `url` is absent when the catalog gives
+// none, which the spec permits for a producer.
+export interface CatalogParty {
+  name: string;
+  url?: string;
+}
 
 export interface Catalog {
   id: string;
   url: string;
   title: string;
   kind: CatalogKind | null;
+  /** Who made the data, in the order the catalog names them. */
+  producers: CatalogParty[];
+  /** Who derived this copy from the source. Often the mirror's own author. */
+  processors: CatalogParty[];
+  /** Who serves this copy. Null when no collection names a host. */
+  host: CatalogParty | null;
   /** Portolan spec version the catalog declares. Null for plain STAC. */
   spec_version: string | null;
   bbox: [number, number, number, number] | null;
@@ -93,6 +108,9 @@ interface ChildLink {
   bbox?: [number, number, number, number] | null;
   "portolan_registry:id": string;
   "portolan_registry:kind"?: string | null;
+  "portolan_registry:producers"?: CatalogParty[] | null;
+  "portolan_registry:processors"?: CatalogParty[] | null;
+  "portolan_registry:host"?: CatalogParty | null;
   "portolan_registry:spec_version"?: string | null;
   "portolan_registry:logo"?: CatalogLogo | null;
   "portolan_registry:collection_count"?: number | null;
@@ -135,6 +153,19 @@ function toKind(value: unknown): CatalogKind | null {
   return value === "official" || value === "mirror" ? value : null;
 }
 
+// A party is only useful if it has a name to print. The registry publishes
+// what a catalog declares, and one entry today names itself "TODO: Add value".
+function toParty(value: unknown): CatalogParty | null {
+  if (!value || typeof value !== "object") return null;
+  const { name, url } = value as { name?: unknown; url?: unknown };
+  if (typeof name !== "string" || !name.trim()) return null;
+  return typeof url === "string" && url ? { name, url } : { name };
+}
+
+function toParties(value: CatalogParty[] | null | undefined): CatalogParty[] {
+  return (value ?? []).map(toParty).filter((p): p is CatalogParty => p !== null);
+}
+
 function toCatalog(link: ChildLink): Catalog {
   const logo = link["portolan_registry:logo"];
 
@@ -143,6 +174,9 @@ function toCatalog(link: ChildLink): Catalog {
     url: link.href,
     title: link.title ?? link["portolan_registry:id"],
     kind: toKind(link["portolan_registry:kind"]),
+    producers: toParties(link["portolan_registry:producers"]),
+    processors: toParties(link["portolan_registry:processors"]),
+    host: toParty(link["portolan_registry:host"]),
     spec_version: link["portolan_registry:spec_version"] ?? null,
     bbox: isBbox(link.bbox) ? link.bbox : null,
     logo: logo && logo.href ? logo : null,
