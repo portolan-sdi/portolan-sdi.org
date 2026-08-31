@@ -96,7 +96,10 @@ export function EcosystemSection() {
           <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
             {t("title")}
           </h2>
-          <p className="mt-5 text-lead leading-relaxed text-p-ink-2 max-w-[54ch]">
+          {/* The intro runs the full container width. A `ch` cap wrapped it
+              mid-page, which read as a broken column beside the full-width
+              card grid below. */}
+          <p className="mt-5 text-lead leading-relaxed text-p-ink-2">
             {t("intro")}
           </p>
         </div>
