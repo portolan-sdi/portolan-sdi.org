@@ -34,7 +34,7 @@ export const POSTS: BlogPost[] = [
   {
     slug: "introducing-portolan",
     title: "Introducing Portolan",
-    subtitle: "A Serverless Spatial Data Infrastructure",
+    subtitle: "A serverless spatial data infrastructure",
     date: "2026-08-26",
     summary:
       "Cloud-optimized formats and STAC metadata make it possible to run a spatial data infrastructure as files in a bucket. Portolan is an open-source spec and toolkit for building one.",

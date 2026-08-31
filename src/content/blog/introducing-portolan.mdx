@@ -21,7 +21,7 @@ words, an SDI can now be files in S3-compatible cloud storage, with no servers,
 databases, or custom APIs. Today, we're launching Portolan, an open-source
 specification and toolkit for publishing geospatial data this way.
 
-## A Specification Built on Existing Standards
+## A specification built on existing standards
 
 The core of Portolan is a [specification](https://github.com/portolan-sdi/portolan-spec)
 that defines what we consider to be the best ways to build a serverless SDI.
@@ -65,7 +65,7 @@ details right, and ships [rashid](https://github.com/portolan-sdi/rashid), a
 validator that checks catalogs against the specification and outputs
 agent-friendly JSON, making it straightforward to identify and fix anything that falls short.
 
-## What Portolan Makes Possible
+## What Portolan makes possible
 
 Once users can query files directly, publishers don't need to maintain a
 service whose main job is to stand between users and the data. For public,
@@ -79,6 +79,10 @@ maintaining a separate serving layer sized for peak demand. That cuts recurring
 infrastructure costs much closer to just the underlying cost of storage and
 data transfer, making it practical to host terabytes of data without also
 paying to operate a dedicated geospatial service.
+
+[Fields of the World](https://fieldsofthe.world) is one example. Its global
+dataset of agricultural field boundaries is published as a Portolan catalog on
+object storage, with no serving layer in front of it.
 
 <PostFigure
   n={1}
@@ -109,7 +113,7 @@ Portolan catalogs also necessarily include the metadata and documentation
 needed to understand what the data contain and how they should be used. The
 [registry](/registry) adds a common place to discover public catalogs.
 
-## Portolan in Practice
+## Portolan in practice
 
 The Portolan specification can be implemented in a number of ways, but we've
 built a set of tools to make publishing and working with Portolan data easy.
@@ -160,7 +164,7 @@ analyses or applications from the results.
   caption="Working with the PDOK catalog, the Dutch national mapping agency's data published as a Portolan catalog."
 />
 
-## Built for People and Agents
+## Built for people and agents
 
 Agents make it viable to work with geospatial data at a scale that was
 previously impractical. They can search across catalogs, inspect hundreds of
@@ -194,7 +198,7 @@ intermediate work, broadening access for new users while letting experienced
 practitioners work across far more data than they could reasonably manage by
 hand.
 
-## Toward a Federated Network
+## Toward a federated network
 
 Our long-term goal is for Portolan to become the default way of publishing
 geospatial data. If national mapping agencies, cities, researchers, NGOs, and
@@ -205,7 +209,8 @@ organizational and geographic boundaries.
 
 The Portolan registry is the first step toward that network. It's deliberately
 nothing more than a catalog of independently hosted catalogs. Any publisher can
-submit a catalog and, once it passes validation, make it discoverable alongside
+[submit a catalog](https://github.com/portolan-sdi/portolan-registry) and, once
+it passes validation, make it discoverable alongside
 data from other publishers. The underlying bytes never leave the publisher's
 storage; users continue to query them directly from the source. Even if the
 registry disappeared tomorrow, every registered catalog would keep working.
@@ -220,14 +225,16 @@ with no instructions about individual portals or APIs. Our ambition is to make
 that kind of access possible across a substantial share of the world's
 published geospatial data.
 
-## What Comes Next
+## What comes next
 
 Portolan is still early stage; right now, we're focused on polishing the
 specification and building out the core tooling and reference implementation.
 Our approach is to learn by doing: publish useful Portolan catalogs, see what
 works across real datasets and publishers, and feed those lessons back into the
 specification and tooling. Because we expect breaking changes in the short
-term, Portolan is currently best suited to early adopters.
+term, Portolan is currently best suited to early adopters. The
+[roadmap](https://github.com/portolan-sdi/portolan-ops/blob/main/ROADMAP.md)
+lists the work in each stage.
 
 The Portolan registry is one useful measure of our progress. The more kinds of
 data, publishers, formats, and use cases represented there, the more confident
@@ -250,7 +257,7 @@ tools and data platforms read Portolan metadata directly. At that point,
 publishers should be able to choose among different tools and workflows while
 producing catalogs that remain interoperable.
 
-## Get Involved
+## Get involved
 
 The best way to participate in building Portolan right now is to publish data
 as Portolan catalogs, test the tooling, and let us know what works and what
