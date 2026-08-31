@@ -147,18 +147,25 @@
   "ecosystem": {
     "eyebrow": "Ecosystem",
     "title": "Ecosystem",
-    "intro": "Portolan's open source core and community-contributed tools.",
+    "intro": "Portolan's open-source core, community tools, and the companies that extend the standard with commercial products.",
     "count": "{count} projects",
     "legendCore": "core",
     "legendCommunity": "community",
+    "legendCommercial": "commercial",
+    "proprietary": "Commercial",
     "submit": "Submit a tool",
+    "commercial": {
+      "title": "Commercial products on the open core",
+      "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over."
+    },
     "projects": {
       "spec": "The standard that defines a Portolan catalog.",
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
       "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
       "registry": "A central registry of public Portolan catalogs.",
       "browser": "A web interface for browsing and exploring Portolan catalogs.",
-      "skills": "Agent skills for creating and working with Portolan catalogs."
+      "skills": "Agent skills for creating and working with Portolan catalogs.",
+      "cartosdi": "A spatial data infrastructure for organizations, built on Portolan."
     }
   },
   "coverage": {

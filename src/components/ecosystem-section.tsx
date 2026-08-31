@@ -1,27 +1,47 @@
 import { useTranslations } from "next-intl";
-import { DirArrow, Ltr } from "./ui";
+import { DirArrow, Ltr, monoChunk } from "./ui";
 
 // The Portolan projects — and only these. Interoperable tools (query engines,
 // desktop GIS, libraries) are NOT part of Portolan and live in How-it-works.
 // Each card: a small symbolic icon, the project name, what it is, its license,
 // and a link to the repo. Names and SPDX license ids stay Latin in every
 // locale; the one-line role is translated (ecosystem.projects.<slug>).
-// `core` = first-party Portolan project (filled marker). The hollow
-// "community" state is the open, still-empty tier that `submitHref` invites.
-// All six are core today.
+// Three tiers (see the legend): `core` = first-party Portolan project
+// (filled blue marker); `community` = third-party open tool, the still-empty
+// tier that `submitHref` invites (hollow marker); `commercial` = a product a
+// company sells on the open core (filled ink marker). Commercial entries name
+// no license and link to the vendor. CARTO SDI links to carto.com until its
+// own page exists.
 // The grid stays uniform. Varying the card widths was tried and reverted:
 // every description is one short sentence, so a double-width cell left a band
-// of empty paper and stranded the status marker at the far edge. Six sibling
+// of empty paper and stranded the status marker at the far edge. Sibling
 // projects are a list, and a list reads as one. The ragged-anatomy rule in
 // AGENTS.md targets decorative sameness on unrelated content, not an index.
-const projects = [
-  { slug: "spec", name: "portolan-spec", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-spec" },
-  { slug: "rashid", name: "rashid", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/rashid" },
-  { slug: "cli", name: "portolan-cli", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-cli" },
-  { slug: "registry", name: "portolan-registry", license: "Apache-2.0", core: true, href: "https://github.com/portolan-sdi/portolan-registry" },
-  { slug: "browser", name: "portolan-browser", license: "ISC", core: true, href: "https://github.com/portolan-sdi/portolan-browser" },
-  { slug: "skills", name: "portolan-skills", license: null, core: true, href: "https://github.com/portolan-sdi/portolan-skills" },
-] as const;
+type Tier = "core" | "community" | "commercial";
+const projects: readonly {
+  slug: string;
+  name: string;
+  license: string | null;
+  tier: Tier;
+  href: string;
+}[] = [
+  { slug: "spec", name: "portolan-spec", license: "Apache-2.0", tier: "core", href: "https://github.com/portolan-sdi/portolan-spec" },
+  { slug: "rashid", name: "rashid", license: "Apache-2.0", tier: "core", href: "https://github.com/portolan-sdi/rashid" },
+  { slug: "cli", name: "portolan-cli", license: "Apache-2.0", tier: "core", href: "https://github.com/portolan-sdi/portolan-cli" },
+  { slug: "registry", name: "portolan-registry", license: "Apache-2.0", tier: "core", href: "https://github.com/portolan-sdi/portolan-registry" },
+  { slug: "browser", name: "portolan-browser", license: "ISC", tier: "core", href: "https://github.com/portolan-sdi/portolan-browser" },
+  { slug: "skills", name: "portolan-skills", license: null, tier: "core", href: "https://github.com/portolan-sdi/portolan-skills" },
+  { slug: "cartosdi", name: "CARTO SDI", license: null, tier: "commercial", href: "https://carto.com/" },
+];
+
+// Marker per tier. Core and commercial are both filled so they read as
+// "maintained products"; the ink fill separates the paid tier without
+// adding a color the palette does not have.
+const tierMarker: Record<Tier, string> = {
+  core: "bg-p-primary",
+  community: "border border-p-primary",
+  commercial: "bg-p-ink",
+};
 
 // TODO(nlebovits): confirm the real destination for "submit a tool". The org
 // landing is a real, non-dead target for now — swap for a dedicated
@@ -29,10 +49,17 @@ const projects = [
 const submitHref = "https://github.com/portolan-sdi";
 
 // Tiny symbolic marks — spec = document, rashid = check (validator), cli =
-// terminal prompt, registry = index rows, browser = window, skills = spark.
+// terminal prompt, registry = index rows, browser = window, skills = spark,
+// cartosdi = layered stack (an infrastructure on top of the standard).
 function ProjectIcon({ slug }: { slug: string }) {
   const p =
-    slug === "spec" ? (
+    slug === "cartosdi" ? (
+      <>
+        <path d="M12 3l8 4.5-8 4.5-8-4.5z" />
+        <path d="M4 12l8 4.5 8-4.5" />
+        <path d="M4 16.5L12 21l8-4.5" />
+      </>
+    ) : slug === "spec" ? (
       <>
         <path d="M6 3h8l4 4v14H6z" />
         <path d="M14 3v4h4" />
@@ -121,15 +148,10 @@ export function EcosystemSection() {
                 <span className="font-mono text-body text-p-primary">
                   <Ltr>{project.name}</Ltr>
                 </span>
-                {/* Square status marker. Filled = core, hollow = community
-                    (see the legend below). The pulse ring is gone: every
-                    project is core today, so six synchronized rings marked no
-                    distinction and drew the eye off the names. It returns
-                    when a community entry gives it something to contrast. */}
+                {/* Square status marker, one state per tier (see the
+                    legend below). */}
                 <span
-                  className={`inline-block w-[7px] h-[7px] shrink-0 ${
-                    project.core ? "bg-p-primary" : "border border-p-primary"
-                  }`}
+                  className={`inline-block w-[7px] h-[7px] shrink-0 ${tierMarker[project.tier]}`}
                 />
               </div>
               <p className="text-body text-p-ink-2 leading-snug flex-1">
@@ -141,6 +163,7 @@ export function EcosystemSection() {
                     <Ltr>{project.license}</Ltr>
                   </span>
                 )}
+                {project.tier === "commercial" && <span>{t("proprietary")}</span>}
                 <span className="ms-auto text-p-primary opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 rtl:translate-x-1 rtl:group-hover:translate-x-0">
                   <DirArrow kind="external" />
                 </span>
@@ -152,7 +175,11 @@ export function EcosystemSection() {
         {/* Legend for the two marker states + the open invitation to grow. */}
         <div className="mt-[18px] flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-eyebrow">
           <span className="inline-flex items-center gap-2 text-p-ink-3">
-            <span>{t("count", { count: projects.length })}</span>
+            {/* The count covers the open-source projects. A commercial
+                product is not one of the "N projects" the community runs. */}
+            <span>
+              {t("count", { count: projects.filter((p) => p.tier !== "commercial").length })}
+            </span>
             <span aria-hidden className="text-p-ink-3">
               ·
             </span>
@@ -167,6 +194,13 @@ export function EcosystemSection() {
               <span className="inline-block w-[7px] h-[7px] border border-p-primary" />
               {t("legendCommunity")}
             </span>
+            <span aria-hidden className="text-p-ink-3">
+              ·
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="inline-block w-[7px] h-[7px] bg-p-ink" />
+              {t("legendCommercial")}
+            </span>
           </span>
           <a
             href={submitHref}
@@ -176,6 +210,33 @@ export function EcosystemSection() {
           >
             {t("submit")} <DirArrow kind="external" />
           </a>
+        </div>
+
+        {/* The commercial layer. The grid above is the open core; this row
+            names what the standard deliberately leaves to vendors, and the
+            first vendor building it. Anatomy mirrors the "Why Portolan"
+            ledger rows (narrow title column, wide body), so the page does
+            not gain a third card grid. The lock-in sentence restates the
+            FAQ answer: the catalog outlives any product that manages it. */}
+        <div className="mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 gap-2 border-t border-p-line pt-7 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:gap-12">
+          <h3 className="text-card-title font-bold tracking-[-0.02em]">
+            {t("commercial.title")}
+          </h3>
+          <p className="text-body text-p-ink-2 leading-relaxed text-pretty max-w-[72ch]">
+            {t.rich("commercial.body", {
+              m: monoChunk,
+              carto: (chunks) => (
+                <a
+                  href="https://carto.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
+          </p>
         </div>
       </div>
     </section>
