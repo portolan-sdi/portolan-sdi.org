@@ -12,14 +12,14 @@ infrastructure was never designed for — this approach to Spatial Data
 Infrastructures (SDIs) is becoming less and less sustainable.
 
 Over the past several years, the cloud-native geospatial community has laid the
-groundwork for a different way of building SDIs.
-[Cloud-optimized file formats](https://guide.cloudnativegeo.org/) and
-[`STAC`](https://stacspec.org/en/) metadata make it possible to
-organize petabyte-scale datasets in object storage and efficiently access them
-with standard tools like QGIS and Python, or hand them to an agent. In other
-words, an SDI can now be files in S3-compatible cloud storage, with no servers,
-databases, or custom APIs. Today, we're launching Portolan, an open-source
-specification and toolkit for publishing geospatial data this way.
+groundwork for a different way of building SDIs. [Cloud-optimized file
+formats](https://guide.cloudnativegeo.org/) and
+[`STAC`](https://stacspec.org/en/) metadata make it possible to organize
+petabyte-scale datasets in object storage and efficiently access them with
+standard tools like [QGIS](https://qgis.org/) and Python, or hand them to an
+agent. In other words, an SDI can now be files in S3-compatible cloud storage,
+with no servers, databases, or custom APIs. Today, we're launching Portolan, an
+open-source specification and toolkit for publishing geospatial data this way.
 
 ## A specification built on existing standards
 
@@ -95,9 +95,10 @@ object storage, with no serving layer in front of it.
 
 The same shift matters at the other end of the spectrum. Many city governments,
 NGOs, researchers, and smaller data producers can't justify maintaining
-GeoServer, Esri infrastructure, or a custom API just to publish a handful of
-datasets. Because a Portolan catalog is just files in a bucket, it lowers the
-technical and financial barriers to publishing useful geospatial data.
+[GeoServer](https://geoserver.org/), Esri infrastructure, or a custom API just
+to publish a handful of datasets. Because a Portolan catalog is just files in a
+bucket, it lowers the technical and financial barriers to publishing useful
+geospatial data.
 
 With Portolan, your data live in any S3-compatible cloud storage, in any
 jurisdiction you choose. Changing providers does not change the file formats or
