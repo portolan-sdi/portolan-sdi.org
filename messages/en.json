@@ -126,17 +126,34 @@
     "eyebrow": "Ecosystem",
     "title": "Ecosystem",
     "intro": "The Portolan specification can be implemented in a number of ways. Here is a list of core, community-contributed, and commercial tools to make publishing and working with Portolan data easy.",
-    "count": "{count} projects",
-    "legendCore": "core",
-    "legendCommunity": "community",
     "submit": "Submit a tool",
+    "filterLabel": "Filter tools by tier",
+    "filters": {
+      "all": "all",
+      "core": "core",
+      "community": "community",
+      "commercial": "commercial"
+    },
+    "empty": "No tools in this tier yet.",
+    "proprietary": "Commercial",
+    "pagination": {
+      "label": "Ecosystem pages",
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {page}"
+    },
+    "commercial": {
+      "title": "Commercial products on the open core",
+      "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over."
+    },
     "projects": {
       "spec": "The standard that defines a Portolan catalog.",
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
       "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
       "registry": "A central registry of public Portolan catalogs.",
       "browser": "A web interface for browsing and exploring Portolan catalogs.",
-      "skills": "Agent skills for creating and working with Portolan catalogs."
+      "skills": "Agent skills for creating and working with Portolan catalogs.",
+      "cartosdi": "A spatial data infrastructure for organizations, built on Portolan."
     }
   },
   "coverage": {
