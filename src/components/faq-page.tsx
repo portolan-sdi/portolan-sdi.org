@@ -10,6 +10,7 @@ import {
 import { useTranslations } from "next-intl";
 import { COMMUNITY_LINKS } from "@/lib/site";
 import { PageHero } from "./page-hero";
+import { FAQ_ITEMS as ITEMS } from "@/lib/faq";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 import { monoChunk } from "./ui";
 
@@ -29,19 +30,6 @@ import { monoChunk } from "./ui";
 
 const SPEC_URL = "https://github.com/portolan-sdi/portolan-spec";
 const RASHID_URL = "https://github.com/portolan-sdi/rashid";
-
-// `paras` is the paragraph count for that answer, so each item renders exactly
-// the keys it has.
-const ITEMS = [
-  { key: "standards", paras: 3 },
-  { key: "servers", paras: 2 },
-  { key: "capabilities", paras: 5 },
-  { key: "conformance", paras: 2 },
-  { key: "lockIn", paras: 2 },
-  { key: "dataModel", paras: 2 },
-  { key: "agents", paras: 3 },
-  { key: "gaps", paras: 2 },
-] as const;
 
 const KEYS = new Set<string>(ITEMS.map((item) => item.key));
 
