@@ -90,7 +90,7 @@
       "large": {
         "title": "Large publishers",
         "today": "Large archives, such as satellite imagery or national-scale geoportals, are expensive to store and hard to maintain.",
-        "change": "Portolan makes it straightforward to publish that data <cost>as cheaply as possible</cost>, without servers, databases, or APIs, while making it easier to discover and use."
+        "change": "Portolan makes it straightforward to publish that data <cost>as cheaply as possible</cost>, without servers, databases, or APIs. A self-describing catalog also reaches more users: analysts query it directly with standard tools, and agents work with it unattended."
       },
       "small": {
         "title": "Small publishers",
@@ -100,7 +100,7 @@
       "users": {
         "title": "Data users",
         "today": "Most geospatial data is scattered, poorly documented, and stored in ways that make it hard to use.",
-        "change": "Portolan requires clear metadata and documentation, uses formats designed for direct access, and provides a <reg>central registry</reg> of public catalogs. You spend less time finding, downloading, and wrangling data, and more time putting it to work."
+        "change": "Portolan requires clear metadata and documentation, uses formats designed for direct access, and provides a <reg>central registry</reg> of public catalogs. You spend less time finding, downloading, and wrangling data. You can also hand a question to an agent and let it find the relevant catalogs, query them, and return an answer."
       }
     }
   },
