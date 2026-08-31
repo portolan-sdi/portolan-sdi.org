@@ -203,14 +203,12 @@ same basic shape, datasets can remain distributed across thousands of
 publishers while becoming consistently searchable and directly usable across
 organizational and geographic boundaries.
 
-The Portolan registry is the first step toward that network. It's
-deliberately simple—just a catalog of independently hosted catalogs. Publishers
-submit a public Portolan catalog, the registry validates it, and conformant
-catalogs become discoverable alongside data from other publishers without
-moving or duplicating the underlying data. Registration is optional, and the
-registry never sits in the data path; users continue to query files directly
-from the publisher's storage. If the registry disappeared tomorrow, every
-registered catalog would still work.
+The Portolan registry is the first step toward that network. It's deliberately
+nothing more than a catalog of independently hosted catalogs. Any publisher can
+submit a catalog and, once it passes validation, make it discoverable alongside
+data from other publishers. The underlying bytes never leave the publisher's
+storage; users continue to query them directly from the source. Even if the
+registry disappeared tomorrow, every registered catalog would keep working.
 
 The network has already started to take shape, with catalogs spanning global
 datasets, national government data, and community mirrors. As it grows,
