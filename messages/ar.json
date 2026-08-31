@@ -184,6 +184,8 @@
     },
     "card": {
       "viewCatalog": "عرض الكتالوج",
+      "createdBy": "أنشأه",
+      "createdByMore": "و{count} أخرى",
       "collections": "{count} مجموعة",
       "licenses": "{count} رخصة",
       "collection": "مجموعة واحدة",

@@ -3,7 +3,7 @@
 import { Fragment, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Tag, DirArrow, Ltr } from "../ui";
-import type { Catalog } from "@/lib/catalogs";
+import type { Catalog, CatalogParty } from "@/lib/catalogs";
 import {
   formatBytes,
   formatCount,
@@ -85,6 +85,32 @@ function CatalogHeader({ catalog, onSelect }: CatalogProps & { onSelect?: () => 
         </div>
       </div>
     </>
+  );
+}
+
+// Who made the data, from the `producer` role on the catalog's own STAC
+// providers. Its own line rather than a run of facts: an agency name can be
+// longer than the two dotted rows below hold, and this is attribution, not
+// measurement.
+//
+// Names stay Latin-ordered on the Arabic page, the way format and license
+// names do. Two registered catalogs name no producer, and they print nothing.
+function CatalogCredit({ producers }: { producers: CatalogParty[] }) {
+  const t = useTranslations("registry");
+  const [first, ...rest] = producers;
+  if (!first) return null;
+
+  return (
+    <p
+      className="text-small text-p-ink-3 font-mono"
+      // The rest of the producers, for a catalog that credits several. A
+      // native tooltip rather than a control: the card names the lead party
+      // and gains no chrome to expand a list.
+      title={rest.length > 0 ? producers.map((p) => p.name).join(", ") : undefined}
+    >
+      {t("card.createdBy")} <Ltr>{first.name}</Ltr>
+      {rest.length > 0 && ` ${t("card.createdByMore", { count: String(rest.length) })}`}
+    </p>
   );
 }
 
@@ -187,6 +213,7 @@ export function CatalogCard({
       }`}
     >
       <CatalogHeader catalog={catalog} onSelect={select} />
+      <CatalogCredit producers={catalog.producers} />
       <CatalogFacts catalog={catalog} />
       <CatalogActions catalog={catalog} />
     </article>

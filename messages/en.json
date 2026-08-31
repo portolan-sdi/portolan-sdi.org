@@ -184,6 +184,8 @@
     },
     "card": {
       "viewCatalog": "View catalog",
+      "createdBy": "created by",
+      "createdByMore": "+{count} more",
       "collections": "{count} collections",
       "licenses": "{count} licenses",
       "collection": "1 collection",
