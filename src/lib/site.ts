@@ -23,6 +23,13 @@ export const COMMUNITY_LINKS = {
   slack: "https://cloudnativegeo.slack.com/archives/C0A1JBH9529",
 } as const;
 
+/**
+ * The Portolan specification. It is ground truth for the standard, so the
+ * home page hero and the FAQ both link it. Keep it aligned with
+ * portolan-ops/copy/urls.md.
+ */
+export const SPEC_URL = "https://github.com/portolan-sdi/portolan-spec";
+
 /** Canonical specification sites from portolan-ops/copy/urls.md. */
 export const FORMAT_LINKS = {
   geoParquet: "https://geoparquet.org/",

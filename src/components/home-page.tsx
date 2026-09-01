@@ -12,7 +12,7 @@ import { WhoForSection } from "./who-for-section";
 import { CoverageSection } from "./coverage-section";
 import { Btn, DirArrow, monoChunk } from "./ui";
 import type { Catalog } from "@/lib/catalogs";
-import { FORMAT_LINKS } from "@/lib/site";
+import { FORMAT_LINKS, SPEC_URL } from "@/lib/site";
 
 /** Aspect ratio of the encoded catalog-build recording, 1454x1118. It
  *  reserves the box before metadata loads, so the poster does not shift the
@@ -59,20 +59,33 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   read as truncated. It stays inside the 75ch readability bound.
                   80ch and wider leaves the Arabic paragraph a 49px stub on its
                   last line. */}
-              {/* "open-source specification and toolkit" carries the link to
-                  the Ecosystem section. That section is where the page lists
-                  the specification and the tools by name, so the phrase that
-                  first makes the claim goes to the place that backs it.
+              {/* The sentence names two things, so it carries two links.
+                  "specification" goes to the spec repository, which is ground
+                  truth for the standard. "toolkit" goes to the Ecosystem
+                  section, which lists the tools by name. One link over the
+                  whole phrase sent both halves to the same place.
 
-                  A plain `a`, not the router `Link`. The target sits on this
-                  page, so the browser can reach it without the router. A
-                  `Link` to `/#ecosystem` asks the router to go to `/`, which
-                  is the page already open. It fetches the page again over RSC
-                  and holds the scroll position, so the link moved the reader
-                  once and then stopped working. */}
+                  "open-source" stays outside both links. It qualifies the two
+                  nouns together, and Spanish and Arabic put it after the pair.
+
+                  The Ecosystem link is a plain `a`, because the section sits on
+                  this page and the browser reaches it without the router. A
+                  `Link` to `/#ecosystem` asks the router to go to `/`, the page
+                  already open, and the router holds the scroll position there.
+                  The spec link leaves the site, so it opens a new tab. */}
               <p className="text-lead leading-relaxed max-w-[72ch]">
                 {t.rich("hero.description", {
                   m: monoChunk,
+                  spec: (chunks) => (
+                    <a
+                      href={SPEC_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                    >
+                      {chunks}
+                    </a>
+                  ),
                   eco: (chunks) => (
                     <a
                       href="#ecosystem"

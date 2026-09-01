@@ -22,7 +22,7 @@
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
     "titleAccent": "sean fáciles de compartir y usar.",
-    "description": "Portolan es una <eco>especificación y un conjunto de herramientas de código abierto</eco> que combinan formatos de archivo diseñados para la nube con metadatos y documentación claros para que personas y agentes puedan publicar y usar datos a cualquier escala.",
+    "description": "Portolan es una <spec>especificación</spec> y un <eco>conjunto de herramientas</eco> de código abierto que combinan formatos de archivo diseñados para la nube con metadatos y documentación claros para que personas y agentes puedan publicar y usar datos a cualquier escala.",
     "howItWorks": "Cómo funciona",
     "exploreCatalogs": "Explorar catálogos"
   },

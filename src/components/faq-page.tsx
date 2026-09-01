@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { COMMUNITY_LINKS } from "@/lib/site";
+import { COMMUNITY_LINKS, SPEC_URL } from "@/lib/site";
 import { PageHero } from "./page-hero";
 import { FAQ_ITEMS as ITEMS } from "@/lib/faq";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
@@ -28,7 +28,6 @@ import { monoChunk } from "./ui";
 // eight questions there restated the page and told the reader nothing the page
 // did not already show.
 
-const SPEC_URL = "https://github.com/portolan-sdi/portolan-spec";
 const RASHID_URL = "https://github.com/portolan-sdi/rashid";
 
 const KEYS = new Set<string>(ITEMS.map((item) => item.key));
