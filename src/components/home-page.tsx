@@ -59,8 +59,29 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   read as truncated. It stays inside the 75ch readability bound.
                   80ch and wider leaves the Arabic paragraph a 49px stub on its
                   last line. */}
+              {/* "open-source specification and toolkit" carries the link to
+                  the Ecosystem section. That section is where the page lists
+                  the specification and the tools by name, so the phrase that
+                  first makes the claim goes to the place that backs it.
+
+                  A plain `a`, not the router `Link`. The target sits on this
+                  page, so the browser can reach it without the router. A
+                  `Link` to `/#ecosystem` asks the router to go to `/`, which
+                  is the page already open. It fetches the page again over RSC
+                  and holds the scroll position, so the link moved the reader
+                  once and then stopped working. */}
               <p className="text-lead leading-relaxed max-w-[72ch]">
-                {t.rich("hero.description", { m: monoChunk })}
+                {t.rich("hero.description", {
+                  m: monoChunk,
+                  eco: (chunks) => (
+                    <a
+                      href="#ecosystem"
+                      className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
+                    >
+                      {chunks}
+                    </a>
+                  ),
+                })}
               </p>
               {/* The gap before this row is the largest in the hero, wider
                   than the h1-to-lead gap above it. The reader stops reading
