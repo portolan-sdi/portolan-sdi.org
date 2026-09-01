@@ -22,8 +22,19 @@ import { SiteFooter } from "./site-footer";
 // disclosure arrow over an indented child list.
 //
 // A group may also carry an `href`, and Overview does. That row holds two hit
-// targets: the arrow opens the group, the label goes to the homepage. A group
-// with no `href` is a label only, so the whole row toggles.
+// targets: the arrow opens the group, the label goes to the homepage.
+//
+// A group with neither an `href` nor a page of its own takes `alwaysOpen`, and
+// Resources does. It reads as a heading over its children and it takes no
+// click. As a toggle it looked like the two link rows around it and went
+// nowhere, and on /faq and /talks a click shut the group and hid the link to
+// the page the reader had open.
+//
+// A group that indexes the page the reader is on takes `anchor` as well. Its
+// `href` is the route to that page, which is the page already open, so the
+// click is a same-route navigation and Next.js holds the scroll position. The
+// reader then clicks Overview from inside Ecosystem and nothing moves. The
+// `anchor` gives that row an element on this page to reach instead.
 //
 // The item list is a prop so a standalone page can index its own contents
 // instead of the homepage's.
@@ -35,6 +46,16 @@ export type RailItem = {
   label: string;
   /** Set for a route. Omit for an in-page anchor. */
   href?: string;
+  /**
+   * Element id to reach when this group indexes the current page. It wins
+   * over `href` there, because `href` points at the page already open.
+   */
+  anchor?: string;
+  /**
+   * Keeps a group open and takes the toggle off its row. Set it on a group
+   * that names its children and has no page of its own.
+   */
+  alwaysOpen?: boolean;
   /** Set to render the item as a group. */
   children?: RailItem[];
 };
@@ -57,11 +78,16 @@ const HOME_ITEMS: RailItem[] = [
     id: "overview",
     label: "nav.overview",
     href: "/",
+    // The homepage hero. It is the section the other seven anchors sit under,
+    // so Overview reaches the top of the page from anywhere on it.
+    anchor: "top",
     children: OVERVIEW_CHILDREN,
   },
   {
     id: "resources",
     label: "nav.resources",
+    // Two children and no page behind the row, so it stays open on every page.
+    alwaysOpen: true,
     children: [
       { id: "talks", label: "nav.talks", href: "/talks" },
       { id: "faq", label: "nav.faq", href: "/faq" },
@@ -75,10 +101,13 @@ const HOME_ITEMS: RailItem[] = [
  * becomes a route to the homepage's copy of it, because a bare `#why` on
  * /faq points at an element that does not exist there. A group keeps whatever
  * `href` it has, so Resources stays a label rather than becoming `/#resources`.
+ *
+ * A group loses its `anchor`, because that id names an element on the homepage
+ * and this page does not hold it. The `href` route carries the reader there.
  */
 const toAway = (item: RailItem): RailItem =>
   item.children
-    ? { ...item, children: item.children.map(toAway) }
+    ? { ...item, anchor: undefined, children: item.children.map(toAway) }
     : { ...item, href: item.href ?? `/#${item.id}` };
 
 export const AWAY_ITEMS: RailItem[] = HOME_ITEMS.map(toAway);
@@ -162,6 +191,7 @@ export function SiteShell({
   // open, because shutting it would hide the index of the page the reader is
   // on. On the homepage that group is Overview.
   const isLocked = (item: RailItem) =>
+    item.alwaysOpen === true ||
     !!item.children?.some((child) => !child.href);
 
   const isOpen = (id: string) => toggled[id] ?? openByRoute[id] ?? false;
@@ -341,7 +371,19 @@ export function SiteShell({
           // span, not a button, because this group does not shut.
           <div className="flex items-center gap-1.5">
             <span className={`${gutter} text-p-ink-3`}>{arrow(true)}</span>
-            {item.href ? (
+            {item.anchor ? (
+              // This group indexes the open page, so the row is an in-page
+              // anchor like its own children. Its route `href` cannot move the
+              // reader here, because it names the page they are already on.
+              <a
+                href={`#${item.anchor}`}
+                onClick={() => closeDrawer()}
+                aria-current={active ? "true" : undefined}
+                className={`flex-1 ${rowBase} ${tone(active)}`}
+              >
+                {t(item.label)}
+              </a>
+            ) : item.href ? (
               <Link
                 href={item.href}
                 onClick={() => closeDrawer()}

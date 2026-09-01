@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { GlyphMap } from "./glyph-map";
 import { SiteShell } from "./site-rail";
 import { DemoSection } from "./demo-section";
@@ -39,7 +38,13 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* No bottom rule. Every following section carries its own top rule, so
           a bottom rule here would stack with it and draw 2px where the rest of
           the page draws 1px. */}
-      <section id="top" className="relative overflow-hidden">
+      {/* `scroll-mt` keeps the mobile top bar off the headline. That bar is
+          sticky, so it covers the first 59px of the viewport, and a bare jump
+          to `#top` put the h1 under it. The rail's Overview row targets this
+          id. 76px matches the FAQ rows and overshoots the bar, which lands the
+          jump at the top of the document. Desktop has no bar, so the value
+          clamps to 0 there and nothing changes. */}
+      <section id="top" className="relative overflow-hidden scroll-mt-[76px]">
         <GlyphMap className="absolute inset-0 w-full h-full" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
@@ -70,11 +75,18 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   pull the box start-ward to make the label line up. The blue
                   block edge is the alignment signal the eye reads, and a
                   negative margin makes it overhang the column. */}
+              {/* Both buttons are plain anchors with a hash target. They point
+                  at sections of this page, so the browser reaches them without
+                  the router. As router `Link`s to `/#how` and `/#coverage`
+                  they asked the router to go to `/`, the page already open.
+                  Each click fetched the page again over RSC, and the router
+                  holds the scroll position on a same-route move, so a button
+                  worked once and then did nothing. */}
               <div className="flex flex-col items-start gap-4 mt-[clamp(2.25rem,4vw,3.25rem)] sm:flex-row sm:items-center sm:gap-6">
                 <Btn asChild variant="primary" size="lg">
-                  <Link href="/#how">
+                  <a href="#how">
                     {t("hero.howItWorks")} <DirArrow />
-                  </Link>
+                  </a>
                 </Btn>
                 {/* The catalogs section on this page, not the registry.
                     Both hero buttons now point into the page, in the order
@@ -83,9 +95,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     registry, so the reader meets the examples before the
                     full list. */}
                 <Btn asChild variant="ghost" size="lg">
-                  <Link href="/#coverage">
+                  <a href="#coverage">
                     {t("hero.exploreCatalogs")} <DirArrow />
-                  </Link>
+                  </a>
                 </Btn>
               </div>
             </div>
