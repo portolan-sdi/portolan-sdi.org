@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { GlyphMap } from "./glyph-map";
 import { SiteShell } from "./site-rail";
 import { DemoSection } from "./demo-section";
@@ -76,11 +75,18 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   pull the box start-ward to make the label line up. The blue
                   block edge is the alignment signal the eye reads, and a
                   negative margin makes it overhang the column. */}
+              {/* Both buttons are plain anchors with a hash target. They point
+                  at sections of this page, so the browser reaches them without
+                  the router. As router `Link`s to `/#how` and `/#coverage`
+                  they asked the router to go to `/`, the page already open.
+                  Each click fetched the page again over RSC, and the router
+                  holds the scroll position on a same-route move, so a button
+                  worked once and then did nothing. */}
               <div className="flex flex-col items-start gap-4 mt-[clamp(2.25rem,4vw,3.25rem)] sm:flex-row sm:items-center sm:gap-6">
                 <Btn asChild variant="primary" size="lg">
-                  <Link href="/#how">
+                  <a href="#how">
                     {t("hero.howItWorks")} <DirArrow />
-                  </Link>
+                  </a>
                 </Btn>
                 {/* The catalogs section on this page, not the registry.
                     Both hero buttons now point into the page, in the order
@@ -89,9 +95,9 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     registry, so the reader meets the examples before the
                     full list. */}
                 <Btn asChild variant="ghost" size="lg">
-                  <Link href="/#coverage">
+                  <a href="#coverage">
                     {t("hero.exploreCatalogs")} <DirArrow />
-                  </Link>
+                  </a>
                 </Btn>
               </div>
             </div>
