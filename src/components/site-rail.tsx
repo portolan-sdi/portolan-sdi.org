@@ -22,8 +22,13 @@ import { SiteFooter } from "./site-footer";
 // disclosure arrow over an indented child list.
 //
 // A group may also carry an `href`, and Overview does. That row holds two hit
-// targets: the arrow opens the group, the label goes to the homepage. A group
-// with no `href` is a label only, so the whole row toggles.
+// targets: the arrow opens the group, the label goes to the homepage.
+//
+// A group with neither an `href` nor a page of its own takes `alwaysOpen`, and
+// Resources does. It reads as a heading over its children and it takes no
+// click. As a toggle it looked like the two link rows around it and went
+// nowhere, and on /faq and /talks a click shut the group and hid the link to
+// the page the reader had open.
 //
 // A group that indexes the page the reader is on takes `anchor` as well. Its
 // `href` is the route to that page, which is the page already open, so the
@@ -46,6 +51,11 @@ export type RailItem = {
    * over `href` there, because `href` points at the page already open.
    */
   anchor?: string;
+  /**
+   * Keeps a group open and takes the toggle off its row. Set it on a group
+   * that names its children and has no page of its own.
+   */
+  alwaysOpen?: boolean;
   /** Set to render the item as a group. */
   children?: RailItem[];
 };
@@ -76,6 +86,8 @@ const HOME_ITEMS: RailItem[] = [
   {
     id: "resources",
     label: "nav.resources",
+    // Two children and no page behind the row, so it stays open on every page.
+    alwaysOpen: true,
     children: [
       { id: "talks", label: "nav.talks", href: "/talks" },
       { id: "faq", label: "nav.faq", href: "/faq" },
@@ -179,6 +191,7 @@ export function SiteShell({
   // open, because shutting it would hide the index of the page the reader is
   // on. On the homepage that group is Overview.
   const isLocked = (item: RailItem) =>
+    item.alwaysOpen === true ||
     !!item.children?.some((child) => !child.href);
 
   const isOpen = (id: string) => toggled[id] ?? openByRoute[id] ?? false;
