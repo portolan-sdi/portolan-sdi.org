@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* Tailwind v4 detects its own sources. It reads every file the repository
+   does not ignore, and that includes the Markdown docs. DESIGN.md quotes the
+   class `rounded-[var(--p-r-*)]` to describe the radius tokens. Tailwind reads
+   the quote as a real class and emits `border-radius: var(--p-r-*)`. The `*`
+   is not a valid custom property name, so the CSS parser in Turbopack stops on
+   it and every route returns 500 under `next dev`. The production build drops
+   the rule instead, so only the dev server broke.
+
+   The docs describe the design, they never ship a class, so Tailwind has no
+   reason to read them. */
+@source not "../../**/*.md";
+
 :root {
   /* Hero legibility scrim over the glyph map — light enough that the map
      stays visible. The opaque end must sit under the headline, which is
