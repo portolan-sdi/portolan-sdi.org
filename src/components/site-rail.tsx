@@ -25,6 +25,12 @@ import { SiteFooter } from "./site-footer";
 // targets: the arrow opens the group, the label goes to the homepage. A group
 // with no `href` is a label only, so the whole row toggles.
 //
+// A group that indexes the page the reader is on takes `anchor` as well. Its
+// `href` is the route to that page, which is the page already open, so the
+// click is a same-route navigation and Next.js holds the scroll position. The
+// reader then clicks Overview from inside Ecosystem and nothing moves. The
+// `anchor` gives that row an element on this page to reach instead.
+//
 // The item list is a prop so a standalone page can index its own contents
 // instead of the homepage's.
 
@@ -35,6 +41,11 @@ export type RailItem = {
   label: string;
   /** Set for a route. Omit for an in-page anchor. */
   href?: string;
+  /**
+   * Element id to reach when this group indexes the current page. It wins
+   * over `href` there, because `href` points at the page already open.
+   */
+  anchor?: string;
   /** Set to render the item as a group. */
   children?: RailItem[];
 };
@@ -57,6 +68,9 @@ const HOME_ITEMS: RailItem[] = [
     id: "overview",
     label: "nav.overview",
     href: "/",
+    // The homepage hero. It is the section the other seven anchors sit under,
+    // so Overview reaches the top of the page from anywhere on it.
+    anchor: "top",
     children: OVERVIEW_CHILDREN,
   },
   {
@@ -75,10 +89,13 @@ const HOME_ITEMS: RailItem[] = [
  * becomes a route to the homepage's copy of it, because a bare `#why` on
  * /faq points at an element that does not exist there. A group keeps whatever
  * `href` it has, so Resources stays a label rather than becoming `/#resources`.
+ *
+ * A group loses its `anchor`, because that id names an element on the homepage
+ * and this page does not hold it. The `href` route carries the reader there.
  */
 const toAway = (item: RailItem): RailItem =>
   item.children
-    ? { ...item, children: item.children.map(toAway) }
+    ? { ...item, anchor: undefined, children: item.children.map(toAway) }
     : { ...item, href: item.href ?? `/#${item.id}` };
 
 export const AWAY_ITEMS: RailItem[] = HOME_ITEMS.map(toAway);
@@ -341,7 +358,19 @@ export function SiteShell({
           // span, not a button, because this group does not shut.
           <div className="flex items-center gap-1.5">
             <span className={`${gutter} text-p-ink-3`}>{arrow(true)}</span>
-            {item.href ? (
+            {item.anchor ? (
+              // This group indexes the open page, so the row is an in-page
+              // anchor like its own children. Its route `href` cannot move the
+              // reader here, because it names the page they are already on.
+              <a
+                href={`#${item.anchor}`}
+                onClick={() => closeDrawer()}
+                aria-current={active ? "true" : undefined}
+                className={`flex-1 ${rowBase} ${tone(active)}`}
+              >
+                {t(item.label)}
+              </a>
+            ) : item.href ? (
               <Link
                 href={item.href}
                 onClick={() => closeDrawer()}

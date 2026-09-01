@@ -39,7 +39,13 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
       {/* No bottom rule. Every following section carries its own top rule, so
           a bottom rule here would stack with it and draw 2px where the rest of
           the page draws 1px. */}
-      <section id="top" className="relative overflow-hidden">
+      {/* `scroll-mt` keeps the mobile top bar off the headline. That bar is
+          sticky, so it covers the first 59px of the viewport, and a bare jump
+          to `#top` put the h1 under it. The rail's Overview row targets this
+          id. 76px matches the FAQ rows and overshoots the bar, which lands the
+          jump at the top of the document. Desktop has no bar, so the value
+          clamps to 0 there and nothing changes. */}
+      <section id="top" className="relative overflow-hidden scroll-mt-[76px]">
         <GlyphMap className="absolute inset-0 w-full h-full" />
         <div className="absolute inset-0" style={{ background: "var(--hero-scrim)" }} />
         <div className="relative z-10 px-[var(--p-pad-section-x)] pt-[clamp(56px,9vw,120px)] pb-[clamp(40px,6vw,72px)]">
