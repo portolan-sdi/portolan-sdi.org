@@ -22,7 +22,7 @@
   "hero": {
     "title": "Portolan makes geospatial data",
     "titleAccent": "easy to share and use.",
-    "description": "Portolan is an open-source specification and toolkit that combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale.",
+    "description": "Portolan is an open-source <spec>specification</spec> and <eco>toolkit</eco> that combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale.",
     "howItWorks": "How it works",
     "exploreCatalogs": "Explore catalogs"
   },
