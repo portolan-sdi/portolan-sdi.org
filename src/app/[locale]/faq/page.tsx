@@ -52,10 +52,16 @@ export default async function Faq({ params }: PageProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "faq" });
+  // `t.raw` reads the message without formatting it. Three answers carry
+  // rich-text tags such as `<spec>` and `<m>`, and `t` needs a chunk function
+  // for every one of them. This page has no chunks to give, because structured
+  // data holds plain text, so `t` failed on those three and returned the key
+  // path. Google then read "faq.items.standards.p3" as the answer. `plainText`
+  // takes the tags off the raw message instead.
   const questions = FAQ_ITEMS.map(({ key, paras }) => ({
-    question: plainText(t(`items.${key}.q`)),
+    question: plainText(t.raw(`items.${key}.q`)),
     answer: Array.from({ length: paras }, (_, i) =>
-      plainText(t(`items.${key}.p${i + 1}`)),
+      plainText(t.raw(`items.${key}.p${i + 1}`)),
     ).join(" "),
   }));
 
