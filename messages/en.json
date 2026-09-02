@@ -325,6 +325,12 @@
         "q": "What can’t Portolan do yet?",
         "p1": "Portolan is still early-stage, and the specification and tooling are evolving as we test them against more publishers, datasets, and use cases. Current gaps include access-controlled data, transactional editing workflows, and normative support for formats such as Zarr and COPC.",
         "p2": "Our near-term focus is to expand the set of reference catalogs, stabilize the core specification, and reach a stable v1.0 CLI. Breaking changes remain possible until then, so Portolan is currently best suited to early adopters. See the <roadmap>project roadmap</roadmap> for current work and linked issues."
+      },
+      "name": {
+        "q": "Why is it called Portolan?",
+        "p1": "Portolan charts were among the earliest practical navigational maps. Chartmakers built these working tools from sailors' observations and corrected them as new voyages added evidence.",
+        "p2": "No single authority made them. Workshops in different ports refined them as sailors brought new observations. Their shared visual language let sailors use each chart across ports and nations.",
+        "p3": "The project takes its name from that tradition. A Portolan catalog is a practical tool, not an academic exercise. It holds open-format files in the publisher's storage for people and agents across organizations, clouds, and borders."
       }
     }
   },

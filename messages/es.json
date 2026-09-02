@@ -325,6 +325,12 @@
         "q": "¿Qué no puede hacer Portolan todavía?",
         "p1": "Portolan está aún en una fase temprana, y la especificación y las herramientas evolucionan a medida que las probamos con más publicadores, más conjuntos de datos y más casos de uso. Entre las carencias actuales están los datos con control de acceso, los flujos de edición transaccional y el soporte normativo para formatos como Zarr y COPC.",
         "p2": "Nuestro foco a corto plazo es ampliar el conjunto de catálogos de referencia, estabilizar la especificación central y llegar a una CLI v1.0 estable. Hasta entonces siguen siendo posibles los cambios incompatibles, así que ahora mismo Portolan encaja mejor con quienes adoptan pronto. Consulta la <roadmap>hoja de ruta del proyecto</roadmap> para ver el trabajo actual y las incidencias enlazadas."
+      },
+      "name": {
+        "q": "¿Por qué se llama Portolan?",
+        "p1": "Las cartas portulanas estuvieron entre los primeros mapas prácticos de navegación. Los cartógrafos creaban estas herramientas de trabajo a partir de las observaciones de los marinos y las corregían cuando nuevas travesías aportaban datos.",
+        "p2": "No las produjo una sola autoridad. Los talleres de distintos puertos las perfeccionaban con las nuevas observaciones que traían los marinos. Su lenguaje visual común permitía que los marinos usaran cada carta entre puertos y naciones.",
+        "p3": "El proyecto toma su nombre de esa tradición. Un catálogo Portolan es una herramienta práctica y no un ejercicio académico. Contiene archivos en formatos abiertos dentro del almacenamiento del publicador para personas y agentes de distintas organizaciones, nubes y países."
       }
     }
   },
