@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Portolan hace que los datos geoespaciales sean fáciles de compartir y usar",
-    "description": "Portolan es un estándar abierto para publicar datos geoespaciales como archivos simples en tu propio almacenamiento. Sin servidores ni bases de datos."
+    "description": "Portolan es una especificación abierta para publicar datos geoespaciales como archivos simples en tu propio almacenamiento. Sin servidores ni bases de datos."
   },
   "nav": {
     "registry": "Registro",
@@ -148,7 +148,7 @@
       "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO SDI</carto> extiende Portolan para organizaciones con conjuntos de datos privados, gobernanza y auditorías, comercialización de datos y conjuntos de datos escribibles. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo."
     },
     "projects": {
-      "spec": "El estándar que define un catálogo Portolan.",
+      "spec": "La especificación que define un catálogo Portolan.",
       "rashid": "El validador que comprueba si un catálogo cumple la especificación Portolan.",
       "cli": "Una herramienta de línea de comandos para crear, comprobar y publicar catálogos Portolan.",
       "registry": "Un registro central de catálogos Portolan públicos.",

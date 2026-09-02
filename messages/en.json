@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Portolan makes geospatial data easy to share and use",
-    "description": "Portolan is an open standard for publishing geospatial data as plain files in your own storage. No servers, no databases. Browse the catalog registry."
+    "description": "Portolan is an open specification for publishing geospatial data as plain files in your own storage. No servers, no databases. Browse the catalog registry."
   },
   "nav": {
     "registry": "Registry",
@@ -148,7 +148,7 @@
       "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over."
     },
     "projects": {
-      "spec": "The standard that defines a Portolan catalog.",
+      "spec": "The specification that defines a Portolan catalog.",
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
       "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
       "registry": "A central registry of public Portolan catalogs.",
