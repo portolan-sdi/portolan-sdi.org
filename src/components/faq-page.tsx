@@ -16,18 +16,18 @@ import { monoChunk, PROSE_LINK } from "./ui";
 
 // Frequently asked questions.
 //
-// Eight objections and one question about the name, one disclosure row each.
-// Native <details> carrying a shared `name`, so the browser opens one at a
-// time with no JavaScript and every answer stays in the DOM for in-page
-// search, print, and crawlers.
+// Nine questions use one disclosure row each. Eight address objections, and
+// one explains the name. Native <details> elements share a `name` attribute.
+// The browser opens one row at a time without JavaScript. Every answer stays
+// in the DOM for search, print, and crawlers.
 //
 // The page spends its whole motion budget on the disclosure itself. There is
 // no scroll reveal: the homepage already authors entrances, and a second
 // generic one here would be decoration rather than a moment.
 //
-// The rail keeps the site index and highlights its own FAQ entry. Listing the
-// nine questions there restated the page and told the reader nothing the page
-// did not already show.
+// The rail keeps the site index and highlights its own FAQ entry. It does not
+// list the nine questions. That list would repeat the page without helping
+// the reader.
 
 const RASHID_URL = "https://github.com/portolan-sdi/rashid";
 

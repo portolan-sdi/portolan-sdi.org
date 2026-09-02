@@ -327,9 +327,9 @@
       },
       "name": {
         "q": "Why is it called Portolan?",
-        "p1": "Portolan charts were among the earliest practical navigational maps. They were working tools rather than theoretical representations of the world, built from the observations of sailors and corrected as later voyages added to them.",
-        "p2": "They weren't made by a single authority, but instead were continuously refined through workshops in different ports. They were designed to be read wherever a ship went, across sailors, ports and nations."
-        "p3": "The project takes its name from that tradition. A Portolan catalog is practical rather than academic. It holds data in open formats instead of drawings, lives in the publisher’s own storage, and works across organizations, clouds, and borders."
+        "p1": "Portolan charts were among the earliest practical navigational maps. Chartmakers built these working tools from sailors' observations and corrected them as new voyages added evidence.",
+        "p2": "No single authority made them. Workshops in different ports refined them as sailors brought new observations. Their shared visual language let sailors use each chart across ports and nations.",
+        "p3": "The project takes its name from that tradition. A Portolan catalog is a practical tool, not an academic exercise. It holds open-format files in the publisher's storage for people and agents across organizations, clouds, and borders."
       }
     }
   },
