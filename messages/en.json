@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Portolan makes geospatial data easy to share and use",
-    "description": "Portolan is an open standard for publishing geospatial data as plain files in your own storage. No servers, no databases. Browse the catalog registry."
+    "description": "Portolan is an open specification for publishing geospatial data as plain files in your own storage. No servers, no databases. Browse the catalog registry."
   },
   "nav": {
     "registry": "Registry",
@@ -34,7 +34,7 @@
     "title": "Get involved",
     "priority": "The simplest way to get started right now is to <publish>publish your data as a Portolan catalog</publish> and let us know how it goes. Feedback on what works, what doesn't, and how Portolan can be improved is always helpful, especially when your implementation differs from existing catalogs.",
     "contributions": "We also welcome contributions to the <github>Portolan spec and tooling</github> in the form of bug reports, feature requests, and PRs (and especially PRs). Check out our <issues>open issues</issues> to get started.",
-    "community": "Portolan is an open-source community project—we welcome new users and contributors. Join the <slack><m>#portolan</m> channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
+    "community": "Portolan is an open-source community project. We welcome new users and contributors. Join the <slack><m>#portolan</m> channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
   },
   "footer": {
     "contentLicense": "Site content is licensed under <cc><m>CC BY 4.0</m></cc>.",
@@ -148,7 +148,7 @@
       "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over."
     },
     "projects": {
-      "spec": "The standard that defines a Portolan catalog.",
+      "spec": "The specification that defines a Portolan catalog.",
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
       "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
       "registry": "A central registry of public Portolan catalogs.",
@@ -315,7 +315,7 @@
         "p2": "Semantic standards and shared schemas can sit on top of Portolan where they are useful. Portolan addresses a different layer of interoperability: making differently produced datasets consistently discoverable, queryable, documented, and usable with common tools."
       },
       "agents": {
-        "q": "Why are agents part of a data publishing standard?",
+        "q": "Why are agents part of a data publishing specification?",
         "p1": "Agents are becoming another major class of data user, and that changes some of the assumptions behind public data infrastructure.",
         "p2": "Agents can inspect and query many datasets quickly, so Portolan assumes catalogs will be consumed programmatically at scale. Every catalog and collection therefore includes an <m>AGENTS.md</m> file that can document access patterns, useful queries, data-quality notes, schema conventions, and other guidance that helps software use the data correctly.",
         "p3": "Agents are not required to publish or consume Portolan data. The CLI provides a deterministic publishing workflow, and standard tools can use the resulting catalogs directly. Agent-readiness is a design requirement, not a dependency on any particular AI system."
