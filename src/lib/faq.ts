@@ -12,4 +12,5 @@ export const FAQ_ITEMS = [
   { key: "dataModel", paras: 2 },
   { key: "agents", paras: 3 },
   { key: "gaps", paras: 2 },
+  { key: "name", paras: 3 },
 ] as const;
