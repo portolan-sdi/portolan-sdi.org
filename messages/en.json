@@ -34,7 +34,7 @@
     "title": "Get involved",
     "priority": "The simplest way to get started right now is to <publish>publish your data as a Portolan catalog</publish> and let us know how it goes. Feedback on what works, what doesn't, and how Portolan can be improved is always helpful, especially when your implementation differs from existing catalogs.",
     "contributions": "We also welcome contributions to the <github>Portolan spec and tooling</github> in the form of bug reports, feature requests, and PRs (and especially PRs). Check out our <issues>open issues</issues> to get started.",
-    "community": "Portolan is an open-source community project—we welcome new users and contributors. Join the <slack><m>#portolan</m> channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
+    "community": "Portolan is an open-source community project. We welcome new users and contributors. Join the <slack><m>#portolan</m> channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
   },
   "footer": {
     "contentLicense": "Site content is licensed under <cc><m>CC BY 4.0</m></cc>.",
