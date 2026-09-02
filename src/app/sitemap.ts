@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { POSTS } from "@/lib/blog";
 import { routing } from "@/i18n/routing";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
@@ -13,6 +14,14 @@ const ROUTES = [
   { path: "/registry", priority: 0.8, changeFrequency: "weekly" as const },
   { path: "/talks", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/faq", priority: 0.7, changeFrequency: "monthly" as const },
+  { path: "/blog", priority: 0.7, changeFrequency: "monthly" as const },
+  // One entry per post. A published post does not change, so it declares the
+  // lowest priority and the slowest change frequency on the site.
+  ...POSTS.map(({ slug }) => ({
+    path: `/blog/${slug}`,
+    priority: 0.6,
+    changeFrequency: "yearly" as const,
+  })),
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

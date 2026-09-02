@@ -17,7 +17,8 @@
     "overview": "Vista general",
     "resources": "Recursos",
     "talks": "Charlas y demos",
-    "toggleGroup": "Enlaces de {section}"
+    "toggleGroup": "Enlaces de {section}",
+    "blog": "Blog"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
@@ -325,6 +326,18 @@
         "p2": "Nuestro foco a corto plazo es ampliar el conjunto de catálogos de referencia, estabilizar la especificación central y llegar a una CLI v1.0 estable. Hasta entonces siguen siendo posibles los cambios incompatibles, así que ahora mismo Portolan encaja mejor con quienes adoptan pronto. Consulta la <roadmap>hoja de ruta del proyecto</roadmap> para ver el trabajo actual y las incidencias enlazadas."
       }
     }
+  },
+  "blog": {
+    "meta": {
+      "title": "Blog",
+      "description": "Textos del proyecto Portolan sobre infraestructuras de datos espaciales sin servidores, la especificación y las herramientas que se apoyan en ella."
+    },
+    "title": "Blog",
+    "intro": "Notas del proyecto Portolan sobre la especificación, las herramientas y lo que aprendemos al publicar catálogos reales.",
+    "backToIndex": "Todas las entradas",
+    "englishNotice": "Esta entrada está disponible solo en inglés. El resto del sitio está traducido.",
+    "figureLabel": "Fig. {n}",
+    "figurePending": "Recurso pendiente"
   },
   "talks": {
     "meta": {

@@ -89,6 +89,7 @@ const HOME_ITEMS: RailItem[] = [
     // Two children and no page behind the row, so it stays open on every page.
     alwaysOpen: true,
     children: [
+      { id: "blog", label: "nav.blog", href: "/blog" },
       { id: "talks", label: "nav.talks", href: "/talks" },
       { id: "faq", label: "nav.faq", href: "/faq" },
     ],

@@ -113,10 +113,38 @@ portolan-ops. The rules below cover how this site spends them.
 - **Page header band:** every route except the homepage opens with `PageHero` in `page-hero.tsx`. It is the homepage hero, shortened and held still: the same glyph relief map, the same `--hero-scrim`, the same headline treatment. The map takes `still` so it does not drift, because the homepage carries the one moving element on the site. The band owns the page's `<h1>`, so the section below it sets no second one and opens with a tightened `pt-[clamp(28px,3.5vw,48px)]` instead of the full section padding. A two-part headline passes `subtitle`, which sets inside the `<h1>` so it inherits the heading font and differs only in weight and size.
 - **Shared chrome:** primary navigation is a collapsible left **side rail**, `SiteShell` in `site-rail.tsx`, which wraps the page. It replaced the old minimal header and centered footer (both removed July 2026, `SiteHeader`/`SiteFooter` are gone, do not reintroduce them or inline `<header>` / `<footer>` markup). The rail is pinned from `md` up (content is inset by `--p-rail`). "Collapse" slides it off-canvas and a mono "» Index" handle restores it. Below `md` it is an off-canvas drawer opened from a mono "Index" button in a slim sticky top bar, the word, never a hamburger icon. The rail holds, top to bottom: the logo linking home, the in-page section anchors (labels reuse each section's eyebrow, active section highlighted in `--p-primary`), an "External" group (Docs↗, GitHub↗), then a pinned foot with the locale control and a compact "«" collapse button on one row (no tagline, no CTA, both removed July 2026). Navigation lives only in the rail. There is no separate footer nav, and only real links, never dead spans. On solid `--p-bg` with black rules, no frosted `backdrop-blur`. Rail transforms are direction-aware (the rail hides toward its own inline-start edge). Do not mirror the logo.
 
+## Blog
+
+Blog posts are MDX. The pipeline is `@next/mdx` with no remark or rehype
+plugins, because Turbopack compiles MDX in Rust and cannot receive a
+JavaScript plugin function.
+
+- **Post bodies** live at `src/content/blog/<slug>.mdx`. The route
+  `src/app/[locale]/blog/[slug]/page.tsx` imports them by slug and sets
+  `dynamicParams = false`, so an unknown slug is a 404.
+- **Post metadata** lives in `src/lib/blog.ts`. A new post needs an entry in
+  `POSTS` and a matching MDX file. The index, the sitemap, and
+  `generateMetadata` all read that list.
+- **Posts are English only.** Post titles and summaries live in
+  `src/lib/blog.ts`, not in `messages/`. This is the one exception to the rule
+  that every user-facing string lives in `messages/`. A reader on `/es/` or
+  `/ar/` gets the English body under a translated notice. All page chrome
+  around the post stays translated in all three locales.
+- **Body styling** comes from `src/mdx-components.tsx`, the element map. There
+  is no `prose` class and no typography plugin. Do not add one. Style a new
+  element by adding it to that map.
+- **Media** uses `PostFigure` in `src/components/blog/post-figure.tsx`. Omit
+  its `src` while an asset is missing and it draws a framed placeholder that
+  names the pending file.
+- **Measure:** a post body runs `max-w-[68ch]`, narrower than the 1240px
+  content column the rest of the site uses. A lead or intro paragraph under a
+  page title takes no measure cap and runs the full column.
+
 ## Tech stack
 
 - Next.js 16+ App Router with TypeScript
 - Tailwind CSS (pure utilities, no `@apply`)
+- MDX via `@next/mdx` for blog post bodies
 - next-intl for i18n (English default, Spanish at `/es/`)
 - pnpm for package management
 - Deploying to Vercel at portolan-sdi.org

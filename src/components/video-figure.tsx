@@ -46,6 +46,7 @@ interface VideoFigureProps {
    * shows needs no line under it repeating the same thing.
    */
   caption?: ReactNode;
+  captionClassName?: string;
   /**
    * A text equivalent for the video-only recording. It is exposed as a
    * programmatically associated description for readers who cannot see it.
@@ -72,6 +73,7 @@ export function VideoFigure({
   poster,
   ratio,
   caption,
+  captionClassName = "",
   description,
   className = "",
 }: VideoFigureProps) {
@@ -257,7 +259,7 @@ export function VideoFigure({
       </div>
 
       {caption && (
-        <figcaption className="mt-6 text-small leading-relaxed text-p-ink-2 text-pretty text-center text-balance">
+        <figcaption className={`mt-6 text-small leading-relaxed text-p-ink-2 text-pretty text-center text-balance ${captionClassName}`}>
           {caption}
         </figcaption>
       )}
