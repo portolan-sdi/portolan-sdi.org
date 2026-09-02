@@ -47,6 +47,7 @@ export const ECOSYSTEM_ENTRIES: readonly EcosystemEntry[] = [
   { slug: "skills", name: "portolan-skills", license: null, tier: "core", href: "https://github.com/portolan-sdi/portolan-skills" },
   // CARTO SDI links to carto.com until its own product page exists.
   { slug: "cartosdi", name: "CARTO SDI", license: null, tier: "commercial", href: "https://carto.com/" },
+  { slug: "scout", name: "SCOUT", license: null, tier: "commercial", href: "https://scout.geosolvix.com" },
   { slug: "browser", name: "portolan-browser", license: "ISC", tier: "core", href: "https://github.com/portolan-sdi/portolan-browser" },
 ];
 
