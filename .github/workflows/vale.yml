@@ -23,7 +23,7 @@ jobs:
   prose:
     # v1 is a moving major tag. A change to a rule reaches this repo when
     # the tag moves, not when ops merges.
-    uses: portolan-sdi/portolan-ops/.github/workflows/reusable-vale.yml@v1
+    uses: portolan-sdi/portolan-ops/.github/workflows/reusable-vale.yml@main
     permissions:
       contents: read
     with:
