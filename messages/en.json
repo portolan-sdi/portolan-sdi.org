@@ -154,7 +154,8 @@
       "registry": "A central registry of public Portolan catalogs.",
       "browser": "A web interface for browsing and exploring Portolan catalogs.",
       "skills": "Agent skills for creating and working with Portolan catalogs.",
-      "cartosdi": "A spatial data infrastructure for organizations, built on Portolan."
+      "cartosdi": "A spatial data infrastructure for organizations, built on Portolan.",
+      "scout": "A geospatial ingestion platform that publishes Portolan-conformant catalogs and answers spatial questions with AI-generated maps and data."
     }
   },
   "coverage": {
