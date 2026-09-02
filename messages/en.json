@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Portolan: An opinionated standard for cloud-native geospatial catalogs",
-    "description": "Portolan publishes geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets a person or an agent read a catalog and query it directly. The standard sets the quality bar, a validator enforces it, tools make catalogs cheap to build, and a registry connects them into a network anyone can search."
+    "title": "Portolan: An opinionated specification for cloud-native geospatial catalogs",
+    "description": "Portolan publishes geospatial data as plain files on object storage, with no servers, no databases, and no proprietary licenses. Structured metadata lets a person or an agent read a catalog and query it directly. The specification sets the quality bar, a validator enforces it, tools make catalogs cheap to build, and a registry connects them into a network anyone can search."
   },
   "nav": {
     "registry": "Registry",
@@ -34,7 +34,7 @@
     "title": "Get involved",
     "priority": "The simplest way to get started right now is to <publish>publish your data as a Portolan catalog</publish> and let us know how it goes. Feedback on what works, what doesn't, and how Portolan can be improved is always helpful, especially when your implementation differs from existing catalogs.",
     "contributions": "We also welcome contributions to the <github>Portolan spec and tooling</github> in the form of bug reports, feature requests, and PRs (and especially PRs). Check out our <issues>open issues</issues> to get started.",
-    "community": "Portolan is an open-source community project—we welcome new users and contributors. Join the <slack><m>#portolan</m> channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
+    "community": "Portolan is an open-source community project. We welcome new users and contributors. Join the <slack><m>#portolan</m> channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
   },
   "footer": {
     "contentLicense": "Site content is licensed under <cc><m>CC BY 4.0</m></cc>.",
@@ -132,7 +132,7 @@
     "legendCommunity": "community",
     "submit": "Submit a tool",
     "projects": {
-      "spec": "The standard that defines a Portolan catalog.",
+      "spec": "The specification that defines a Portolan catalog.",
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
       "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
       "registry": "A central registry of public Portolan catalogs.",

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Portolan, un estándar con criterio para catálogos geoespaciales nativos de la nube",
-    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que una persona o un agente lea un catálogo y lo consulte directamente. El estándar fija el nivel de calidad, un validador lo hace cumplir, las herramientas hacen que los catálogos sean baratos de crear y un registro los conecta en una red que cualquiera puede buscar."
+    "title": "Portolan, una especificación con criterio para catálogos geoespaciales nativos de la nube",
+    "description": "Portolan publica datos geoespaciales como archivos simples en almacenamiento de objetos, sin servidores, sin bases de datos y sin licencias propietarias. Los metadatos estructurados permiten que una persona o un agente lea un catálogo y lo consulte directamente. La especificación fija el nivel de calidad, un validador lo hace cumplir, las herramientas hacen que los catálogos sean baratos de crear y un registro los conecta en una red que cualquiera puede buscar."
   },
   "nav": {
     "registry": "Registro",
@@ -132,7 +132,7 @@
     "legendCommunity": "comunidad",
     "submit": "Proponer una herramienta",
     "projects": {
-      "spec": "El estándar que define un catálogo Portolan.",
+      "spec": "La especificación que define un catálogo Portolan.",
       "rashid": "El validador que comprueba si un catálogo cumple la especificación Portolan.",
       "cli": "Una herramienta de línea de comandos para crear, comprobar y publicar catálogos Portolan.",
       "registry": "Un registro central de catálogos Portolan públicos.",
