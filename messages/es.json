@@ -33,7 +33,7 @@
   "getInvolved": {
     "title": "Participa",
     "priority": "La forma más sencilla de empezar ahora es <publish>publicar tus datos como un catálogo de Portolan</publish> y contarnos cómo fue. Siempre ayudan los comentarios sobre lo que funciona, lo que no funciona y cómo podemos mejorar Portolan, sobre todo si tu implementación difiere de los catálogos existentes.",
-    "contributions": "También aceptamos contribuciones al <github>estándar y las herramientas de Portolan</github> mediante informes de errores, solicitudes de funciones y PRs. Nos interesan en especial los PRs. Consulta nuestros <issues>asuntos abiertos</issues> para empezar.",
+    "contributions": "También aceptamos contribuciones al <github>especificación y las herramientas de Portolan</github> mediante informes de errores, solicitudes de funciones y PRs. Nos interesan en especial los PRs. Consulta nuestros <issues>asuntos abiertos</issues> para empezar.",
     "community": "Portolan es un proyecto comunitario de código abierto. Damos la bienvenida a nuevos usuarios y colaboradores. Únete al canal <slack><m>#portolan</m> en Slack</slack> y sigue el <group>Grupo de Google de Portolan</group> para conocer los detalles de nuestras reuniones semanales."
   },
   "footer": {
@@ -315,7 +315,7 @@
         "p2": "Los estándares semánticos y los esquemas compartidos pueden situarse encima de Portolan cuando resulten útiles. Portolan aborda otra capa de la interoperabilidad y hace que conjuntos de datos producidos de formas distintas sean de manera consistente localizables, consultables, documentados y utilizables con herramientas comunes."
       },
       "agents": {
-        "q": "¿Por qué los agentes forman parte de un estándar de publicación de datos?",
+        "q": "¿Por qué los agentes forman parte de una especificación de publicación de datos?",
         "p1": "Los agentes se están convirtiendo en otra clase importante de usuario de datos, y eso cambia algunos de los supuestos que hay detrás de la infraestructura de datos pública.",
         "p2": "Los agentes pueden inspeccionar y consultar muchos conjuntos de datos con rapidez, así que Portolan asume que los catálogos se consumirán de forma programática y a escala. Por eso cada catálogo y cada colección incluye un archivo <m>AGENTS.md</m> que puede documentar patrones de acceso, consultas útiles, notas sobre la calidad de los datos, convenciones de esquema y otras indicaciones que ayudan al software a usar los datos correctamente.",
         "p3": "No hace falta un agente para publicar ni para consumir datos de Portolan. La CLI ofrece un flujo de publicación determinista, y las herramientas estándar pueden usar directamente los catálogos resultantes. Estar listo para agentes es un requisito de diseño, no una dependencia de ningún sistema de IA concreto."

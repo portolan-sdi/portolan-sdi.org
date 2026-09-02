@@ -315,7 +315,7 @@
         "p2": "Semantic standards and shared schemas can sit on top of Portolan where they are useful. Portolan addresses a different layer of interoperability: making differently produced datasets consistently discoverable, queryable, documented, and usable with common tools."
       },
       "agents": {
-        "q": "Why are agents part of a data publishing standard?",
+        "q": "Why are agents part of a data publishing specification?",
         "p1": "Agents are becoming another major class of data user, and that changes some of the assumptions behind public data infrastructure.",
         "p2": "Agents can inspect and query many datasets quickly, so Portolan assumes catalogs will be consumed programmatically at scale. Every catalog and collection therefore includes an <m>AGENTS.md</m> file that can document access patterns, useful queries, data-quality notes, schema conventions, and other guidance that helps software use the data correctly.",
         "p3": "Agents are not required to publish or consume Portolan data. The CLI provides a deterministic publishing workflow, and standard tools can use the resulting catalogs directly. Agent-readiness is a design requirement, not a dependency on any particular AI system."
