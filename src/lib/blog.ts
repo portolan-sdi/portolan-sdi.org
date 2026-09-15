@@ -32,6 +32,14 @@ export interface BlogPost {
 /** Newest first. The index renders this order as written. */
 export const POSTS: BlogPost[] = [
   {
+    slug: "building-portolan-trimet",
+    title: "Building Portolan",
+    subtitle: "A TriMet mirror",
+    date: "2026-09-15",
+    summary:
+      "TriMet publishes eight geospatial datasets as plain files. Mirroring them into a Portolan catalog, with a custom-themed browser, took about three hours of work on a plane.",
+  },
+  {
     slug: "introducing-portolan",
     title: "Introducing Portolan",
     subtitle: "A serverless spatial data infrastructure",
