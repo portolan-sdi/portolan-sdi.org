@@ -25,12 +25,32 @@ export interface BlogPost {
   subtitle?: string;
   /** ISO calendar date, such as "2026-08-26". */
   date: string;
+  /**
+   * Byline, for a post written by one person. A post by the project as a
+   * whole sets no author and renders no byline.
+   *
+   * The name is English only, for the same reason the title is: it is content,
+   * not chrome. The word in front of it comes from `messages/`.
+   */
+  author?: string;
+  /** Where the byline links. Requires `author`. */
+  authorUrl?: string;
   /** One or two sentences. Feeds the index card and the meta description. */
   summary: string;
 }
 
 /** Newest first. The index renders this order as written. */
 export const POSTS: BlogPost[] = [
+  {
+    slug: "building-portolan-trimet",
+    title: "Building Portolan",
+    subtitle: "A TriMet mirror",
+    date: "2026-09-16",
+    author: "Chris Holmes",
+    authorUrl: "https://9eo.org/",
+    summary:
+      "TriMet publishes eight geospatial datasets as plain files. Mirroring them into a Portolan catalog, with a custom-themed browser, took about three hours of work on a plane.",
+  },
   {
     slug: "introducing-portolan",
     title: "Introducing Portolan",

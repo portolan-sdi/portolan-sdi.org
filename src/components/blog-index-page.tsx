@@ -2,6 +2,7 @@
 
 import { useFormatter, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { Ltr } from "./ui";
 import { POSTS } from "@/lib/blog";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
@@ -44,6 +45,15 @@ export function BlogIndexPage() {
                 >
                   {format.dateTime(new Date(post.date), "postDate")}
                 </time>
+
+                {/* The byline sits under the date, in the same mono column.
+                    It carries no link here: the only hit target on a card is
+                    the title. */}
+                {post.author && (
+                  <p className="mt-1 font-mono text-eyebrow uppercase tracking-[0.06em] text-p-ink-3 md:col-start-1">
+                    {t("by")} <Ltr>{post.author}</Ltr>
+                  </p>
+                )}
 
                 <div className="mt-3 md:mt-0">
                   {/* The link spans both halves of the headline, so the whole
