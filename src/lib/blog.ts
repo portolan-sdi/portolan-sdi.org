@@ -43,8 +43,8 @@ export interface BlogPost {
 export const POSTS: BlogPost[] = [
   {
     slug: "building-portolan-trimet",
-    title: "Building Portolan",
-    subtitle: "A TriMet mirror",
+    title: "Building Portolan: TriMet Mirror",
+    subtitle: "Three hours from shapefiles to a live catalog",
     date: "2026-09-16",
     author: "Chris Holmes",
     authorUrl: "https://9eo.org/",
@@ -68,7 +68,13 @@ export function getPost(slug: string): BlogPost | undefined {
 /**
  * The headline as one string, for a document title, an OG title, or anywhere
  * else that cannot set two lines.
+ *
+ * A colon joins the two halves, except when the title carries one already. A
+ * series title such as "Building Portolan: TriMet Mirror" would otherwise read
+ * with two colons, and the second one would look like a typo.
  */
 export function fullTitle(post: BlogPost): string {
-  return post.subtitle ? `${post.title}: ${post.subtitle}` : post.title;
+  if (!post.subtitle) return post.title;
+  const join = post.title.includes(":") ? " — " : ": ";
+  return `${post.title}${join}${post.subtitle}`;
 }
