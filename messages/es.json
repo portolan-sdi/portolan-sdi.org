@@ -345,7 +345,8 @@
     "backToIndex": "Todas las entradas",
     "englishNotice": "Esta entrada está disponible solo en inglés. El resto del sitio está traducido.",
     "figureLabel": "Fig. {n}",
-    "figurePending": "Recurso pendiente"
+    "figurePending": "Recurso pendiente",
+    "by": "Por"
   },
   "talks": {
     "meta": {

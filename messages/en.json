@@ -345,7 +345,8 @@
     "backToIndex": "All posts",
     "englishNotice": "This post is available in English only. The rest of the site is translated.",
     "figureLabel": "Fig. {n}",
-    "figurePending": "Asset pending"
+    "figurePending": "Asset pending",
+    "by": "By"
   },
   "talks": {
     "meta": {

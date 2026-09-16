@@ -345,7 +345,8 @@
     "backToIndex": "كل المقالات",
     "englishNotice": "هذه المقالة متاحة بالإنجليزية فقط. بقية الموقع مترجمة.",
     "figureLabel": "شكل {n}",
-    "figurePending": "الملف غير متوفر بعد"
+    "figurePending": "الملف غير متوفر بعد",
+    "by": "بقلم"
   },
   "talks": {
     "meta": {

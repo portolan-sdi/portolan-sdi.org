@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { Ltr } from "./ui";
 import type { BlogPost } from "@/lib/blog";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
@@ -38,9 +39,32 @@ export function BlogPostPage({ post, children }: BlogPostPageProps) {
         title={post.title}
         subtitle={post.subtitle}
         eyebrow={
-          <time dateTime={post.date}>
-            {format.dateTime(new Date(post.date), "postDate")}
-          </time>
+          <>
+            <time dateTime={post.date}>
+              {format.dateTime(new Date(post.date), "postDate")}
+            </time>
+            {/* A post by one person carries a byline. The separator is the
+                middle dot the rest of the site uses for a mono run-on. The
+                name is Latin, so it holds its order inside Arabic. */}
+            {post.author && (
+              <>
+                {" · "}
+                {t("by")}{" "}
+                <Ltr>
+                  {post.authorUrl ? (
+                    <a
+                      href={post.authorUrl}
+                      className="underline underline-offset-4 transition-colors hover:text-p-primary"
+                    >
+                      {post.author}
+                    </a>
+                  ) : (
+                    post.author
+                  )}
+                </Ltr>
+              </>
+            )}
+          </>
         }
       >
         <Link
