@@ -23,7 +23,7 @@ import {
 // `community` = third-party open tool, the still-empty tier that the submit
 // link invites (hollow marker); `commercial` = a product a company sells on
 // the open core (filled ink marker). Commercial entries name no license and
-// link to the vendor. CARTO SDI links to carto.com until its own page exists.
+// link to the vendor.
 //
 // The list grows in three directions at once, so the section filters and
 // paginates rather than printing every entry. The filter row absorbed the old
@@ -317,7 +317,7 @@ export function EcosystemSection() {
               m: monoChunk,
               carto: (chunks) => (
                 <a
-                  href="https://carto.com/"
+                  href="https://carto.com/spatial-data-infrastructure/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
