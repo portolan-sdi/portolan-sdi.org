@@ -35,9 +35,25 @@ export function BlogIndexPage() {
         <a
           href={FEED_PATH}
           type="application/rss+xml"
-          className="mt-4 inline-block font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3 underline underline-offset-4 transition-colors hover:text-p-primary rtl:tracking-normal"
+          className="mt-4 inline-flex items-center gap-2 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3 transition-colors hover:text-p-primary rtl:tracking-normal"
         >
-          {t("feed")}
+          {/* The feed mark, drawn square to match the site's corners: a
+              square source and two arcs with butt caps. It takes the link
+              color and is decorative, so the label carries the meaning. */}
+          <svg
+            viewBox="0 0 16 16"
+            className="h-[1em] w-[1em] shrink-0"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="butt"
+          >
+            <rect x="1" y="12" width="3" height="3" fill="currentColor" stroke="none" />
+            <path d="M2.25 7.25a6.5 6.5 0 0 1 6.5 6.5" />
+            <path d="M2.25 2.25a11.5 11.5 0 0 1 11.5 11.5" />
+          </svg>
+          <span className="underline underline-offset-4">{t("feed")}</span>
         </a>
       </PageHero>
 
