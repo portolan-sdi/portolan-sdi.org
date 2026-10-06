@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { BlogPostPage } from "@/components";
 import { POSTS, fullTitle, getPost } from "@/lib/blog";
+import { FEED_URL } from "@/lib/feed";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
 interface PageProps {
@@ -39,6 +40,8 @@ export async function generateMetadata({
     alternates: {
       canonical: url,
       languages: alternateLanguages(route),
+      // Feed readers find the blog feed from this link.
+      types: { "application/rss+xml": FEED_URL },
     },
     openGraph: {
       type: "article",

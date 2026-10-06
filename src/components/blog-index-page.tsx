@@ -4,6 +4,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Ltr } from "./ui";
 import { POSTS } from "@/lib/blog";
+import { FEED_PATH } from "@/lib/feed";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 
@@ -29,6 +30,15 @@ export function BlogIndexPage() {
         <p className="mt-6 text-lead leading-relaxed text-p-ink-2">
           {t("intro")}
         </p>
+        {/* A plain anchor, not the locale Link. The feed is English only and
+            lives at one unprefixed path in every locale. */}
+        <a
+          href={FEED_PATH}
+          type="application/rss+xml"
+          className="mt-4 inline-block font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3 underline underline-offset-4 transition-colors hover:text-p-primary rtl:tracking-normal"
+        >
+          {t("feed")}
+        </a>
       </PageHero>
 
       <section className="px-[var(--p-pad-section-x)] pb-[var(--p-pad-section-y)] pt-[clamp(28px,3.5vw,48px)]">

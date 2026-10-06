@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BlogIndexPage } from "@/components";
+import { FEED_URL } from "@/lib/feed";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
 const ROUTE = "/blog";
@@ -28,6 +29,8 @@ export async function generateMetadata({
     alternates: {
       canonical: url,
       languages: alternateLanguages(ROUTE),
+      // Feed readers find the blog feed from this link.
+      types: { "application/rss+xml": FEED_URL },
     },
     openGraph: {
       type: "website",
