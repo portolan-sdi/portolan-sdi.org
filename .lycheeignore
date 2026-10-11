@@ -1,0 +1,10 @@
+# URL patterns the link check skips. One regular expression per line.
+# Path exceptions live in lychee.toml.
+
+# Next.js serves /registry as a route under src/app/[locale]/registry, not
+# as a file in public/. lychee resolves it against public/ and fails.
+^file://.*/public/registry$
+
+# An MDX expression such as {COMMUNITY_LINKS.slack} becomes a URL at build
+# time. In the source, lychee reads the expression as a file name.
+%7B[A-Za-z_.]+%7D$

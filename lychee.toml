@@ -1,0 +1,7 @@
+# This repo's link-check exceptions. The org rules live in portolan-ops
+# lychee/org.toml. URL exceptions live in .lycheeignore.
+exclude_path = [
+  # Static design sketches. Their navigation uses placeholder anchors, and
+  # no page links to them.
+  '(^|/)design-mockups/',
+]
