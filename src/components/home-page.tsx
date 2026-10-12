@@ -118,7 +118,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   worked once and then did nothing. */}
               <div className="flex flex-col items-start gap-4 mt-[clamp(2.25rem,4vw,3.25rem)] sm:flex-row sm:items-center sm:gap-6">
                 <Btn asChild variant="primary" size="lg">
-                  <a href="#how">
+                  <a href="#how" data-track="hero-how">
                     {t("hero.howItWorks")} <DirArrow />
                   </a>
                 </Btn>
@@ -129,7 +129,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     registry, so the reader meets the examples before the
                     full list. */}
                 <Btn asChild variant="ghost" size="lg">
-                  <a href="#coverage">
+                  <a href="#coverage" data-track="hero-coverage">
                     {t("hero.exploreCatalogs")} <DirArrow />
                   </a>
                 </Btn>

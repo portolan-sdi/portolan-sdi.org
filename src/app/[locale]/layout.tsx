@@ -10,6 +10,7 @@ import { getDirection } from "@/i18n/direction";
 import { SITE_ORIGIN, alternateLanguages, localeUrl } from "@/lib/site";
 import { siteJsonLd } from "@/lib/structured-data";
 import { JsonLd } from "@/components/json-ld";
+import { LinkTracker } from "@/components/link-tracker";
 
 const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
@@ -101,6 +102,7 @@ export default async function LocaleLayout({
           {children}
         </NextIntlClientProvider>
         <Analytics />
+        <LinkTracker />
         <SpeedInsights />
       </body>
     </html>
