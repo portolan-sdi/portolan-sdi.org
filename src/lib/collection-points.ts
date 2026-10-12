@@ -1,4 +1,5 @@
 import {
+  getBboxSpans,
   getCoverageTier,
   type Bbox,
   type CatalogCoverage,
@@ -97,20 +98,35 @@ export function isBroadExtent(bbox: Bbox): boolean {
   return getCoverageTier(bbox) === "global";
 }
 
+/**
+ * The middle of a bbox. A bbox with west > east crosses the antimeridian, so
+ * its middle lies east of west by half its span, not halfway between the two
+ * numbers. Alaska with the Aleutians, [172.4, 51, -129.9, 71.4], has its middle
+ * at -158.8, not at 21.2.
+ */
 export function centroid(bbox: Bbox): { lng: number; lat: number } {
-  const [west, south, east, north] = bbox;
-  return { lng: (west + east) / 2, lat: (south + north) / 2 };
+  const [west, south, , north] = bbox;
+  const { lonSpan } = getBboxSpans(bbox);
+  return { lng: wrapLng(west + lonSpan / 2), lat: (south + north) / 2 };
 }
 
 /** Half the bbox diagonal, in degrees. Stands for how far the extent reaches. */
 function reach(bbox: Bbox): number {
-  const [west, south, east, north] = bbox;
-  return Math.hypot(east - west, north - south) / 2;
+  const { lonSpan, latSpan } = getBboxSpans(bbox);
+  return Math.hypot(lonSpan, latSpan) / 2;
 }
 
 function area(bbox: Bbox): number {
-  const [west, south, east, north] = bbox;
-  return (east - west) * (north - south);
+  const { lonSpan, latSpan } = getBboxSpans(bbox);
+  return lonSpan * latSpan;
+}
+
+/**
+ * The longitude moved by whole turns to lie within 180 degrees of `ref`.
+ * Distances and means between centroids then hold across the antimeridian.
+ */
+function unwrapLng(lng: number, ref: number): number {
+  return ref + ((((lng - ref + 180) % 360) + 360) % 360) - 180;
 }
 
 /**
@@ -204,6 +220,9 @@ function placesFor(records: CollectionRecord[]): CollectionPoint[] {
   if (placeable.length === 0) return [];
 
   const widestFirst = [...placeable].sort((a, b) => area(b.bbox) - area(a.bbox));
+  // All centroids in one frame around the widest extent, so a place across
+  // the antimeridian groups and averages as one. Wrapped back at the end.
+  const frame = centroid(widestFirst[0].bbox).lng;
   const groups: Array<{
     titles: string[];
     reach: number;
@@ -212,7 +231,8 @@ function placesFor(records: CollectionRecord[]): CollectionPoint[] {
   }> = [];
 
   for (const record of widestFirst) {
-    const point = centroid(record.bbox);
+    const middle = centroid(record.bbox);
+    const point = { lng: unwrapLng(middle.lng, frame), lat: middle.lat };
     const own = reach(record.bbox);
     const group = groups.find((candidate) => {
       const limit = Math.max(MIN_MERGE_DEGREES, (candidate.reach + own) / 2);
@@ -246,7 +266,7 @@ function placesFor(records: CollectionRecord[]): CollectionPoint[] {
       count: group.members.length,
       placeIndex: i + 1,
       placeCount: groups.length,
-      lng: place.lng,
+      lng: wrapLng(place.lng),
       lat: place.lat,
     };
   });
@@ -301,6 +321,16 @@ function overlaps(a: Bbox, b: Bbox): boolean {
   return a[0] <= b[2] && a[2] >= b[0] && a[1] <= b[3] && a[3] >= b[1];
 }
 
+/** A bbox as plain rectangles. One with west > east crosses the antimeridian. */
+function bboxParts(bbox: Bbox): Bbox[] {
+  const [west, south, east, north] = bbox;
+  if (west <= east) return [bbox];
+  return [
+    [west, south, 180, north],
+    [-180, south, east, north],
+  ];
+}
+
 /**
  * The catalogs the viewport reaches.
  *
@@ -318,7 +348,8 @@ export function catalogsInViewport(
 
   for (const catalog of index.catalogs) {
     for (const collection of catalog.collections) {
-      if (parts.some((part) => overlaps(collection.bbox, part))) {
+      const own = bboxParts(collection.bbox);
+      if (parts.some((part) => own.some((piece) => overlaps(piece, part)))) {
         hits.add(catalog.id);
         break;
       }
