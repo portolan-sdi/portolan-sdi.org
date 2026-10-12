@@ -11,6 +11,7 @@ import { GetInvolvedSection } from "./get-involved-section";
 import { WhoForSection } from "./who-for-section";
 import { CoverageSection } from "./coverage-section";
 import { Btn, DirArrow, monoChunk } from "./ui";
+import { Link } from "@/i18n/navigation";
 import type { Catalog } from "@/lib/catalogs";
 import { FORMAT_LINKS, SPEC_URL } from "@/lib/site";
 
@@ -109,29 +110,27 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   pull the box start-ward to make the label line up. The blue
                   block edge is the alignment signal the eye reads, and a
                   negative margin makes it overhang the column. */}
-              {/* Both buttons are plain anchors with a hash target. They point
-                  at sections of this page, so the browser reaches them without
-                  the router. As router `Link`s to `/#how` and `/#coverage`
-                  they asked the router to go to `/`, the page already open.
-                  Each click fetched the page again over RSC, and the router
-                  holds the scroll position on a same-route move, so a button
-                  worked once and then did nothing. */}
+              {/* "How it works" is a plain anchor with a hash target. It points
+                  at a section of this page, so the browser reaches it without
+                  the router. As a router `Link` to `/#how` it asked the router
+                  to go to `/`, the page already open. Each click fetched the
+                  page again over RSC, and the router holds the scroll position
+                  on a same-route move, so the button worked once and then did
+                  nothing. */}
               <div className="flex flex-col items-start gap-4 mt-[clamp(2.25rem,4vw,3.25rem)] sm:flex-row sm:items-center sm:gap-6">
                 <Btn asChild variant="primary" size="lg">
                   <a href="#how" data-track="hero-how">
                     {t("hero.howItWorks")} <DirArrow />
                   </a>
                 </Btn>
-                {/* The catalogs section on this page, not the registry.
-                    Both hero buttons now point into the page, in the order
-                    the page runs: how it works, then the catalogs that come
-                    out of it. That section carries the link onward to the
-                    registry, so the reader meets the examples before the
-                    full list. */}
+                {/* The registry, not the catalogs section on this page. Most
+                    registry visitors arrive from inside the site, so the hero
+                    puts it above the fold (#173). The registry is a separate
+                    route, so this button is a locale `Link`. */}
                 <Btn asChild variant="ghost" size="lg">
-                  <a href="#coverage" data-track="hero-coverage">
-                    {t("hero.exploreCatalogs")} <DirArrow />
-                  </a>
+                  <Link href="/registry" data-track="hero-registry">
+                    {t("hero.browseRegistry")} <DirArrow />
+                  </Link>
                 </Btn>
               </div>
             </div>
