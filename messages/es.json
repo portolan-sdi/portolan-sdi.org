@@ -25,7 +25,8 @@
     "titleAccent": "sean fáciles de compartir y usar.",
     "description": "Portolan es una <spec>especificación</spec> y un <eco>conjunto de herramientas</eco> de código abierto que combinan formatos de archivo diseñados para la nube con metadatos y documentación claros para que personas y agentes puedan publicar y usar datos a cualquier escala.",
     "howItWorks": "Cómo funciona",
-    "exploreCatalogs": "Explorar catálogos"
+    "exploreCatalogs": "Explorar catálogos",
+    "browseRegistry": "Ver el registro"
   },
   "involved": {
     "ariaLabel": "Usuarios y colaboradores"

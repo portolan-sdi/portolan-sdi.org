@@ -25,7 +25,8 @@
     "titleAccent": "easy to share and use.",
     "description": "Portolan is an open-source <spec>specification</spec> and <eco>toolkit</eco> that combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale.",
     "howItWorks": "How it works",
-    "exploreCatalogs": "Explore catalogs"
+    "exploreCatalogs": "Explore catalogs",
+    "browseRegistry": "Browse the registry"
   },
   "involved": {
     "ariaLabel": "Users and supporters"
