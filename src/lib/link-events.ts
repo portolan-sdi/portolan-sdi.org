@@ -6,7 +6,7 @@
 // that starts with `#/` stays, because it is a client-side route and not an
 // anchor. The catalog links to browser.portolan-sdi.org name the catalog there.
 // `cta` fires for a link that carries `data-track`. Its `target` is that
-// attribute. The hero buttons use it because they point into the same page.
+// attribute. The hero buttons use it because they point into the same site.
 
 export const OUTBOUND_EVENT = "outbound";
 export const CTA_EVENT = "cta";
