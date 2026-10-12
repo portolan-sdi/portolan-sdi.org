@@ -5,3 +5,7 @@ exclude_path = [
   # no page links to them.
   '(^|/)design-mockups/',
 ]
+
+# A link to a directory, such as /#how, resolves to its index.html, so the
+# check can find the anchor. "." keeps a directory without an index valid.
+index_files = ["index.html", "."]
