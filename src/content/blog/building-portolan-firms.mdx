@@ -40,9 +40,9 @@ It showed a lot of potential and, after more iterations than I was expecting, I
 believe it's now a great demonstration of just how far you can push things with
 cloud-native geospatial techniques. I'll dig into those later in the post, but
 first a bit more about what you're seeing. The FIRMS data archive is about 10
-gigabytes of data on every single potential fire captured by a variety of
-different satellites. It's updated several times a day as new satellites capture
-images, and is used in numerous critical applications. They have a really nice
+gigabytes of data on every potential fire captured by different satellites.
+It's updated several times a day as new satellites capture images, and a lot of
+critical applications rely on it. They have a really nice
 default viewer, one of the more responsive ones that I've seen with this amount
 of data:
 
@@ -57,9 +57,9 @@ of data:
 
 But the time selection caps out at 30 days, and the density of points also kind
 of saturates the map so it's hard to really tell where the data is used. So I
-wanted to see if I could make an application that is more responsive in certain
-ways, using only Cloud-Native Geospatial formats - mostly PMTiles, though I
-experimented some with GeoParquet in the mix. The big difference is an embrace
+wanted to see if I could make an application that is more responsive, using only
+Cloud-Native Geospatial formats. Mostly PMTiles, though I experimented some
+with GeoParquet in the mix. The big difference is an embrace
 of gridded aggregations at multiple zooms to show complete overviews of the data
 instead of the typical 'thinning' approach.
 
@@ -91,15 +91,15 @@ data in your current view. And if you've done a lot of thinning then it will
 likely not be that representative of the actual time distribution.
 
 So the solution I'm really liking lately is to aggregate to a grid, where you
-can have each cell contain various totals of the actual data. I used
+can have each cell contain totals of the actual data. I used
 [A5](https://a5geo.org/), a new Discrete Global Grid System (DGGS) based on
 pentagons, but H3 or S2 or anything else works equally well (and
 [admin-partitioned](https://9eo.org/blog/the-admin-partitioned-geoparquet-distribution/)
 can work too, showing true country stats). I did a lot of tweaking between the
 data and the front-end to get the performance right, but I believe the result is
-quite compelling, as you can 'zoom in' both temporally and spatially - go down
-to the full points from the aggregates, and go down to daily time slices as
-well, anywhere in the 25 year history of data.
+quite compelling, as you can 'zoom in' both temporally and spatially. You go
+down to the full points from the aggregates, and down to daily time slices,
+anywhere in the 25 year history of data.
 
 <PostLoopFigure
   n={4}
@@ -122,13 +122,13 @@ actual [FIRMS Portolan
 catalog](https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/firms-catalog/detections/collection.json),
 which is arguably the part that's most clearly useful today. The entire FIRMS
 archive is now available as year-partitioned GeoParquet files, along with a
-'latest' file of the last seven days, that you can now query as a complete,
-single dataset. And there are yearly PMTiles with the aggregates built in (they
+'latest' file of the last seven days, that you can now query as one complete
+dataset. And there are yearly PMTiles with the aggregates built in (they
 drive the app). These can be accessed without API key, and should enable much
 easier bulk access to the data. It's one of the first 'updating' Portolan
 catalogs, that stays in sync with the source data. And with GeoParquet you can
-treat the entire set of data, including the latest updates, as a single set of
-data, instead of having to download and work with multiple files.
+treat the entire set of data, including the latest updates, as one set of data.
+Today that means downloading and stitching together several files.
 
 ## The gory details
 
@@ -139,9 +139,9 @@ application.
 
 ### The FIRMS Portolan catalog
 
-So this catalog is modest from the diversity of data standpoint, as it's just a
-single dataset. But I think there's a few interesting aspects. The first is
-actually the decision to make it a single dataset. The
+So this catalog is modest from the diversity of data standpoint, as it's just
+one dataset. But I think there's a few interesting aspects. The first is
+actually the decision to make it one dataset. The
 [downloads](https://firms.modaps.eosdis.nasa.gov/active_fire/) divide it up into
 the different sensors, and make regional downloads available.
 
@@ -154,7 +154,7 @@ the different sensors, and make regional downloads available.
   caption="The FIRMS download page splits the archive by sensor and by region."
 />
 
-I decided to put them all in a single set of data, since they all share the same
+I decided to put them all in one set of data, since they all share the same
 schema and then you can easily filter for which one you want. I did a 'hive
 partition' (the `year=2005` style directories) which lets parquet clients fully
 skip the folder if the query is made with a year parameter.
@@ -174,8 +174,8 @@ is to break things up if the file is over 2 gigabytes, and this total set of
 data is just shy of 10 gigabytes. You generally want to partition by the
 parameter that will be most often used for querying, and with global temporal
 data it's generally a bit of a toss-up which way to partition. I went with
-temporal splits in part because I knew I wanted the data to drive a timeline
-while displaying globally, so you can get a sense of all fires happening in the
+temporal splits in part because I knew I wanted a timeline that reads from the
+data while displaying globally, to get a sense of every fire happening in the
 world. If I split spatially then each view would have to pull in all the spatial
 parts. But both could work, especially for the parquet partition.
 
@@ -183,18 +183,18 @@ I may make an admin-partitioned version of the data at some point, so that you
 can browse to each country and download it fully. But right now I'm more
 interested in trying to create that experience by just creating country parquets
 on the fly, which should be possible. And if it works it'd enable conversion to
-different formats (geopackage, etc) and also arbitrary bounds. Hopefully I'll
+different formats (GeoPackage, etc) and also arbitrary bounds. Hopefully I'll
 get some time for that in the next couple of months.
 
-In addition to the yearly parquets and PMTiles I also included A5 aggregation
-parquets at resolutions 5 and 8. These are included in the PMTiles and drive the
-visualization, and in my initial experiments I just threw these away. But this
+Alongside the yearly parquets and PMTiles I also included A5 aggregation
+parquets at resolutions 5 and 8. These go into the PMTiles, and the
+visualization reads from them. In my initial experiments I just threw these away. But this
 time I left them in, and added examples to the `agents.md` file that Portolan
 requires, so that AI agents can answer relevant questions directly from the
 aggregates instead of scanning the full files, which should make some questions
 much faster to answer. Creation of aggregations is now quite easy, using [gpio
-process aggregation](https://geoparquet.io/guide/process-aggregate) tools that
-landed a couple months ago.
+process aggregation](https://geoparquet.io/guide/process-aggregate) tools
+released a couple months ago.
 
 #### Near real time updates
 
@@ -207,12 +207,12 @@ datasets on ArcGIS Servers and GeoServers, but this was a more straightforward
 situation to handle.
 
 The FIRMS fire data feed is updated several times a day, as the data comes from
-a handful of satellites that pass over fires at different times, with varying
+a few satellites that pass over fires at different times, with varying
 amounts of processing time. The feed has a nice straightforward API that makes
 it easy to grab the latest. I like things to be as simple and static as
 possible, so I went with a [git-backed
 catalog](https://github.com/portolan-sdi/portolan-spec/blob/v0.2.0/specs/best-practices/git-backed-catalogs.md)
-on GitHub, where I could utilize GitHub Actions to stay in sync with the API.
+on GitHub, where I could use GitHub Actions to stay in sync with the API.
 This lets me have a regular job that checks the latest data from the FIRMS API,
 updating several times per day, all for free with GitHub's continuous
 integration infrastructure.
@@ -231,10 +231,10 @@ usually gets an update every 3-5 hours. A more professional version could pretty
 easily pay for periodic instances for a few dollars a month.
 
 I kept the same pattern that the core data feed did with the data, making a
-parquet file for the most recent 7 days, so you can just download the most
-recent fires in a smaller file. The update scripts move the older data into the
-year file, so that you can always query the whole dataset with one call and get
-all the data - the historical along with the most recent. I did a bit of
+parquet file for the most recent 7 days, a smaller file for anyone who only
+wants the most recent fires. The update scripts move the older data into the
+year file, and one call still returns the whole dataset - the historical along
+with the most recent. I did a bit of
 adjustment to the schemas to have this work, but generally it's pretty true to
 the source data.
 
@@ -243,8 +243,8 @@ the source data.
 Setting up the catalog was relatively straightforward, so most of my time on
 this project went to seeing how far I could push the front-end. My goal was to
 make it so the core files powering it are generally useful in other tools, while
-making my front-end tool as interactive as possible. What I ended up with was an
-'all-time' PMTiles that had monthly columns for the statistics, and then one
+making my front-end tool as interactive as possible. I ended up with an 'all-time'
+PMTiles that had monthly columns for the statistics, and then one
 PMTiles for each year that has a column for each day. Then in my front-end I
 managed to get it so that all the parts integrate on the timeline, loading each
 bit iteratively as you interact with it. When you zoom out on the slider it
@@ -255,8 +255,8 @@ This is potentially abusing PMTiles a bit, as it makes the tiles heavier than
 they would be otherwise. Leveraging the A5 aggregations at coarser zoom levels
 lets us balance it the other way, as you need the full 365 columns per geometry
 per tile, so if you have less geometries per tile then the total size can be
-less. But on the other hand the map looks much nicer if you have smaller cells,
-as you can see much more spatial nuance.
+less. But the map looks much nicer if you have smaller cells, as you can see much
+more spatial nuance.
 
 The front end would struggle if I loaded it up with too much data, since I
 wanted it to update the map as you drag the time slider. I just love that
@@ -294,14 +294,14 @@ This does mean I likely have more headroom to either put in finer cells or more
 data, so I hope to try that out in the future. One angle I'm most interested in
 is the ability to filter the views based on different attributes - sensor,
 day/night, confidence, etc. This makes the aggregation a lot heavier with the
-PMTiles approach, but I believe if you make the time chunks tighter, like 90
-days instead of a full year, then you could fit in more of that data.
+PMTiles approach, but I believe tighter time chunks, like 90 days instead of a
+full year, would fit in more of that data.
 
 I did have one iteration where I drove the statistics for the map based on the
 Parquet A5 aggregation file. It was a promising direction, that did improve
 things, but I decided to go back to the pure PMTiles approach so that the viewer
-isn't super custom. I want to be sure that any client can read the data, and
-that making a nice viewer doesn't require a bunch of super custom code. And once
+isn't super custom. I want any client to be able to read the data, and I don't
+want a nice viewer to require a bunch of super custom code. And once
 I brought deck.gl in it got things fast enough that additional performance
 wasn't really required, so shifting back to the more straight forward approach
 made sense.
@@ -322,8 +322,8 @@ try out a parquet partitioning scheme with aggregates that can handle global
 datasets in the future.
 
 The other fun challenge was the time slider. This probably took the most time,
-as I wanted to get it to feel fairly seamless - just zooming in and out
-temporally, but in the background loading the right data. I don't think it's yet
+as I wanted the zooming in and out to feel continuous - temporal on the
+surface, but in the background loading the right data. I don't think it's yet
 'perfect', but I got to my goal of just having one time line that loads the data
 as you explore. I had to cut myself off from just continuing to code on this,
 but if I get back to this I think I'd make the time chunks shorter. Each of
@@ -375,15 +375,15 @@ there is anyone who would like to help turn this into a truly useful tool and
 thinks it would get some traction let me know - I'd love to iterate with users
 or developers who are deeper in the fire world than I am. Halfway through
 building it I did talk to someone who does use the dataset, and they said that
-the 'confidence' value is really important, so next I'd like to do a view that
-is the typical 'thinning' of PMTiles but uses some combination of confidence and
-fire radiative power, to enable viewing the 'most important' fires. I have
+the 'confidence' value is really important. So next I'd like a view that does
+the typical 'thinning' of PMTiles on some combination of confidence and fire
+radiative power, to show the 'most important' fires. I have
 ideas, like enabling more filtering of data, bringing in satellite imagery,
 adding geocoders and improving the performance. But I'd like to understand what
 would actually be useful.
 
 And then the other two points that I will be on like a broken record with
-Portolan. The first is the cost, and the scalability you get with that cost. The
+Portolan. The first is the cost, and the scale you get for that cost. The
 whole dataset, in both PMTiles and GeoParquet, is ~27gb, which on AWS costs
 $7.44 to store per year. The other cost is 'egress', which is measured on the
 total number of bytes accessed. For egress we can query the public visits to the
@@ -396,9 +396,8 @@ there is no server that can go down - everything is just reading the data and
 all the interactivity comes on the client side.
 
 And the second is that this enables full AI analysis of the data. You can ask
-about trends in different countries, and even join with other datasets (easily
-if they are in portolan catalogs, a bit less easily if they are not, but still
-quite possible). I'm continually surprised by how insightful the results of
+about trends in different countries, and even join with other datasets. That is
+easy if they are in Portolan catalogs, and a bit less easy if they are not. I'm continually surprised by how insightful the results of
 these sessions are, as AI's have so much context around the spatial data. But
 the data grounds their answers in real truth - with the cloud-native geo +
 agents.md files of Portolan the agents can easily understand the real data
