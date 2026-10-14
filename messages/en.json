@@ -195,6 +195,7 @@
     },
     "title": "Portolan registry",
     "intro": "The <reg>Portolan registry</reg> is a catalog of independently hosted catalogs and a first step toward a federated network for geospatial data. It makes interoperable catalogs from many publishers searchable in one place while the underlying data remain distributed and are queried directly from the source.",
+    "qgis": "Every catalog in the registry also opens in QGIS with the <qgis>Portolan Registry plugin</qgis>.",
     "note": "Some of these catalogs are unofficial mirrors maintained by volunteers. We expect mirrors to be replaced by official catalogs as publishers adopt the Portolan specification.",
     "search": {
       "placeholder": "Search catalogs...",
