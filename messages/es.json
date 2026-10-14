@@ -152,6 +152,7 @@
       "rashid": "El validador que comprueba si un catálogo cumple la especificación Portolan.",
       "cli": "Una herramienta de línea de comandos para crear, comprobar y publicar catálogos Portolan.",
       "registry": "Un registro central de catálogos Portolan públicos.",
+      "qgis": "Un complemento de QGIS para explorar y cargar datos de todos los catálogos del registro Portolan.",
       "browser": "Una interfaz web para navegar y explorar catálogos Portolan.",
       "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos.",
       "cartosdi": "Una infraestructura de datos espaciales para organizaciones, construida sobre Portolan.",
