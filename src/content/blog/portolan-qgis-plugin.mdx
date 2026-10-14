@@ -24,30 +24,28 @@ both vector and raster data.
   mp4="/video/qgis-plugin.mp4"
   poster="/video/qgis-plugin.webp"
   ratio="1698 / 1440"
-  caption="Loading GloFAS 100-year floor depth, clipped to Pergamino district boundaries."
+  caption="Loading GloFAS 100-year flood depth, clipped to Pergamino district boundaries."
   description="A screen recording of QGIS with the Portolan Registry panel open over a world map. It opens the IDE Pergamino catalog and adds the Partido de Pergamino boundary, which draws as a pink polygon in Argentina. The boundary gets a new style. The recording then opens the JRC GloFAS Global Flood Hazard Maps catalog, picks Depth Rp100, and sets the boundary layer as the area of interest. The flood depth raster loads in blue along the rivers inside the district."
 />
 
-Users interested in more information on the dataset can see relevant
-documentation, such as the dataset extent, README, and license, or click out to
+Users can also see thumbnails, the dataset extent, READMEs, and licenses, or click out to
 open the full data documentation in [the Portolan browser](https://browser.portolan-sdi.org/#/).
 
-Because Portolan catalogs are built on strict, consistent standards for
+Because the underlying Portolan catalogs are built on strict, consistent standards for
 cloud-optimized files and catalog structure, the plugin requires no complicated
 backend infrastructure — just GDAL and DuckDB. Users might not know (or care)
-that the underlying data are cloud-optimized and organized in STAC catalogs; all
+that the data they're using are cloud-optimized and organized in STAC catalogs; all
 that matters for them is that it's now easy to access datasets like the Joint Research Commission's
 [global flood
 hazard](https://browser.portolan-sdi.org/#/external/data.source.coop/nlebovits/jrc-glofas/catalog.json),
 or [Overture building
 footprints](https://browser.portolan-sdi.org/#/external/nlebovits.github.io/overture-portolan/catalog.json),
-or [GHSL
-population](https://browser.portolan-sdi.org/#/external/data.source.coop/nlebovits/ghsl/catalog.json),
+or the World Bank's [global wildfire hazard](https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/wb-fwi/catalog.json),
 or [Fields of the
 World](https://browser.portolan-sdi.org/#/external/data.source.coop/ftw/global-data-2e/catalog.json),
 all in a single, simple UI. This is particularly important because previously,
 most of these datasets were scattered across different portals, in different
-formats, meaning that an analyst's time was primarily about finding and
+formats, meaning that an analyst's time was primarily spent finding and
 wrangling data, not using it. Now, with all of these datasets available through
 a consistent UI, analysts can spend less time searching and more time actually
 working with the data.
@@ -61,25 +59,23 @@ of whom are in the Global South. During my Fulbright research in Argentina,
 pretty much everyone I met who did geospatial — whether at universities, in
 local governments, volunteer firefighters, etc. — was using QGIS, whether due to
 the cost of an Esri license, the technical barriers to using R or Python, or
-just the momentum stemming from the large QGIS user community. Because of this,
+just the momentum stemming from the large existing QGIS user community. Because of this,
 making data available in QGIS means reaching a whole new audience: namely, users
 who would never otherwise be able to access these data through, say,
 [`pystac-client`](https://pystac-client.readthedocs.io/en/stable/) or [Copernicus APIs](https://dataspace.copernicus.eu/analyse/apis). This should be particularly compelling to
 institutional data publishers like JRC, the World Bank, or World Resources
 Institute, who often spend a lot of time and effort and money producing datasets
-that then don't have nearly the reach they could
-simply because it's hard for less technical users to access them.
+that then don't have nearly the impact they could have, simply because it's hard for less technical users to access them.
 
-With this QGIS plugin, any catalog [added to the Portolan registry](/registry)
-shows up automatically in the plugin, which means that institutional publishers
-can make their data available without spinning up custom infrastructure. And,
+Going forward, any catalog [added to the Portolan registry](/registry)
+will show up automatically in the plugin, which will allow institutional publishers
+to make their data available without spinning up custom infrastructure. And,
 because the plugin is meant to host a wide range of possible data — while also
-being easily searchable — people will hopefully start their searches here, much
-like in the case of ArcGIS' open data portal, meaning that your data are more
-likely to be found here. (As a bonus, if your data are hosted on [Source
+being easily searchable — people will hopefully start their searches here (much
+like in the case of ArcGIS' open data portal) meaning that, if you publish your data in the Portolan regsitry, your data will be much more likely to be found and used. (As a bonus, if your data are hosted on [Source
 Cooperative](https://source.coop), you get an immediate sense of usage thanks to
 the built-in analytics.) Eventually, we are hoping that uptake of this plugin
-will actually drive new traffic to all of the catalogs in the Portolan registry
+will drive new traffic to all of the catalogs in the Portolan registry
 — people who otherwise would never have known about or used the data in question
 — demonstrating that making data more accessible also makes it more used.
 
@@ -88,8 +84,7 @@ will actually drive new traffic to all of the catalogs in the Portolan registry
 In future releases, we'll improve the UI and performance, and try to add features
 as they're requested. (See the [GitHub
 repo](https://github.com/portolan-sdi/portolan-registry-qgis/issues) for a list
-of currently planned features.) I also plan to add multilingual support soon
-(initially for English, Spanish, French, and Arabic). Youssef Harby of CARTO
+of currently planned features.) We are also in the process of adding multilingual support, beginning with English, Spanish, French, and Arabic. Youssef Harby of CARTO
 plans to work on an ArcGIS version of the plugin, and Qiusheng Wu has already
 built a version for [GeoLibre](https://geolibre.app/). Finally. while managing Portolan catalogs is explicitly out
 of scope in *this* plugin due to the complexity involved, we do hope to develop
