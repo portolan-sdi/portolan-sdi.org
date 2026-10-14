@@ -1,0 +1,100 @@
+import { PostFigure } from "@/components/blog/post-figure";
+
+One of the first things that Chris Holmes and I talked about at the beginning of
+this year, when kicking around the idea of Portolan, was a QGIS plugin that
+would let users browse and download data from any published Portolan dataset.
+Our goal was to make it simple for QGIS users to tap into what we consider "key"
+open datasets around the world, like ESA WorldCover or Overture Maps or GHSL
+population data. They shouldn't need to track down and wrangle different files
+scattered across different portals, each requiring different tools. This is now
+possible. Last week, we released a [Portolan registry plugin in
+QGIS](https://plugins.qgis.org/plugins/portolan_registry_qgis/), making any
+dataset in the Portolan registry accessible in QGIS, too.
+
+## What's in the plugin?
+
+Currently, the plugin lets users browse every catalog in the Portolan registry
+and explore its data. Any dataset imports or downloads with a click. You can
+filter by map extent or a polygon boundary to import only the data you need,
+for both vector and raster data.
+
+<PostFigure
+  n={1}
+  caption="The plugin browses the registry, filters a dataset to the map extent, and loads it into QGIS."
+  pending="GIF of the plugin in QGIS"
+/>
+
+Users interested in more information on the dataset can see relevant
+documentation, such as the dataset extent, README, and license, or click out to
+open the full data documentation in the Portolan browser.
+
+Because Portolan catalogs are built on strict, consistent standards for
+cloud-optimized files and catalog structure, the plugin requires no complicated
+backend infrastructure. It needs only GDAL and DuckDB. Users might not know (or
+care) that the underlying data are cloud-optimized and organized in STAC
+catalogs. For them, the change is that it's now easy to get at the data.
+Datasets like JRC's [global flood
+hazard](https://browser.portolan-sdi.org/#/external/data.source.coop/nlebovits/jrc-glofas/catalog.json),
+the World Bank's [global wildfire
+hazard](https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/wb-fwi/catalog.json),
+[Overture](https://browser.portolan-sdi.org/#/external/nlebovits.github.io/overture-portolan/catalog.json)
+building footprints, [GHSL
+population](https://browser.portolan-sdi.org/#/external/data.source.coop/nlebovits/ghsl/catalog.json),
+Microsoft's [road
+detections](https://browser.portolan-sdi.org/#/external/data.source.coop/nlebovits/microsoft-ml-road-detections/catalog.json),
+Planet's [disaster
+imagery](https://browser.portolan-sdi.org/#/external/data.source.coop/planet/disasterdata/catalog.json),
+[OpenStreetMap for North
+America](https://browser.portolan-sdi.org/#/external/parquetry.geomermaids.com/osm/catalog/catalog.json),
+or [Fields of the
+World](https://browser.portolan-sdi.org/#/external/data.source.coop/ftw/global-data-2e/catalog.json)
+now load from one simple UI. Most of these datasets used to be scattered across different portals, in different formats. An analyst's time
+went mostly to finding and wrangling data, not using it. Now, with all of these
+datasets available through a consistent UI, analysts can spend less time
+searching and more time working with the data.
+
+## Why QGIS?
+
+QGIS is one of the most democratic geospatial tools available. It's free and
+open source, with [millions of
+users](https://www.cell.com/patterns/fulltext/S2666-3899%2825%2900113-8), many
+of whom are in the Global South. During my Fulbright research in Argentina,
+nearly everyone I met who did geospatial work used QGIS. That held at
+universities, in local governments, and among volunteer firefighters. Some
+chose it because of the cost of an Esri license, some because of the technical
+barriers to using R or Python, and some because of the momentum of the large
+QGIS user community. Because of this, making data available in QGIS means
+reaching a whole new audience. These are users who would never otherwise access
+these data through, say, `pystac-client` or the Copernicus API. Institutional
+data publishers like JRC, the World Bank, or World Resources Institute should
+find this particularly compelling. They often spend a lot of time, effort, and
+money producing datasets that then stay in storage somewhere. Those datasets
+don't reach nearly the audience they could, because it's hard for less technical
+users to access them.
+
+With this QGIS plugin, any catalog [added to the Portolan registry](/registry)
+shows up automatically in the plugin. Institutional publishers can make their
+data available without spinning up custom infrastructure. And because the
+plugin is meant to host many datasets while staying easy to search,
+people will hopefully start their searches here, much like with ArcGIS' open
+data portal. That makes your data more likely to be found. (As a bonus, if your
+data are hosted on [Source Cooperative](https://source.coop), you get an
+immediate sense of usage thanks to the built-in analytics.) Eventually, we hope
+that uptake of this plugin will drive new traffic to all of the catalogs in the
+Portolan registry. These are people who otherwise would never have known about
+or used the data in question. That would show that making data more accessible
+also makes it more used.
+
+## What's next?
+
+In future releases, I'll improve the UI and performance, and add features as
+they're requested. (See the [GitHub
+repo](https://github.com/portolan-sdi/portolan-registry-qgis/issues) for a list
+of currently planned features.) I also plan to add multilingual support soon,
+initially for English, Spanish, French, and Arabic. Youssef Harby of CARTO plans
+to work on an ArcGIS version of the plugin, and Qiusheng Wu has already built a
+version for GeoLibre. Managing Portolan catalogs is explicitly out of scope in
+*this* plugin due to the complexity involved, but we hope to develop a plugin
+for that in the future.
+
+[Check out the QGIS plugin here →](https://plugins.qgis.org/plugins/portolan_registry_qgis/)
