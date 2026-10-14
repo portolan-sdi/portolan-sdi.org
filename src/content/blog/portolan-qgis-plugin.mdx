@@ -1,4 +1,4 @@
-import { PostFigure } from "@/components/blog/post-figure";
+import { PostLoopFigure } from "@/components/blog/post-loop-figure";
 
 One of the first things that Chris Holmes and I talked about at the beginning of
 this year, when kicking around the idea of Portolan, was a QGIS plugin that
@@ -18,10 +18,14 @@ and explore its data. Any dataset imports or downloads with a click. You can
 filter by map extent or a polygon boundary to import only the data you need,
 for both vector and raster data.
 
-<PostFigure
+<PostLoopFigure
   n={1}
-  caption="The plugin browses the registry, filters a dataset to the map extent, and loads it into QGIS."
-  pending="GIF of the plugin in QGIS"
+  webm="/video/qgis-plugin.webm"
+  mp4="/video/qgis-plugin.mp4"
+  poster="/video/qgis-plugin.webp"
+  ratio="1698 / 1440"
+  caption="The plugin loads the Pergamino district boundary from one catalog, then clips the GloFAS 100-year flood depth to it."
+  description="A screen recording of QGIS with the Portolan Registry panel open over a world map. It opens the IDE Pergamino catalog and adds the Partido de Pergamino boundary, which draws as a pink polygon in Argentina. The boundary gets a new style. The recording then opens the JRC GloFAS Global Flood Hazard Maps catalog, picks Depth Rp100, and sets the boundary layer as the area of interest. The flood depth raster loads in blue along the rivers inside the district."
 />
 
 Users interested in more information on the dataset can see relevant
