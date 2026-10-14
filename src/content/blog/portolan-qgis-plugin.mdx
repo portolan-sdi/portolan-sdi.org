@@ -79,6 +79,19 @@ will drive new traffic to all of the catalogs in the Portolan registry
 — people who otherwise would never have known about or used the data in question
 — demonstrating that making data more accessible also makes it more used.
 
+## How do I install it?
+
+The plugin needs QGIS 3.34 or newer, and it also runs on QGIS 4.
+
+1. In QGIS, open **Plugins > Manage and Install Plugins**.
+2. Search for **Portolan Registry** and select **Install Plugin**.
+3. Open the plugin from **Web > Portolan Registry** or from its toolbar button.
+
+GeoParquet data loads through DuckDB, which QGIS does not include. The plugin
+asks for DuckDB 1.5.0 or newer the first time you add a GeoParquet asset. The
+[install guide](https://portolan-sdi.github.io/portolan-registry-qgis/install/)
+gives the command for each platform.
+
 ## What's next?
 
 In future releases, we'll improve the UI and performance, and try to add features
