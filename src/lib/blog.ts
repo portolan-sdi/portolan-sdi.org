@@ -42,6 +42,16 @@ export interface BlogPost {
 /** Newest first. The index renders this order as written. */
 export const POSTS: BlogPost[] = [
   {
+    slug: "building-portolan-firms",
+    title: "Building Portolan: FIRMS Mirror",
+    subtitle: "More than 600 million fire detections on one timeline",
+    date: "2026-10-13",
+    author: "Chris Holmes",
+    authorUrl: "https://9eo.org/",
+    summary:
+      "NASA FIRMS publishes 25 years of active fire detections and updates them several times a day. The mirror carries the whole archive as year-partitioned GeoParquet and PMTiles, which an explorer reads to draw every detection since 2000.",
+  },
+  {
     slug: "building-portolan-trimet",
     title: "Building Portolan: TriMet Mirror",
     subtitle: "Three hours from shapefiles to a live catalog",
