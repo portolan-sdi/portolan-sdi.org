@@ -44,12 +44,12 @@ export const POSTS: BlogPost[] = [
   {
     slug: "portolan-qgis-plugin",
     title: "The Portolan QGIS plugin",
-    subtitle: "Every catalog in the registry, one click from QGIS",
+    subtitle: "Every catalog in the registry, available directly in QGIS",
     date: "2026-10-14",
     author: "Nissim Lebovits",
     authorUrl: "https://nlebovits.github.io/",
     summary:
-      "A new QGIS plugin lists every catalog in the Portolan registry. Users can browse a dataset, clip it to the map extent or a polygon, and load vector or raster data with a click.",
+      "A new QGIS plugin lets users browse and import every catalog in the Portolan registry with just a click.",
   },
   {
     slug: "building-portolan-firms",
