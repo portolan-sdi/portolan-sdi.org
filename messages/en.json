@@ -351,7 +351,8 @@
     "feed": "RSS feed",
     "previous": "Previous",
     "next": "Next",
-    "pagerLabel": "Previous and next"
+    "pagerLabel": "Previous and next",
+    "inThisArticle": "In this article"
   },
   "tutorials": {
     "meta": {

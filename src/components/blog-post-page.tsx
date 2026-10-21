@@ -7,6 +7,7 @@ import { Ltr } from "./ui";
 import type { BlogPost } from "@/lib/blog";
 import type { Heading } from "@/lib/headings";
 import { ENTRIES, type ArticleSection } from "./blog-index-page";
+import { PostToc } from "./blog/post-toc";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 
@@ -25,8 +26,9 @@ import { AWAY_ITEMS, SiteShell } from "./site-rail";
 // Posts and tutorials are written in English only. A reader on /es/ or /ar/
 // gets the English body and a translated notice that says so.
 //
-// The post's `##` sections nest under its rail entry, and a previous and next
-// pair under the body links the neighboring entries in the same section.
+// The post's `##` sections list in an "In this article" box pinned beside the
+// body, and a previous and next pair under the body links the neighboring
+// entries in the same section.
 
 interface BlogPostPageProps {
   post: BlogPost;
@@ -63,21 +65,8 @@ export function BlogPostPage({
   const older = entries[index + 1];
   const newer = index > 0 ? entries[index - 1] : undefined;
 
-  // The post is its own row in the rail, under its list's entry.
-  const pageId = `${section}/${post.slug}`;
-
   return (
-    <SiteShell
-      navItems={AWAY_ITEMS}
-      activeId={pageId}
-      page={{
-        parentId: section,
-        id: pageId,
-        title: post.title,
-        href: `/${section}/${post.slug}`,
-        sections: sections ?? [],
-      }}
-    >
+    <SiteShell navItems={AWAY_ITEMS} activeId={section}>
       {/* The headline runs the full 1240px band, like every other page header.
           Only the body below it takes the narrow reading measure. */}
       <PageHero
@@ -126,7 +115,8 @@ export function BlogPostPage({
             same edge the headline above it uses. Centring it instead left the
             body indented from its own title. */}
         <div className="mx-auto max-w-[1240px]">
-          <div className="max-w-[68ch]">
+          {/* Relative, so the contents box can hang off its inline-end edge. */}
+          <div className="relative max-w-[68ch]">
             {locale !== "en" && (
               <p className="mb-10 border border-p-line bg-p-bg-soft p-4 text-small leading-[1.6] text-p-ink-2">
                 {t("englishNotice")}
@@ -137,6 +127,8 @@ export function BlogPostPage({
                 written in English. The page header band already draws the rule
                 above it. */}
             <div dir="ltr">{children}</div>
+
+            <PostToc sections={sections ?? []} />
 
             {(older || newer) && (
               <nav

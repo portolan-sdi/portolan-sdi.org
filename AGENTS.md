@@ -93,12 +93,12 @@ JavaScript plugin function.
   one primary button centered in the text column, with no text around it.
   Use a few per piece, not one per section.
 - **Navigation:** the route reads the body's `##` headings with
-  `extractHeadings` in `src/lib/headings.ts`. The rail nests the post as a
-  row under Blog or Tutorials and its sections under the post, each open row
-  with the down arrow and each list on the dashed rule, with a scroll spy. The `h2` in `src/mdx-components.tsx`
-  sets the matching id. Under the body, a previous and next pair links the
-  neighboring entries in the same list. Do not add a second contents list on
-  the page.
+  `extractHeadings` in `src/lib/headings.ts`, and the `h2` in
+  `src/mdx-components.tsx` sets the matching id. `PostToc` pins them as an
+  "In this article" list in the margin from `xl` up, above the figure
+  captions on a 90% page-color backing. The rail does not list post
+  sections. Under the body, a previous and next pair links the neighboring
+  entries in the same list.
 - **Measure:** a post body runs `max-w-[68ch]`, narrower than the 1240px
   content column the rest of the site uses. A lead or intro paragraph under a
   page title takes no measure cap and runs the full column.

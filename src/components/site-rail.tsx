@@ -1,16 +1,8 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import type { Heading } from "@/lib/headings";
 import { PortolanLogo } from "./portolan-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { SiteFooter } from "./site-footer";
@@ -46,23 +38,12 @@ import { SiteFooter } from "./site-footer";
 //
 // The item list is a prop so a standalone page can index its own contents
 // instead of the homepage's.
-//
-// A post or tutorial passes itself as `page`. It nests as a row under its
-// list's entry (Blog or Tutorials), and its `##` sections nest under it as
-// in-page anchors. Each open row carries the down arrow, and each nested list
-// hangs on the same dashed rule as a group's. The post row is the current
-// page, and the scroll spy highlights the section in view.
 
 export type RailItem = {
   /** Element id on the current page, and the React key. */
   id: string;
   /** Translation key to read for the label. */
-  label?: string;
-  /**
-   * A literal label. It wins over `label`. Post sections use it, because a
-   * post heading is English content and has no key in `messages/`.
-   */
-  text?: string;
+  label: string;
   /** Set for a route. Omit for an in-page anchor. */
   href?: string;
   /**
@@ -149,43 +130,7 @@ interface SiteShellProps {
    * sections of its own names its own rail entry instead.
    */
   activeId?: string | null;
-  /** A post or tutorial, nested with its sections under its list's entry. */
-  page?: RailPage;
 }
-
-export interface RailPage {
-  /** The rail entry the page belongs under, such as "tutorials". */
-  parentId: string;
-  /** The page row's id. Pass the same value as `activeId`. */
-  id: string;
-  /** The post title. English only, like the post itself. */
-  title: string;
-  href: string;
-  /** The body's `##` headings. */
-  sections: Heading[];
-}
-
-/** Hangs the page row, and its sections under it, beneath `page.parentId`. */
-const withPage = (items: RailItem[], page: RailPage): RailItem[] =>
-  items.map((item) =>
-    item.id === page.parentId
-      ? {
-          ...item,
-          children: [
-            {
-              id: page.id,
-              text: page.title,
-              href: page.href,
-              children: page.sections.length
-                ? page.sections.map(({ id, text }) => ({ id, text }))
-                : undefined,
-            },
-          ],
-        }
-      : item.children
-        ? { ...item, children: withPage(item.children, page) }
-        : item,
-  );
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -203,7 +148,6 @@ export function SiteShell({
   children,
   navItems = HOME_ITEMS,
   activeId: activeIdProp,
-  page,
 }: SiteShellProps) {
   const t = useTranslations();
   const pathname = usePathname();
@@ -229,17 +173,8 @@ export function SiteShell({
     }
   }, []);
 
-  const hasSections = !!page && page.sections.length > 0;
-  const items = useMemo(
-    () => (page ? withPage(navItems, page) : navItems),
-    [navItems, page],
-  );
-
-  // A page with sections names its own entry and still spies on its sections.
-  const spyOn = activeIdProp === undefined || hasSections;
-  const activeId = activeIdProp === undefined ? spiedId : activeIdProp;
-  const isActive = (id: string) =>
-    id === activeId || (hasSections && id === spiedId);
+  const spyOn = activeIdProp === undefined;
+  const activeId = spyOn ? spiedId : activeIdProp;
 
   // Which group the reader is inside. A group of in-page anchors can only be
   // the homepage's own, so it opens whenever the rail is showing anchors.
@@ -273,44 +208,13 @@ export function SiteShell({
   // Highlight the section currently in view. Anchors only: a route has no
   // element on this page to observe. Read the whole tree, because the anchors
   // sit one level down under Overview.
-  const anchorKey = flatten(items)
+  const anchorKey = flatten(navItems)
     .filter((item) => !item.href && !item.children)
     .map((item) => item.id)
     .join(",");
 
-  // A post section is a heading, not a box that spans its content, so the
-  // band test below misses it most of the time. The current section is the
-  // last heading above 40% of the viewport, read on scroll.
   useEffect(() => {
-    if (!hasSections) return;
-    const els = anchorKey
-      .split(",")
-      .filter(Boolean)
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (els.length === 0) return;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const line = window.innerHeight * 0.4;
-      const passed = els.filter((el) => el.getBoundingClientRect().top <= line);
-      setSpiedId(passed.length ? passed[passed.length - 1].id : null);
-    };
-    const onScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [anchorKey, hasSections]);
-
-  useEffect(() => {
-    if (!spyOn || hasSections) return;
+    if (!spyOn) return;
     const els = anchorKey
       .split(",")
       .filter(Boolean)
@@ -328,7 +232,7 @@ export function SiteShell({
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, [anchorKey, spyOn, hasSections]);
+  }, [anchorKey, spyOn]);
 
   // The mobile rail behaves as a modal navigation surface. Move focus into
   // it on open, keep Tab within it, and return focus to its trigger on close.
@@ -413,12 +317,8 @@ export function SiteShell({
   const leafRow = `${rowBase} ps-[18px]`;
   const childRowBase =
     "flex items-center justify-between py-[7px] text-small transition-colors";
-  // A post title or section wraps rather than truncates, so it stays whole.
-  const sectionRow = "block py-[5px] text-small leading-snug text-pretty transition-colors";
   const tone = (active: boolean) =>
     active ? "text-p-primary" : "text-p-ink hover:text-p-primary";
-  const labelOf = (item: RailItem) =>
-    item.text ?? (item.label ? t(item.label) : "");
 
   // U+25BE points down, which reads the same in both directions, so only the
   // shut state needs an RTL variant.
@@ -434,7 +334,7 @@ export function SiteShell({
   );
 
   const renderLeaf = (item: RailItem, base: string) => {
-    const active = isActive(item.id);
+    const active = activeId === item.id;
     const className = `${base} ${tone(active)}`;
     return item.href ? (
       <Link
@@ -443,7 +343,7 @@ export function SiteShell({
         aria-current={active ? "page" : undefined}
         className={className}
       >
-        {labelOf(item)}
+        {t(item.label)}
       </Link>
     ) : (
       <a
@@ -452,41 +352,18 @@ export function SiteShell({
         aria-current={active ? "true" : undefined}
         className={className}
       >
-        {labelOf(item)}
+        {t(item.label)}
       </a>
     );
   };
 
   const gutter = "inline-flex h-6 w-3 shrink-0 items-center justify-center";
 
-  // A child row that holds rows of its own: a list entry over the open post,
-  // or the post over its sections. The arrow hangs in the 18px before the
-  // label, so the label stays in line with its siblings, and the nested list
-  // draws its dashed rule under the arrow, 10px in, as a group's list does.
-  const renderChild = (item: RailItem, base: string): ReactNode =>
-    item.children ? (
-      <>
-        <div className="flex items-baseline">
-          <span className={`${gutter} -ms-[18px] me-1.5 text-p-ink-3`}>
-            {arrow(true)}
-          </span>
-          {renderLeaf(item, `flex-1 ${base}`)}
-        </div>
-        <ul className="mb-1 -ms-[12px] border-s border-dashed border-p-line-soft ps-[22px]">
-          {item.children.map((child) => (
-            <li key={child.id}>{renderChild(child, sectionRow)}</li>
-          ))}
-        </ul>
-      </>
-    ) : (
-      renderLeaf(item, base)
-    );
-
   const renderGroup = (item: RailItem) => {
     const locked = isLocked(item);
     const open = locked || isOpen(item.id);
     const listId = `rail-group-${item.id}`;
-    const active = isActive(item.id);
+    const active = activeId === item.id;
     const children = item.children ?? [];
 
     return (
@@ -506,7 +383,7 @@ export function SiteShell({
                 aria-current={active ? "true" : undefined}
                 className={`flex-1 ${rowBase} ${tone(active)}`}
               >
-                {labelOf(item)}
+                {t(item.label)}
               </a>
             ) : item.href ? (
               <Link
@@ -515,11 +392,11 @@ export function SiteShell({
                 aria-current={active ? "page" : undefined}
                 className={`flex-1 ${rowBase} ${tone(active)}`}
               >
-                {labelOf(item)}
+                {t(item.label)}
               </Link>
             ) : (
               <span className={`flex-1 ${rowBase} ${tone(false)}`}>
-                {labelOf(item)}
+                {t(item.label)}
               </span>
             )}
           </div>
@@ -531,7 +408,7 @@ export function SiteShell({
               onClick={() => toggle(item.id)}
               aria-expanded={open}
               aria-controls={listId}
-              aria-label={t("nav.toggleGroup", { section: labelOf(item) })}
+              aria-label={t("nav.toggleGroup", { section: t(item.label) })}
               className={`${gutter} text-p-ink-3 transition-colors hover:text-p-primary`}
             >
               {arrow(open)}
@@ -542,7 +419,7 @@ export function SiteShell({
               aria-current={active ? "page" : undefined}
               className={`flex-1 ${rowBase} ${tone(active)}`}
             >
-              {labelOf(item)}
+              {t(item.label)}
             </Link>
           </div>
         ) : (
@@ -557,7 +434,7 @@ export function SiteShell({
             <span className={`${gutter} text-p-ink-3`}>
               {arrow(open)}
             </span>
-            <span className="flex-1">{labelOf(item)}</span>
+            <span className="flex-1">{t(item.label)}</span>
           </button>
         )}
 
@@ -568,7 +445,7 @@ export function SiteShell({
           className="ms-[6px] border-s border-dashed border-p-line-soft ps-[22px]"
         >
           {children.map((child) => (
-            <li key={child.id}>{renderChild(child, childRowBase)}</li>
+            <li key={child.id}>{renderLeaf(child, childRowBase)}</li>
           ))}
         </ul>
       </>
@@ -605,7 +482,7 @@ export function SiteShell({
 
         <div className="flex-1 overflow-y-auto py-3.5">
           <ul className="px-[22px]">
-            {items.map((item) => (
+            {navItems.map((item) => (
               <li key={item.id}>
                 {item.children ? renderGroup(item) : renderLeaf(item, leafRow)}
               </li>
