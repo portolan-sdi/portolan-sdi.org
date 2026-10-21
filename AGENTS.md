@@ -90,8 +90,8 @@ JavaScript plugin function.
   its `src` while an asset is missing and it draws a framed placeholder that
   names the pending file.
 - **Calls to action** use `PostCta` in `src/components/blog/post-cta.tsx`:
-  a solid `--p-primary` band with one sentence and one paper button. Use a
-  few per piece, not one per section.
+  one primary button centered in the text column, with no text around it.
+  Use a few per piece, not one per section.
 - **Measure:** a post body runs `max-w-[68ch]`, narrower than the 1240px
   content column the rest of the site uses. A lead or intro paragraph under a
   page title takes no measure cap and runs the full column.
