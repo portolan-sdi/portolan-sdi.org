@@ -1,9 +1,12 @@
 import { PostFigure } from "@/components/blog/post-figure";
 import { PostLoopFigure } from "@/components/blog/post-loop-figure";
+import { PostCta } from "@/components/blog/post-cta";
 
 Personal note: need lots of calls to action in the tutorial, like, "Get started with the agents kills [link to repo]" and that kin dof thing
 
 In this tutorial, we'll cover a simple example of publishing East Hampton, New York's open data as a Portolan catalog. By the end, you'll know how to use the Portolan `bootstrap`agent skill to orchestrate an end-to-end conversion of an existing Esri server to a complete Portolan catalog, published on Source Cooperative. (Note: the example here is an unofficial mirror of East Hampton's data, not an officially-endorsed catalog.) In future tutorials, we'll dive deeper on some of what's going on under the hood, including topics like [generating nice thumbnails](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/portolan-thumbnails/SKILL.md), [git-backed Portolan catalogs](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/git-backed-catalog/SKILL.md), and [publishing to Source Cooperative](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/sourcecoop/SKILL.md).
+
+<PostCta href="https://github.com/portolan-sdi/portolan-skills#quickstart" label="Get the skills" track="east-hampton-skills">Follow along with the Portolan agent skills.</PostCta>
 
 ## Getting Started
 
@@ -65,6 +68,8 @@ I can either accept, or give it more feedback for further iteration. In this cas
 
 Under the hood, Claude is instructed to use `portolan-cli`, which is a CLI that ships a bunch of convenience tooling we've developed for creating Portolan catalogs. The CLI handles things like extracting data from upstream Esri or WFS servers, converting it to cloud-optimized file formats, organizing it as a STAC catalog, and enriching it with metadata extracted from the original source.
 
+<PostCta href="https://cli.portolan-sdi.org/" label="Read the CLI docs" track="east-hampton-cli">See the commands Claude runs under the hood.</PostCta>
+
 > Key note: the CLI is deterministic, meaning that it's all scripts. This is more reliable than prompting an agent, and costs far fewer tokens.
 
 The CLI also allows Claude to dry run the extraction before starting. In this case, the dry run reveals some issues with how the data would be extracted, which Claude troubleshoots and fixes before proceeding, as well as filing [a bug report in the Portolan CLI repository](https://github.com/portolan-sdi/portolan-cli/issues/1003).
@@ -107,6 +112,8 @@ Claude ues the Source Coop skill and the CLI, following the Source Coop docs.
 
 One the data are published, Claude will add them to the Portolan registry. The registry is a kind of catalog of catalogs: a federated network of all public Portolan catalogs. This means that catalog owners can keep their data in their own storage while making it easily findable, searchable, and accessilble for users, like via the Portolan registry QGIS plugin or the reading Portolan skill.
 
+<PostCta href="https://github.com/portolan-sdi/portolan-skills/tree/main/skills/register-catalog" label="Register a catalog" track="east-hampton-register">Have a Portolan catalog? Add it to the registry.</PostCta>
+
 <PostFigure
   n={8}
   src="/img/tutorials/east-hampton-registry.webp"
@@ -118,6 +125,8 @@ One the data are published, Claude will add them to the Portolan registry. The r
 ## Results
 
 Let's take a look at what this looks like
+
+<PostCta href="https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/east-hampton-catalog/catalog.json" label="Browse the catalog" track="east-hampton-browser">The East Hampton catalog is live.</PostCta>
 
 [Total size of catalog? Cost, assuming 0.02 pre month or whatever?]
 
@@ -152,3 +161,5 @@ Check back for future posts on the ins and outs of publishing data this way, and
 - query with an agent (for a future post)
 
 ## Takeaways
+
+<PostCta href="https://github.com/portolan-sdi/portolan-skills#quickstart" label="Get the skills" track="east-hampton-end-skills">Publish your own city's open data.</PostCta>
