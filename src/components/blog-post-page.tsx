@@ -63,8 +63,21 @@ export function BlogPostPage({
   const older = entries[index + 1];
   const newer = index > 0 ? entries[index - 1] : undefined;
 
+  // The post is its own row in the rail, under its list's entry.
+  const pageId = `${section}/${post.slug}`;
+
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId={section} sections={sections}>
+    <SiteShell
+      navItems={AWAY_ITEMS}
+      activeId={pageId}
+      page={{
+        parentId: section,
+        id: pageId,
+        title: post.title,
+        href: `/${section}/${post.slug}`,
+        sections: sections ?? [],
+      }}
+    >
       {/* The headline runs the full 1240px band, like every other page header.
           Only the body below it takes the narrow reading measure. */}
       <PageHero

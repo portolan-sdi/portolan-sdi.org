@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import type { Heading } from "@/lib/headings";
@@ -40,9 +47,11 @@ import { SiteFooter } from "./site-footer";
 // The item list is a prop so a standalone page can index its own contents
 // instead of the homepage's.
 //
-// A post or tutorial passes its `##` sections as well. They nest one level
-// under the page's own rail entry, as in-page anchors, and the scroll spy
-// highlights the one in view while the entry stays highlighted as the page.
+// A post or tutorial passes itself as `page`. It nests as a row under its
+// list's entry (Blog or Tutorials), and its `##` sections nest under it as
+// in-page anchors. Each open row carries the down arrow, and each nested list
+// hangs on the same dashed rule as a group's. The post row is the current
+// page, and the scroll spy highlights the section in view.
 
 export type RailItem = {
   /** Element id on the current page, and the React key. */
@@ -140,27 +149,41 @@ interface SiteShellProps {
    * sections of its own names its own rail entry instead.
    */
   activeId?: string | null;
-  /**
-   * The page's own sections. They nest under the `activeId` entry, and the
-   * scroll spy runs over them.
-   */
-  sections?: Heading[];
+  /** A post or tutorial, nested with its sections under its list's entry. */
+  page?: RailPage;
 }
 
-/** Hangs `sections` under the item whose id is `parentId`. */
-const withSections = (
-  items: RailItem[],
-  parentId: string,
-  sections: Heading[],
-): RailItem[] =>
+export interface RailPage {
+  /** The rail entry the page belongs under, such as "tutorials". */
+  parentId: string;
+  /** The page row's id. Pass the same value as `activeId`. */
+  id: string;
+  /** The post title. English only, like the post itself. */
+  title: string;
+  href: string;
+  /** The body's `##` headings. */
+  sections: Heading[];
+}
+
+/** Hangs the page row, and its sections under it, beneath `page.parentId`. */
+const withPage = (items: RailItem[], page: RailPage): RailItem[] =>
   items.map((item) =>
-    item.id === parentId
+    item.id === page.parentId
       ? {
           ...item,
-          children: sections.map(({ id, text }) => ({ id, text })),
+          children: [
+            {
+              id: page.id,
+              text: page.title,
+              href: page.href,
+              children: page.sections.length
+                ? page.sections.map(({ id, text }) => ({ id, text }))
+                : undefined,
+            },
+          ],
         }
       : item.children
-        ? { ...item, children: withSections(item.children, parentId, sections) }
+        ? { ...item, children: withPage(item.children, page) }
         : item,
   );
 
@@ -180,7 +203,7 @@ export function SiteShell({
   children,
   navItems = HOME_ITEMS,
   activeId: activeIdProp,
-  sections,
+  page,
 }: SiteShellProps) {
   const t = useTranslations();
   const pathname = usePathname();
@@ -206,11 +229,10 @@ export function SiteShell({
     }
   }, []);
 
-  const hasSections = !!activeIdProp && !!sections && sections.length > 0;
+  const hasSections = !!page && page.sections.length > 0;
   const items = useMemo(
-    () =>
-      hasSections ? withSections(navItems, activeIdProp, sections) : navItems,
-    [hasSections, navItems, activeIdProp, sections],
+    () => (page ? withPage(navItems, page) : navItems),
+    [navItems, page],
   );
 
   // A page with sections names its own entry and still spies on its sections.
@@ -391,7 +413,7 @@ export function SiteShell({
   const leafRow = `${rowBase} ps-[18px]`;
   const childRowBase =
     "flex items-center justify-between py-[7px] text-small transition-colors";
-  // A post section wraps rather than truncates, so a long heading stays whole.
+  // A post title or section wraps rather than truncates, so it stays whole.
   const sectionRow = "block py-[5px] text-small leading-snug text-pretty transition-colors";
   const tone = (active: boolean) =>
     active ? "text-p-primary" : "text-p-ink hover:text-p-primary";
@@ -436,6 +458,29 @@ export function SiteShell({
   };
 
   const gutter = "inline-flex h-6 w-3 shrink-0 items-center justify-center";
+
+  // A child row that holds rows of its own: a list entry over the open post,
+  // or the post over its sections. The arrow hangs in the 18px before the
+  // label, so the label stays in line with its siblings, and the nested list
+  // draws its dashed rule under the arrow, 10px in, as a group's list does.
+  const renderChild = (item: RailItem, base: string): ReactNode =>
+    item.children ? (
+      <>
+        <div className="flex items-baseline">
+          <span className={`${gutter} -ms-[18px] me-1.5 text-p-ink-3`}>
+            {arrow(true)}
+          </span>
+          {renderLeaf(item, `flex-1 ${base}`)}
+        </div>
+        <ul className="mb-1 -ms-[12px] border-s border-dashed border-p-line-soft ps-[22px]">
+          {item.children.map((child) => (
+            <li key={child.id}>{renderChild(child, sectionRow)}</li>
+          ))}
+        </ul>
+      </>
+    ) : (
+      renderLeaf(item, base)
+    );
 
   const renderGroup = (item: RailItem) => {
     const locked = isLocked(item);
@@ -523,17 +568,7 @@ export function SiteShell({
           className="ms-[6px] border-s border-dashed border-p-line-soft ps-[22px]"
         >
           {children.map((child) => (
-            <li key={child.id}>
-              {renderLeaf(child, childRowBase)}
-              {/* A post's own sections, one step in under its entry. */}
-              {child.children && (
-                <ul className="mb-1.5 border-s border-p-line-soft ps-3">
-                  {child.children.map((section) => (
-                    <li key={section.id}>{renderLeaf(section, sectionRow)}</li>
-                  ))}
-                </ul>
-              )}
-            </li>
+            <li key={child.id}>{renderChild(child, childRowBase)}</li>
           ))}
         </ul>
       </>
