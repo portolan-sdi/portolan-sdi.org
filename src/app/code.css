@@ -1,0 +1,32 @@
+/* Shared by Markdown and translated inline identifiers on every route. */
+:root {
+  --p-code-bg: color-mix(in srgb, var(--p-primary) 18%, var(--p-bg));
+  --p-code-radius: 0.375rem;
+}
+
+@layer base {
+  code {
+    font-family: var(--p-mono);
+    background: var(--p-code-bg);
+    border-radius: var(--p-code-radius);
+    padding: 0.1em 0.3em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    overflow-wrap: anywhere;
+  }
+
+  pre:has(> code) {
+    background: var(--p-code-bg);
+    border-radius: var(--p-code-radius);
+    padding: 1rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+    -webkit-box-decoration-break: slice;
+    box-decoration-break: slice;
+  }
+}

@@ -1,6 +1,7 @@
 import { isValidElement, type ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
 import { ProseLink } from "@/components/ui";
+import { PostCodeBlock } from "@/components/blog/post-code-block";
 import { slugify } from "@/lib/headings";
 
 // Element map for every MDX file on the site.
@@ -90,16 +91,8 @@ const components: MDXComponents = {
       {children}
     </code>
   ),
-  // A code block never mirrors in Arabic, and scrolls rather than wrapping.
-  pre: ({ children, ...props }) => (
-    <pre
-      dir="ltr"
-      className="mt-6 overflow-x-auto border border-p-line bg-p-paper p-4 text-small leading-[1.6]"
-      {...props}
-    >
-      {children}
-    </pre>
-  ),
+  // Code stays LTR, wraps visually, and copies with its source lines intact.
+  pre: PostCodeBlock,
 };
 
 export function useMDXComponents(): MDXComponents {

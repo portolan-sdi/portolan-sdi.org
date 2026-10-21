@@ -16,10 +16,10 @@
     "coverage": "Explore catalogs",
     "overview": "Overview",
     "resources": "Resources",
-    "talks": "Talks & demos",
+    "talks": "Talks",
     "toggleGroup": "{section} links",
     "blog": "Blog",
-    "tutorials": "Tutorials"
+    "tutorials": "Guides & demos"
   },
   "hero": {
     "title": "Portolan makes geospatial data",
@@ -347,6 +347,11 @@
     "englishNotice": "This post is available in English only. The rest of the site is translated.",
     "figureLabel": "Fig. {n}",
     "figurePending": "Asset pending",
+    "codeBlock": {
+      "copy": "Copy",
+      "copied": "Copied",
+      "failed": "Copy failed. Select and copy the text."
+    },
     "by": "By",
     "feed": "RSS feed",
     "previous": "Previous",
@@ -356,20 +361,20 @@
   },
   "tutorials": {
     "meta": {
-      "title": "Tutorials",
-      "description": "Step-by-step guides to publishing and using Portolan catalogs."
+      "title": "Guides & demos",
+      "description": "Tutorials, demos, and walkthroughs for publishing and using Portolan catalogs."
     },
-    "title": "Tutorials",
-    "intro": "Step-by-step guides to publishing and using Portolan catalogs.",
-    "backToIndex": "All tutorials",
-    "englishNotice": "This tutorial is available in English only. The rest of the site is translated."
+    "title": "Guides & demos",
+    "intro": "Tutorials, demos, and walkthroughs for publishing and using Portolan catalogs.",
+    "backToIndex": "All guides & demos",
+    "englishNotice": "This content is available in English only. The rest of the site is translated."
   },
   "talks": {
     "meta": {
-      "title": "Talks & demos",
+      "title": "Talks",
       "description": "Conference talks and live demos that show Portolan in use. Slides from the OGC Metadata Summit, Cloud Native Geospatial Japan, Open Geodag, and OGC Connect Helsinki, plus an agent demo and a storage cost calculator."
     },
-    "title": "Talks & demos",
+    "title": "Talks",
     "items": {
       "bolzanoTalk": {
         "title": "AI-Ready Metadata in Practice",

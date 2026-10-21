@@ -16,10 +16,10 @@
     "coverage": "Explorar catálogos",
     "overview": "Vista general",
     "resources": "Recursos",
-    "talks": "Charlas y demos",
+    "talks": "Charlas",
     "toggleGroup": "Enlaces de {section}",
     "blog": "Blog",
-    "tutorials": "Tutoriales"
+    "tutorials": "Guías y demostraciones"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
@@ -347,6 +347,11 @@
     "englishNotice": "Esta entrada está disponible solo en inglés. El resto del sitio está traducido.",
     "figureLabel": "Fig. {n}",
     "figurePending": "Recurso pendiente",
+    "codeBlock": {
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "failed": "No se pudo copiar. Seleccione y copie el texto."
+    },
     "by": "Por",
     "feed": "Feed RSS",
     "previous": "Anterior",
@@ -356,20 +361,20 @@
   },
   "tutorials": {
     "meta": {
-      "title": "Tutoriales",
-      "description": "Guías paso a paso para publicar y usar catálogos Portolan."
+      "title": "Guías y demostraciones",
+      "description": "Tutoriales, demostraciones y ejemplos prácticos para publicar y usar catálogos Portolan."
     },
-    "title": "Tutoriales",
-    "intro": "Guías paso a paso para publicar y usar catálogos Portolan.",
-    "backToIndex": "Todos los tutoriales",
-    "englishNotice": "Este tutorial está disponible solo en inglés. El resto del sitio está traducido."
+    "title": "Guías y demostraciones",
+    "intro": "Tutoriales, demostraciones y ejemplos prácticos para publicar y usar catálogos Portolan.",
+    "backToIndex": "Todas las guías y demostraciones",
+    "englishNotice": "Este contenido está disponible solo en inglés. El resto del sitio está traducido."
   },
   "talks": {
     "meta": {
-      "title": "Charlas y demos",
+      "title": "Charlas",
       "description": "Charlas de conferencias y demos en vivo que muestran Portolan en uso. Diapositivas del OGC Metadata Summit, Cloud Native Geospatial Japan, Open Geodag y OGC Connect Helsinki, además de una demo con agentes y una calculadora de costes de almacenamiento."
     },
-    "title": "Charlas y demos",
+    "title": "Charlas",
     "items": {
       "bolzanoTalk": {
         "title": "Metadatos listos para la IA en la práctica",
