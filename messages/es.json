@@ -348,7 +348,10 @@
     "figureLabel": "Fig. {n}",
     "figurePending": "Recurso pendiente",
     "by": "Por",
-    "feed": "Feed RSS"
+    "feed": "Feed RSS",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pagerLabel": "Anterior y siguiente"
   },
   "tutorials": {
     "meta": {

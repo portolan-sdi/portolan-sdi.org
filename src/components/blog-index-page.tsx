@@ -24,7 +24,8 @@ import { AWAY_ITEMS, SiteShell } from "./site-rail";
 
 export type ArticleSection = "blog" | "tutorials";
 
-const ENTRIES = { blog: POSTS, tutorials: TUTORIALS };
+/** Each section's entries, newest first. The post page reads its neighbors here. */
+export const ENTRIES = { blog: POSTS, tutorials: TUTORIALS };
 
 interface BlogIndexPageProps {
   section?: ArticleSection;

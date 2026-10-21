@@ -348,7 +348,10 @@
     "figureLabel": "شكل {n}",
     "figurePending": "الملف غير متوفر بعد",
     "by": "بقلم",
-    "feed": "موجز RSS"
+    "feed": "موجز RSS",
+    "previous": "السابق",
+    "next": "التالي",
+    "pagerLabel": "السابق والتالي"
   },
   "tutorials": {
     "meta": {

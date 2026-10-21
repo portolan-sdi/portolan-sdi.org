@@ -1,9 +1,12 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { BlogPostPage } from "@/components";
 import { fullTitle } from "@/lib/blog";
 import { TUTORIALS, getTutorial } from "@/lib/tutorials";
+import { extractHeadings } from "@/lib/headings";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
 interface PageProps {
@@ -66,9 +69,17 @@ export default async function Tutorial({ params }: PageProps) {
   if (!tutorial) notFound();
 
   const { default: Body } = await import(`@/content/tutorials/${slug}.mdx`);
+  // The rail lists the body's sections. The page prerenders, so this read
+  // runs at build time.
+  const sections = extractHeadings(
+    await readFile(
+      path.join(process.cwd(), "src/content/tutorials", `${slug}.mdx`),
+      "utf8",
+    ),
+  );
 
   return (
-    <BlogPostPage post={tutorial} section="tutorials">
+    <BlogPostPage post={tutorial} section="tutorials" sections={sections}>
       <Body />
     </BlogPostPage>
   );

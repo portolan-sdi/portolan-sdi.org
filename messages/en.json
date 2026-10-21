@@ -348,7 +348,10 @@
     "figureLabel": "Fig. {n}",
     "figurePending": "Asset pending",
     "by": "By",
-    "feed": "RSS feed"
+    "feed": "RSS feed",
+    "previous": "Previous",
+    "next": "Next",
+    "pagerLabel": "Previous and next"
   },
   "tutorials": {
     "meta": {

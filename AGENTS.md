@@ -92,6 +92,12 @@ JavaScript plugin function.
 - **Calls to action** use `PostCta` in `src/components/blog/post-cta.tsx`:
   one primary button centered in the text column, with no text around it.
   Use a few per piece, not one per section.
+- **Navigation:** the route reads the body's `##` headings with
+  `extractHeadings` in `src/lib/headings.ts`, and the rail nests them under
+  the post's entry with a scroll spy. The `h2` in `src/mdx-components.tsx`
+  sets the matching id. Under the body, a previous and next pair links the
+  neighboring entries in the same list. Do not add a second contents list on
+  the page.
 - **Measure:** a post body runs `max-w-[68ch]`, narrower than the 1240px
   content column the rest of the site uses. A lead or intro paragraph under a
   page title takes no measure cap and runs the full column.

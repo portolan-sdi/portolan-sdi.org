@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import type { Heading } from "@/lib/headings";
 import { PortolanLogo } from "./portolan-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { SiteFooter } from "./site-footer";
@@ -38,12 +39,21 @@ import { SiteFooter } from "./site-footer";
 //
 // The item list is a prop so a standalone page can index its own contents
 // instead of the homepage's.
+//
+// A post or tutorial passes its `##` sections as well. They nest one level
+// under the page's own rail entry, as in-page anchors, and the scroll spy
+// highlights the one in view while the entry stays highlighted as the page.
 
 export type RailItem = {
   /** Element id on the current page, and the React key. */
   id: string;
   /** Translation key to read for the label. */
-  label: string;
+  label?: string;
+  /**
+   * A literal label. It wins over `label`. Post sections use it, because a
+   * post heading is English content and has no key in `messages/`.
+   */
+  text?: string;
   /** Set for a route. Omit for an in-page anchor. */
   href?: string;
   /**
@@ -130,7 +140,29 @@ interface SiteShellProps {
    * sections of its own names its own rail entry instead.
    */
   activeId?: string | null;
+  /**
+   * The page's own sections. They nest under the `activeId` entry, and the
+   * scroll spy runs over them.
+   */
+  sections?: Heading[];
 }
+
+/** Hangs `sections` under the item whose id is `parentId`. */
+const withSections = (
+  items: RailItem[],
+  parentId: string,
+  sections: Heading[],
+): RailItem[] =>
+  items.map((item) =>
+    item.id === parentId
+      ? {
+          ...item,
+          children: sections.map(({ id, text }) => ({ id, text })),
+        }
+      : item.children
+        ? { ...item, children: withSections(item.children, parentId, sections) }
+        : item,
+  );
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -148,6 +180,7 @@ export function SiteShell({
   children,
   navItems = HOME_ITEMS,
   activeId: activeIdProp,
+  sections,
 }: SiteShellProps) {
   const t = useTranslations();
   const pathname = usePathname();
@@ -173,8 +206,18 @@ export function SiteShell({
     }
   }, []);
 
-  const spyOn = activeIdProp === undefined;
-  const activeId = spyOn ? spiedId : activeIdProp;
+  const hasSections = !!activeIdProp && !!sections && sections.length > 0;
+  const items = useMemo(
+    () =>
+      hasSections ? withSections(navItems, activeIdProp, sections) : navItems,
+    [hasSections, navItems, activeIdProp, sections],
+  );
+
+  // A page with sections names its own entry and still spies on its sections.
+  const spyOn = activeIdProp === undefined || hasSections;
+  const activeId = activeIdProp === undefined ? spiedId : activeIdProp;
+  const isActive = (id: string) =>
+    id === activeId || (hasSections && id === spiedId);
 
   // Which group the reader is inside. A group of in-page anchors can only be
   // the homepage's own, so it opens whenever the rail is showing anchors.
@@ -208,13 +251,44 @@ export function SiteShell({
   // Highlight the section currently in view. Anchors only: a route has no
   // element on this page to observe. Read the whole tree, because the anchors
   // sit one level down under Overview.
-  const anchorKey = flatten(navItems)
+  const anchorKey = flatten(items)
     .filter((item) => !item.href && !item.children)
     .map((item) => item.id)
     .join(",");
 
+  // A post section is a heading, not a box that spans its content, so the
+  // band test below misses it most of the time. The current section is the
+  // last heading above 40% of the viewport, read on scroll.
   useEffect(() => {
-    if (!spyOn) return;
+    if (!hasSections) return;
+    const els = anchorKey
+      .split(",")
+      .filter(Boolean)
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (els.length === 0) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.4;
+      const passed = els.filter((el) => el.getBoundingClientRect().top <= line);
+      setSpiedId(passed.length ? passed[passed.length - 1].id : null);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [anchorKey, hasSections]);
+
+  useEffect(() => {
+    if (!spyOn || hasSections) return;
     const els = anchorKey
       .split(",")
       .filter(Boolean)
@@ -232,7 +306,7 @@ export function SiteShell({
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, [anchorKey, spyOn]);
+  }, [anchorKey, spyOn, hasSections]);
 
   // The mobile rail behaves as a modal navigation surface. Move focus into
   // it on open, keep Tab within it, and return focus to its trigger on close.
@@ -317,8 +391,12 @@ export function SiteShell({
   const leafRow = `${rowBase} ps-[18px]`;
   const childRowBase =
     "flex items-center justify-between py-[7px] text-small transition-colors";
+  // A post section wraps rather than truncates, so a long heading stays whole.
+  const sectionRow = "block py-[5px] text-small leading-snug text-pretty transition-colors";
   const tone = (active: boolean) =>
     active ? "text-p-primary" : "text-p-ink hover:text-p-primary";
+  const labelOf = (item: RailItem) =>
+    item.text ?? (item.label ? t(item.label) : "");
 
   // U+25BE points down, which reads the same in both directions, so only the
   // shut state needs an RTL variant.
@@ -334,7 +412,7 @@ export function SiteShell({
   );
 
   const renderLeaf = (item: RailItem, base: string) => {
-    const active = activeId === item.id;
+    const active = isActive(item.id);
     const className = `${base} ${tone(active)}`;
     return item.href ? (
       <Link
@@ -343,7 +421,7 @@ export function SiteShell({
         aria-current={active ? "page" : undefined}
         className={className}
       >
-        {t(item.label)}
+        {labelOf(item)}
       </Link>
     ) : (
       <a
@@ -352,7 +430,7 @@ export function SiteShell({
         aria-current={active ? "true" : undefined}
         className={className}
       >
-        {t(item.label)}
+        {labelOf(item)}
       </a>
     );
   };
@@ -363,7 +441,7 @@ export function SiteShell({
     const locked = isLocked(item);
     const open = locked || isOpen(item.id);
     const listId = `rail-group-${item.id}`;
-    const active = activeId === item.id;
+    const active = isActive(item.id);
     const children = item.children ?? [];
 
     return (
@@ -383,7 +461,7 @@ export function SiteShell({
                 aria-current={active ? "true" : undefined}
                 className={`flex-1 ${rowBase} ${tone(active)}`}
               >
-                {t(item.label)}
+                {labelOf(item)}
               </a>
             ) : item.href ? (
               <Link
@@ -392,11 +470,11 @@ export function SiteShell({
                 aria-current={active ? "page" : undefined}
                 className={`flex-1 ${rowBase} ${tone(active)}`}
               >
-                {t(item.label)}
+                {labelOf(item)}
               </Link>
             ) : (
               <span className={`flex-1 ${rowBase} ${tone(false)}`}>
-                {t(item.label)}
+                {labelOf(item)}
               </span>
             )}
           </div>
@@ -408,7 +486,7 @@ export function SiteShell({
               onClick={() => toggle(item.id)}
               aria-expanded={open}
               aria-controls={listId}
-              aria-label={t("nav.toggleGroup", { section: t(item.label) })}
+              aria-label={t("nav.toggleGroup", { section: labelOf(item) })}
               className={`${gutter} text-p-ink-3 transition-colors hover:text-p-primary`}
             >
               {arrow(open)}
@@ -419,7 +497,7 @@ export function SiteShell({
               aria-current={active ? "page" : undefined}
               className={`flex-1 ${rowBase} ${tone(active)}`}
             >
-              {t(item.label)}
+              {labelOf(item)}
             </Link>
           </div>
         ) : (
@@ -434,7 +512,7 @@ export function SiteShell({
             <span className={`${gutter} text-p-ink-3`}>
               {arrow(open)}
             </span>
-            <span className="flex-1">{t(item.label)}</span>
+            <span className="flex-1">{labelOf(item)}</span>
           </button>
         )}
 
@@ -445,7 +523,17 @@ export function SiteShell({
           className="ms-[6px] border-s border-dashed border-p-line-soft ps-[22px]"
         >
           {children.map((child) => (
-            <li key={child.id}>{renderLeaf(child, childRowBase)}</li>
+            <li key={child.id}>
+              {renderLeaf(child, childRowBase)}
+              {/* A post's own sections, one step in under its entry. */}
+              {child.children && (
+                <ul className="mb-1.5 border-s border-p-line-soft ps-3">
+                  {child.children.map((section) => (
+                    <li key={section.id}>{renderLeaf(section, sectionRow)}</li>
+                  ))}
+                </ul>
+              )}
+            </li>
           ))}
         </ul>
       </>
@@ -482,7 +570,7 @@ export function SiteShell({
 
         <div className="flex-1 overflow-y-auto py-3.5">
           <ul className="px-[22px]">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <li key={item.id}>
                 {item.children ? renderGroup(item) : renderLeaf(item, leafRow)}
               </li>
