@@ -106,6 +106,7 @@ JavaScript plugin function.
   `src/content/tutorials/<slug>.mdx` and metadata in `src/lib/tutorials.ts`.
   The routes under `src/app/[locale]/tutorials/` render through the blog
   components with `section="tutorials"`. Tutorials are not in the RSS feed.
+  Tutorials carry no author byline, and the `Tutorial` type forbids `author`.
 
 ## Tech stack
 
