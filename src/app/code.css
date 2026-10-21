@@ -5,8 +5,14 @@
 }
 
 @layer base {
+  /* Inline code takes the code block's voice: the text-small size and full
+     ink. In body text that is 13px, as in a block. In larger text it keeps
+     the small-to-body ratio (13 / 15) so it does not shrink below its
+     sentence. */
   code {
     font-family: var(--p-mono);
+    font-size: max(var(--text-small), calc(1em * 13 / 15));
+    color: var(--p-ink);
     background: var(--p-code-bg);
     border-radius: var(--p-code-radius);
     padding: 0.1em 0.3em;
@@ -24,6 +30,7 @@
   }
 
   pre code {
+    font-size: inherit;
     background: transparent;
     padding: 0;
     -webkit-box-decoration-break: slice;
