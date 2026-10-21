@@ -555,8 +555,8 @@ body {
 /* A call-to-action button in a post body. The hero button reads as a button
    because it sits on the map. On the blank reading page a flat blue fill
    reads as a box, so this one stands on a hard ink offset, the same
-   offset language as the figures. Hover lifts it, and a press drops it onto
-   its offset. */
+   offset language as the figures. Hover pushes it halfway into the offset,
+   and a press drops it flat. */
 .post-cta-btn {
   box-shadow: 4px 4px 0 var(--p-line);
   transition:
@@ -565,8 +565,8 @@ body {
     background-color 0.15s ease;
 }
 .post-cta-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--p-line);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--p-line);
 }
 .post-cta-btn:active {
   transform: translate(4px, 4px);
@@ -580,8 +580,8 @@ body {
   box-shadow: -4px 4px 0 var(--p-line);
 }
 [dir="rtl"] .post-cta-btn:hover {
-  transform: translate(2px, -2px);
-  box-shadow: -6px 6px 0 var(--p-line);
+  transform: translate(-2px, 2px);
+  box-shadow: -2px 2px 0 var(--p-line);
 }
 [dir="rtl"] .post-cta-btn:active {
   transform: translate(-4px, 4px);
