@@ -1,9 +1,12 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { BlogPostPage } from "@/components";
 import { POSTS, fullTitle, getPost } from "@/lib/blog";
 import { FEED_URL } from "@/lib/feed";
+import { extractHeadings } from "@/lib/headings";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
 interface PageProps {
@@ -68,9 +71,17 @@ export default async function Post({ params }: PageProps) {
   if (!post) notFound();
 
   const { default: Body } = await import(`@/content/blog/${slug}.mdx`);
+  // The rail lists the body's sections. The page prerenders, so this read
+  // runs at build time.
+  const sections = extractHeadings(
+    await readFile(
+      path.join(process.cwd(), "src/content/blog", `${slug}.mdx`),
+      "utf8",
+    ),
+  );
 
   return (
-    <BlogPostPage post={post}>
+    <BlogPostPage post={post} sections={sections}>
       <Body />
     </BlogPostPage>
   );

@@ -1,5 +1,8 @@
+import { isValidElement, type ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
 import { ProseLink } from "@/components/ui";
+import { PostCodeBlock } from "@/components/blog/post-code-block";
+import { slugify } from "@/lib/headings";
 
 // Element map for every MDX file on the site.
 //
@@ -10,11 +13,26 @@ import { ProseLink } from "@/components/ui";
 //
 // Required by @next/mdx: the App Router loader fails without this file.
 
+/** The text of a React subtree, for a heading id. */
+function textOf(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(textOf).join("");
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return textOf(node.props.children);
+  }
+  return "";
+}
+
 const components: MDXComponents = {
   // A post supplies its own <h1>, so the body starts at h2.
+  //
+  // The id is the anchor the rail links to. The route builds the same id from
+  // the MDX source with `extractHeadings` (src/lib/headings.ts). The scroll
+  // margin keeps the heading clear of the sticky mobile top bar.
   h2: ({ children, ...props }) => (
     <h2
-      className="mt-14 mb-4 text-feature font-extrabold leading-[1.2] tracking-[-0.02em] text-balance text-p-ink"
+      id={slugify(textOf(children))}
+      className="mt-14 mb-4 scroll-mt-20 text-feature font-extrabold leading-[1.2] tracking-[-0.02em] text-balance text-p-ink md:scroll-mt-8"
       {...props}
     >
       {children}
@@ -73,16 +91,8 @@ const components: MDXComponents = {
       {children}
     </code>
   ),
-  // A code block never mirrors in Arabic, and scrolls rather than wrapping.
-  pre: ({ children, ...props }) => (
-    <pre
-      dir="ltr"
-      className="mt-6 overflow-x-auto border border-p-line bg-p-paper p-4 text-small leading-[1.6]"
-      {...props}
-    >
-      {children}
-    </pre>
-  ),
+  // Code stays LTR, wraps visually, and copies with its source lines intact.
+  pre: PostCodeBlock,
 };
 
 export function useMDXComponents(): MDXComponents {

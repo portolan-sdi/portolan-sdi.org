@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./code.css";
 
 // All routes are localized under [locale], which owns <html>/<body> so it can
 // set lang/dir per locale. This root layout stays as a required pass-through

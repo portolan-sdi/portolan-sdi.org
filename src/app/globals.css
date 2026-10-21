@@ -57,8 +57,8 @@
     monospace;
   --p-arabic: var(--font-cairo), "Segoe UI", Tahoma, sans-serif;
 
-  /* Radii — square. Every corner is 90 degrees; the tokens stay so existing
-     rounded-[var(--p-r-*)] utilities resolve to 0. */
+  /* General UI radii stay square; code uses --p-code-radius. The tokens stay
+     so existing rounded-[var(--p-r-*)] utilities resolve to 0. */
   --p-r-xs: 0px;
   --p-r-sm: 0px;
   --p-r-md: 0px;
@@ -94,6 +94,7 @@
   --color-p-primary: var(--p-primary);
   --color-p-primary-ink: var(--p-primary-ink);
   --color-p-on-primary: var(--p-on-primary);
+  --color-p-code-bg: var(--p-code-bg);
   --color-p-success: var(--p-success);
   --color-p-warn: var(--p-warn);
   --color-p-warn-ink: var(--p-warn-ink);
@@ -550,6 +551,49 @@ body {
 }
 [dir="rtl"] .post-media-frame {
   box-shadow: -5px 5px 0 var(--p-primary);
+}
+
+/* A call-to-action button in a post body. The hero button reads as a button
+   because it sits on the map. On the blank reading page a flat blue fill
+   reads as a box, so this one stands on a hard ink offset, the same
+   offset language as the figures. Hover pushes it halfway into the offset,
+   and a press drops it flat. */
+.post-cta-btn {
+  box-shadow: 4px 4px 0 var(--p-line);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.15s ease;
+}
+.post-cta-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--p-line);
+}
+.post-cta-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--p-line);
+}
+.post-cta-btn:focus-visible {
+  outline: 3px solid var(--p-primary);
+  outline-offset: 4px;
+}
+[dir="rtl"] .post-cta-btn {
+  box-shadow: -4px 4px 0 var(--p-line);
+}
+[dir="rtl"] .post-cta-btn:hover {
+  transform: translate(-2px, 2px);
+  box-shadow: -2px 2px 0 var(--p-line);
+}
+[dir="rtl"] .post-cta-btn:active {
+  transform: translate(-4px, 4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .post-cta-btn,
+  .post-cta-btn:hover,
+  .post-cta-btn:active {
+    transition: background-color 0.15s ease;
+    transform: none;
+  }
 }
 @media (min-width: 1024px) {
   .post-figure {

@@ -16,9 +16,10 @@
     "coverage": "استكشف الفهارس",
     "overview": "نظرة عامة",
     "resources": "موارد",
-    "talks": "محاضرات وتجارب",
+    "talks": "محاضرات",
     "toggleGroup": "روابط {section}",
-    "blog": "المدونة"
+    "blog": "المدونة",
+    "tutorials": "أدلة وعروض توضيحية"
   },
   "hero": {
     "title": "Portolan يجعل البيانات الجيومكانية",
@@ -34,11 +35,11 @@
     "title": "شارك",
     "priority": "أسهل طريقة للبدء الآن هي <publish>نشر بياناتك في كتالوج Portolan</publish> وإخبارنا بالنتيجة. تفيدنا دائما ملاحظاتك عما يعمل وما لا يعمل وكيف يمكن تحسين Portolan، خاصة إذا اختلف تنفيذك عن الكتالوجات الحالية.",
     "contributions": "نرحب أيضا بالمساهمات في <github>مواصفة Portolan وأدواته</github> من خلال تقارير الأخطاء وطلبات الميزات وPRs. نرحب بشكل خاص بـ PRs. راجع <issues>المسائل المفتوحة</issues> للبدء.",
-    "community": "Portolan مشروع مجتمعي مفتوح المصدر ونرحب بالمستخدمين والمساهمين الجدد. انضم إلى قناة <slack><m>#portolan</m> على Slack</slack> وتابع <group>مجموعة Portolan على Google</group> لمعرفة تفاصيل اجتماعاتنا الأسبوعية."
+    "community": "Portolan مشروع مجتمعي مفتوح المصدر ونرحب بالمستخدمين والمساهمين الجدد. انضم إلى <slack>قناة Portolan على Slack</slack> وتابع <group>مجموعة Portolan على Google</group> لمعرفة تفاصيل اجتماعاتنا الأسبوعية."
   },
   "footer": {
-    "contentLicense": "محتوى الموقع مرخّص بموجب <cc><m>CC BY 4.0</m></cc>.",
-    "sourceLicense": "مصدر الموقع مرخّص بموجب <apache><m>Apache-2.0</m></apache>.",
+    "contentLicense": "محتوى الموقع مرخّص بموجب <cc>CC BY 4.0</cc>.",
+    "sourceLicense": "مصدر الموقع مرخّص بموجب <apache>Apache-2.0</apache>.",
     "googleGroup": "مجموعة Google",
     "slack": "Slack",
     "community": "المجتمع",
@@ -51,11 +52,11 @@
     "cards": {
       "open": {
         "title": "مفتوح وقابل للتشغيل البيني",
-        "description": "يبني Portolan على معايير مفتوحة مثل <geoparquet><m>GeoParquet</m></geoparquet> و<pmtiles><m>PMTiles</m></pmtiles> و<cog><m>COG</m></cog> و<stac><m>STAC</m></stac>، فتدخل البيانات مباشرة إلى أدوات مثل QGIS وArcGIS وPandas وBigQuery."
+        "description": "يبني Portolan على معايير مفتوحة مثل <geoparquet>GeoParquet</geoparquet> و<pmtiles>PMTiles</pmtiles> و<cog>COG</cog> و<stac>STAC</stac>، فتدخل البيانات مباشرة إلى أدوات مثل QGIS وArcGIS وPandas وBigQuery."
       },
       "simple": {
         "title": "بسيط ورخيص وقابل للتوسّع وسيادي",
-        "description": "مع Portolan، بياناتك مجرد ملفات في حاوية سحابية. خزّنها لدى أي مزوّد متوافق مع <m>S3</m> وفي أي ولاية قضائية تختارها. وتكاليفك الوحيدة هي التخزين ونقل البيانات إلى الخارج. توسّع من ميغابايتات إلى بيتابايتات بلا خوادم ولا قواعد بيانات ولا واجهات برمجية مخصصة."
+        "description": "مع Portolan، بياناتك مجرد ملفات في حاوية سحابية. خزّنها لدى أي مزوّد متوافق مع <s3>S3</s3> وفي أي ولاية قضائية تختارها. وتكاليفك الوحيدة هي التخزين ونقل البيانات إلى الخارج. توسّع من ميغابايتات إلى بيتابايتات بلا خوادم ولا قواعد بيانات ولا واجهات برمجية مخصصة."
       },
       "agents": {
         "title": "مصمّم للناس والوكلاء",
@@ -91,12 +92,12 @@
       "convert": {
         "id": "01",
         "title": "التحويل",
-        "description": "سواء عملت بملفات Shapefile وGeoPackage أو بنقطة WFS أو بخادم Esri، تصبح بياناتك <m>GeoParquet</m> و<m>PMTiles</m> للبيانات الشعاعية و<m>COG</m> للبيانات النقطية."
+        "description": "سواء عملت بملفات Shapefile وGeoPackage أو بنقطة WFS أو بخادم Esri، تصبح بياناتك <geoparquet>GeoParquet</geoparquet> و<pmtiles>PMTiles</pmtiles> للبيانات الشعاعية و<cog>COG</cog> للبيانات النقطية."
       },
       "catalog": {
         "id": "02",
         "title": "الفهرسة",
-        "description": "تُنظَّم بياناتك المهيأة للسحابة ككتالوج <m>STAC</m> مع بيانات وصفية وتوثيق واضحين، وهذا يجعل الكتالوج سهل العثور عليه وفهمه واستخدامه للناس والوكلاء معًا."
+        "description": "تُنظَّم بياناتك المهيأة للسحابة ككتالوج <stac>STAC</stac> مع بيانات وصفية وتوثيق واضحين، وهذا يجعل الكتالوج سهل العثور عليه وفهمه واستخدامه للناس والوكلاء معًا."
       },
       "publish": {
         "id": "03",
@@ -346,15 +347,34 @@
     "englishNotice": "هذه المقالة متاحة بالإنجليزية فقط. بقية الموقع مترجمة.",
     "figureLabel": "شكل {n}",
     "figurePending": "الملف غير متوفر بعد",
+    "codeBlock": {
+      "copy": "نسخ",
+      "copied": "تم النسخ",
+      "failed": "تعذر النسخ. حدد النص وانسخه."
+    },
     "by": "بقلم",
-    "feed": "موجز RSS"
+    "feed": "موجز RSS",
+    "previous": "السابق",
+    "next": "التالي",
+    "pagerLabel": "السابق والتالي",
+    "inThisArticle": "في هذا المقال"
+  },
+  "tutorials": {
+    "meta": {
+      "title": "أدلة وعروض توضيحية",
+      "description": "دروس وعروض توضيحية وأمثلة عملية لنشر كتالوجات Portolan واستخدامها."
+    },
+    "title": "أدلة وعروض توضيحية",
+    "intro": "دروس وعروض توضيحية وأمثلة عملية لنشر كتالوجات Portolan واستخدامها.",
+    "backToIndex": "كل الأدلة والعروض التوضيحية",
+    "englishNotice": "هذا المحتوى متاح بالإنجليزية فقط. بقية الموقع مترجمة."
   },
   "talks": {
     "meta": {
-      "title": "محاضرات وتجارب",
+      "title": "محاضرات",
       "description": "محاضرات من المؤتمرات وعروض حية تُظهر Portolan أثناء الاستخدام. شرائح من OGC Metadata Summit و Cloud Native Geospatial Japan و Open Geodag و OGC Connect Helsinki، إضافة إلى عرض بالوكلاء وحاسبة تكلفة التخزين."
     },
-    "title": "محاضرات وتجارب",
+    "title": "محاضرات",
     "items": {
       "bolzanoTalk": {
         "title": "بيانات وصفية جاهزة للذكاء الاصطناعي في الممارسة",

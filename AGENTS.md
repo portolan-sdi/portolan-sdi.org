@@ -48,10 +48,10 @@ Brand values (palette, type, logos) come from
 [brand/](https://github.com/portolan-sdi/portolan-ops/blob/main/brand/) in
 portolan-ops. The rules below cover how this site spends them.
 
-- **Color tokens:** Use CSS variables from `globals.css`. Never hardcode hex except in SVG and the map canvas.
+- **Color tokens:** Use CSS variables from the shared styles in `globals.css` and `code.css`. Never hardcode hex except in SVG and the map canvas.
 - **Light mode only.** Dark mode was removed in July 2026. There is no `[data-theme]` switch, no `ThemeToggle`, and no dark token block. Do not reintroduce a dark theme or a theme toggle.
 - **Type scale (single source of truth):** Use the named utilities generated from `--text-*` tokens in `globals.css`, never arbitrary sizes like `text-[13px]`. Eight steps, smallest first: `text-eyebrow`, `text-small`, `text-body`, `text-lead`, `text-card-title`, `text-feature`, `text-section`, `text-hero`. Headings and lead text are fluid via `clamp()`. The scale was cut from thirteen steps in August 2026. Do not add a step back: the removed ones (`micro`, `body-lg`, `card-title-lg`, `section-sm`, `hero-sm`) sat within 0.5px of a neighbor or inverted the heading hierarchy. `text-lead` caps at 18px so `text-card-title` outranks it at every width.
-- **Corners are square.** All `--p-r-*` radius tokens are `0px`, so every button, input, and content block has 90-degree corners. Nothing is rounded or pill-shaped. The only circle allowed is a loading spinner, which has to spin.
+- **Corners are square, except code.** All `--p-r-*` radius tokens are `0px`, so buttons, inputs, and general content blocks have 90-degree corners. Code blocks and inline code use `--p-code-radius` for small rounded corners. Nothing is pill-shaped. The only circle allowed is a loading spinner, which has to spin.
 - **Surfaces are flat, rules are black.** Shadow tokens render as `none` or a single rule, never a glassy drop shadow. Separate content with rules, not cards or soft background bands. Structural rules (`border-p-line`) are near-black ink. There is no `border-p-line-strong`: it carried the same hex as `border-p-line`, so it named a weight a color token cannot hold. Where a rule needs more weight, thicken the border. The soft tier (`border-p-line-soft`, `#d6d5ca`) is only for interior separators inside an already-bordered block. The heavy black line weight is deliberate, so do not lighten it back to pale hairlines. No `--p-bg-soft` section band on the page: the talks section runs a solid `--p-primary` band instead.
 - **Annotated figures are the sanctioned illustration motif.** Technical diagrams drawn as inline SVG in `--p-primary` strokes with tiny mono labels, dashed leader lines, a faint blue graph-paper wash, and a `Fig. N` caption row (see `PipelineFigure` in the how-it-works section). Figures never mirror in RTL (`dir="ltr"`), and format and tool names inside figures stay Latin. Compass roses and rhumb lines remain banned.
 - **Section kickers:** mono, `text-p-ink-3`, the label string only. No `NN ·` index prefixes (numbers are reserved for real sequences like the how-it-works steps), no `// EYEBROW` punctuation, no uppercase, no wide tracking.
@@ -89,9 +89,24 @@ JavaScript plugin function.
 - **Media** uses `PostFigure` in `src/components/blog/post-figure.tsx`. Omit
   its `src` while an asset is missing and it draws a framed placeholder that
   names the pending file.
+- **Calls to action** use `PostCta` in `src/components/blog/post-cta.tsx`:
+  one primary button centered in the text column, with no text around it.
+  Use a few per piece, not one per section.
+- **Navigation:** the route reads the body's `##` headings with
+  `extractHeadings` in `src/lib/headings.ts`, and the `h2` in
+  `src/mdx-components.tsx` sets the matching id. `PostToc` pins them as an
+  "In this article" list in the margin from `xl` up, above the figure
+  captions on a 90% page-color backing. The rail does not list post
+  sections. Under the body, a previous and next pair links the neighboring
+  entries in the same list.
 - **Measure:** a post body runs `max-w-[68ch]`, narrower than the 1240px
   content column the rest of the site uses. A lead or intro paragraph under a
   page title takes no measure cap and runs the full column.
+- **Tutorials** use the same pipeline under Resources. Bodies live at
+  `src/content/tutorials/<slug>.mdx` and metadata in `src/lib/tutorials.ts`.
+  The routes under `src/app/[locale]/tutorials/` render through the blog
+  components with `section="tutorials"`. Tutorials are not in the RSS feed.
+  Tutorials carry no author byline, and the `Tutorial` type forbids `author`.
 
 ## Tech stack
 
@@ -139,6 +154,11 @@ JavaScript plugin function.
   Product names (Portolan, DuckDB, ...) stay sans. Tags must stay identical across all
   three locales, and any key carrying `<m>` tags must be rendered with `t.rich`, never
   plain `t()`.
+- A name that links somewhere renders as a plain link, never as linked mono. On the
+  homepage, format and storage names (GeoParquet, PMTiles, COG, STAC, S3) link to their
+  spec sites through the `FORMAT_TAGS` tags in `home-page.tsx`, not `<m>`. The
+  footer licenses are plain links too. The Slack link reads "Portolan channel",
+  not `#portolan`.
 
 ### RTL rules (Arabic)
 

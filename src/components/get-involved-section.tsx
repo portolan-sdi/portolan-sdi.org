@@ -1,7 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { COMMUNITY_LINKS } from "@/lib/site";
-import { Ltr, monoChunk } from "./ui";
 
 const proseLink =
   "text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink";
@@ -43,7 +42,6 @@ export function GetInvolvedSection() {
                   {chunks}
                 </a>
               ),
-              m: (chunks) => <Ltr>{monoChunk(chunks)}</Ltr>,
             })}
           </p>
           <p>

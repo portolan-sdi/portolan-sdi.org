@@ -36,6 +36,8 @@ export const FORMAT_LINKS = {
   pmtiles: "https://docs.protomaps.com/pmtiles/",
   cog: "https://cogeo.org/",
   stac: "https://stacspec.org/en/",
+  // Not in urls.md, which lists no storage links.
+  s3: "https://aws.amazon.com/s3/",
 } as const;
 
 export const LICENSE_LINKS = {
