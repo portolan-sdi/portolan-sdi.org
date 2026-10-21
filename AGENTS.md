@@ -154,6 +154,11 @@ JavaScript plugin function.
   Product names (Portolan, DuckDB, ...) stay sans. Tags must stay identical across all
   three locales, and any key carrying `<m>` tags must be rendered with `t.rich`, never
   plain `t()`.
+- A name that links somewhere renders as a plain link, never as linked mono. On the
+  homepage, format and storage names (GeoParquet, PMTiles, COG, STAC, S3) link to their
+  spec sites through the `FORMAT_TAGS` tags in `home-page.tsx`, not `<m>`. The
+  footer licenses are plain links too. The Slack link reads "Portolan channel",
+  not `#portolan`.
 
 ### RTL rules (Arabic)
 

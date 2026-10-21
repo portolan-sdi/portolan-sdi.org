@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { GlyphMap } from "./glyph-map";
 import { SiteShell } from "./site-rail";
@@ -19,6 +20,29 @@ import { FORMAT_LINKS, SPEC_URL } from "@/lib/site";
  *  reserves the box before metadata loads, so the poster does not shift the
  *  page when it paints. */
 const DEMO_ONE_RATIO = "1454 / 1118";
+
+const formatLink =
+  "text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink";
+
+/** Rich-text tags that link a format or storage name to its spec site. */
+const FORMAT_TAGS = Object.fromEntries(
+  (
+    [
+      ["geoparquet", FORMAT_LINKS.geoParquet],
+      ["pmtiles", FORMAT_LINKS.pmtiles],
+      ["cog", FORMAT_LINKS.cog],
+      ["stac", FORMAT_LINKS.stac],
+      ["s3", FORMAT_LINKS.s3],
+    ] as const
+  ).map(([tag, href]) => [
+    tag,
+    (chunks: ReactNode) => (
+      <a href={href} className={formatLink}>
+        {chunks}
+      </a>
+    ),
+  ]),
+);
 
 interface HomePageProps {
   catalogs?: Catalog[];
@@ -169,41 +193,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                   {t(`why.cards.${key}.title`)}
                 </h3>
                 <p className="text-body text-p-ink-2 leading-relaxed text-pretty">
-                  {t.rich(`why.cards.${key}.description`, {
-                    m: monoChunk,
-                    geoparquet: (chunks) => (
-                      <a
-                        href={FORMAT_LINKS.geoParquet}
-                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
-                      >
-                        {chunks}
-                      </a>
-                    ),
-                    pmtiles: (chunks) => (
-                      <a
-                        href={FORMAT_LINKS.pmtiles}
-                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
-                      >
-                        {chunks}
-                      </a>
-                    ),
-                    cog: (chunks) => (
-                      <a
-                        href={FORMAT_LINKS.cog}
-                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
-                      >
-                        {chunks}
-                      </a>
-                    ),
-                    stac: (chunks) => (
-                      <a
-                        href={FORMAT_LINKS.stac}
-                        className="text-p-primary underline underline-offset-2 transition-colors hover:text-p-ink"
-                      >
-                        {chunks}
-                      </a>
-                    ),
-                  })}
+                  {t.rich(`why.cards.${key}.description`, FORMAT_TAGS)}
                 </p>
               </div>
             ))}
@@ -304,9 +294,7 @@ export function HomePage({ catalogs = [] }: HomePageProps) {
                     {t(`howItWorks.steps.${step}.title`)}
                   </h3>
                   <p className="text-body text-p-ink-2 leading-relaxed text-pretty mt-3">
-                    {t.rich(`howItWorks.steps.${step}.description`, {
-                      m: monoChunk,
-                    })}
+                    {t.rich(`howItWorks.steps.${step}.description`, FORMAT_TAGS)}
                   </p>
                 </li>
               ))}

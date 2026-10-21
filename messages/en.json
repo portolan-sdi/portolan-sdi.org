@@ -35,11 +35,11 @@
     "title": "Get involved",
     "priority": "The simplest way to get started right now is to <publish>publish your data as a Portolan catalog</publish> and let us know how it goes. Feedback on what works, what doesn't, and how Portolan can be improved is always helpful, especially when your implementation differs from existing catalogs.",
     "contributions": "We also welcome contributions to the <github>Portolan spec and tooling</github> in the form of bug reports, feature requests, and PRs (and especially PRs). Check out our <issues>open issues</issues> to get started.",
-    "community": "Portolan is an open-source community project. We welcome new users and contributors. Join the <slack><m>#portolan</m> channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
+    "community": "Portolan is an open-source community project. We welcome new users and contributors. Join the <slack>Portolan channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
   },
   "footer": {
-    "contentLicense": "Site content is licensed under <cc><m>CC BY 4.0</m></cc>.",
-    "sourceLicense": "Website source is licensed under <apache><m>Apache-2.0</m></apache>.",
+    "contentLicense": "Site content is licensed under <cc>CC BY 4.0</cc>.",
+    "sourceLicense": "Website source is licensed under <apache>Apache-2.0</apache>.",
     "googleGroup": "Google Group",
     "slack": "Slack",
     "community": "Community",
@@ -52,11 +52,11 @@
     "cards": {
       "open": {
         "title": "Open and interoperable",
-        "description": "Portolan builds on open standards like <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog>, and <stac><m>STAC</m></stac> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery."
+        "description": "Portolan builds on open standards like <geoparquet>GeoParquet</geoparquet>, <pmtiles>PMTiles</pmtiles>, <cog>COG</cog>, and <stac>STAC</stac> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery."
       },
       "simple": {
         "title": "Simple, cheap, scalable, sovereign",
-        "description": "With Portolan, your data are just files in a cloud bucket. Store them with any <m>S3</m>-compatible provider, in any jurisdiction you choose. Your only costs are storage and egress. Scale from megabytes to petabytes with no servers, databases, or custom APIs."
+        "description": "With Portolan, your data are just files in a cloud bucket. Store them with any <s3>S3</s3>-compatible provider, in any jurisdiction you choose. Your only costs are storage and egress. Scale from megabytes to petabytes with no servers, databases, or custom APIs."
       },
       "agents": {
         "title": "Built for people and agents",
@@ -92,12 +92,12 @@
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, your data end up as <m>GeoParquet</m> and <m>PMTiles</m> for vector and <m>COG</m> for raster."
+        "description": "Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, your data end up as <geoparquet>GeoParquet</geoparquet> and <pmtiles>PMTiles</pmtiles> for vector and <cog>COG</cog> for raster."
       },
       "catalog": {
         "id": "02",
         "title": "Catalog",
-        "description": "Your cloud-optimized data are organized as a <m>STAC</m> catalog with clear metadata and docs, making the catalog easy to find, understand, and use for people and agents."
+        "description": "Your cloud-optimized data are organized as a <stac>STAC</stac> catalog with clear metadata and docs, making the catalog easy to find, understand, and use for people and agents."
       },
       "publish": {
         "id": "03",

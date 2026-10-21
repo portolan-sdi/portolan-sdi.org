@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { COMMUNITY_LINKS, LICENSE_LINKS } from "@/lib/site";
 import { PortolanLogo } from "./portolan-logo";
-import { Ltr, monoChunk } from "./ui";
+import { Ltr } from "./ui";
 
 const licenseLink = "underline underline-offset-2";
 
@@ -108,7 +108,6 @@ export function SiteFooter() {
 
         <p className="mt-12 text-center text-small text-p-ink-3">
           {t.rich("footer.contentLicense", {
-            m: monoChunk,
             cc: (chunks) => (
               <a href={LICENSE_LINKS.content} className={licenseLink}>
                 <Ltr>{chunks}</Ltr>
@@ -117,7 +116,6 @@ export function SiteFooter() {
           })}{" "}
           ·{" "}
           {t.rich("footer.sourceLicense", {
-            m: monoChunk,
             apache: (chunks) => (
               <a href={LICENSE_LINKS.source} className={licenseLink}>
                 <Ltr>{chunks}</Ltr>

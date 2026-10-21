@@ -35,11 +35,11 @@
     "title": "Participa",
     "priority": "La forma más sencilla de empezar ahora es <publish>publicar tus datos como un catálogo de Portolan</publish> y contarnos cómo fue. Siempre ayudan los comentarios sobre lo que funciona, lo que no funciona y cómo podemos mejorar Portolan, sobre todo si tu implementación difiere de los catálogos existentes.",
     "contributions": "También aceptamos contribuciones al <github>especificación y las herramientas de Portolan</github> mediante informes de errores, solicitudes de funciones y PRs. Nos interesan en especial los PRs. Consulta nuestros <issues>asuntos abiertos</issues> para empezar.",
-    "community": "Portolan es un proyecto comunitario de código abierto. Damos la bienvenida a nuevos usuarios y colaboradores. Únete al canal <slack><m>#portolan</m> en Slack</slack> y sigue el <group>Grupo de Google de Portolan</group> para conocer los detalles de nuestras reuniones semanales."
+    "community": "Portolan es un proyecto comunitario de código abierto. Damos la bienvenida a nuevos usuarios y colaboradores. Únete al <slack>canal de Portolan en Slack</slack> y sigue el <group>Grupo de Google de Portolan</group> para conocer los detalles de nuestras reuniones semanales."
   },
   "footer": {
-    "contentLicense": "El contenido del sitio tiene una licencia <cc><m>CC BY 4.0</m></cc>.",
-    "sourceLicense": "El código fuente del sitio tiene una licencia <apache><m>Apache-2.0</m></apache>.",
+    "contentLicense": "El contenido del sitio tiene una licencia <cc>CC BY 4.0</cc>.",
+    "sourceLicense": "El código fuente del sitio tiene una licencia <apache>Apache-2.0</apache>.",
     "googleGroup": "Grupo de Google",
     "slack": "Slack",
     "community": "Comunidad",
@@ -52,11 +52,11 @@
     "cards": {
       "open": {
         "title": "Abierto e interoperable",
-        "description": "Portolan se apoya en estándares abiertos como <geoparquet><m>GeoParquet</m></geoparquet>, <pmtiles><m>PMTiles</m></pmtiles>, <cog><m>COG</m></cog> y <stac><m>STAC</m></stac>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, Pandas o BigQuery."
+        "description": "Portolan se apoya en estándares abiertos como <geoparquet>GeoParquet</geoparquet>, <pmtiles>PMTiles</pmtiles>, <cog>COG</cog> y <stac>STAC</stac>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, Pandas o BigQuery."
       },
       "simple": {
         "title": "Simple, barato, escalable, soberano",
-        "description": "Con Portolan, tus datos son solo archivos en un bucket en la nube. Guárdalos con cualquier proveedor compatible con <m>S3</m>, en cualquier jurisdicción que elijas. Tus únicos costes son el almacenamiento y la salida de datos. Escala de megabytes a petabytes sin servidores, bases de datos ni APIs personalizadas."
+        "description": "Con Portolan, tus datos son solo archivos en un bucket en la nube. Guárdalos con cualquier proveedor compatible con <s3>S3</s3>, en cualquier jurisdicción que elijas. Tus únicos costes son el almacenamiento y la salida de datos. Escala de megabytes a petabytes sin servidores, bases de datos ni APIs personalizadas."
       },
       "agents": {
         "title": "Hecho para personas y agentes",
@@ -92,12 +92,12 @@
       "convert": {
         "id": "01",
         "title": "Convertir",
-        "description": "Trabajes con Shapefiles y GeoPackages, con un endpoint WFS o con un servidor Esri, tus datos acaban como <m>GeoParquet</m> y <m>PMTiles</m> para vectores y <m>COG</m> para ráster."
+        "description": "Trabajes con Shapefiles y GeoPackages, con un endpoint WFS o con un servidor Esri, tus datos acaban como <geoparquet>GeoParquet</geoparquet> y <pmtiles>PMTiles</pmtiles> para vectores y <cog>COG</cog> para ráster."
       },
       "catalog": {
         "id": "02",
         "title": "Catalogar",
-        "description": "Tus datos optimizados para la nube se organizan como un catálogo <m>STAC</m> con metadatos y documentación claros, lo que hace que el catálogo sea fácil de encontrar, de entender y de usar para personas y agentes."
+        "description": "Tus datos optimizados para la nube se organizan como un catálogo <stac>STAC</stac> con metadatos y documentación claros, lo que hace que el catálogo sea fácil de encontrar, de entender y de usar para personas y agentes."
       },
       "publish": {
         "id": "03",
