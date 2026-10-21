@@ -18,7 +18,8 @@
     "resources": "Resources",
     "talks": "Talks & demos",
     "toggleGroup": "{section} links",
-    "blog": "Blog"
+    "blog": "Blog",
+    "tutorials": "Tutorials"
   },
   "hero": {
     "title": "Portolan makes geospatial data",
@@ -348,6 +349,16 @@
     "figurePending": "Asset pending",
     "by": "By",
     "feed": "RSS feed"
+  },
+  "tutorials": {
+    "meta": {
+      "title": "Tutorials",
+      "description": "Step-by-step guides to publishing and using Portolan catalogs."
+    },
+    "title": "Tutorials",
+    "intro": "Step-by-step guides to publishing and using Portolan catalogs.",
+    "backToIndex": "All tutorials",
+    "englishNotice": "This tutorial is available in English only. The rest of the site is translated."
   },
   "talks": {
     "meta": {

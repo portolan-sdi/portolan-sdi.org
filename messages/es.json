@@ -18,7 +18,8 @@
     "resources": "Recursos",
     "talks": "Charlas y demos",
     "toggleGroup": "Enlaces de {section}",
-    "blog": "Blog"
+    "blog": "Blog",
+    "tutorials": "Tutoriales"
   },
   "hero": {
     "title": "Portolan hace que los datos geoespaciales",
@@ -348,6 +349,16 @@
     "figurePending": "Recurso pendiente",
     "by": "Por",
     "feed": "Feed RSS"
+  },
+  "tutorials": {
+    "meta": {
+      "title": "Tutoriales",
+      "description": "Guías paso a paso para publicar y usar catálogos Portolan."
+    },
+    "title": "Tutoriales",
+    "intro": "Guías paso a paso para publicar y usar catálogos Portolan.",
+    "backToIndex": "Todos los tutoriales",
+    "englishNotice": "Este tutorial está disponible solo en inglés. El resto del sitio está traducido."
   },
   "talks": {
     "meta": {

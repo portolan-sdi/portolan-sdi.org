@@ -1,0 +1,152 @@
+import { PostFigure } from "@/components/blog/post-figure";
+import { PostVideoFigure } from "@/components/blog/post-video-figure";
+
+Personal note: need lots of calls to action in the tutorial, like, "Get started with the agents kills [link to repo]" and that kin dof thing
+
+In this tutorial, we'll cover a simple example of publishing East Hampton, New York's open data as a Portolan catalog. By the end, you'll know how to use the Portolan `bootstrap`agent skill to orchestrate an end-to-end conversion of an existing Esri server to a complete Portolan catalog, published on Source Cooperative. (Note: the example here is an unofficial mirror of East Hampton's data, not an officially-endorsed catalog.) In future tutorials, we'll dive deeper on some of what's going on under the hood, including topics like [generating nice thumbnails](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/portolan-thumbnails/SKILL.md), [git-backed Portolan catalogs](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/git-backed-catalog/SKILL.md), and [publishing to Source Cooperative](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/sourcecoop/SKILL.md).
+
+## Getting Started
+
+To start, we'll install the Portolan skills plugin in our Claude Code instance. In this session, we're using Claude Opus 5.5. The total runtime for the session was about 90 minutes, and used 52 million tokens, which at current API prices comes to about $24, although in reality this is much cheaper on a subscription. I ran the session on a 20x Max plan and had no issues, but if you're on a Pro plan, you'd likely hit the usage limit at least once, or consider switching to a cheaper model like Sonnet (we haven't done evals to compare these, but anecdotally, we think Sonnet handles tasks like this fairly well).
+
+We're using Claude Code CLI here, and running on a laptop with 16 cores and 64 GB of RAM. While these skills work fine in Claude Cowork, too, Cowork's stricter sandboxing and smaller virtual machines can lead to difficulties in accessing and processing the data, so we generally prefer to use the CLI. This would also work fine with Codex, Gemini, and other LLMs, and we include documentation and a quickstart guide in the Portolan skills repository.
+
+This installs all of the Portolan skills, and [will it stay up to date over time?]
+
+<PostFigure
+  n={1}
+  src="/img/tutorials/east-hampton-plugin-install.webp"
+  alt="A Claude Code session runs claude plugin marketplace add portolan-sdi/portolan-skills and claude plugin install portolan, then /reload-plugins."
+  ratio="1600 / 1346"
+  caption="Installing the Portolan plugin in Claude Code."
+/>
+
+With the plugins installed, we're going to have Claude use the `bootstrap` skill to orchestrate the entire process of converting East Hampton's open data into a catalog. The bootstrap skill is deliberately designed for this and is fairly comprehensive, but we're also going to specifically request that it use the `git-backed catalog` skill, the `thumbnails`skill, and the `sourcecoop` skill. All of these are optional, but we believe that they all make for a better experience of publishing and using Portolan data. (We'll release mini tutorials on each of them in the near future.)
+
+[Probably need tutorials on each of these.]
+
+Because these skills are thorough, prompting Claude isn't very hard. This was the whole message that I sent it:
+
+<PostFigure
+  n={2}
+  src="/img/tutorials/east-hampton-prompt.webp"
+  alt="The prompt asks Claude to use the bootstrap skill to mirror the East Hampton MapServer as a git-backed catalog with thumbnails, published to Source Cooperative. Claude loads the portolan-bootstrap skill."
+  ratio="1600 / 1346"
+  caption="The prompt, and Claude loading the bootstrap skill."
+/>
+
+## Planning up front
+
+The first thing that Claude will do, per the `bootstrap`instructions, is explore the data source and plan its work. (You may want to explicitly switch into Claude's `plan` mode for this step.) It will do some research to understand what it's working with, identify any potential stumbling blocks, and also ask for my input on key decisions. For example, in this session, Claude ran into some issues with the licensing of a few of the upstream datasets, which it asked me about:
+
+<PostFigure
+  n={3}
+  src="/img/tutorials/east-hampton-license-questions.webp"
+  alt="Claude asks four questions before it writes the plan: License, Scope, Destination, and Host. The license question recommends license other and excluding the Suffolk County parcel layers."
+  ratio="1600 / 1346"
+  caption="Claude asks how to handle the license before it writes the plan."
+/>
+
+Before writing a plan, Claude stops to ask me four questions. The service states no license. All it has is an "as is" disclaimer, and the tax parcel lines are marked as copyright Suffolk County, used with permission. Claude can't settle that on its own, so it asks, and it recommends labeling the license "other" and leaving the parcels out. It also asks which of the 53 layers to mirror, because some are duplicates and the service says some of its data is draft.
+
+After some iteration and getting my input, Claude will propose a plan for my approval.
+
+<PostFigure
+  n={4}
+  src="/img/tutorials/east-hampton-plan.webp"
+  alt="Claude's plan for an East Hampton Portolan mirror, git-backed and on Source Cooperative, with the context and the decisions already made. Claude asks whether to proceed."
+  ratio="1600 / 1346"
+  caption="The plan, ready for approval."
+/>
+
+I can either accept, or give it more feedback for further iteration. In this case, I'll accept, and we'll move on to the actual data extraction.
+
+## Creating and publishing the catalog
+
+Under the hood, Claude is instructed to use `portolan-cli`, which is a CLI that ships a bunch of convenience tooling we've developed for creating Portolan catalogs. The CLI handles things like extracting data from upstream Esri or WFS servers, converting it to cloud-optimized file formats, organizing it as a STAC catalog, and enriching it with metadata extracted from the original source.
+
+> Key note: the CLI is deterministic, meaning that it's all scripts. This is more reliable than prompting an agent, and costs far fewer tokens.
+
+The CLI also allows Claude to dry run the extraction before starting. In this case, the dry run reveals some issues with how the data would be extracted, which Claude troubleshoots and fixes before proceeding, as well as filing [a bug report in the Portolan CLI repository](https://github.com/portolan-sdi/portolan-cli/issues/1003).
+
+<PostFigure
+  n={5}
+  src="/img/tutorials/east-hampton-dry-run.webp"
+  alt="The dry run lists the wrong layers. Claude reads the portolan-cli layer filter help and code to find the cause."
+  ratio="1600 / 1346"
+  caption="The dry run lists the wrong layers, and Claude looks for the cause."
+/>
+
+In general, Claude is good at recovering from bugs and that kind of thing.
+
+The skill also explicitly says to double-check the catalog and look for errors/discrepancies/etc. Claude found a few ofthese in our session.
+
+Claude also spends some time on getting the layer styling right. We feel that this is a key distinction in Portolan: why have crappy thumbnails when you can have nice ones? This makes a big difference in a nice catalog.
+
+<PostFigure
+  n={6}
+  src="/img/tutorials/east-hampton-styles.webp"
+  alt="All 38 thumbnails pass the first gate. The second gate finds faint fills, oversized zoom levels, flat grey colors, thin lines, and hidden wetlands, and Claude starts to fix them."
+  ratio="1600 / 1346"
+  caption="Claude reviews the thumbnails and fixes the styles that render poorly."
+/>
+
+## Publication
+
+Once the catalog is cleaned up, Claude is ready to publish it. For our purposes, there are two steps here that we care about: publishing the data to Source Cooperative and adding the published catalog to the Portolan registry. (In a future post, we'll talk about publishing the catalog metadata to GitHub with continuous integration.)
+
+Claude ues the Source Coop skill and the CLI, following the Source Coop docs.
+
+<PostFigure
+  n={7}
+  src="/img/tutorials/east-hampton-source-coop.webp"
+  alt="Claude reports that the East Hampton catalog is published on Source Cooperative: 38 collections in 6 subcatalogs, 76 data files (57 MB), and 214 metadata files."
+  ratio="1600 / 1346"
+  caption="The catalog is live on Source Cooperative."
+/>
+
+One the data are published, Claude will add them to the Portolan registry. The registry is a kind of catalog of catalogs: a federated network of all public Portolan catalogs. This means that catalog owners can keep their data in their own storage while making it easily findable, searchable, and accessilble for users, like via the Portolan registry QGIS plugin or the reading Portolan skill.
+
+<PostFigure
+  n={8}
+  src="/img/tutorials/east-hampton-registry.webp"
+  alt="Claude opens a pull request against portolan-registry that adds catalogs/east-hampton-catalog.yaml, and files an issue against the catalog template."
+  ratio="1600 / 1346"
+  caption="Claude opens the registry pull request."
+/>
+
+## Results
+
+Let's take a look at what this looks like
+
+[Total size of catalog? Cost, assuming 0.02 pre month or whatever?]
+
+<PostVideoFigure
+  n={9}
+  src="/video/east-hampton-source-coop.mp4"
+  poster="/video/east-hampton-source-coop.webp"
+  ratio="1280 / 994"
+  caption="The East Hampton catalog on Source Cooperative."
+  description="A screen recording scrolls the Source Cooperative page for the Town of East Hampton, NY GIS Layers. It shows the six subcatalogs, the catalog files, and the README."
+/>
+
+Users can now open the data in the QGIS plugin or query it using, e.g., the reading Portolan skill. We'll talk about this in a future post.
+
+<PostVideoFigure
+  n={10}
+  src="/video/east-hampton-browser.mp4"
+  poster="/video/east-hampton-browser.webp"
+  ratio="1280 / 994"
+  caption="Browsing the East Hampton catalog in the Portolan Browser."
+  description="A screen recording opens the East Hampton catalog in the Portolan Browser, moves into the Boundaries and Districts subcatalog, and opens the Zoning Districts collection on a map."
+/>
+
+And that's it! The whole process took about an hour and a half, most of which is bottlenecked by the size of the upstream dataset and your internet speed. Better-documented
+
+Check back for future posts on the ins and outs of publishing data this way, and deep dives on specific topics.
+
+- portolan browser
+- open in the QGIS plugin
+- query with an agent (for a future post)
+
+## Takeaways

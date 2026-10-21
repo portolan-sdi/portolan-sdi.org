@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
+import { TUTORIALS } from "@/lib/tutorials";
 import { routing } from "@/i18n/routing";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
@@ -15,10 +16,17 @@ const ROUTES = [
   { path: "/talks", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/faq", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/blog", priority: 0.7, changeFrequency: "monthly" as const },
+  { path: "/tutorials", priority: 0.7, changeFrequency: "monthly" as const },
   // One entry per post. A published post does not change, so it declares the
   // lowest priority and the slowest change frequency on the site.
   ...POSTS.map(({ slug }) => ({
     path: `/blog/${slug}`,
+    priority: 0.6,
+    changeFrequency: "yearly" as const,
+  })),
+  // Tutorials take the same priority and change frequency as posts.
+  ...TUTORIALS.map(({ slug }) => ({
+    path: `/tutorials/${slug}`,
     priority: 0.6,
     changeFrequency: "yearly" as const,
   })),

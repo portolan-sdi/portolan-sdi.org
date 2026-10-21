@@ -92,6 +92,10 @@ JavaScript plugin function.
 - **Measure:** a post body runs `max-w-[68ch]`, narrower than the 1240px
   content column the rest of the site uses. A lead or intro paragraph under a
   page title takes no measure cap and runs the full column.
+- **Tutorials** use the same pipeline under Resources. Bodies live at
+  `src/content/tutorials/<slug>.mdx` and metadata in `src/lib/tutorials.ts`.
+  The routes under `src/app/[locale]/tutorials/` render through the blog
+  components with `section="tutorials"`. Tutorials are not in the RSS feed.
 
 ## Tech stack
 

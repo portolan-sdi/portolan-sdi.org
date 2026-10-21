@@ -90,6 +90,7 @@ const HOME_ITEMS: RailItem[] = [
     alwaysOpen: true,
     children: [
       { id: "blog", label: "nav.blog", href: "/blog" },
+      { id: "tutorials", label: "nav.tutorials", href: "/tutorials" },
       { id: "talks", label: "nav.talks", href: "/talks" },
       { id: "faq", label: "nav.faq", href: "/faq" },
     ],

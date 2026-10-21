@@ -18,7 +18,8 @@
     "resources": "موارد",
     "talks": "محاضرات وتجارب",
     "toggleGroup": "روابط {section}",
-    "blog": "المدونة"
+    "blog": "المدونة",
+    "tutorials": "دروس تعليمية"
   },
   "hero": {
     "title": "Portolan يجعل البيانات الجيومكانية",
@@ -348,6 +349,16 @@
     "figurePending": "الملف غير متوفر بعد",
     "by": "بقلم",
     "feed": "موجز RSS"
+  },
+  "tutorials": {
+    "meta": {
+      "title": "دروس تعليمية",
+      "description": "أدلة خطوة بخطوة لنشر كتالوجات Portolan واستخدامها."
+    },
+    "title": "دروس تعليمية",
+    "intro": "أدلة خطوة بخطوة لنشر كتالوجات Portolan واستخدامها.",
+    "backToIndex": "كل الدروس",
+    "englishNotice": "هذا الدرس متاح بالإنجليزية فقط. بقية الموقع مترجمة."
   },
   "talks": {
     "meta": {

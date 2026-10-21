@@ -87,6 +87,11 @@ export function SiteFooter() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/tutorials" className={footLink}>
+                    {t("nav.tutorials")}
+                  </Link>
+                </li>
+                <li>
                   <Link href="/talks" className={footLink}>
                     {t("nav.talks")}
                   </Link>

@@ -5,10 +5,13 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Ltr } from "./ui";
 import type { BlogPost } from "@/lib/blog";
+import type { ArticleSection } from "./blog-index-page";
 import { PageHero } from "./page-hero";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
 
-// A single blog post.
+// A single blog post or tutorial. The section picks the rail entry, the
+// back link, and the message namespace for the back link and the English
+// notice.
 //
 // The body is the compiled MDX, passed in as children from the route so it
 // stays a server component. Its elements pick up their classes from
@@ -18,21 +21,28 @@ import { AWAY_ITEMS, SiteShell } from "./site-rail";
 // column, which is right for a grid of cards and much too wide for a
 // 2,000-word article.
 //
-// Posts are written in English only. A reader on /es/ or /ar/ gets the English
+// Posts and tutorials are written in English only. A reader on /es/ or /ar/ gets the English
 // body and a translated notice that says so.
 
 interface BlogPostPageProps {
   post: BlogPost;
+  section?: ArticleSection;
   children: ReactNode;
 }
 
-export function BlogPostPage({ post, children }: BlogPostPageProps) {
-  const t = useTranslations("blog");
+export function BlogPostPage({
+  post,
+  section = "blog",
+  children,
+}: BlogPostPageProps) {
+  const t = useTranslations(section);
+  // The byline word is shared with the blog.
+  const tBlog = useTranslations("blog");
   const format = useFormatter();
   const locale = useLocale();
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId="blog">
+    <SiteShell navItems={AWAY_ITEMS} activeId={section}>
       {/* The headline runs the full 1240px band, like every other page header.
           Only the body below it takes the narrow reading measure. */}
       <PageHero
@@ -49,7 +59,7 @@ export function BlogPostPage({ post, children }: BlogPostPageProps) {
             {post.author && (
               <>
                 {" · "}
-                {t("by")}{" "}
+                {tBlog("by")}{" "}
                 <Ltr>
                   {post.authorUrl ? (
                     <a
@@ -68,7 +78,7 @@ export function BlogPostPage({ post, children }: BlogPostPageProps) {
         }
       >
         <Link
-          href="/blog"
+          href={`/${section}`}
           className="mt-8 inline-flex items-center gap-2 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3 transition-colors hover:text-p-primary"
         >
           {/* Points back along the reading direction, so it flips in
