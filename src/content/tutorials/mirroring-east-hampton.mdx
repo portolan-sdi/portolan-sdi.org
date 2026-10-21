@@ -1,5 +1,4 @@
 import { PostFigure } from "@/components/blog/post-figure";
-import { PostVideoFigure } from "@/components/blog/post-video-figure";
 
 Personal note: need lots of calls to action in the tutorial, like, "Get started with the agents kills [link to repo]" and that kin dof thing
 
@@ -17,7 +16,7 @@ This installs all of the Portolan skills, and [will it stay up to date over time
   n={1}
   src="/img/tutorials/east-hampton-plugin-install.webp"
   alt="A Claude Code session runs claude plugin marketplace add portolan-sdi/portolan-skills and claude plugin install portolan, then /reload-plugins."
-  ratio="1600 / 1346"
+  ratio="1600 / 1296"
   caption="Installing the Portolan plugin in Claude Code."
 />
 
@@ -31,7 +30,7 @@ Because these skills are thorough, prompting Claude isn't very hard. This was th
   n={2}
   src="/img/tutorials/east-hampton-prompt.webp"
   alt="The prompt asks Claude to use the bootstrap skill to mirror the East Hampton MapServer as a git-backed catalog with thumbnails, published to Source Cooperative. Claude loads the portolan-bootstrap skill."
-  ratio="1600 / 1346"
+  ratio="1600 / 1296"
   caption="The prompt, and Claude loading the bootstrap skill."
 />
 
@@ -43,7 +42,7 @@ The first thing that Claude will do, per the `bootstrap`instructions, is explore
   n={3}
   src="/img/tutorials/east-hampton-license-questions.webp"
   alt="Claude asks four questions before it writes the plan: License, Scope, Destination, and Host. The license question recommends license other and excluding the Suffolk County parcel layers."
-  ratio="1600 / 1346"
+  ratio="1600 / 1296"
   caption="Claude asks how to handle the license before it writes the plan."
 />
 
@@ -55,7 +54,7 @@ After some iteration and getting my input, Claude will propose a plan for my app
   n={4}
   src="/img/tutorials/east-hampton-plan.webp"
   alt="Claude's plan for an East Hampton Portolan mirror, git-backed and on Source Cooperative, with the context and the decisions already made. Claude asks whether to proceed."
-  ratio="1600 / 1346"
+  ratio="1600 / 1296"
   caption="The plan, ready for approval."
 />
 
@@ -73,7 +72,7 @@ The CLI also allows Claude to dry run the extraction before starting. In this ca
   n={5}
   src="/img/tutorials/east-hampton-dry-run.webp"
   alt="The dry run lists the wrong layers. Claude reads the portolan-cli layer filter help and code to find the cause."
-  ratio="1600 / 1346"
+  ratio="1600 / 1296"
   caption="The dry run lists the wrong layers, and Claude looks for the cause."
 />
 
@@ -87,7 +86,7 @@ Claude also spends some time on getting the layer styling right. We feel that th
   n={6}
   src="/img/tutorials/east-hampton-styles.webp"
   alt="All 38 thumbnails pass the first gate. The second gate finds faint fills, oversized zoom levels, flat grey colors, thin lines, and hidden wetlands, and Claude starts to fix them."
-  ratio="1600 / 1346"
+  ratio="1600 / 1296"
   caption="Claude reviews the thumbnails and fixes the styles that render poorly."
 />
 
@@ -101,7 +100,7 @@ Claude ues the Source Coop skill and the CLI, following the Source Coop docs.
   n={7}
   src="/img/tutorials/east-hampton-source-coop.webp"
   alt="Claude reports that the East Hampton catalog is published on Source Cooperative: 38 collections in 6 subcatalogs, 76 data files (57 MB), and 214 metadata files."
-  ratio="1600 / 1346"
+  ratio="1600 / 1296"
   caption="The catalog is live on Source Cooperative."
 />
 
@@ -111,7 +110,7 @@ One the data are published, Claude will add them to the Portolan registry. The r
   n={8}
   src="/img/tutorials/east-hampton-registry.webp"
   alt="Claude opens a pull request against portolan-registry that adds catalogs/east-hampton-catalog.yaml, and files an issue against the catalog template."
-  ratio="1600 / 1346"
+  ratio="1600 / 1244"
   caption="Claude opens the registry pull request."
 />
 
@@ -121,24 +120,22 @@ Let's take a look at what this looks like
 
 [Total size of catalog? Cost, assuming 0.02 pre month or whatever?]
 
-<PostVideoFigure
+<PostFigure
   n={9}
-  src="/video/east-hampton-source-coop.mp4"
-  poster="/video/east-hampton-source-coop.webp"
-  ratio="1280 / 994"
+  src="/video/east-hampton-source-coop.gif"
+  alt="A screen recording scrolls the Source Cooperative page for the Town of East Hampton, NY GIS Layers. It shows the six subcatalogs, the catalog files, and the README."
+  ratio="960 / 745"
   caption="The East Hampton catalog on Source Cooperative."
-  description="A screen recording scrolls the Source Cooperative page for the Town of East Hampton, NY GIS Layers. It shows the six subcatalogs, the catalog files, and the README."
 />
 
 Users can now open the data in the QGIS plugin or query it using, e.g., the reading Portolan skill. We'll talk about this in a future post.
 
-<PostVideoFigure
+<PostFigure
   n={10}
-  src="/video/east-hampton-browser.mp4"
-  poster="/video/east-hampton-browser.webp"
-  ratio="1280 / 994"
+  src="/video/east-hampton-browser.gif"
+  alt="A screen recording opens the East Hampton catalog in the Portolan Browser, moves into the Boundaries and Districts subcatalog, and opens the Zoning Districts collection on a map."
+  ratio="960 / 745"
   caption="Browsing the East Hampton catalog in the Portolan Browser."
-  description="A screen recording opens the East Hampton catalog in the Portolan Browser, moves into the Boundaries and Districts subcatalog, and opens the Zoning Districts collection on a map."
 />
 
 And that's it! The whole process took about an hour and a half, most of which is bottlenecked by the size of the upstream dataset and your internet speed. Better-documented
