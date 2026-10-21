@@ -13,9 +13,9 @@ If you want to try this with your own data, you'll need:
 - [Claude Code](https://code.claude.com/docs/en/setup), installed and signed in.
 - Git and a GitHub account for the Git-backed catalog.
 - A Source Cooperative account with write access to your destination repository. The [sourcecoop prerequisites](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/sourcecoop/SKILL.md#prerequisites) cover access and authentication setup.
-- Node.js 24.12 or newer and npm for thumbnails. See the [thumbnail skill requirements](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/portolan-thumbnails/SKILL.md#requirements).
+- Node.js 24.12 or newer and `npm` for thumbnails. See the [thumbnail skill requirements](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/portolan-thumbnails/SKILL.md#requirements).
 
-Claude handles installing uv and portolan-cli.
+Claude handles installing `uv` and `portolan-cli`.
 
 ## Getting started
 
@@ -59,7 +59,7 @@ Please make sure that we publish this as a git-backed catalog with really nice t
 
 ## Planning up front
 
-The first thing that Claude does, per the `bootstrap` instructions, is explore the data source and plan its work. (You may want to explicitly switch into Claude's `plan` mode for this step.) It does some research to understand what it's working with, identifies any potential stumbling blocks, and also asks for input on key decisions. For example, in this session, Claude runs into some issues with the licensing of a few of the upstream datasets, which it asks me about:
+The first thing that Claude does, per the `bootstrap` instructions, is explore the data source and plan its work. (You may want to explicitly switch into [Claude's `plan` mode](https://code.claude.com/docs/en/common-workflows#plan-before-editing) for this step.) It does some research to understand what it's working with, identifies any potential stumbling blocks, and also asks for input on key decisions. For example, in this session, Claude runs into some issues with the licensing of a few of the upstream datasets, which it asks me about:
 
 <PostFigure
   n={3}
@@ -87,7 +87,7 @@ Under the hood, the `bootstrap` skill instructs Claude to use [portolan-cli](htt
 
 <PostCta href="https://cli.portolan-sdi.org/" label="Read the CLI docs" track="east-hampton-cli" />
 
-The CLI also allows Claude to dry run the extraction before starting. In this case, the dry run reveals a [layer-selection bug](https://github.com/portolan-sdi/portolan-cli/issues/1003). The CLI interprets the numbers passed to `--layers` as positions in the layer list instead of Esri layer IDs. Claude works around this by passing the list positions for the intended layers before proceeding. In general, frontier models like Claude Opus and OpenAI's Sol tend to be quite good at finding and recovering from complications like this, which is one advantage of the flexibility that comes from working with an agent.
+The CLI also allows Claude to dry run the extraction before starting. In this case, the dry run reveals a [layer-selection bug](https://github.com/portolan-sdi/portolan-cli/issues/1003). The CLI interprets the numbers passed to `--layers` as positions in the layer list instead of Esri layer IDs. Claude works around this by passing the list positions for the intended layers before proceeding. In general, frontier models like Claude Opus and [OpenAI's Sol](https://openai.com/index/introducing-gpt-6-1-sol/) tend to be quite good at finding and recovering from complications like this, which is one advantage of the flexibility that comes from working with an agent.
 
 <PostFigure
   n={5}
@@ -109,7 +109,7 @@ Once a first pass on the catalog is complete, the `bootstrap` skill explicitly i
 
 ## Publication and results
 
-Once the catalog has been cleaned up, Claude takes care of publishing it. In this case, we publish the data to [Source Cooperative](https://source.coop/). The `bootstrap` skill instructs Claude to use the [sourcecoop skill](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/sourcecoop/SKILL.md) and [Source Coop's documentation](https://docs.source.coop/), which makes the process straightforward.
+Once the catalog has been cleaned up, Claude takes care of publishing it. In this case, we publish the data to [Source Cooperative](https://source.coop/). The `bootstrap` skill instructs Claude to use the [sourcecoop skill](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/sourcecoop/SKILL.md) which makes the process straightforward. (See [Source Coop's documentation](https://docs.source.coop/) for information on getting set up to publish on Source Cooperative.)
 
 <PostFigure
   n={7}
@@ -131,7 +131,7 @@ Once the data are live, we can view [the published catalog on Source Cooperative
   caption="The Source Cooperative page shows the catalog's files and documentation."
 />
 
-Claude also adds the catalog to the [Portolan registry](https://github.com/portolan-sdi/portolan-registry), which is a kind of catalog of catalogs: a federated network of registered Portolan catalogs. This means that catalog owners can keep their data in their own storage while making it easily findable, searchable, and accessible for users, like via the [Portolan registry QGIS plugin](https://github.com/portolan-sdi/portolan-registry-qgis) or the [reading-portolan skill](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/reading-portolan/SKILL.md).
+Claude also adds the catalog to the [Portolan registry](https://github.com/portolan-sdi/portolan-registry), which is a kind of catalog of catalogs: a federated network of registered Portolan catalogs. This means that catalog owners can keep their data in their own storage while making it easily findable, searchable, and accessible for users, like via the [Portolan registry QGIS plugin](https://github.com/portolan-sdi/portolan-registry-qgis) or the [reading-portolan skill](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/reading-portolan/SKILL.md). (Adding catalogs to the registry is always opt-in, not the default.)
 
 Lastly, we open the East Hampton catalog in the Portolan browser to see what it looks like. Pretty cool! The upstream data have been extracted into a single catalog, organized neatly in subcatalogs and collections, and given nice thumbnails and styling for easy visualization in the browser. Any of the data in the catalog can also be opened directly in tooling like ArcGIS, Python, QGIS, DuckDB, or other standard geospatial tools. Choose a file format your tool supports and use its remote-file reader to open the file URL.
 
@@ -145,12 +145,10 @@ Lastly, we open the East Hampton catalog in the Portolan browser to see what it 
   caption="Opening a collection and viewing its map in the Portolan Browser."
 />
 
-All told, the entire process took about an hour and a half, most of which was bottlenecked by the size of the upstream dataset and my internet speed. Claude used 52 million tokens, which at current API prices comes to about $24, although in reality this is much cheaper on a subscription. I ran the session on a 20x Max plan and had no issues, but if you're on a Pro plan, you'd likely hit the usage limit at least once, or consider switching to a cheaper model like Sonnet (we haven't done evals to compare these, but anecdotally, we think Sonnet handles tasks like this fairly well).
-
-This is one way to publish a Portolan catalog. The finished files work independently of Claude and the skills that created them. If you'd prefer to work directly with the CLI, the [runnable Philadelphia housing tutorial](https://cli.portolan-sdi.org/examples/) covers a complete publishing workflow. Our [launch post](/blog/introducing-portolan) explains the broader ideas behind Portolan.
+All told, the entire process took about an hour and a half, most of which was bottlenecked by the size of the upstream dataset and my internet speed. Claude used 52 million tokens, which at current API prices comes to about $24, although in reality this is much cheaper on a subscription. I ran the session on a 20x Max plan and had no issues, but if you're on a Pro plan, you'd likely hit the five hour usage limit at least once. You can always resume when your limits reset, or consider switching to a cheaper model like Sonnet (we haven't done evals to compare these, but anecdotally, we think Sonnet handles tasks like this pretty well). If you prefer working entirely without agents, you can use the Portolan CLI yourself; the [runnable Philadelphia housing tutorial](https://cli.portolan-sdi.org/examples/) covers a complete example of this. 
 
 In future walkthroughs, we'll dive deeper on some of what's going on under the hood, including topics like [generating nice thumbnails](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/portolan-thumbnails/SKILL.md), [git-backed Portolan catalogs](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/git-backed-catalog/SKILL.md), and [publishing to Source Cooperative](https://github.com/portolan-sdi/portolan-skills/blob/main/skills/sourcecoop/SKILL.md).
 
-If you'd like to try this with your own data, give your agent a source URL and adapt the prompt above. You can also pick a dataset from our [list of datasets to mirror](https://github.com/portolan-sdi/portolan-data/issues). Portolan is still early stage, and publishing real catalogs helps us find bugs and improve the tools. Share what worked — and what didn't — in the [Portolan Slack channel](https://cloudnativegeo.slack.com/archives/C0A1JBH9529).
+If you'd like to try this yourself, give the agent the URL for your dataset of choice (or pick one from our [list of datasets to mirror](https://github.com/portolan-sdi/portolan-data/issues)) and adapt the prompt above. If you have feedback or want to get involved in building Portolan, check out [our GitHub org](https://github.com/portolan-sdi) and [join the Portolan channel on Slack](https://cloudnativegeo.slack.com/archives/C0A1JBH9529).
 
 <PostCta href="https://browser.portolan-sdi.org/#/external/data.source.coop/portolan-mirrors/east-hampton-catalog/catalog.json" label="Browse the East Hampton catalog" track="east-hampton-browser" />
