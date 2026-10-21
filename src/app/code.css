@@ -21,6 +21,11 @@
     overflow-wrap: anywhere;
   }
 
+  /* Linked code keeps the link color. */
+  a code {
+    color: inherit;
+  }
+
   pre:has(> code) {
     background: var(--p-code-bg);
     border-radius: var(--p-code-radius);
