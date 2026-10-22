@@ -107,6 +107,13 @@ JavaScript plugin function.
   The routes under `src/app/[locale]/tutorials/` render through the blog
   components with `section="tutorials"`. Tutorials are not in the RSS feed.
   Tutorials carry no author byline, and the `Tutorial` type forbids `author`.
+- **Mirrored tutorials** copy an example README from portolan-cli, the same
+  text the CLI docs site renders. `CLI_TUTORIALS` in `src/lib/cli-tutorials.ts`
+  lists them. `pnpm sync:cli-tutorials` rewrites each body, and the Sync CLI
+  Tutorials workflow runs it daily and on a `cli-docs-updated` dispatch, then
+  opens a bot pull request that auto-merges after the checks pass. Never edit
+  a mirrored body by hand. Fix the README in portolan-cli. The title,
+  subtitle, and summary in `TUTORIALS` stay site-owned and do not sync.
 
 ## Tech stack
 
