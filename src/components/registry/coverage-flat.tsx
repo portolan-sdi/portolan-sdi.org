@@ -200,12 +200,15 @@ export default function CoverageFlat() {
           <span>{t("legend")}</span>
           <span className="flex items-center gap-1">
             <span>{legend[0]?.count}</span>
-            <span className="flex">
+            {/* The ramp has one step per distinct count, and the count of
+                steps grows with the registry. The strip keeps one width and
+                the steps share it, so the legend never outgrows a phone. */}
+            <span className="flex w-32">
               {legend.map((step) => (
                 <span
                   key={step.count}
                   aria-hidden="true"
-                  className="inline-block h-3 w-4 border-s border-p-bg first:border-s-0"
+                  className="h-3 min-w-0 flex-1"
                   style={{
                     backgroundColor: "var(--p-primary)",
                     opacity: step.alpha,

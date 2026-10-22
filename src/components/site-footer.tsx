@@ -19,8 +19,10 @@ export function SiteFooter() {
       <div className="mx-auto max-w-[1240px]">
         {/* Logo on the inline-start edge, the link columns beside it. The
             rail indexes the page, so every destination that leaves the page
-            lives here instead. */}
-        <div className="flex flex-col items-start gap-8 sm:flex-row sm:gap-12 lg:gap-20">
+            lives here instead. The logo sits above the columns until lg: from
+            md the pinned rail narrows the content, and beside the logo a
+            column is too narrow for one long word such as "demostraciones". */}
+        <div className="flex flex-col items-start gap-8 lg:flex-row lg:gap-20">
           <Link
             href="/"
             aria-label={t("nav.homeAria")}
