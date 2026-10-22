@@ -20,6 +20,15 @@ export type Tutorial = BlogPost & { author?: never; authorUrl?: never };
 
 /** Newest first. The index renders this order as written. */
 export const TUTORIALS: Tutorial[] = [
+  // The body mirrors a portolan-cli example. See src/lib/cli-tutorials.ts.
+  {
+    slug: "philadelphia-housing",
+    title: "Publishing Philadelphia housing data",
+    subtitle: "From two ArcGIS layers to a catalog you can query",
+    date: "2026-10-22",
+    summary:
+      "Use the Portolan CLI to convert two City of Philadelphia ArcGIS layers to GeoParquet, document and check them as one catalog, publish it to object storage, and query it over HTTP with DuckDB.",
+  },
   {
     slug: "mirroring-east-hampton",
     title: "Mirroring East Hampton's open data",

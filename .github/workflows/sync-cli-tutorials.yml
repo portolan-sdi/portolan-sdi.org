@@ -1,0 +1,135 @@
+name: Sync CLI Tutorials
+
+# Some tutorials mirror example READMEs from portolan-cli. See
+# src/lib/cli-tutorials.ts. portolan-cli can send the dispatch when an
+# example changes on main. The daily run catches a change without one.
+on:
+  repository_dispatch:
+    types: [cli-docs-updated]
+  workflow_dispatch:
+  schedule:
+    - cron: '37 5 * * *'
+
+permissions:
+  contents: read
+
+# A dispatch and the daily run can arrive together. Keep one writer on the
+# stable bot branch so a later run cannot replace a push in flight.
+concurrency:
+  group: cli-tutorial-sync
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync tutorials
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          pnpm -s sync:cli-tutorials | tee "$RUNNER_TEMP/sync.log"
+
+      # git diff misses a new mirror, which is an untracked file.
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -z "$(git status --porcelain -- src/content/tutorials)" ]; then
+            echo "Tutorials unchanged"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # GITHUB_TOKEN cannot raise the pull_request event that runs required
+      # checks. Use the registry bot so the generated pull request can pass.
+      # The registry bot auto-merge workflow merges it after the checks pass.
+      - name: Create bot token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: token
+        with:
+          client-id: ${{ secrets.REGISTRY_BOT_APP_CLIENT_ID }}
+          private-key: ${{ secrets.REGISTRY_BOT_APP_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Open or update the tutorial pull request
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          BRANCH: bot/cli-tutorials
+          CHANGED: ${{ steps.changes.outputs.changed }}
+        run: |
+          open=$(gh pr list --head "$BRANCH" --state open \
+            --json number --jq '.[0].number // empty')
+
+          if [ "$CHANGED" != "true" ]; then
+            if [ -n "$open" ]; then
+              gh pr close "$open" --delete-branch
+              echo "Closed unchanged pull request #${open}"
+            fi
+            exit 0
+          fi
+
+          git config user.name "portolan-registry-bot[bot]"
+          git config user.email \
+            "portolan-registry-bot[bot]@users.noreply.github.com"
+          git remote set-url origin \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          git checkout -B "$BRANCH"
+          git add src/content/tutorials
+          git commit -m "docs: sync tutorials from portolan-cli"
+          git push --force origin "$BRANCH"
+
+          body="$RUNNER_TEMP/tutorial-pr.md"
+          {
+            echo "## What changed"
+            echo
+            echo "Update the mirrored tutorials from the current portolan-cli examples."
+            echo
+            echo "## Why"
+            echo
+            echo "An example README in portolan-cli changed. The mirrored tutorial on this site must show the same text."
+            echo
+            echo "## Verification"
+            echo
+            echo "The header line of each changed file names the source commit."
+            echo
+            echo '```console'
+            echo '$ pnpm sync:cli-tutorials'
+            cat "$RUNNER_TEMP/sync.log"
+            echo '```'
+          } > "$body"
+
+          if [ -n "$open" ]; then
+            gh pr edit "$open" --body-file "$body"
+            echo "Updated open pull request #${open}"
+          else
+            gh pr create --head "$BRANCH" --base main \
+              --title "docs: sync tutorials from portolan-cli" \
+              --body-file "$body"
+          fi
