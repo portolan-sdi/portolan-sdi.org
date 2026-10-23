@@ -42,6 +42,16 @@ export interface BlogPost {
 /** Newest first. The index renders this order as written. */
 export const POSTS: BlogPost[] = [
   {
+    slug: "portolan-qgis-plugin",
+    title: "The Portolan QGIS plugin",
+    subtitle: "Every catalog in the registry, available directly in QGIS",
+    date: "2026-10-14",
+    author: "Nissim Lebovits",
+    authorUrl: "https://nlebovits.github.io/",
+    summary:
+      "A new QGIS plugin lets users browse and import every catalog in the Portolan registry with just a click.",
+  },
+  {
     slug: "building-portolan-firms",
     title: "Building Portolan: FIRMS Mirror",
     subtitle: "More than 600 million fire detections on one timeline",
