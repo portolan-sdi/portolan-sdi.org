@@ -153,6 +153,7 @@
       "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
       "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
       "registry": "A central registry of public Portolan catalogs.",
+      "qgis": "A QGIS plugin for browsing and loading data from every catalog in the Portolan registry.",
       "browser": "A web interface for browsing and exploring Portolan catalogs.",
       "skills": "Agent skills for creating and working with Portolan catalogs.",
       "cartosdi": "A spatial data infrastructure for organizations, built on Portolan.",
@@ -195,6 +196,7 @@
     },
     "title": "Portolan registry",
     "intro": "The <reg>Portolan registry</reg> is a catalog of independently hosted catalogs and a first step toward a federated network for geospatial data. It makes interoperable catalogs from many publishers searchable in one place while the underlying data remain distributed and are queried directly from the source.",
+    "qgis": "Every catalog in the registry also opens in QGIS with the <qgis>Portolan Registry plugin</qgis>.",
     "note": "Some of these catalogs are unofficial mirrors maintained by volunteers. We expect mirrors to be replaced by official catalogs as publishers adopt the Portolan specification.",
     "search": {
       "placeholder": "Search catalogs...",
