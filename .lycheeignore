@@ -1,9 +1,16 @@
 # URL patterns the link check skips. One regular expression per line.
 # Path exceptions live in lychee.toml.
 
-# Next.js serves /registry as a route under src/app/[locale]/registry, not
-# as a file in public/. lychee resolves it against public/ and fails.
-^file://.*/public/registry$
+# Next.js serves these paths as routes under src/app/[locale]/, not as files
+# in public/. lychee resolves a root-relative link in the source against
+# public/ and fails. The Site links workflow checks these routes on the
+# built site, so a broken route still fails a check.
+^file://.*/public/(blog|faq|registry|talks|tutorials)(/[^/]+)?/?$
+
+# These hosts send HTTP 403 to requests from GitHub-hosted runners. From
+# other networks, the same URLs return HTTP 200. The pages exist.
+^https://opendata-ajuntament\.barcelona\.cat/?$
+^https://openai\.com/index/introducing-gpt-6-1-sol/?$
 
 # An MDX expression such as {COMMUNITY_LINKS.slack} becomes a URL at build
 # time. In the source, lychee reads the expression as a file name.
