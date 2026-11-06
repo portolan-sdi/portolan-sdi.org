@@ -8,7 +8,6 @@ test("the explorer gives each catalog bbox one vote", () => {
   const duplicate = [4, 50, 5, 51] as const;
   const data: CoverageBboxes = {
     generated: "2026-08-27T12:00:00Z",
-    registry_generated: "2026-08-27T12:00:00Z",
     catalogs: [
       {
         id: "example",
@@ -39,6 +38,9 @@ test("the bake workflow fixes its base and reconciles an unchanged pull request"
   assert.match(workflow, /persist-credentials: false/);
   assert.match(workflow, /queue: max/);
   assert.match(workflow, /github\.event\.client_payload\.registry_sha/);
+  assert.match(workflow, /github\.event\.client_payload\.generated/);
+  assert.match(workflow, /REGISTRY_GENERATED: \$\{\{ steps\.source\.outputs\.generated \}\}/);
+  assert.doesNotMatch(workflow, /raw\.githubusercontent\.com/);
   assert.match(workflow, /gh pr close "\$open" --delete-branch/);
 
   const tokenStep = workflow.slice(
@@ -48,10 +50,12 @@ test("the bake workflow fixes its base and reconciles an unchanged pull request"
   assert.doesNotMatch(tokenStep, /if:/);
 });
 
-test("the bake uses a bounded immutable fetch and ignores source timestamps", async () => {
+test("the bake reads the 0.1 line with a bounded fetch and ignores source timestamps", async () => {
   const script = await readFile("scripts/bake-a5-coverage.mjs", "utf8");
 
-  assert.match(script, /process\.env\.COVERAGE_BBOX_URL/);
+  assert.match(script, /from "\.\.\/src\/lib\/registry-v01\.mjs"/);
+  assert.match(script, /process\.env\.REGISTRY_GENERATED/);
+  assert.doesNotMatch(script, /raw\.githubusercontent\.com/);
   assert.match(script, /AbortSignal\.timeout\(FETCH_TIMEOUT_MS\)/);
   assert.match(script, /const FETCH_RETRIES = 1/);
   assert.doesNotMatch(script, /generated: index\.generated/);

@@ -1,3 +1,5 @@
+import { CATALOGS_URL, checkCatalogs, loadCoverage } from "./registry-v01.mjs";
+
 // What the registry checks about a catalog during a crawl.
 //
 // `stac_valid` comes from the crawl itself. The other two report the Markdown
@@ -91,15 +93,15 @@ export interface CatalogCoverage {
 }
 
 export interface CoverageBboxes {
+  /** When the registry wrote the coverage index. */
   generated: string;
-  registry_generated: string | null;
   catalogs: CatalogCoverage[];
 }
 
-// The registry publishes its export as a STAC Catalog: one `rel="child"` link
-// per registered catalog, carrying the crawl's findings under a
-// `portolan_registry:` prefix. Schema:
-// https://github.com/portolan-sdi/portolan-registry/blob/main/schema/export.schema.json
+// The registry publishes catalogs.json as a STAC Catalog: one `rel="child"`
+// link per registered catalog, carrying the crawl's findings under a
+// `portolan_registry:` prefix. The site reads the 0.1 release line. Schema:
+// https://registry.portolan-sdi.org/schemas/v0.1.0/extension.json
 interface ChildLink {
   rel: string;
   href: string;
@@ -128,15 +130,10 @@ interface ChildLink {
 }
 
 interface RegistryExport {
-  generated: string;
-  count: number;
+  "portolan_registry:generated": string;
+  "portolan_registry:count": number;
   links: ChildLink[];
 }
-
-const CATALOGS_URL =
-  "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/catalogs.json";
-const COVERAGE_URL =
-  "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/coverage-bboxes.json";
 
 // Tag the registry fetch so the registry CI can invalidate it on demand
 // (POST /api/revalidate) the moment a new export is published, instead of
@@ -197,37 +194,52 @@ function toCatalog(link: ChildLink): Catalog {
   };
 }
 
-export async function getCatalogs(): Promise<CatalogsResponse> {
-  const res = await fetch(CATALOGS_URL, {
-    next: { revalidate: 3600, tags: [CATALOGS_CACHE_TAG] },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch catalogs: ${res.status}`);
+// One registry read. Each URL is cached for an hour under the shared tag. A
+// failed request gets one retry, because a coverage load makes one request
+// for each catalog.
+async function fetchRegistryJson(url: string): Promise<unknown> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(url, {
+        next: { revalidate: 3600, tags: [CATALOGS_CACHE_TAG] },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (error) {
+      lastError = error;
+    }
   }
+  throw new Error(`Failed to fetch ${url}: ${lastError}`);
+}
 
-  const data: RegistryExport = await res.json();
-  const catalogs = (data.links ?? [])
+/** Turn a checked catalogs.json into the site's catalog list. */
+export function parseCatalogs(doc: unknown): CatalogsResponse {
+  const data = checkCatalogs(doc) as unknown as RegistryExport;
+  const catalogs = data.links
     .filter((link) => link.rel === "child" && link["portolan_registry:id"])
     .map(toCatalog);
 
   return {
-    generated: data.generated,
+    generated: data["portolan_registry:generated"],
     count: catalogs.length,
     catalogs,
   };
 }
 
+export async function getCatalogs(): Promise<CatalogsResponse> {
+  return parseCatalogs(await fetchRegistryJson(CATALOGS_URL));
+}
+
 export async function getCoverageBboxes(): Promise<CoverageBboxes> {
-  const res = await fetch(COVERAGE_URL, {
-    next: { revalidate: 3600, tags: [CATALOGS_CACHE_TAG] },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch collection coverage: ${res.status}`);
+  const { generated, catalogs, mixed } = await loadCoverage(fetchRegistryJson);
+  // Directly after a registry deploy, the CDN can serve some old files. The
+  // map accepts the mix. The registry revalidates this tag again when the CDN
+  // serves the new index, so a later request reads a consistent set.
+  if (mixed.length > 0) {
+    console.warn(`Registry coverage mixes exports for: ${mixed.join(", ")}`);
   }
-
-  return (await res.json()) as CoverageBboxes;
+  return { generated, catalogs };
 }
 
 // The Portolan browser opens any catalog.json via a hash route that carries the

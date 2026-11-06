@@ -1,0 +1,184 @@
+{
+  "type": "Catalog",
+  "stac_version": "1.1.0",
+  "id": "portolan-registry",
+  "title": "Portolan Registry",
+  "description": "A unified registry of Portolan catalogs. Each child link points to a registered cloud-native STAC catalog.",
+  "links": [
+    {
+      "rel": "root",
+      "href": "https://registry.portolan-sdi.org/v0.1/catalogs.json",
+      "type": "application/json",
+      "title": "Portolan Registry"
+    },
+    {
+      "rel": "self",
+      "href": "https://registry.portolan-sdi.org/v0.1/catalogs.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "https://pub-1e760dc850cb4a5aa5f8afb77713f8cd.r2.dev/catalog.json",
+      "type": "application/json",
+      "title": "Indirizzi ANNCSU",
+      "bbox": [
+        6.7003259,
+        35.5017421,
+        18.660009,
+        47.0805336
+      ],
+      "portolan_registry:id": "anncsu",
+      "portolan_registry:status": "valid",
+      "portolan_registry:api_type": "static",
+      "portolan_registry:spec_version": "0.2.0",
+      "portolan_registry:spec_version_mixed": false,
+      "portolan_registry:stac_version": "1.1.0",
+      "portolan_registry:logo": null,
+      "portolan_registry:updated": "2026-09-19T15:07:48Z",
+      "portolan_registry:first_registered": "2026-09-19T15:58:57+00:00",
+      "portolan_registry:kind": "mirror",
+      "portolan_registry:producers": [
+        {
+          "name": "Agenzia delle Entrate",
+          "url": "https://www.agenziaentrate.gov.it/"
+        },
+        {
+          "name": "Istat",
+          "url": "https://www.istat.it/"
+        }
+      ],
+      "portolan_registry:processors": [
+        {
+          "name": "anncsu-open",
+          "url": "https://github.com/anncsu-open/anncsu-viewer"
+        }
+      ],
+      "portolan_registry:host": {
+        "name": "Geobeyond",
+        "url": "https://geobeyond.it/"
+      },
+      "portolan_registry:licenses": [
+        {
+          "id": "CC-BY-4.0",
+          "count": 3
+        }
+      ],
+      "portolan_registry:collection_count": 3,
+      "portolan_registry:feature_count": 41462130,
+      "portolan_registry:item_count": 13,
+      "portolan_registry:asset_count": 7,
+      "portolan_registry:total_size_bytes": 1393694428,
+      "portolan_registry:counts_partial": false,
+      "portolan_registry:temporal_extent": [
+        "2025-09-03T00:00:00Z",
+        null
+      ],
+      "portolan_registry:last_crawled": "2026-11-05T14:01:35.720508+00:00",
+      "portolan_registry:last_validated": "2026-11-05T14:01:35.720508+00:00",
+      "portolan_registry:stale_since": null,
+      "portolan_registry:failure_reason": null,
+      "portolan_registry:stac_valid": true,
+      "portolan_registry:stac_invalid_since": null,
+      "portolan_registry:has_agents_md": true,
+      "portolan_registry:has_readme": true,
+      "portolan_registry:deprecated": false,
+      "portolan_registry:deprecated_since": null,
+      "portolan_registry:deprecated_reason": null,
+      "portolan_registry:superseded_by": null,
+      "portolan_registry:coverage": "https://registry.portolan-sdi.org/v0.1/coverage/anncsu.json"
+    },
+    {
+      "rel": "child",
+      "href": "https://storage.googleapis.com/carto-open-catalogs/baden-wuerttemberg-lgl/main/catalog.json",
+      "type": "application/json",
+      "title": "Offene Geodaten Baden-Württemberg",
+      "bbox": [
+        -124.508523,
+        -83.164298,
+        120.673283,
+        90
+      ],
+      "portolan_registry:id": "baden-wuerttemberg-lgl",
+      "portolan_registry:status": "valid",
+      "portolan_registry:api_type": "static",
+      "portolan_registry:spec_version": "0.2.0",
+      "portolan_registry:spec_version_mixed": false,
+      "portolan_registry:stac_version": "1.1.0",
+      "portolan_registry:logo": {
+        "href": "https://storage.googleapis.com/carto-open-catalogs/baden-wuerttemberg-lgl/main/_assets/lgl-logo.svg",
+        "type": "image/svg+xml",
+        "title": "Landesamt für Geoinformation und Landentwicklung Baden-Württemberg"
+      },
+      "portolan_registry:updated": "2026-09-21T12:00:00Z",
+      "portolan_registry:first_registered": "2026-10-02T11:45:13+03:00",
+      "portolan_registry:kind": "mirror",
+      "portolan_registry:producers": [
+        {
+          "name": "MobiData BW, NVBW – Nahverkehrsgesellschaft Baden-Württemberg mbH",
+          "url": "https://www.mobidata-bw.de"
+        },
+        {
+          "name": "Ministerium für Verkehr Baden-Württemberg",
+          "url": "https://vm.baden-wuerttemberg.de"
+        },
+        {
+          "name": "Landesamt für Geoinformation und Landentwicklung Baden-Württemberg",
+          "url": "https://www.lgl-bw.de"
+        },
+        {
+          "name": "Forstliche Versuchs- und Forschungsanstalt Baden-Württemberg",
+          "url": "https://www.fva-bw.de"
+        }
+      ],
+      "portolan_registry:processors": [
+        {
+          "name": "CARTO",
+          "url": "https://carto.com/"
+        },
+        {
+          "name": "MobiData BW, NVBW – Nahverkehrsgesellschaft Baden-Württemberg mbH",
+          "url": "https://www.mobidata-bw.de"
+        }
+      ],
+      "portolan_registry:host": {
+        "name": "CARTO",
+        "url": "https://carto.com/"
+      },
+      "portolan_registry:licenses": [
+        {
+          "id": "DL-DE-BY-2.0",
+          "count": 25
+        },
+        {
+          "id": "DL-DE-ZERO-2.0",
+          "count": 1
+        }
+      ],
+      "portolan_registry:collection_count": 26,
+      "portolan_registry:feature_count": 859468,
+      "portolan_registry:item_count": 0,
+      "portolan_registry:asset_count": 154,
+      "portolan_registry:total_size_bytes": 654115474,
+      "portolan_registry:counts_partial": false,
+      "portolan_registry:temporal_extent": null,
+      "portolan_registry:last_crawled": "2026-11-05T14:01:35.720508+00:00",
+      "portolan_registry:last_validated": "2026-11-05T14:01:35.720508+00:00",
+      "portolan_registry:stale_since": null,
+      "portolan_registry:failure_reason": null,
+      "portolan_registry:stac_valid": true,
+      "portolan_registry:stac_invalid_since": null,
+      "portolan_registry:has_agents_md": true,
+      "portolan_registry:has_readme": true,
+      "portolan_registry:deprecated": false,
+      "portolan_registry:deprecated_since": null,
+      "portolan_registry:deprecated_reason": null,
+      "portolan_registry:superseded_by": null,
+      "portolan_registry:coverage": "https://registry.portolan-sdi.org/v0.1/coverage/baden-wuerttemberg-lgl.json"
+    }
+  ],
+  "portolan_registry:generated": "2026-11-05T14:01:35.720508+00:00",
+  "portolan_registry:count": 2,
+  "stac_extensions": [
+    "https://registry.portolan-sdi.org/schemas/v0.1.0/extension.json"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://registry.portolan-sdi.org/schemas/v0.1.0/coverage.json",
+  "generated": "2026-11-05T14:01:35.720508+00:00",
+  "catalogs": [
+    {
+      "id": "anncsu",
+      "collection_count": 3,
+      "href": "https://registry.portolan-sdi.org/v0.1/coverage/anncsu.json"
+    },
+    {
+      "id": "baden-wuerttemberg-lgl",
+      "collection_count": 26,
+      "href": "https://registry.portolan-sdi.org/v0.1/coverage/baden-wuerttemberg-lgl.json"
+    }
+  ]
+}

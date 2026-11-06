@@ -1,0 +1,422 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://registry.portolan-sdi.org/schemas/v0.1.0/extension.json",
+  "title": "Portolan Registry Extension",
+  "description": "The contract of the Portolan registry export. The registry is a STAC Catalog. Each registered catalog is a child link, and this extension defines the registry fields on the root and on each child link. The schema is open: it accepts fields that it does not define. A released copy also accepts the schema URL of each later release in its line. So a tool that validates with an older release of the line keeps working.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/definitions/stac_extensions"
+    },
+    {
+      "$comment": "The registry export is a STAC Catalog.",
+      "required": [
+        "type",
+        "links"
+      ],
+      "properties": {
+        "type": {
+          "const": "Catalog"
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/root"
+    },
+    {
+      "properties": {
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/link"
+          }
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "stac_extensions": {
+      "type": "object",
+      "required": [
+        "stac_extensions"
+      ],
+      "properties": {
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "type": "string",
+            "pattern": "^https://registry\\.portolan-sdi\\.org/schemas/v0\\.1\\.[0-9]+/extension\\.json$"
+          }
+        }
+      }
+    },
+    "root": {
+      "$comment": "Top-level fields of the registry Catalog.",
+      "type": "object",
+      "required": [
+        "portolan_registry:generated",
+        "portolan_registry:count"
+      ],
+      "properties": {
+        "portolan_registry:generated": {
+          "description": "When the registry wrote the data in this document, RFC 3339.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "portolan_registry:count": {
+          "description": "The number of child links, one for each registered catalog.",
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "link": {
+      "$comment": "The registry fields apply to child links only.",
+      "type": "object",
+      "if": {
+        "required": [
+          "rel"
+        ],
+        "properties": {
+          "rel": {
+            "const": "child"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "href",
+          "title",
+          "portolan_registry:id",
+          "portolan_registry:status",
+          "portolan_registry:collection_count",
+          "portolan_registry:has_agents_md",
+          "portolan_registry:has_readme",
+          "portolan_registry:deprecated",
+          "portolan_registry:deprecated_since",
+          "portolan_registry:deprecated_reason",
+          "portolan_registry:superseded_by",
+          "portolan_registry:kind",
+          "portolan_registry:producers",
+          "portolan_registry:processors",
+          "portolan_registry:host",
+          "portolan_registry:stac_invalid_since",
+          "portolan_registry:temporal_extent",
+          "portolan_registry:coverage"
+        ],
+        "properties": {
+          "bbox": {
+            "$ref": "#/definitions/bbox"
+          },
+          "portolan_registry:id": {
+            "description": "The registry ID of the catalog, from the name of its entry file. The coverage URL of the catalog uses it as a path segment.",
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "portolan_registry:status": {
+            "enum": [
+              "valid",
+              "stale",
+              "removed"
+            ]
+          },
+          "portolan_registry:api_type": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "api",
+              "static",
+              null
+            ]
+          },
+          "portolan_registry:licenses": {
+            "description": "The license mix of the collections beneath this catalog. One entry per license identifier, sorted by `id`. The identifier is what the collection declares: an SPDX id, or a STAC convention such as `proprietary` or `other`. Collections that declare no license are the difference against `portolan_registry:collection_count`.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "count"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "count": {
+                  "description": "The number of collections that declare this license.",
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          },
+          "portolan_registry:spec_version": {
+            "description": "Portolan specification version the catalog claims, parsed from the versioned schema URI in its stac_extensions. Null when it declares none.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9]+(\\.[0-9]+)*$"
+          },
+          "portolan_registry:spec_version_mixed": {
+            "description": "True when objects beneath the root declare more than one Portolan version. The spec permits this and asks for a warning, not a rejection.",
+            "type": "boolean"
+          },
+          "portolan_registry:stac_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:logo": {
+            "description": "The catalog's logo, read from its own `rel: \"icon\"` link and confirmed to resolve to an image. The href is absolute, resolved against the catalog. Null when the catalog publishes no usable logo.",
+            "type": [
+              "object",
+              "null"
+            ],
+            "required": [
+              "href",
+              "type"
+            ],
+            "properties": {
+              "href": {
+                "type": "string",
+                "minLength": 1
+              },
+              "type": {
+                "description": "Media type as the catalog declares it, restricted to what a browser renders in an <img>.",
+                "type": "string",
+                "enum": [
+                  "image/apng",
+                  "image/avif",
+                  "image/gif",
+                  "image/jpeg",
+                  "image/png",
+                  "image/svg+xml",
+                  "image/webp"
+                ]
+              },
+              "title": {
+                "description": "The catalog author's own label for the image, suitable as alt text. Absent when the catalog gives none.",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "portolan_registry:updated": {
+            "description": "The catalog's own top-level `updated`, RFC 3339. Null when it sets none.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:first_registered": {
+            "description": "When the entry file was added to this registry, RFC 3339.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:kind": {
+            "description": "Whether this catalog is the canonical home of its data or a cloud-native copy of a source maintained elsewhere. Derived, never declared: the specification defines the kind as a reading of a collection's providers and gives it no property of its own (portolan-spec core.md, Source Provenance). The registry applies rashid's rule to each collection: official when a producer carries the host's name, compared without case, and a mirror otherwise. A catalog reads as official when every collection that has a kind is official, and as a mirror when any is a mirror. A catalog's own providers take no part, because the specification makes the collection-level declaration authoritative. Null when no collection names a producer and exactly one named host, so the registry cannot say.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "official",
+              "mirror",
+              null
+            ]
+          },
+          "portolan_registry:producers": {
+            "description": "Who made the data, from the providers of every collection, in crawl order. Repeats are dropped, compared on the name without case. Two organizations that share a URL host both stay on the list. Empty when no collection names a producer.",
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/party"
+            }
+          },
+          "portolan_registry:processors": {
+            "description": "Who derived this copy from the source, from the providers of every collection, in crawl order. Repeats are dropped, compared on the name without case. On a mirror this is usually the party that built the mirror. Empty when no collection names a processor.",
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/party"
+            }
+          },
+          "portolan_registry:host": {
+            "description": "Who serves this copy, and the party a reader contacts about it. The first host the crawl reads among the collections, since the specification allows one host per collection. Null when no collection names one.",
+            "oneOf": [
+              {
+                "$ref": "#/definitions/party"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "portolan_registry:collection_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "portolan_registry:feature_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "portolan_registry:item_count": {
+            "description": "STAC Items beneath this catalog, counted from the rel=\"item\" links its collections publish. The crawler counts those links and never fetches them. Null when no item was countable because every collection holding items lists them behind a rel=\"items\" endpoint, which the crawler does not page. Zero means the catalog was fully enumerable and holds no items. Read portolan_registry:counts_partial before treating a number here as a total.",
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "portolan_registry:asset_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "portolan_registry:total_size_bytes": {
+            "description": "Sum of file:size over the collection-level assets beneath this catalog. Null when nothing declared file:size, which is common: most publishers omit it. Null is the absence of a measurement, where zero would claim the catalog holds no bytes.",
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "portolan_registry:counts_partial": {
+            "description": "True when the counts above are a floor rather than a total, because a child failed to fetch or a collection's items could not be enumerated. Absent on entries carried forward from an export published before this field existed; treat absent as false.",
+            "type": "boolean"
+          },
+          "portolan_registry:temporal_extent": {
+            "description": "[start, end] of the period the catalog's data covers, from the first extent.temporal.interval of every collection beneath it. The start is the earliest start and the end is the latest end. A null endpoint is an open end, as in STAC, and one open interval leaves that end of the whole extent open. A collection takes no part when its interval is [null, null], or when it holds a value that is not an RFC 3339 date-time. Null when no collection declares an interval that takes part.",
+            "type": [
+              "array",
+              "null"
+            ],
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          },
+          "portolan_registry:last_crawled": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:last_validated": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:stale_since": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:failure_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:stac_valid": {
+            "description": "True when `rashid` and `stac-node-validator` report no errors and the registry fetches every linked catalog, collection, and item. These validators check metadata, not data assets. False when either validator reports an error or the registry cannot fetch a document. Null when no validation result is available. A run with no result preserves the previously published value. Validation failures affect `portolan_registry:status` only for deprecated catalogs.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "portolan_registry:stac_invalid_since": {
+            "description": "RFC 3339 timestamp of the first registry run that detected the current validation failure. For failures that predate this field, the timestamp identifies the first run that detects the failure after the field was introduced. Null when no failure timestamp is available or a later check passed. A run with no validation result preserves the previously published timestamp.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:has_agents_md": {
+            "type": "boolean"
+          },
+          "portolan_registry:has_readme": {
+            "type": "boolean"
+          },
+          "portolan_registry:deprecated": {
+            "description": "True when the entry file sets `deprecated` to true. The catalog stays in the export. If nightly checks keep failing for 30 days, its status changes to `removed`. Its entry and export link remain. A check fails if the registry cannot fetch the root catalog or the validators report an error. If the catalog is reachable but the validators return no result, its status stays unchanged. You can use this flag to label or filter deprecated catalogs.",
+            "type": "boolean"
+          },
+          "portolan_registry:deprecated_since": {
+            "description": "The deprecation date in RFC 3339 format, from the commit that set `deprecated` to true. If Git history is unavailable, the registry keeps the previously published date. Null when the catalog is not deprecated or no date is available.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:deprecated_reason": {
+            "description": "The plain-text reason for deprecation from the entry file. Null when the catalog is not deprecated or the entry provides no reason.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portolan_registry:superseded_by": {
+            "description": "The replacement catalog's registry ID. To find its export link, match this value to `portolan_registry:id`. Null when the catalog is not deprecated or the entry names no replacement.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "portolan_registry:coverage": {
+            "description": "The URL of the collection coverage file of this catalog. The file follows the coverage schema of the same contract version.",
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "party": {
+      "description": "One organization a catalog names, trimmed to what identifies it. The provider's own description is left in the catalog.",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "description": "The party's own URL, as the catalog declares it. Absent when it declares none, which the specification permits for a producer.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "bbox": {
+      "description": "WGS84 bounding box, [west, south, east, north] or [west, south, min_alt, east, north, max_alt]. Range and ordering rules beyond arity are checked in the test suite.",
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "oneOf": [
+        {
+          "minItems": 4,
+          "maxItems": 4
+        },
+        {
+          "minItems": 6,
+          "maxItems": 6
+        }
+      ]
+    }
+  }
+}

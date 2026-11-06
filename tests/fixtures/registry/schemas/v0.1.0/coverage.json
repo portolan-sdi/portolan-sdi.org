@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://registry.portolan-sdi.org/schemas/v0.1.0/coverage.json",
+  "title": "Portolan registry coverage",
+  "description": "The collection coverage files of the Portolan registry. A coverage file lists the bounding box of each collection beneath one registered catalog. The index lists every coverage file. Each document names this schema in `$schema`, so a file read alone still tells its contract version. The schema is open: it accepts fields that it does not define.",
+  "type": "object",
+  "required": ["$schema", "generated"],
+  "properties": {
+    "$schema": {
+      "description": "The versioned URL of the schema of this file. A released copy accepts the URL of each release in its line.",
+      "type": "string",
+      "pattern": "^https://registry\\.portolan-sdi\\.org/schemas/v0\\.1\\.[0-9]+/coverage\\.json$"
+    },
+    "generated": {
+      "description": "When the registry wrote the data in this document, RFC 3339.",
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "oneOf": [
+    {"$ref": "#/definitions/catalog"},
+    {"$ref": "#/definitions/index"}
+  ],
+  "definitions": {
+    "catalog_id": {
+      "description": "A registry id. The name of the coverage file of the catalog uses it.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "catalog": {
+      "description": "The coverage of one registered catalog.",
+      "type": "object",
+      "required": ["id", "collection_count", "collections"],
+      "properties": {
+        "id": {
+          "description": "The registry id of the catalog. It matches `portolan_registry:id` on its child link.",
+          "$ref": "#/definitions/catalog_id"
+        },
+        "collection_count": {
+          "description": "The number of collections beneath the catalog. Collections without a usable bbox count here but have no record in `collections`.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "collections": {
+          "description": "One record for each map rectangle. A collection whose bbox crosses the antimeridian has two records with the same id.",
+          "type": "array",
+          "items": {"$ref": "#/definitions/collection"}
+        }
+      }
+    },
+    "collection": {
+      "type": "object",
+      "required": ["id", "title", "bbox"],
+      "properties": {
+        "id": {
+          "description": "The collection id, or its URL when the collection declares no id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "description": "The collection title, or its id when the collection declares no title.",
+          "type": "string",
+          "minLength": 1
+        },
+        "bbox": {
+          "description": "[west, south, east, north] in WGS84, rounded to 4 decimal places. West is never greater than east.",
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    },
+    "index": {
+      "description": "The list of coverage files, one for each registered catalog.",
+      "type": "object",
+      "required": ["catalogs"],
+      "properties": {
+        "catalogs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "collection_count", "href"],
+            "properties": {
+              "id": {"$ref": "#/definitions/catalog_id"},
+              "collection_count": {"type": "integer", "minimum": 0},
+              "href": {
+                "description": "The URL of the coverage file of the catalog.",
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

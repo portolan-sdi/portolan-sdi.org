@@ -4,10 +4,11 @@ import { CATALOGS_CACHE_TAG } from "@/lib/catalogs";
 
 const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET;
 
-// On-demand revalidation for the catalog registry. The portolan-registry CI
-// posts here right after it publishes a fresh exports/catalogs.json so the
-// browsable catalog list updates immediately instead of waiting out the
-// hourly ISR window. Authenticated with a shared bearer secret.
+// On-demand revalidation for the catalog registry. The portolan-registry
+// Pages workflow posts here when the CDN serves a new export of the v0.1
+// release tree on registry.portolan-sdi.org. The catalog list and the map
+// then update without a wait for the hourly ISR window. Authenticated with a
+// shared bearer secret.
 export async function POST(req: NextRequest) {
   if (!REVALIDATE_SECRET) {
     return NextResponse.json(

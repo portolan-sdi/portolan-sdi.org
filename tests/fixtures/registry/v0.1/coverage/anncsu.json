@@ -1,0 +1,38 @@
+{
+  "$schema": "https://registry.portolan-sdi.org/schemas/v0.1.0/coverage.json",
+  "generated": "2026-11-05T14:01:35.720508+00:00",
+  "id": "anncsu",
+  "collection_count": 3,
+  "collections": [
+    {
+      "id": "indirizzi",
+      "title": "Indirizzi ANNCSU, file unico",
+      "bbox": [
+        6.7003,
+        35.5017,
+        18.66,
+        47.0805
+      ]
+    },
+    {
+      "id": "indirizzi-h3",
+      "title": "Indirizzi ANNCSU, partizionati per cella H3",
+      "bbox": [
+        6.7003,
+        35.5017,
+        18.66,
+        47.0805
+      ]
+    },
+    {
+      "id": "rilasci",
+      "title": "Rilasci mensili ANNCSU",
+      "bbox": [
+        6.7003,
+        35.5017,
+        18.66,
+        47.0805
+      ]
+    }
+  ]
+}
