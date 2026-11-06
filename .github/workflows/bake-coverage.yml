@@ -41,10 +41,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # The bake reads the published 0.1 line at registry.portolan-sdi.org.
+      # That host serves only the latest export. A dispatch reports the time
+      # of the export that it announces, and the bake waits for that export.
       - name: Resolve registry source
         id: source
         env:
           DISPATCH_SHA: ${{ github.event.client_payload.registry_sha }}
+          DISPATCH_GENERATED: ${{ github.event.client_payload.generated }}
           GH_TOKEN: ${{ github.token }}
         run: |
           sha="$DISPATCH_SHA"
@@ -55,13 +59,20 @@ jobs:
             echo "Invalid registry commit: $sha" >&2
             exit 1
           fi
-          url="https://raw.githubusercontent.com/portolan-sdi/portolan-registry/${sha}/exports/coverage-bboxes.json"
-          echo "registry_sha=$sha" >> "$GITHUB_OUTPUT"
-          echo "export_url=$url" >> "$GITHUB_OUTPUT"
+          generated="$DISPATCH_GENERATED"
+          if [ -n "$generated" ] && ! [[ "$generated" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$ ]]; then
+            echo "Invalid export time: $generated" >&2
+            exit 1
+          fi
+          {
+            echo "registry_sha=$sha"
+            echo "generated=$generated"
+            echo "export_url=https://registry.portolan-sdi.org/v0.1/coverage/index.json"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Bake coverage
         env:
-          COVERAGE_BBOX_URL: ${{ steps.source.outputs.export_url }}
+          REGISTRY_GENERATED: ${{ steps.source.outputs.generated }}
         run: |
           set -o pipefail
           node scripts/bake-a5-coverage.mjs 5 | tee "$RUNNER_TEMP/bake.log"

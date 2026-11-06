@@ -31,11 +31,14 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { lonLatToCell, cellToBoundary, cellArea } from "a5-js";
+import { COVERAGE_INDEX_URL, loadCoverage } from "../src/lib/registry-v01.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BBOX_URL =
-  process.env.COVERAGE_BBOX_URL ??
-  "https://raw.githubusercontent.com/portolan-sdi/portolan-registry/main/exports/coverage-bboxes.json";
+/**
+ * The registry export time that the dispatch reports. When it is set, the
+ * bake waits until the CDN serves that export or a newer one.
+ */
+const EXPECT_GENERATED = process.env.REGISTRY_GENERATED || null;
 const MASK_PATH = resolve(HERE, "../public/data/land-mask.json");
 const outPath = (res) =>
   resolve(HERE, `../public/data/a5-coverage-r${res}.json`);
@@ -73,6 +76,14 @@ const EARTH_AREA_KM2 = 4 * Math.PI * EARTH_RADIUS_KM * EARTH_RADIUS_KM;
 const FETCH_TIMEOUT_MS = 20_000;
 const FETCH_RETRIES = 1;
 
+/**
+ * The CDN in front of registry.portolan-sdi.org caches each file for up to
+ * 600 seconds, and a query string does not bypass it. Thirteen tries one
+ * minute apart outlast one full cache period.
+ */
+const LOAD_ATTEMPTS = 13;
+const LOAD_WAIT_MS = 60_000;
+
 async function fetchJson(url) {
   let lastError;
   for (let attempt = 0; attempt <= FETCH_RETRIES; attempt++) {
@@ -88,7 +99,7 @@ async function fetchJson(url) {
       lastError = error;
     }
   }
-  throw new Error(`Failed to fetch collection coverage from ${url}: ${lastError}`);
+  throw new Error(`Failed to fetch ${url}: ${lastError}`);
 }
 
 /** Share of the globe a bbox covers, by area on the sphere. */
@@ -323,9 +334,37 @@ async function bakeResolution(index, mask, RESOLUTION) {
   );
 }
 
+/**
+ * Read a consistent coverage set: every file from one export, and that
+ * export no older than EXPECT_GENERATED. Retry while the CDN serves old
+ * files. Fail when the retries run out, so the bake never commits a mix.
+ */
+async function loadConsistentCoverage() {
+  let reason = "";
+  for (let attempt = 1; attempt <= LOAD_ATTEMPTS; attempt++) {
+    const coverage = await loadCoverage(fetchJson);
+    const old =
+      EXPECT_GENERATED !== null &&
+      Date.parse(coverage.generated) < Date.parse(EXPECT_GENERATED);
+    if (!old && coverage.mixed.length === 0) return coverage;
+
+    reason = old
+      ? `the index is from ${coverage.generated}, before ${EXPECT_GENERATED}`
+      : `${coverage.mixed.length} coverage files are from another export`;
+    if (attempt < LOAD_ATTEMPTS) {
+      console.log(`  attempt ${attempt}: ${reason}. Waiting.`);
+      await new Promise((done) => setTimeout(done, LOAD_WAIT_MS));
+    }
+  }
+  throw new Error(`No consistent registry coverage after ${LOAD_ATTEMPTS} attempts: ${reason}`);
+}
+
 async function main() {
-  console.log(`Reading ${BBOX_URL}`);
-  const index = await fetchJson(BBOX_URL);
+  console.log(`Reading ${COVERAGE_INDEX_URL}`);
+  if (EXPECT_GENERATED) console.log(`  expecting   ${EXPECT_GENERATED} or newer`);
+  const index = await loadConsistentCoverage();
+  console.log(`  export      ${index.generated}`);
+  console.log(`  catalogs    ${index.catalogs.length}`);
   const mask = decodeMask(JSON.parse(await readFile(MASK_PATH, "utf8")));
   for (const resolution of RESOLUTIONS) {
     await bakeResolution(index, mask, resolution);

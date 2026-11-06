@@ -1,0 +1,268 @@
+{
+  "$schema": "https://registry.portolan-sdi.org/schemas/v0.1.0/coverage.json",
+  "generated": "2026-11-05T14:01:35.720508+00:00",
+  "id": "baden-wuerttemberg-lgl",
+  "collection_count": 26,
+  "collections": [
+    {
+      "id": "elektromobilitaet-und-sharing/ladesaeulen",
+      "title": "Gebündelte Daten E-Ladesäulen Baden-Württemberg",
+      "bbox": [
+        -124.5085,
+        -83.1643,
+        120.6733,
+        90
+      ]
+    },
+    {
+      "id": "elektromobilitaet-und-sharing/sharing-stationen",
+      "title": "Sharing-Stationen Baden-Württemberg",
+      "bbox": [
+        3.4936,
+        45.8261,
+        14.3238,
+        54.4814
+      ]
+    },
+    {
+      "id": "oepnv/bahnhoefe-und-haltestellen",
+      "title": "Bahnhöfe und Haltestellen Baden-Württemberg",
+      "bbox": [
+        -8.849,
+        39.0844,
+        30.5198,
+        56.9438
+      ]
+    },
+    {
+      "id": "oepnv/gueteklassen",
+      "title": "ÖPNV - Güteklassen Baden-Württemberg",
+      "bbox": [
+        7.5121,
+        47.5324,
+        10.4644,
+        49.7896
+      ]
+    },
+    {
+      "id": "oepnv/haltesteige",
+      "title": "Haltesteige Baden-Württemberg",
+      "bbox": [
+        -8.849,
+        39.0844,
+        30.5198,
+        56.9438
+      ]
+    },
+    {
+      "id": "radverkehr/fahrradabstellanlagen",
+      "title": "Gebündelte Daten Fahrradabstellanlagen Baden-Württemberg",
+      "bbox": [
+        6.9941,
+        47.5461,
+        13.4517,
+        53.1698
+      ]
+    },
+    {
+      "id": "radverkehr/radnetz",
+      "title": "RadNETZ Baden-Württemberg",
+      "bbox": [
+        7.5131,
+        47.4645,
+        10.471,
+        49.7884
+      ]
+    },
+    {
+      "id": "radverkehr/radservicepunkte",
+      "title": "Gebündelte Daten Radservicepunkte Baden-Württemberg",
+      "bbox": [
+        7.5929,
+        47.5494,
+        10.3345,
+        49.5178
+      ]
+    },
+    {
+      "id": "strassenverkehr/parkplaetze-und-parkbauten",
+      "title": "Gebündelte Daten Parkplätze und Parkbauten Baden-Württemberg",
+      "bbox": [
+        5.9988,
+        45.8339,
+        14.9938,
+        54.8041
+      ]
+    },
+    {
+      "id": "strassenverkehr/verkehrszeichen",
+      "title": "Verkehrszeichen Baden-Württemberg",
+      "bbox": [
+        7.5206,
+        47.5382,
+        10.4442,
+        49.7859
+      ]
+    },
+    {
+      "id": "verwaltungsgrenzen/fluren",
+      "title": "ALKIS-Fluren",
+      "bbox": [
+        8.3534,
+        47.6378,
+        10.4256,
+        49.5773
+      ]
+    },
+    {
+      "id": "verwaltungsgrenzen/gemarkungen",
+      "title": "ALKIS-Gemarkungen",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "verwaltungsgrenzen/gemeinden",
+      "title": "ALKIS-Gemeinden",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "verwaltungsgrenzen/kreise",
+      "title": "ALKIS-Stadt- und Landkreise",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "verwaltungsgrenzen/land",
+      "title": "ALKIS-Bundesland",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "verwaltungsgrenzen/regierungsbezirke",
+      "title": "ALKIS-Regierungsbezirke",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "verwaltungsgrenzen/regionen",
+      "title": "ALKIS-Regionen",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "wald/klimaschutzwald",
+      "title": "Existierende Bodennutzung – Klimaschutzwald",
+      "bbox": [
+        7.5251,
+        47.5452,
+        10.3193,
+        49.7853
+      ]
+    },
+    {
+      "id": "wald/standortskundliche-hoehenstufen",
+      "title": "Biogeographische Regionen - Standortskundliche Höhenstufen",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "wald/standortskundliche-klimahaupttypen",
+      "title": "Biogeographische Regionen - Standortskundliche Klimahaupttypen",
+      "bbox": [
+        7.5118,
+        47.5324,
+        10.4956,
+        49.7913
+      ]
+    },
+    {
+      "id": "wildtiere/auerhuhnverbreitung",
+      "title": "Verteilung der Arten Monitoring Auerhuhnverbreitung",
+      "bbox": [
+        7.3019,
+        47.3701,
+        10.7208,
+        49.9322
+      ]
+    },
+    {
+      "id": "wildtiere/luchsnachweise",
+      "title": "Verteilung der Arten Monitoring Luchsnachweise",
+      "bbox": [
+        7.1877,
+        47.3843,
+        10.8037,
+        49.9325
+      ]
+    },
+    {
+      "id": "wildtiere/rotwildgebiete",
+      "title": "Schutzgebiete Rotwildgebiete Baden-Württemberg",
+      "bbox": [
+        7.9941,
+        47.6661,
+        10.1397,
+        49.5791
+      ]
+    },
+    {
+      "id": "wildtiere/wildkatzennachweise",
+      "title": "Verteilung der Arten Monitoring Wildkatzennachweise",
+      "bbox": [
+        7.4361,
+        47.4772,
+        10.5332,
+        49.8422
+      ]
+    },
+    {
+      "id": "wildtiere/wildschutz-und-wildruhegebiete",
+      "title": "Schutzgebiete Wildschutz- und Wildruhegebiete Baden-Württemberg",
+      "bbox": [
+        7.7191,
+        47.6951,
+        8.538,
+        49.3603
+      ]
+    },
+    {
+      "id": "wildtiere/wolfsnachweise",
+      "title": "Verteilung der Arten Monitoring Wolfsnachweise",
+      "bbox": [
+        7.1877,
+        47.3843,
+        10.8037,
+        49.9325
+      ]
+    }
+  ]
+}
