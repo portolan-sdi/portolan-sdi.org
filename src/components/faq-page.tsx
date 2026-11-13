@@ -8,7 +8,12 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { COMMUNITY_LINKS, SPEC_URL } from "@/lib/site";
+import {
+  COMMUNITY_LINKS,
+  SPEC_EPUB_URL,
+  SPEC_PDF_URL,
+  SPEC_URL,
+} from "@/lib/site";
 import { PageHero } from "./page-hero";
 import { FAQ_ITEMS as ITEMS } from "@/lib/faq";
 import { AWAY_ITEMS, SiteShell } from "./site-rail";
@@ -201,6 +206,8 @@ export function FaqPage() {
                       {t.rich(`items.${key}.p${i + 1}`, {
                         m: monoChunk,
                         spec: inlineLink(SPEC_URL),
+                        pdf: inlineLink(SPEC_PDF_URL),
+                        epub: inlineLink(SPEC_EPUB_URL),
                         rashid: inlineLink(RASHID_URL, true),
                         roadmap: inlineLink(COMMUNITY_LINKS.roadmap),
                       })}

@@ -24,11 +24,15 @@ export const COMMUNITY_LINKS = {
 } as const;
 
 /**
- * The Portolan specification. It is ground truth for the standard, so the
- * home page hero and the FAQ both link it. Keep it aligned with
- * portolan-ops/copy/urls.md.
+ * The rendered Portolan specification. The home page hero and the FAQ both
+ * link it as the place to read the spec. Keep it aligned with the
+ * "Specification (rendered)" row in portolan-ops/copy/urls.md.
  */
-export const SPEC_URL = "https://github.com/portolan-sdi/portolan-spec";
+export const SPEC_URL = "https://spec.portolan-sdi.org/";
+
+/** Downloads of the v0.2.0 release, hosted on the rendered spec site. */
+export const SPEC_PDF_URL = `${SPEC_URL}v0.2.0/downloads/portolan-spec-v0.2.0.pdf`;
+export const SPEC_EPUB_URL = `${SPEC_URL}v0.2.0/downloads/portolan-spec-v0.2.0.epub`;
 
 /** Canonical specification sites from portolan-ops/copy/urls.md. */
 export const FORMAT_LINKS = {
