@@ -30,9 +30,12 @@ export const COMMUNITY_LINKS = {
  */
 export const SPEC_URL = "https://spec.portolan-sdi.org/";
 
-/** Downloads of the v0.2.0 release, hosted on the rendered spec site. */
-export const SPEC_PDF_URL = `${SPEC_URL}v0.2.0/downloads/portolan-spec-v0.2.0.pdf`;
-export const SPEC_EPUB_URL = `${SPEC_URL}v0.2.0/downloads/portolan-spec-v0.2.0.epub`;
+/**
+ * The PDF and EPUB downloads of the newest release. `latest/` redirects to
+ * the newest version and keeps the hash, so this link needs no change at a
+ * release.
+ */
+export const SPEC_DOWNLOADS_URL = `${SPEC_URL}latest/#downloads`;
 
 /** Canonical specification sites from portolan-ops/copy/urls.md. */
 export const FORMAT_LINKS = {
