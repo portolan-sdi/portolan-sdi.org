@@ -24,11 +24,18 @@ export const COMMUNITY_LINKS = {
 } as const;
 
 /**
- * The Portolan specification. It is ground truth for the standard, so the
- * home page hero and the FAQ both link it. Keep it aligned with
- * portolan-ops/copy/urls.md.
+ * The rendered Portolan specification. The home page hero and the FAQ both
+ * link it as the place to read the spec. Keep it aligned with the
+ * "Specification (rendered)" row in portolan-ops/copy/urls.md.
  */
-export const SPEC_URL = "https://github.com/portolan-sdi/portolan-spec";
+export const SPEC_URL = "https://spec.portolan-sdi.org/";
+
+/**
+ * The PDF and EPUB downloads of the newest release. `latest/` redirects to
+ * the newest version and keeps the hash, so this link needs no change at a
+ * release.
+ */
+export const SPEC_DOWNLOADS_URL = `${SPEC_URL}latest/#downloads`;
 
 /** Canonical specification sites from portolan-ops/copy/urls.md. */
 export const FORMAT_LINKS = {
