@@ -47,10 +47,26 @@ const tierMarker: Record<EcosystemTier, string> = {
   commercial: "bg-p-ink",
 };
 
+// The QGIS logo, flattened to one fill so it takes `currentColor` like the
+// line marks. The upstream file (qgis/QGIS images/icons/qgis_icon.svg) uses a
+// gradient and two accent colors, which the flat-surface rules exclude.
+function QgisMark() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+      <path d="m137.607 136.899h34.437l-29.146-28.816h-35.708v34.309l30.417 30.316z" />
+      <path d="m248.061 212.048-61.443-60.742h-34.608v35.761l58.881 58.682h37.17z" />
+      <path d="m152.01 151.306h34.608l-14.574-14.407h-34.437v35.809l14.403 14.359z" />
+      <path d="m144.826 199.3c-5.22 1.202-10.643 1.854-16.238 1.854-40.027 0-74.072-32.914-74.072-75.59 0-42.677 33.666-74.869 74.072-74.869 40.401 0 72.57 32.187 72.57 74.869 0 6.937-.863 13.619-2.461 19.945l37.047 37.042c9.552-16.736 14.896-36.197 14.896-57.274 0-65.778-52.493-115.026-122.801-115.026-69.99 0-122.479 48.927-122.479 115.026 0 66.421 52.489 116.321 122.479 116.321 18.066 0 34.952-3.323 50.077-9.371z" />
+    </svg>
+  );
+}
+
 // Tiny symbolic marks — spec = document, rashid = check (validator), cli =
 // terminal prompt, registry = index rows, browser = window, skills = spark,
-// cartosdi = layered stack (an infrastructure on top of the standard).
+// cartosdi = layered stack (an infrastructure on top of the standard). The
+// QGIS plugin carries the QGIS logo instead, so the host app is recognizable.
 function ProjectIcon({ slug }: { slug: string }) {
+  if (slug === "qgis") return <QgisMark />;
   const p =
     slug === "cartosdi" ? (
       <>
