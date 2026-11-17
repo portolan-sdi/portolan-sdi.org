@@ -35,3 +35,8 @@ The footer image is astronaut photograph ISS075-E-70481. It is courtesy of
 the Earth Science and Remote Sensing Unit, NASA Johnson Space Center. The
 source is the NASA Earth Observatory article
 [Monterrey Amid Mountains](https://science.nasa.gov/earth/earth-observatory/monterrey-amid-mountains/).
+
+The image behind the "Why Portolan" band on the homepage is a NASA Earth
+Observatory image made with Landsat data from the U.S. Geological Survey.
+The source is the NASA Earth Observatory article
+[An Agricultural Mosaic in Taiwan](https://science.nasa.gov/earth/earth-observatory/an-agricultural-mosaic-in-taiwan/).

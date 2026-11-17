@@ -20,25 +20,25 @@ colors:
 typography:
   eyebrow:
     fontFamily: "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
-    fontSize: "11px"
+    fontSize: "13px"
     fontWeight: 400
     lineHeight: 1.4
     letterSpacing: "0.04em"
   small:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "13px"
+    fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: "normal"
   body:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "15px"
+    fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.6
     letterSpacing: "normal"
   lead:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(16px, 0.4vw + 14.5px, 18px)"
+    fontSize: "clamp(17px, 0.4vw + 15.5px, 19px)"
     fontWeight: 400
     lineHeight: 1.6
     letterSpacing: "normal"
@@ -192,10 +192,10 @@ such as `text-[13px]`.
 
 | Step | Size | Line height | Use |
 |---|---|---|---|
-| `text-eyebrow` | 11px | 1.4 | Mono kickers, tags, and labels |
-| `text-small` | 13px | 1.5 | Secondary text and button labels |
-| `text-body` | 15px | 1.6 | Body prose |
-| `text-lead` | clamp(16px, 0.4vw + 14.5px, 18px) | 1.6 | Supporting copy under a heading |
+| `text-eyebrow` | 13px | 1.4 | Mono kickers, tags, and labels |
+| `text-small` | 14px | 1.5 | Secondary text and button labels |
+| `text-body` | 16px | 1.6 | Body prose |
+| `text-lead` | clamp(17px, 0.4vw + 15.5px, 19px) | 1.6 | Supporting copy under a heading |
 | `text-card-title` | 20px | 1.3 | Card and list-item titles |
 | `text-feature` | clamp(22px, 2vw + 15px, 26px) | 1.2 | Sub-section headings |
 | `text-section` | clamp(30px, 4vw + 8px, 46px) | 1.05 | Section headings |
@@ -204,7 +204,7 @@ such as `text-[13px]`.
 The scale was cut from thirteen steps in August 2026. Do not add a step back.
 The removed steps (`micro`, `body-lg`, `card-title-lg`, `section-sm`,
 `hero-sm`) each sat within 0.5px of a neighbor or inverted the heading
-hierarchy. `text-lead` caps at 18px so `text-card-title` outranks it at every
+hierarchy. `text-lead` caps at 19px so `text-card-title` outranks it at every
 width.
 
 Headings take negative tracking, from `-0.015em` at card title to `-0.03em`
@@ -235,7 +235,7 @@ bar, which is the primary navigation and the one site header, and
 stops below the bar.
 
 The bar shows the logo linking home on the inline-start side, then the page
-links Blog, Guides & demos, Talks, FAQ, and Registry, then the locale control
+links Blog, Guides & demos, Talks, Ecosystem, FAQ, and Registry, then the locale control
 on the inline-end side. The locale control shows a globe icon beside the locale code. The globe is the only icon in the bar, and the page links take none. It lists pages only, with no homepage section
 anchors, no scroll-spy, and no collapse control. The link for the current
 page takes `aria-current="page"` and `#4163cc`. Below `md` the bar shows the
@@ -257,16 +257,13 @@ The hero has no buttons. `HeroFigure` in `src/components/home/hero-figure.tsx`
 is on the inline-end side. The figure has no frame. Below `lg` the hero is
 one column, and the figure is under the description.
 
-`HeroFigure` is a Canvas 2D figure and the one moving element on the site.
+`HeroFigure` is a Canvas 2D figure. It is one of two moving elements on the
+site. The other is `PipelineFigure` in the solution section.
 It has two states that never show together. The first state is a turning
-globe. Land shows as points on a sphere with a thin outline and a faint
-graticule. The second state is a Portolan catalog, drawn as a directory tree
-under `s3://your-bucket/`. A role note beside each light file says what it
+globe. Land shows as points on a sphere with a thin outline and a faint graticule. Everything on the globe is `--p-primary`, with no gray or ink lines. The second state is a Portolan catalog, drawn as a directory tree under `s3://your-bucket/`. The tree is illustrative. It shows each kind of file once and is not a complete valid catalog. A role note beside each light file says what it
 is, such as "STAC catalog", "for people", and "for agents". The GeoParquet
 file and the COG each have a drawing, and both drawings show the world map.
-The GeoParquet drawing is a map of land outlines beside a table of row
-groups with a footer. The COG drawing is a header bar over a pyramid of the
-same map as rasters. The PMTiles file is a plain row with a role note and no
+The GeoParquet drawing is a map of land outlines beside a table of row groups. The COG drawing is a pyramid of the same map as rasters. The drawings have no header or footer parts. `geometry` is the one label inside them. The PMTiles file is a plain row with a role note and no
 drawing. One transition moves the points from the globe to their own places
 on the two maps, and the same transition runs backward, on a loop. The
 figure has no phase words, no request lines, and no read step.
@@ -283,17 +280,44 @@ caption and no visible caption. The homepage hero does not use `GlyphMap` or
 `--hero-scrim`.
 
 The homepage sections run in this order: hero `#top`, `#challenge`,
-`#solution`, `#who`, `#use`, the users and supporters strip, `#coverage`,
-`#how`, `#ecosystem`, `#involved`. The homepage plays no terminal recording.
+`#solution`, `#why`, `#cases`, `#about`. `#why` is a satellite image band
+with the footer treatment. Case studies is one row of six cards that
+scrolls on the inline axis and runs to the inline-end edge of the window.
+`#about` has the about text, the "Join us on Slack" button, and the logos of
+the organizations that the text names. The four steps and the recorded catalog build are the `/how-it-works` route. The tool list is the `/ecosystem` route. The homepage plays no terminal recording.
+
+The solution section has `PipelineFigure` in
+`src/components/home/pipeline-figure.tsx`, under its head. The figure has
+two halves on one 23.2 second clock. From `lg` they sit side by side at
+560px. Below `lg` they stack, the session first. The left half is a Claude
+Code session that fetches four Philadelphia layers, converts them,
+catalogs them, and pushes the catalog. It is `#16170f` with `#4163cc` as
+its accent, and it is the one sanctioned terminal mock-up. The right half
+is one canvas, drawn by `pipeline-renderer.ts`, with a camera that only
+moves down. The four sources sit at the top in their own systems: a
+Shapefile on a share, a GeoPackage on a desktop, an ArcGIS REST service,
+and a WFS service. The files are copied and the services are paged down
+their lanes into `~/phl-housing`, where each layer turns into GeoParquet
+and PMTiles. The plates drop into a catalog tree under
+`s3://your-bucket/`, and the tree becomes the portal of Rowhouse Atlas, a
+fictional publisher. The camera then carries on down to a fresh start, so
+the loop never runs backward. Four mono step labels under the canvas
+(Ingest, Convert, Catalog, Publish) mark the current step in `#2d4aa8`.
+By the owner's choice the figure is a second moving element, next to
+`HeroFigure`. The session styles are the `pipe-` block in `globals.css`,
+with no hex of their own. The portal is the one place on the site with
+another brand. Its paper, ink, and brick colors are canvas constants in
+the renderer, and its faces, Fraunces and Instrument Sans, are local files
+in `src/components/home/fonts/` that only the figure loads. The figure is
+`dir="ltr"`, has fixed heights, holds the finished portal under reduced
+motion, and pauses off screen and in a hidden tab.
 
 Every route except the homepage opens with `PageHero` in `page-hero.tsx`,
 which draws the still glyph relief map under `--hero-scrim`. That band owns
 the page `h1`, so the section below it sets no second `h1` and opens with
 `pt-[clamp(28px,3.5vw,48px)]` instead of full section padding.
 
-Content keeps a 1240px column, with one exception. In "Toward a federated
-network" (`#coverage`) the registry map and the IDE Pergamino feature block
-run edge to edge of the content area.
+Content keeps a 1240px column. No homepage section runs media edge to edge.
 
 Shared UI uses logical properties (`ps`/`pe`, `ms`/`me`, `text-start`/`end`,
 `border-s`/`e`, `inset-s`/`e`), never physical ones. Prefer `gap-*` over
@@ -312,8 +336,10 @@ section band on the page.
 
 The permitted full-bleed color fields are solid, and there are four.
 
-- **Challenge section** (homepage): `#4163cc` with `#ffffff` text.
-- **"Portolan in practice"** (homepage): `#16170f` with `#fcfcfa` text.
+- **Challenge section** (homepage): `#16170f` with `#ffffff` text. It has no
+  large heading. Its eyebrow is its `h2`, its first paragraph is the
+  statement in bold, and its second paragraph supports it.
+- **Case study cards** (homepage): `#16170f` with `#fcfcfa` text. The registry card takes the primary color.
 - **Footer** (every page): a grayscale NASA astronaut photograph
   multiplied over `#4163cc`, so it reads as one-color blue, with `#ffffff`
   text. Multiply can only darken, so text contrast never drops below white
@@ -397,10 +423,10 @@ no uppercase, and no wide tracking. Omit the kicker where the title below
 already names the section.
 
 The homepage has exactly two eyebrows, and neither uses `SectionHead`. "The
-challenge" is above the challenge heading and "The solution" is above the
+challenge" is above the challenge statement and "The solution" is above the
 solution heading (`challenge.eyebrow`, `solution.eyebrow`). Both are mono
 `text-eyebrow`, in sentence case at default tracking. The challenge eyebrow
-is `#ffffff` on the blue band, and the solution eyebrow is `#74766a`. Put no
+is `#ffffff` on the ink band, and the solution eyebrow is `#74766a`. Put no
 small label above any other homepage heading, card title, or figure.
 
 The title is `text-section`, weight 800, `tracking-[-0.03em]`,
@@ -449,7 +475,8 @@ The mark never mirrors in RTL. It never takes a gradient.
   `SiteShell`.
 - **Don't** use a compass rose or a rhumb line. The motif was tried
   repeatedly and rejected.
-- **Don't** add a terminal or code-session mockup.
+- **Don't** add a terminal or code-session mockup. The Claude Code session
+  in `PipelineFigure` is the one sanctioned exception.
 - **Don't** add an emoji. The permitted Unicode marks are ↗, →, and ·.
 - **Don't** give every card in a grid the same anatomy. Ragged is deliberate.
 - **Don't** number a card grid that is not a real sequence.
