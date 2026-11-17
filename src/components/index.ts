@@ -8,6 +8,8 @@ export { HomePage } from "./home-page";
 export { FaqPage } from "./faq-page";
 export { BlogIndexPage } from "./blog-index-page";
 export { BlogPostPage } from "./blog-post-page";
+export { EcosystemPage } from "./ecosystem-page";
+export { HowItWorksPage } from "./how-it-works-page";
 export { TalksPage } from "./talks-page";
 export { RegistryPage } from "./registry-page";
 export { SiteShell } from "./site-rail";

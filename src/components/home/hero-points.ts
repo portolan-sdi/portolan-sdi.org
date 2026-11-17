@@ -121,7 +121,7 @@ export function finishAlpha(p: number): number {
   return smooth(0.88, 0.99, p);
 }
 
-/** Opacity of the role notes and the light rows in the wide form. */
+/** Opacity of the role notes in the wide form. */
 export function noteAlpha(p: number): number {
   return smooth(0.62, 0.8, p);
 }
@@ -473,7 +473,7 @@ export function buildWorld(land: Land): World {
 
 /* --- The catalog tree ---------------------------------------------------- */
 
-export type RowKind = "root" | "dir" | "file" | "light" | "data";
+export type RowKind = "root" | "dir" | "file" | "data";
 export type DrawingKind = "parquet" | "cog";
 
 interface RowSpec {
@@ -488,10 +488,9 @@ interface RowSpec {
 }
 
 /**
- * The tree follows portolan-spec. Every catalog and collection holds its
- * STAC JSON, an AGENTS.md, and a README.md, and every collection holds a
- * thumbnail. A collection of one file holds that file with no item folder.
- * PMTiles is the visualization derivative and needs a style in `styles/`.
+ * The tree is illustrative. It shows each kind of file once and is not a
+ * complete valid catalog. A real collection also holds its own README.md
+ * and AGENTS.md, a thumbnail, and a style for its PMTiles file.
  */
 const TREE: RowSpec[] = [
   { depth: 0, name: "s3://your-bucket/", kind: "root" },
@@ -500,7 +499,6 @@ const TREE: RowSpec[] = [
   { depth: 1, name: "AGENTS.md", kind: "file", note: "for agents" },
   { depth: 1, name: "boundaries/", kind: "dir" },
   { depth: 2, name: "collection.json", kind: "file", note: "STAC collection" },
-  { depth: 2, name: "README.md  AGENTS.md  thumbnail.png", kind: "light" },
   {
     depth: 2,
     name: "boundaries.parquet",
@@ -514,10 +512,8 @@ const TREE: RowSpec[] = [
     kind: "file",
     note: "for visualization",
   },
-  { depth: 2, name: "styles/", kind: "file" },
   { depth: 1, name: "landcover/", kind: "dir" },
-  { depth: 2, name: "collection.json", kind: "file", note: "STAC collection" },
-  { depth: 2, name: "README.md  AGENTS.md  thumbnail.png", kind: "light" },
+  { depth: 2, name: "collection.json", kind: "file" },
   {
     depth: 2,
     name: "landcover.tif",
@@ -554,8 +550,7 @@ export interface ParquetDrawing {
   /** The top of each row group, and their shared height. */
   bands: number[];
   bandH: number;
-  /** The top of the footer strip and of the column labels. */
-  footY: number;
+  /** The baseline of the one column label. */
   labelY: number;
 }
 
@@ -569,15 +564,10 @@ export interface Plane {
   shear: number;
 }
 
-/** The COG drawing: a header bar over a pyramid of planes. */
+/** The COG drawing: a pyramid of planes. */
 export interface CogDrawing {
-  x: number;
-  y: number;
-  barW: number;
   /** The planes from full resolution up to the smallest overview. */
   planes: Plane[];
-  /** The left edge of the labels. */
-  labelX: number;
 }
 
 /** Map a place on a plane, `u` and `v` from 0 to 1, to the figure. */
@@ -592,22 +582,22 @@ export function planePoint(plane: Plane, u: number, v: number): [number, number]
 const WIDE_FROM = 520;
 
 /**
- * The row and drawing heights fix the height of each form: 496px wide and
- * 532px stacked. `hero-figure.tsx` reserves the same heights in CSS, so
+ * The row and drawing heights fix the height of each form: 429px wide and
+ * 465px stacked. `hero-figure.tsx` reserves the same heights in CSS, so
  * change both together.
  */
 const ROW = 18;
-const PARQUET_H = 112;
-const COG_H = 130;
+const PARQUET_H = 102;
+const COG_H = 127;
 
 function layoutParquet(x: number, y: number, w: number): ParquetDrawing {
-  const mw = w >= 350 ? 170 : w >= 300 ? 148 : 112;
+  const mw = w >= 370 ? 200 : w >= 320 ? 170 : w >= 300 ? 160 : 112;
   const mh = Math.round((mw * LAT_SPAN) / 360);
   const gap = w >= 300 ? 18 : 12;
   const tx = x + mw + gap;
-  const tw = Math.min(190, x + w - tx - 1);
+  const tw = Math.min(170, x + w - tx - 1);
   const top = y + 16;
-  const bandH = 24;
+  const bandH = 26;
   const bandGap = 4;
   const bands = [0, 1, 2].map((i) => top + i * (bandH + bandGap));
   const cols = [0.13, 0.13, 0.49].map((share) => Math.round(tw * share));
@@ -622,7 +612,6 @@ function layoutParquet(x: number, y: number, w: number): ParquetDrawing {
     cols,
     bands,
     bandH,
-    footY: bands[2] + bandH + 6,
     labelY: y + 11,
   };
 }
@@ -633,24 +622,30 @@ function layoutCog(
   w: number,
   levels: RasterLevel[],
 ): CogDrawing {
-  const roomy = w >= 290;
-  const cell = roomy ? 3 : 2.2;
-  const cellDepth = 2;
+  const cell = w >= 265 ? 3.5 : 3;
+  const cellDepth = 2.5;
   const slant = 0.62;
   const full = levels[0].nx * cell;
   const shearMax = levels[0].ny * cellDepth * slant;
   const center = x + (full + shearMax) / 2;
   const planes: Plane[] = [];
-  let top = y + 20;
+  let top = y;
   for (let k = levels.length - 1; k >= 0; k--) {
     const level = levels[k];
     const pw = level.nx * cell;
     const depth = level.ny * cellDepth;
     const shear = depth * slant;
-    planes[k] = { level, x0: center - (pw + shear) / 2, y0: top, w: pw, depth, shear };
+    planes[k] = {
+      level,
+      x0: center - (pw + shear) / 2,
+      y0: top,
+      w: pw,
+      depth,
+      shear,
+    };
     top += depth + 11;
   }
-  return { x, y, barW: 72, planes, labelX: x + full + shearMax + (roomy ? 12 : 8) };
+  return { planes };
 }
 
 export interface Scene {
