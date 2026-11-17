@@ -4,19 +4,45 @@ import { COMMUNITY_LINKS, LICENSE_LINKS } from "@/lib/site";
 import { PortolanLogo } from "./portolan-logo";
 import { Ltr } from "./ui";
 
-const licenseLink = "underline underline-offset-2";
+// The picture behind the footer. Swap this path to change it, and update
+// `footer.imageCredit` in messages/ to match. The file is grayscale: the
+// blend below supplies the color.
+const FOOTER_IMAGE = "/img/footer/monterrey.webp";
+
+// White text on the band. The focus ring is white too, because the default
+// ring can vanish against the blue.
+const onBand =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-p-on-primary";
+
+const licenseLink = `text-p-on-primary underline underline-offset-2 ${onBand}`;
 
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-const columnLabel = "mb-2 font-mono text-eyebrow text-p-ink-3";
-const footLink = "inline-flex min-h-6 items-center text-p-ink-2 transition-colors hover:text-p-primary";
+const columnLabel = "mb-2 font-mono text-eyebrow text-p-on-primary";
+const footLink = `inline-flex min-h-6 items-center text-p-on-primary underline-offset-4 hover:underline ${onBand}`;
 
 export function SiteFooter() {
   const t = useTranslations();
 
   return (
-    <footer className="border-t border-p-line px-[var(--p-pad-section-x)] pb-6 pt-10">
-      <div className="mx-auto max-w-[1240px]">
+    // `isolate` keeps the blend inside the footer, so the image multiplies
+    // with the footer's own blue and not with the page behind it.
+    <footer className="relative isolate flex min-h-[clamp(260px,30vw,420px)] flex-col justify-end overflow-hidden border-t border-p-line bg-p-primary px-[var(--p-pad-section-x)] pb-6 pt-16 text-p-on-primary">
+      {/* A grayscale photograph multiplied over the brand blue. Multiply only
+          darkens, so no pixel ends up lighter than --p-primary. White text on
+          --p-primary is 5.3:1, so white text clears 4.5:1 over every part of
+          the picture. The image is decorative and it never mirrors in RTL. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={FOOTER_IMAGE}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover mix-blend-multiply"
+      />
+
+      <div className="mx-auto w-full max-w-[1240px]">
         {/* Logo on the inline-start edge, the link columns beside it. The
             rail indexes the page, so every destination that leaves the page
             lives here instead. The logo sits above the columns until lg: from
@@ -26,9 +52,14 @@ export function SiteFooter() {
           <Link
             href="/"
             aria-label={t("nav.homeAria")}
-            className="block w-fit shrink-0"
+            className={`block w-fit shrink-0 ${onBand}`}
           >
-            <PortolanLogo size={30} />
+            {/* The mark and wordmark turn white here. The blue mark would
+                disappear into the blue band. */}
+            <PortolanLogo
+              size={30}
+              className="text-p-on-primary! [&_g]:fill-p-on-primary"
+            />
           </Link>
 
           <div className="grid w-full grid-cols-1 gap-8 text-start text-small sm:grid-cols-3 sm:gap-10">
@@ -108,7 +139,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <p className="mt-12 text-center text-small text-p-ink-3">
+        <p className="mt-12 text-center text-small text-p-on-primary">
           {t.rich("footer.contentLicense", {
             cc: (chunks) => (
               <a href={LICENSE_LINKS.content} className={licenseLink}>
@@ -124,6 +155,10 @@ export function SiteFooter() {
               </a>
             ),
           })}
+        </p>
+
+        <p className="mt-3 text-center font-mono text-eyebrow text-p-on-primary">
+          {t("footer.imageCredit")}
         </p>
       </div>
     </footer>

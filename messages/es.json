@@ -5,28 +5,32 @@
   },
   "nav": {
     "registry": "Registro",
-    "why": "Por qué Portolan",
     "homeAria": "Inicio de Portolan",
     "languageAria": "Cambiar idioma",
     "index": "Índice",
-    "who": "Para quién es",
+    "who": "Lo que hace posible",
     "collapse": "Contraer el índice",
     "expand": "Índice",
     "faq": "Preguntas frecuentes",
-    "coverage": "Explorar catálogos",
+    "coverage": "La red",
     "overview": "Vista general",
     "resources": "Recursos",
     "talks": "Charlas",
     "toggleGroup": "Enlaces de {section}",
     "blog": "Blog",
-    "tutorials": "Guías y demostraciones"
+    "tutorials": "Guías y demostraciones",
+    "challenge": "El desafío",
+    "solution": "La solución",
+    "use": "En la práctica"
   },
   "hero": {
-    "title": "Portolan hace que los datos geoespaciales",
-    "titleAccent": "sean fáciles de compartir y usar.",
-    "description": "Portolan es una <spec>especificación</spec> y un <eco>conjunto de herramientas</eco> de código abierto que combinan formatos de archivo diseñados para la nube con metadatos y documentación claros para que personas y agentes puedan publicar y usar datos a cualquier escala.",
+    "title": "Publica datos geoespaciales sin servidores, bases de datos ni APIs personalizadas.",
+    "description": "Portolan es una <spec>especificación</spec> y un <eco>conjunto de herramientas</eco> de código abierto para publicar datos geoespaciales como archivos en almacenamiento en la nube compatible con S3.",
     "howItWorks": "Cómo funciona",
-    "browseRegistry": "Ver el registro de catálogos"
+    "browseRegistry": "Ver el registro de catálogos",
+    "figure": {
+      "description": "Un mapa animado. Miles de puntos dibujan los continentes y después se reorganizan en una lista de archivos dentro de un bucket de almacenamiento en la nube. La lista muestra un catálogo, su documentación y archivos de datos GeoParquet, PMTiles y COG. Luego los puntos vuelven a formar el mapa."
+    }
   },
   "involved": {
     "ariaLabel": "Usuarios y colaboradores"
@@ -46,42 +50,45 @@
     "development": "Desarrollo",
     "resources": "Recursos",
     "roadmap": "Hoja de ruta",
-    "github": "GitHub"
-  },
-  "why": {
-    "cards": {
-      "open": {
-        "title": "Abierto e interoperable",
-        "description": "Portolan se apoya en estándares abiertos como <geoparquet>GeoParquet</geoparquet>, <pmtiles>PMTiles</pmtiles>, <cog>COG</cog> y <stac>STAC</stac>, así que los datos entran directamente en herramientas como QGIS, ArcGIS, Pandas o BigQuery."
-      },
-      "simple": {
-        "title": "Simple, barato, escalable, soberano",
-        "description": "Con Portolan, tus datos son solo archivos en un bucket en la nube. Guárdalos con cualquier proveedor compatible con <s3>S3</s3>, en cualquier jurisdicción que elijas. Tus únicos costes son el almacenamiento y la salida de datos. Escala de megabytes a petabytes sin servidores, bases de datos ni APIs personalizadas."
-      },
-      "agents": {
-        "title": "Hecho para personas y agentes",
-        "description": "Los catálogos Portolan están bien estructurados, bien formateados y bien documentados, así que personas y agentes pueden encontrarlos, entenderlos y usarlos. Explora el registro tú mismo para descubrir datos nuevos, o apunta un agente al registro y mira lo que puede hacer."
-      }
-    }
+    "github": "GitHub",
+    "imageCredit": "Fotografía de astronauta ISS075-E-70481, cortesía de la Earth Science and Remote Sensing Unit, NASA Johnson Space Center."
   },
   "whoFor": {
-    "title": "Para quién es",
+    "title": "Lo que Portolan hace posible",
     "stories": {
       "large": {
         "title": "Grandes publicadores",
-        "today": "Los archivos grandes, como las imágenes satelitales o los geoportales de escala nacional, son caros de almacenar y difíciles de mantener.",
-        "change": "Portolan permite publicar esos datos <cost>al menor coste posible</cost>, sin servidores, bases de datos ni APIs, y hace que sean más fáciles de descubrir y de usar."
+        "first": "Los geoportales nacionales y los archivos planetarios pueden apoyarse en el almacenamiento de objetos en lugar de mantener una capa de servicio aparte, dimensionada para la demanda máxima.",
+        "second": "Eso acerca mucho los costes recurrentes de infraestructura al mero coste subyacente del almacenamiento y la transferencia de datos."
       },
       "small": {
         "title": "Pequeños publicadores",
-        "today": "Muchos gobiernos municipales, ONG y otros productores de datos pequeños no pueden asumir el coste ni la complejidad de publicar datos con herramientas como GeoServer o Esri.",
-        "change": "Portolan baja la barrera de entrada y te deja compartir tus datos con nada más que un bucket de almacenamiento en la nube."
+        "first": "Muchos gobiernos municipales, ONG, investigadores y pequeños productores de datos no pueden justificar el mantenimiento de GeoServer, de infraestructura de Esri o de una API personalizada solo para publicar unos pocos conjuntos de datos.",
+        "second": "Como un catálogo Portolan es solo archivos en un bucket, reduce las barreras técnicas y económicas para publicar datos geoespaciales útiles."
       },
       "users": {
         "title": "Usuarios de datos",
-        "today": "La mayoría de los datos geoespaciales están dispersos, mal documentados y guardados de formas que dificultan su uso.",
-        "change": "Portolan exige metadatos y documentación claros, usa formatos pensados para el acceso directo y ofrece un <reg>registro central</reg> de catálogos públicos. Dedicas menos tiempo a buscar, descargar y adaptar datos, y más tiempo a usarlos."
+        "first": "Los usuarios deberían poder centrarse en hacer preguntas útiles en lugar de aprender las particularidades de varios portales, gestionar la paginación de las APIs, adaptar descargas o escribir código geoespacial solo para empezar.",
+        "second": "Los catálogos Portolan incluyen los metadatos y la documentación necesarios para entender qué contienen los datos y cómo deben usarse."
       }
+    },
+    "costs": {
+      "municipality": {
+        "figure": "~€0.47",
+        "label": "Un municipio, al mes",
+        "line": "Datos vectoriales, ~2 GB."
+      },
+      "province": {
+        "figure": "~€75",
+        "label": "Una provincia, al mes",
+        "line": "Datos vectoriales y una ortofoto, ~3 TB."
+      },
+      "national": {
+        "figure": "~€6,006",
+        "label": "Un geoportal nacional, al mes",
+        "line": "Escala de PDOK, ~80 TB almacenados, ~2 PB transferidos."
+      },
+      "caption": "Almacenamiento y transferencia de salida en el almacenamiento de objetos de Leaseweb, según la <cost>calculadora de costes</cost>. Sin costes de cómputo de servidores, licencias ni personal."
     }
   },
   "howItWorks": {
@@ -109,14 +116,17 @@
         "title": "Usar",
         "description": "Ya puedes llevar tus datos directamente a herramientas como QGIS, ArcGIS o Python, o pasar la URL del catálogo a un agente para que se ponga a trabajar."
       }
+    },
+    "quickstart": {
+      "title": "Inicio rápido",
+      "body": "Las <skills>habilidades de agente</skills> pueden partir de una carpeta de archivos, un endpoint WFS, un servicio de Esri u otro conjunto de datos publicado, y después ocuparse de la estructura del catálogo, la conversión, la documentación, la visualización, la validación y la publicación. La <cli>CLI de Portolan</cli> se encarga del trabajo determinista que hay debajo.",
+      "caption": "El mensaje completo con el que empezó el catálogo de East Hampton.",
+      "guide": "Leer la guía"
     }
   },
   "demo": {
-    "navLabel": "Demo",
     "title": "Una mejor forma de trabajar con datos geoespaciales",
     "blurb": "Empieza con preguntas reales, no con un guion. Mira cómo un agente encuentra catálogos relevantes en el registro de Portolan y responde preguntas complejas en lenguaje natural sobre el riesgo de inundación en Moldavia.",
-    "captionPhiladelphia": "Creando <catalog>un catálogo de Portolan</catalog> de principio a fin a partir de datos de vivienda de Filadelfia.",
-    "transcriptPhiladelphia": "Una grabación solo de terminal muestra a un agente crear y publicar un catálogo Portolan con diez conjuntos de datos de Open Data Philly. La solicitud nombra parcelas, uso del suelo, distritos base y superposiciones de zonificación, descripciones de zonificación, indicadores de propiedades vacantes, distritos del Ayuntamiento, huellas de edificios y producción de viviendas asequibles. El agente carga la habilidad de arranque de Portolan, investiga y descarga las fuentes, mejora los metadatos, crea miniaturas y estilos de mapa, valida el catálogo y lo publica. La terminal informa de unos 1,78 millones de entidades y confirma que todas las comprobaciones del catálogo pasan. También registra campos de origen sin resolver, detalles de licencia y problemas de herramientas antes de sincronizar los archivos y las guías de agentes publicados.",
     "transcriptFloodRisk": "Una grabación solo de terminal muestra a un agente encontrar datos sobre el riesgo de inundación en Chisináu a través del registro activo de Portolan. Inspecciona el catálogo de datos geoespaciales de Moldavia y otros catálogos relacionados para buscar extensiones y profundidad de inundación, edificios, población, cobertura del suelo, hidrografía, carreteras, servicios y límites. Informa de escenarios de inundación de Moldavia con probabilidades anuales del 1%, 0,5% y 0,1%, extensiones por rotura de presas, capas de profundidad JRC GLOFAS y cuadrículas de población GHSL. Después calcula estimaciones de cribado de edificios y población expuestos y clasifica varios corredores de planificación. El resultado indica que las estimaciones no incluyen profundidad local, velocidad, tiempo de llegada ni datos de vulnerabilidad de edificios.",
     "play": "Reproducir la demo",
     "pause": "Pausar la demo",
@@ -160,33 +170,40 @@
     }
   },
   "coverage": {
-    "title": "Explorar catálogos",
-    "blurb": "Consulta catálogos geoespaciales alojados de forma independiente por publicadores de todo el mundo.",
+    "title": "Hacia una red federada",
     "cta": "Explorar el registro",
-    "featuredLabel": "Catálogos destacados",
-    "featured": {
-      "global-data": {
-        "title": "Límites de parcelas agrícolas",
-        "publisher": "Fields of the World",
-        "place": "Todo el mundo"
-      },
-      "portolan-nl": {
-        "title": "Geodatos nacionales de los Países Bajos",
-        "publisher": "Portolan NL",
-        "place": "Países Bajos"
-      },
-      "trimet": {
-        "title": "Datos de transporte regional",
-        "publisher": "TriMet",
-        "place": "Portland, Oregón"
-      }
-    },
     "about": "Este mapa muestra dónde hay datos disponibles en el registro de Portolan. Cada hexágono se sombrea según el número de catálogos distintos que tienen al menos una colección sobre esa zona.",
     "cell": {
       "catalogs": "{count, plural, one {# catálogo} other {# catálogos}}"
     },
     "caption": "Cobertura mundial de los catálogos Portolan",
-    "legend": "catálogos por celda"
+    "legend": "catálogos por celda",
+    "lead": "Nuestro objetivo a largo plazo es que Portolan se convierta en la forma predeterminada de publicar datos geoespaciales. El registro es el primer paso, un catálogo de catálogos alojados de forma independiente. Los bytes subyacentes nunca salen del almacenamiento del publicador, y los usuarios los consultan directamente en la fuente.",
+    "pergamino": {
+      "title": "IDE Pergamino, una SDI municipal en 390 MB de archivos",
+      "body": "El catálogo replica la SDI de la Municipalidad de Pergamino, Argentina, con 183 capas en 13 categorías y 1,024,255 entidades.",
+      "link": "Abrir IDE Pergamino",
+      "alt": "Las categorías de IDE Pergamino, que son catastro, vialidad, transporte, agua y saneamiento, energía, salud, educación, seguridad, demografía, ambiente, límites administrativos y servicios municipales."
+    },
+    "stories": {
+      "trimet": {
+        "title": "TriMet, tres horas de los shapefiles a un catálogo en línea",
+        "body": "TriMet publica ocho conjuntos de datos geoespaciales como archivos simples. Replicarlos en un catálogo Portolan, con un navegador de tema personalizado, llevó unas tres horas de trabajo en un avión.",
+        "link": "Leer la entrada",
+        "alt": "El catálogo de TriMet en un navegador de Portolan con un tema basado en los colores de TriMet."
+      },
+      "eastHampton": {
+        "title": "East Hampton, un servidor Esri replicado por un agente",
+        "body": "El catálogo completo ocupa 78.1 MB en 290 archivos. Al precio de lista de AWS S3 Standard, almacenar estos datos cuesta aproximadamente dos centavos al año.",
+        "link": "Leer la guía",
+        "alt": "El catálogo del Town of East Hampton en el navegador de Portolan, agrupado en seis subcatálogos."
+      },
+      "ftw": {
+        "title": "Fields of the World, 369 TB sin capa de servicio",
+        "body": "Su conjunto de datos global de límites de parcelas agrícolas se publica como un catálogo Portolan en almacenamiento de objetos, y sirvió 106.6 TB en los 28 días que terminaron el 27 de agosto de 2026.",
+        "link": "Abrir el catálogo"
+      }
+    }
   },
   "registry": {
     "meta": {
@@ -411,6 +428,78 @@
         "attribution": "Open Geodag",
         "description": "Estima el coste de publicar tus datos como un catálogo Portolan.",
         "alt": "La calculadora, que compara costos mensuales de almacenamiento y salida en tres proveedores."
+      }
+    }
+  },
+  "challenge": {
+    "title": "Publicar datos geoespaciales todavía implica operar servidores, bases de datos y APIs.",
+    "p1": "Durante décadas, publicar datos geoespaciales ha supuesto desplegar y mantener una infraestructura compleja y cara, mientras que usar esos datos ha exigido herramientas y conocimientos especializados.",
+    "p2": "Esto tenía sentido cuando los archivos espaciales no podían consultarse de forma eficiente a través de la red. A medida que los conjuntos de datos se vuelven más grandes y complejos, y los agentes generan volúmenes de consultas para los que la infraestructura de servicio tradicional nunca fue diseñada, este modelo de infraestructura de datos espaciales resulta cada vez menos sostenible."
+  },
+  "solution": {
+    "title": "Una SDI ya puede ser archivos en almacenamiento en la nube.",
+    "p1": "Los formatos de archivo optimizados para la nube y los metadatos STAC permiten organizar conjuntos de datos a escala de petabytes en almacenamiento de objetos y acceder a ellos de forma eficiente con herramientas estándar como QGIS y Python, o entregárselos a un agente.",
+    "p2": "Cuando los usuarios pueden consultar los archivos directamente, los publicadores no necesitan mantener un servicio cuya función principal es situarse entre los usuarios y los datos.",
+    "before": {
+      "items": {
+        "mapServer": "Servidor de mapas · GeoServer, ArcGIS Server",
+        "database": "Base de datos espacial",
+        "tileServer": "Servidor de teselas",
+        "api": "API personalizada",
+        "capacity": "Capacidad dimensionada para la demanda máxima",
+        "operations": "Trabajo operativo para mantenerlo en marcha"
+      },
+      "caption": "Los publicadores mantienen un servicio cuya función principal es situarse entre los usuarios y los datos."
+    },
+    "after": {
+      "notes": {
+        "readme": "docs para personas",
+        "agents": "docs para agentes"
+      },
+      "caption": "Un catálogo Portolan es solo archivos en un bucket."
+    },
+    "blocks": {
+      "standards": {
+        "title": "Una especificación construida sobre estándares existentes",
+        "body": "Portolan se apoya deliberadamente en estándares existentes en lugar de reinventarlos. Usa <geoparquet>GeoParquet</geoparquet> y <pmtiles>PMTiles</pmtiles> para datos vectoriales, <cog>COG</cog> para ráster y <stac>STAC</stac> para organizarlos."
+      },
+      "docs": {
+        "title": "Documentado para personas y agentes",
+        "body": "Todos los catálogos Portolan deben incluir archivos README y <m>AGENTS.md</m> para que personas y agentes puedan entender los datos y trabajar con ellos fácilmente."
+      },
+      "sovereign": {
+        "title": "Cualquier proveedor, cualquier jurisdicción",
+        "body": "Tus datos residen en cualquier almacenamiento en la nube compatible con S3, en la jurisdicción que elijas. Cambiar de proveedor no cambia los formatos de archivo ni la estructura del catálogo."
+      }
+    }
+  },
+  "practice": {
+    "title": "Portolan en la práctica",
+    "lead": "Como los catálogos Portolan se construyen a partir de estándares existentes, usarlos no requiere ninguna herramienta específica de Portolan. Puedes explorar los mismos datos en el navegador de Portolan, consultarlos directamente desde QGIS, ArcGIS, Python o DuckDB, o entregar el catálogo a un agente.",
+    "items": {
+      "browser": {
+        "title": "En el navegador de Portolan",
+        "caption": "Philadelphia Housing and Land Use · 10 colecciones · 1,781,572 entidades",
+        "alt": "El navegador de Portolan muestra el catálogo Philadelphia Housing and Land Use, con una miniatura de mapa para cada colección."
+      },
+      "qgis": {
+        "title": "En QGIS",
+        "caption": "IDE Pergamino y la profundidad de inundación de JRC GloFAS, cargadas desde el registro",
+        "description": "Una grabación de pantalla de QGIS. El complemento Portolan Registry abre IDE Pergamino, añade el límite del Partido de Pergamino y después añade una capa global de profundidad de inundación recortada a ese límite.",
+        "body": "Los formatos optimizados para la nube permiten un acceso mucho más rápido del que jamás podrían ofrecer los endpoints WFS o los servidores Esri."
+      },
+      "app": {
+        "title": "En una aplicación web sin servidores",
+        "caption": "Réplica de NASA FIRMS · 632,405,531 detecciones de incendios",
+        "alt": "Un mapa web de detecciones de incendios en todo el mundo con una línea de tiempo, que lee el catálogo réplica de NASA FIRMS.",
+        "body": "La réplica contiene todo el archivo como GeoParquet y PMTiles particionados por año, que un explorador lee para dibujar cada detección desde 2000."
+      },
+      "agent": {
+        "title": "Con un agente",
+        "caption": "La respuesta de un agente a partir del catálogo de TriMet y un conjunto de datos de arbolado viario",
+        "body": "El almacenamiento en la nube y los formatos optimizados para la nube pueden absorber los volúmenes de consultas mucho mayores que generan los agentes, mientras que los metadatos STAC y una documentación sólida les dan una forma consistente de descubrir los datos y usarlos correctamente.",
+        "question": "¿En qué paradas de autobús es peor esperar en un día caluroso?",
+        "answer": "El 23% de las paradas de autobús de Portland no tiene ningún árbol viario a menos de 100 ft, y el 59% no tiene ningún árbol de copa grande."
       }
     }
   }

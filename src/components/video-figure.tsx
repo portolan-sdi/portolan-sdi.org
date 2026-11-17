@@ -57,6 +57,15 @@ interface VideoFigureProps {
    * one player centers at a fixed 620px and the other fills a grid column.
    */
   className?: string;
+  /** Restart the recording when it ends. Off by default. */
+  loop?: boolean;
+  /** Mute the element. Off by default. */
+  muted?: boolean;
+  /**
+   * The caller frames the figure. The player drops its own border and offset
+   * shadow, and the caption takes only the caller's classes.
+   */
+  plain?: boolean;
 }
 
 /** mm:ss. Neither demo runs past a minute and a half, so no hour field. */
@@ -76,6 +85,9 @@ export function VideoFigure({
   captionClassName = "",
   description,
   className = "",
+  loop = false,
+  muted = false,
+  plain = false,
 }: VideoFigureProps) {
   const t = useTranslations("demo");
   const descriptionId = useId();
@@ -179,13 +191,18 @@ export function VideoFigure({
       <div
         ref={frameRef}
         dir="ltr"
-        className="demo-frame border border-p-line bg-p-paper"
+        // The frame keeps its class when plain, because the full-screen rules
+        // in globals.css hang on it. The inline style only removes the shadow.
+        className={`demo-frame bg-p-paper ${plain ? "" : "border border-p-line"}`}
+        style={plain ? { boxShadow: "none" } : undefined}
       >
         <div className="demo-stage relative">
           <video
             ref={videoRef}
             playsInline
             preload="none"
+            loop={loop}
+            muted={muted}
             poster={poster}
             onClick={toggle}
             style={{ "--demo-ratio": ratio } as CSSProperties}
@@ -259,7 +276,13 @@ export function VideoFigure({
       </div>
 
       {caption && (
-        <figcaption className={`mt-6 text-small leading-relaxed text-p-ink-2 text-pretty text-center text-balance ${captionClassName}`}>
+        <figcaption
+          className={
+            plain
+              ? captionClassName
+              : `mt-6 text-small leading-relaxed text-p-ink-2 text-pretty text-center text-balance ${captionClassName}`
+          }
+        >
           {caption}
         </figcaption>
       )}
