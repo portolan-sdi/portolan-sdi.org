@@ -7,7 +7,7 @@ import { POSTS } from "@/lib/blog";
 import { FEED_PATH } from "@/lib/feed";
 import { TUTORIALS } from "@/lib/tutorials";
 import { PageHero } from "./page-hero";
-import { AWAY_ITEMS, SiteShell } from "./site-rail";
+import { SiteShell } from "./site-rail";
 
 // The index for the blog and for tutorials.
 //
@@ -19,7 +19,7 @@ import { AWAY_ITEMS, SiteShell } from "./site-rail";
 // from messages/, because both are written in English only. Everything else on
 // this page is translated.
 //
-// The section picks the list, the route prefix, the rail entry, and the
+// The section picks the list, the route prefix, and the
 // message namespace for the page title and intro. Only the blog has a feed.
 
 export type ArticleSection = "blog" | "tutorials";
@@ -38,7 +38,7 @@ export function BlogIndexPage({ section = "blog" }: BlogIndexPageProps) {
   const format = useFormatter();
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId={section}>
+    <SiteShell>
       <PageHero title={t("title")}>
         {/* No measure cap. A lead paragraph that stops at 60ch leaves a
             ragged edge mid-page while the rules below it run full width. */}

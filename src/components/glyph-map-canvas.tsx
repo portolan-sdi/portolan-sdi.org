@@ -340,8 +340,8 @@ export default function GlyphMapCanvas({
       }
       if (!disposed) setReady(true);
 
-      // The rail collapse resizes the column without a window resize event, so
-      // the frame is observed directly. Only the column count and the raster
+      // The column can resize without a window resize event, so the frame is
+      // observed directly. Only the column count and the raster
       // height depend on the frame, so a rebuild is cheap and rare.
       let last = frame.getBoundingClientRect();
       const observer = new ResizeObserver(() => {

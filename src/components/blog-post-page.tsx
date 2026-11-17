@@ -9,10 +9,10 @@ import type { Heading } from "@/lib/headings";
 import { ENTRIES, type ArticleSection } from "./blog-index-page";
 import { PostToc } from "./blog/post-toc";
 import { PageHero } from "./page-hero";
-import { AWAY_ITEMS, SiteShell } from "./site-rail";
+import { SiteShell } from "./site-rail";
 
-// A single blog post or tutorial. The section picks the rail entry, the
-// back link, and the message namespace for the back link and the English
+// A single blog post or tutorial. The section picks the back link
+// and the message namespace for the back link and the English
 // notice.
 //
 // The body is the compiled MDX, passed in as children from the route so it
@@ -66,7 +66,7 @@ export function BlogPostPage({
   const newer = index > 0 ? entries[index - 1] : undefined;
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId={section}>
+    <SiteShell>
       {/* The headline runs the full 1240px band, like every other page header.
           Only the body below it takes the narrow reading measure. */}
       <PageHero

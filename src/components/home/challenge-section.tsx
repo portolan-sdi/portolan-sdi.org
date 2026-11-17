@@ -12,9 +12,16 @@ export function ChallengeSection() {
       className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] bg-p-primary text-p-on-primary"
     >
       <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-7 items-start">
-        <h2 className="text-p-on-primary text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-balance">
-          {t("title")}
-        </h2>
+        <div>
+          {/* One of the two eyebrows on the homepage. The other is on the
+              solution section. */}
+          <p className="font-mono rtl:font-sans! text-eyebrow text-p-on-primary">
+            {t("eyebrow")}
+          </p>
+          <h2 className="mt-3 text-p-on-primary text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-balance">
+            {t("title")}
+          </h2>
+        </div>
         <div className="flex flex-col gap-5 max-w-[60ch]">
           <p className="text-lead leading-relaxed text-p-on-primary">{t("p1")}</p>
           <p className="text-lead leading-relaxed text-p-on-primary">{t("p2")}</p>

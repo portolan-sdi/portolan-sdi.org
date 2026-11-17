@@ -76,7 +76,7 @@ spacing:
   pad-lg: "32px"
   pad-section-x: "clamp(20px, 5vw, 64px)"
   pad-section-y: "clamp(56px, 8vw, 104px)"
-  rail: "264px"
+  bar: "68px"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -227,42 +227,64 @@ Sections take `px-[var(--p-pad-section-x)]` and `py-[var(--p-pad-section-y)]`.
 Both are fluid `clamp()` values. Do not use the fixed `--p-pad-lg` for section
 padding.
 
-`SiteShell` in `site-rail.tsx` wraps every page. It renders the left side
-rail, which is the primary navigation, and `SiteFooter` under the page
-content. From `md` up the rail is pinned and content is inset by `--p-rail` (264px). Below
-`md` it is an off-canvas drawer, opened from a mono "Index" button in a slim
-sticky top bar. The word "Index" is the control, never a hamburger icon.
-Rail transforms are direction-aware: the rail hides toward its own
-inline-start edge.
+`SiteShell` in `site-rail.tsx` wraps every page. It renders a sticky top
+bar, which is the primary navigation and the one site header, and
+`SiteFooter` under the page content. The bar is solid `--p-bg` over one
+`#16170f` bottom rule. It has no blur or shadow. Its height is `--p-bar`
+(68px), and `html` sets `scroll-padding-top` to that token, so an anchor jump
+stops below the bar.
 
-The rail indexes the site in three top-level rows. Overview nests the
-homepage section anchors, Resources lists Blog, Tutorials, Talks, and FAQ,
-and Registry links to `/registry`. Links that leave the site are in `SiteFooter`. Every
-item is a real link, never a dead span.
+The bar shows the logo linking home on the inline-start side, then the page
+links Blog, Guides & demos, Talks, FAQ, and Registry, then the locale control
+on the inline-end side. The locale control shows a globe icon beside the locale code. The globe is the only icon in the bar, and the page links take none. It lists pages only, with no homepage section
+anchors, no scroll-spy, and no collapse control. The link for the current
+page takes `aria-current="page"` and `#4163cc`. Below `md` the bar shows the
+logo and a mono "Index" button, which opens a panel under the bar with the
+same links and the locale control. The word "Index" is the control, never a
+hamburger icon. Links that leave the site are in `SiteFooter`. Every item is
+a real link, never a dead span.
 
-The homepage hero section takes the `graph-wash` class. The headline is
-beside the description and its two buttons in a two-column head from `lg`,
-and the head stacks below `lg`. `HeroFigure` in
-`src/components/home/hero-figure.tsx` runs under the head at the full width
-of the section, with no frame.
+`SiteHeader` was removed in July 2026 and the collapsible left side rail in
+November 2026. Do not reintroduce the rail or a second header component.
 
-`HeroFigure` is a canvas point cloud and the one moving element on the
-homepage. Tens of thousands of points draw a world map, then every point
-moves into a file listing under `s3://your-bucket/`, then moves back, on a
-loop. The listing shows the catalog, the docs, and GeoParquet, PMTiles, and
-COG files as blocks of points with mono labels. The map and the file listing
-never show together. The figure renders with raw WebGL and falls back
-to Canvas 2D, with no added dependency. Point tones mix the palette tokens,
-which the figure reads at runtime. Under `prefers-reduced-motion` it shows
-one static frame of the file listing. The loop pauses while the figure is off
-screen or the tab is hidden. The figure is `dir="ltr"` and never mirrors. It
-has an `sr-only` caption and no visible caption. The homepage hero does not
-use `GlyphMap` or `--hero-scrim`.
+In the footer, content starts at the top of the band and aligns to the
+inline-start edge. The license line is at the bottom edge of the band,
+start-aligned.
 
-The homepage sections run in this order: hero `#top`, the users and
-supporters strip, `#challenge`, `#solution`, `#who`, `#use`, `#coverage`,
-`#how`, `#ecosystem`, `#involved`. The rail labels follow the same order. The
-homepage plays no terminal recording.
+The homepage hero section takes the `graph-wash` class. From `lg` up it has
+two columns. The headline and the description are on the inline-start side.
+The hero has no buttons. `HeroFigure` in `src/components/home/hero-figure.tsx`
+is on the inline-end side. The figure has no frame. Below `lg` the hero is
+one column, and the figure is under the description.
+
+`HeroFigure` is a Canvas 2D figure and the one moving element on the site.
+It has two states that never show together. The first state is a turning
+globe. Land shows as points on a sphere with a thin outline and a faint
+graticule. The second state is a Portolan catalog, drawn as a directory tree
+under `s3://your-bucket/`. A role note beside each light file says what it
+is, such as "STAC catalog", "for people", and "for agents". The GeoParquet
+file and the COG each have a drawing, and both drawings show the world map.
+The GeoParquet drawing is a map of land outlines beside a table of row
+groups with a footer. The COG drawing is a header bar over a pyramid of the
+same map as rasters. The PMTiles file is a plain row with a role note and no
+drawing. One transition moves the points from the globe to their own places
+on the two maps, and the same transition runs backward, on a loop. The
+figure has no phase words, no request lines, and no read step.
+
+The figure picks its form from its own width. The wide form has the tree
+beside the drawings, and the stacked form has each drawing under its file
+name. CSS reserves the height of each form, so the page does not shift when
+the land mask loads. The figure has no WebGL path and no added dependency.
+Its colors and its mono font come from the palette tokens, which the figure
+reads at runtime. Under `prefers-reduced-motion` it shows the static
+catalog. The loop pauses while the figure is off screen or the tab is
+hidden. The figure is `dir="ltr"` and never mirrors. It has an `sr-only`
+caption and no visible caption. The homepage hero does not use `GlyphMap` or
+`--hero-scrim`.
+
+The homepage sections run in this order: hero `#top`, `#challenge`,
+`#solution`, `#who`, `#use`, the users and supporters strip, `#coverage`,
+`#how`, `#ecosystem`, `#involved`. The homepage plays no terminal recording.
 
 Every route except the homepage opens with `PageHero` in `page-hero.tsx`,
 which draws the still glyph relief map under `--hero-scrim`. That band owns
@@ -270,7 +292,7 @@ the page `h1`, so the section below it sets no second `h1` and opens with
 `pt-[clamp(28px,3.5vw,48px)]` instead of full section padding.
 
 Content keeps a 1240px column, with one exception. In "Toward a federated
-network" (`#coverage`) the coverage map and the IDE Pergamino feature block
+network" (`#coverage`) the registry map and the IDE Pergamino feature block
 run edge to edge of the content area.
 
 Shared UI uses logical properties (`ps`/`pe`, `ms`/`me`, `text-start`/`end`,
@@ -292,10 +314,11 @@ The permitted full-bleed color fields are solid, and there are four.
 
 - **Challenge section** (homepage): `#4163cc` with `#ffffff` text.
 - **"Portolan in practice"** (homepage): `#16170f` with `#fcfcfa` text.
-- **Footer** (every page): a grayscale NASA Earth Observatory photograph
+- **Footer** (every page): a grayscale NASA astronaut photograph
   multiplied over `#4163cc`, so it reads as one-color blue, with `#ffffff`
-  text and an image credit. Multiply can only darken, so text contrast never
-  drops below white on `#4163cc`.
+  text. Multiply can only darken, so text contrast never drops below white
+  on `#4163cc`. The footer shows no image credit. The credit for the
+  photograph is in `README.md`.
 - **Talks band** (`/talks` route): a `#4163cc` band behind the talk cards.
 
 No other section takes a color band.
@@ -321,7 +344,7 @@ Annotated figures are the sanctioned illustration motif: inline SVG in
 `#4163cc` strokes, tiny mono labels, dashed leader lines, and the
 `graph-wash` grid. See the two panels in
 `src/components/home/solution-section.tsx`. `HeroFigure` is not an annotated
-figure. It is the canvas point map described under Layout. A
+figure. It is the Canvas 2D figure described under Layout. A
 homepage figure has no `Fig. N` caption row. That row is the pattern for blog post
 figures. Figures never mirror in RTL, so they carry `dir="ltr"`,
 and format and tool names inside them stay in Latin.
@@ -371,8 +394,14 @@ side, bottom-aligned from `md` up. The grid is
 The kicker is mono, `text-eyebrow`, `#74766a`, `tracking-[0.04em]`, and holds
 the label string only. It carries no `NN ·` index prefix, no `//` punctuation,
 no uppercase, and no wide tracking. Omit the kicker where the title below
-already names the section. The homepage has no kickers or eyebrows. Put no
-small label above a homepage heading, card title, or figure.
+already names the section.
+
+The homepage has exactly two eyebrows, and neither uses `SectionHead`. "The
+challenge" is above the challenge heading and "The solution" is above the
+solution heading (`challenge.eyebrow`, `solution.eyebrow`). Both are mono
+`text-eyebrow`, in sentence case at default tracking. The challenge eyebrow
+is `#ffffff` on the blue band, and the solution eyebrow is `#74766a`. Put no
+small label above any other homepage heading, card title, or figure.
 
 The title is `text-section`, weight 800, `tracking-[-0.03em]`,
 `leading-[1.05]`, and balanced.
@@ -416,7 +445,8 @@ The mark never mirrors in RTL. It never takes a gradient.
 - **Don't** add a step back to the type scale.
 - **Don't** add a `border-p-line-strong` tier. Thicken the border instead.
 - **Don't** inline `<header>` or `<footer>` markup in a page, or reintroduce
-  `SiteHeader`. The rail and `SiteFooter` both come from `SiteShell`.
+  `SiteHeader` or the side rail. The top bar and `SiteFooter` both come from
+  `SiteShell`.
 - **Don't** use a compass rose or a rhumb line. The motif was tried
   repeatedly and rejected.
 - **Don't** add a terminal or code-session mockup.

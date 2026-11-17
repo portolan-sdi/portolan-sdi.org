@@ -127,8 +127,7 @@ export function EcosystemSection() {
     >
       <div className="max-w-[1240px] mx-auto">
         {/* No eyebrow: the title is the section label, so a kicker would
-            repeat it. The rail still reads `ecosystem.eyebrow` for its own
-            list. */}
+            repeat it. */}
         <div className="mb-[clamp(2rem,4vw,3rem)]">
           <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
             {t("title")}
@@ -304,10 +303,9 @@ export function EcosystemSection() {
             ledger rows (narrow title column, wide body), so the page does
             not gain a third card grid. The lock-in sentence restates the
             FAQ answer: the catalog outlives any product that manages it. */}
-        {/* The split waits for `lg`. At `md` the pinned rail already takes
-            264px, which leaves the body column 59px and pushes the text past
-            the viewport edge. The section stacks instead until there is room
-            for both columns. */}
+        {/* The split waits for `lg`. Below it the 320px title column leaves the body too
+            narrow to read, so the section stacks until there is room for
+            both columns. */}
         <div className="mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 gap-2 border-t border-p-line pt-7 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:gap-12">
           <h3 className="text-card-title font-bold tracking-[-0.02em]">
             {t("commercial.title")}

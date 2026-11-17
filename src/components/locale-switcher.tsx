@@ -104,10 +104,27 @@ export function LocaleSwitcher() {
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1 h-8 px-2 rounded-[var(--p-r-md)] text-small text-p-ink-2 transition-colors hover:bg-p-bg-soft hover:text-p-ink"
+        className="inline-flex items-center gap-1.5 h-8 px-2 rounded-[var(--p-r-md)] text-small text-p-ink-2 transition-colors hover:bg-p-bg-soft hover:text-p-ink"
       >
-        {/* No globe. Nav items in the rail carry no icons, and this control
-            sits among eight of them. The locale code names it. */}
+        {/* No globe. Nav items in the bar carry no icons, and this control
+            sits beside them. The locale code names it. */}
+        {/* A globe marks the control as the language menu. The locale code
+            beside it stays, so the current language is readable. */}
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </svg>
         <Ltr>{locale.toUpperCase()}</Ltr>
         <svg
           width="12"
@@ -125,12 +142,16 @@ export function LocaleSwitcher() {
         </svg>
       </button>
 
+      {/* In the top bar the menu drops under the control, from its inline-end
+          edge, so it stays inside the viewport. Below md the control sits at
+          the foot of the navigation panel, so the menu opens upward over the
+          links instead of past the panel's edge. */}
       {open ? (
         <div
           id={menuId}
           role="menu"
           aria-labelledby={buttonId}
-          className="absolute start-0 bottom-full mb-2 min-w-40 py-1 rounded-[var(--p-r-md)] border border-p-line-soft bg-p-bg shadow-[var(--p-shadow-md)] text-small z-50"
+          className="absolute start-0 bottom-full mb-2 md:start-auto md:end-0 md:bottom-auto md:top-full md:mb-0 md:mt-2 min-w-40 py-1 rounded-[var(--p-r-md)] border border-p-line-soft bg-p-bg shadow-[var(--p-shadow-md)] text-small z-50"
         >
           {routing.locales.map((loc, index) => {
             const isActive = loc === locale;

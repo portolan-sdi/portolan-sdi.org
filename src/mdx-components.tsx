@@ -26,13 +26,14 @@ function textOf(node: ReactNode): string {
 const components: MDXComponents = {
   // A post supplies its own <h1>, so the body starts at h2.
   //
-  // The id is the anchor the rail links to. The route builds the same id from
-  // the MDX source with `extractHeadings` (src/lib/headings.ts). The scroll
-  // margin keeps the heading clear of the sticky mobile top bar.
+  // The id is the anchor `PostToc` links to. The route builds the same id from
+  // the MDX source with `extractHeadings` (src/lib/headings.ts). The sticky
+  // top bar is cleared by `scroll-padding-top` on `html`, and the scroll
+  // margin adds the breathing room above the heading.
   h2: ({ children, ...props }) => (
     <h2
       id={slugify(textOf(children))}
-      className="mt-14 mb-4 scroll-mt-20 text-feature font-extrabold leading-[1.2] tracking-[-0.02em] text-balance text-p-ink md:scroll-mt-8"
+      className="mt-14 mb-4 scroll-mt-8 text-feature font-extrabold leading-[1.2] tracking-[-0.02em] text-balance text-p-ink"
       {...props}
     >
       {children}

@@ -69,8 +69,9 @@
      defined and never spent. */
   --p-pad-lg: 32px;
 
-  /* Primary side rail width (see .site-rail / .site-main) */
-  --p-rail: 264px;
+  /* Height of the sticky top navigation bar (see SiteShell). The bar, the
+     scroll padding on html, and the blog margin list all read it. */
+  --p-bar: 68px;
 
   /* Shadows — flat editorial: no drop shadows, hairlines only */
   --p-shadow-sm: none;
@@ -148,6 +149,14 @@ html,
 body {
   margin: 0;
   padding: 0;
+}
+
+/* The top bar is sticky, so an anchor jump (`/#how`, `/faq#lockIn`, a post
+   heading) would land with its target under the bar. The padding stops the
+   scroll one bar height short. An element that wants air above it adds its
+   own `scroll-mt-*` on top. */
+html {
+  scroll-padding-top: var(--p-bar);
 }
 
 /* Element defaults live in the base layer so Tailwind utilities (which sit in
@@ -242,55 +251,6 @@ body {
 }
 .catalog-map-popup .maplibregl-popup-tip {
   display: none;
-}
-
-/* --- Primary side rail navigation (replaces header + footer nav) ---------
-   The rail is off-canvas by default (mobile drawer, opened with .is-open).
-   From md up it is permanently pinned and content is inset by --p-rail.
-   Transforms are direction-aware so the rail hides toward its own
-   inline-start edge below md. */
-.site-rail {
-  transform: translateX(-100%);
-  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
-[dir="rtl"] .site-rail {
-  transform: translateX(100%);
-}
-.site-rail.is-open {
-  transform: translateX(0);
-}
-@media (min-width: 768px) {
-  .site-rail,
-  [dir="rtl"] .site-rail {
-    transform: translateX(0);
-  }
-
-  /* Collapsed: the rail slides off toward its own inline-start edge and the
-     content reclaims the 264px. */
-  .site-rail.is-collapsed {
-    transform: translateX(-100%);
-  }
-  [dir="rtl"] .site-rail.is-collapsed {
-    transform: translateX(100%);
-  }
-
-  /* The margin is not animated. Only the rail's transform is, which the
-     compositor handles on its own layer. Easing the margin instead would
-     relayout <main> on every frame for 280ms, and <main> holds the MapLibre
-     canvas and the hero glyph map, both of which resize on reflow. The
-     content reflows once, then the rail slides away over it. */
-  .site-main {
-    margin-inline-start: var(--p-rail);
-  }
-  .site-rail.is-collapsed ~ .site-main {
-    margin-inline-start: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-rail {
-    transition: none;
-  }
 }
 
 /* Who it's for: each story's rule wipes in from its inline-start edge, then

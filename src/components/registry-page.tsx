@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react
 import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { PageHero } from "./page-hero";
-import { AWAY_ITEMS, SiteShell } from "./site-rail";
+import { SiteShell } from "./site-rail";
 import { DirArrow, PROSE_LINK } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import type { MapState } from "./registry/catalog-map";
@@ -106,8 +106,10 @@ function Pager({
 function MapSkeleton() {
   const t = useTranslations("registry");
   return (
-    <div className="h-[440px] md:h-[540px] border border-p-line bg-p-bg-soft animate-pulse flex items-center justify-center">
-      <span className="text-small text-p-ink-3 font-mono">{t("map.loading")}</span>
+    // The frame does not pulse. A pulse fades the text with the frame, and a
+    // contrast check then reads a different value on each run.
+    <div className="h-[440px] md:h-[540px] border border-p-line bg-p-bg-soft flex items-center justify-center">
+      <span className="text-small text-p-ink-2 font-mono">{t("map.loading")}</span>
     </div>
   );
 }
@@ -329,7 +331,7 @@ export function RegistryPage({
   };
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId="registry">
+    <SiteShell>
       {/* The header band renders whether or not the listing loaded, so a
           failed fetch still returns a page with a title. */}
       <PageHero title={t("registry.title")}>

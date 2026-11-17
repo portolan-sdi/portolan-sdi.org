@@ -1,14 +1,14 @@
 /**
  * Section headings for a post or tutorial body.
  *
- * The rail lists a post's `##` sections. The route reads them from the MDX
+ * `PostToc` lists a post's `##` sections. The route reads them from the MDX
  * source at build time with `extractHeadings`, and the `h2` in
  * `src/mdx-components.tsx` sets its id with `slugify` on its rendered text.
- * Both sides strip the same inline markup, so the rail link and the heading
+ * Both sides strip the same inline markup, so the list link and the heading
  * id agree.
  */
 export interface Heading {
-  /** Element id on the page, and the anchor in the rail link. */
+  /** Element id on the page, and the anchor in the `PostToc` link. */
   id: string;
   /** The heading text with inline markup removed. */
   text: string;

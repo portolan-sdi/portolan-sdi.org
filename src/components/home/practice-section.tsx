@@ -6,12 +6,11 @@ import { VideoFigure } from "../video-figure";
 //
 // Each item is a framed figure with a mono caption row, then a title, then
 // at most one paragraph. The anatomy is ragged on purpose: the browser item
-// carries no paragraph and the agent item carries no picture.
+// carries no paragraph. Two items hold a still and two hold a recording.
 //
 // The media sits on the page color inside the dark band, so the screenshots
 // keep their light look. Media frames pin LTR because they capture LTR
-// interfaces. Captions and the agent exchange are translated copy and follow
-// the page direction.
+// interfaces. Captions are translated copy and follow the page direction.
 
 const FRAME = "m-0 border border-p-bg/40 bg-p-bg";
 const CAPTION =
@@ -138,17 +137,21 @@ export function PracticeSection() {
             title={t("items.agent.title")}
             body={t("items.agent.body")}
             figure={
+              // A still from the recorded run an agent made against the live
+              // registry. The file is the top of one frame of
+              // `portolan-demo-two.mp4`, so the question is readable.
               <figure className={FRAME}>
-                {/* The panel holds the 16:10 shape of its neighbor from md
-                    up. Below that it takes a floor instead, so long
-                    translations never clip. */}
-                <div className="graph-wash flex min-h-[15rem] flex-col justify-center gap-4 bg-p-bg p-[clamp(1.25rem,4vw,2.5rem)] md:min-h-0 md:aspect-[16/10]">
-                  <p className="text-card-title font-bold leading-snug text-p-ink text-pretty">
-                    {t("items.agent.question")}
-                  </p>
-                  <p className="text-card-title font-normal leading-snug text-p-primary-ink text-pretty">
-                    {t("items.agent.answer")}
-                  </p>
+                <div dir="ltr">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/img/home/agent-flood-risk.webp"
+                    alt={t("items.agent.alt")}
+                    width={1194}
+                    height={746}
+                    loading="lazy"
+                    decoding="async"
+                    className="block h-auto w-full"
+                  />
                 </div>
                 <figcaption className={CAPTION}>
                   {t("items.agent.caption")}

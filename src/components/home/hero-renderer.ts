@@ -1,300 +1,448 @@
 /**
- * Draws the hero point cloud on a canvas.
+ * Canvas 2D drawing for the homepage hero figure.
  *
- * WebGL is the main path. It uploads both states once and moves every point
- * in the vertex shader, so a frame costs one draw call. Canvas 2D is the
- * fallback for a browser with no WebGL. Both read the same `Scene`.
+ * One frame holds the catalog tree, the two file drawings, the globe
+ * outline, and the land points. The tree text draws on the canvas too, so
+ * it scales with the device pixel ratio and stays crisp.
+ *
+ * Ink lines are structure. Blue is the data itself.
  */
-import { STAGGER, computeFrame, type Scene } from "./hero-points";
+
+import {
+  REGIONS,
+  ROLL,
+  TIP,
+  finishAlpha,
+  flightEase,
+  globeAlpha,
+  globeSlide,
+  landedAlpha,
+  mapWipe,
+  noteAlpha,
+  planePoint,
+  smooth,
+  structureAlpha,
+  type CogDrawing,
+  type ParquetDrawing,
+  type Plane,
+  type Scene,
+  type Stage,
+} from "./hero-points";
+
+/** The brand tokens the figure draws with, read from CSS at runtime. */
+export interface Palette {
+  bg: string;
+  primary: string;
+  primaryInk: string;
+  ink: string;
+  ink2: string;
+  ink3: string;
+  lineSoft: string;
+  /** The mono font stack. */
+  mono: string;
+}
 
 export interface Renderer {
-  kind: "webgl" | "2d";
-  /** Load a scene. Call again after a resize. */
-  setScene(scene: Scene, palette: Uint8Array, dpr: number): void;
-  /** Draw one frame. `morph` is 0 on the map and 1 on the files. */
-  draw(morph: number): void;
+  setScene(scene: Scene, palette: Palette, dpr: number): void;
+  draw(stage: Stage): void;
   destroy(): void;
 }
 
-/** Point opacity. A little under 1 lets dense land build up darker. */
-const ALPHA = 0.9;
+/** The tint of each region, shared by the map and its row group. */
+const TINTS = [0.12, 0.26, 0.42];
 
-const VERTEX = `
-attribute vec2 aFrom;
-attribute vec2 aTo;
-attribute vec4 aMove;
-attribute vec3 aToneFrom;
-attribute vec3 aToneTo;
-uniform vec2 uSize;
-uniform float uMorph;
-uniform float uDpr;
-uniform float uStagger;
-varying vec3 vTone;
-void main() {
-  float local = clamp((uMorph - aMove.x * uStagger) / (1.0 - uStagger), 0.0, 1.0);
-  float e = local * local * local * (local * (local * 6.0 - 15.0) + 10.0);
-  vec2 d = aTo - aFrom;
-  float swing = sin(e * 3.14159265) * aMove.y;
-  vec2 p = aFrom + d * e + vec2(-d.y, d.x) * swing;
-  gl_Position = vec4(p.x / uSize.x * 2.0 - 1.0, 1.0 - p.y / uSize.y * 2.0, 0.0, 1.0);
-  gl_PointSize = max(1.0, mix(aMove.z, aMove.w, e) * uDpr);
-  vTone = mix(aToneFrom, aToneTo, e);
-}`;
+/** Size of the notes and the drawing labels, in CSS pixels. */
+const LABEL_PX = 11;
 
-const FRAGMENT = `
-precision mediump float;
-uniform float uAlpha;
-varying vec3 vTone;
-void main() {
-  gl_FragColor = vec4(vTone * uAlpha, uAlpha);
-}`;
-
-function sizeCanvas(canvas: HTMLCanvasElement, scene: Scene, dpr: number) {
-  const w = Math.max(1, Math.round(scene.width * dpr));
-  const h = Math.max(1, Math.round(scene.height * dpr));
-  if (canvas.width !== w) canvas.width = w;
-  if (canvas.height !== h) canvas.height = h;
-}
-
-function createWebgl(canvas: HTMLCanvasElement): Renderer | null {
-  const gl = canvas.getContext("webgl", {
-    alpha: true,
-    antialias: false,
-    depth: false,
-    stencil: false,
-    premultipliedAlpha: true,
-    powerPreference: "low-power",
-  });
-  if (!gl) return null;
-
-  let program: WebGLProgram | null = null;
-  let floats: WebGLBuffer | null = null;
-  let bytes: WebGLBuffer | null = null;
-  let uMorph: WebGLUniformLocation | null = null;
-  let count = 0;
-  let last: { scene: Scene; palette: Uint8Array; dpr: number } | null = null;
-  let lastMorph = 0;
-
-  function compile(type: number, source: string): WebGLShader | null {
-    const shader = gl!.createShader(type);
-    if (!shader) return null;
-    gl!.shaderSource(shader, source);
-    gl!.compileShader(shader);
-    if (!gl!.getShaderParameter(shader, gl!.COMPILE_STATUS)) {
-      gl!.deleteShader(shader);
-      return null;
-    }
-    return shader;
-  }
-
-  function link(): boolean {
-    const vs = compile(gl!.VERTEX_SHADER, VERTEX);
-    const fs = compile(gl!.FRAGMENT_SHADER, FRAGMENT);
-    const prog = gl!.createProgram();
-    if (!vs || !fs || !prog) return false;
-    gl!.attachShader(prog, vs);
-    gl!.attachShader(prog, fs);
-    gl!.linkProgram(prog);
-    gl!.deleteShader(vs);
-    gl!.deleteShader(fs);
-    if (!gl!.getProgramParameter(prog, gl!.LINK_STATUS)) {
-      gl!.deleteProgram(prog);
-      return false;
-    }
-    program = prog;
-    floats = gl!.createBuffer();
-    bytes = gl!.createBuffer();
-    return true;
-  }
-
-  if (!link()) return null;
-
-  function upload(scene: Scene, palette: Uint8Array, dpr: number) {
-    if (!program) return;
-    sizeCanvas(canvas, scene, dpr);
-    count = scene.count;
-
-    // Eight floats per point: both positions, then delay, bend, two sizes.
-    const f = new Float32Array(count * 8);
-    // Eight bytes per point: both tones as RGB, padded to four bytes each.
-    const b = new Uint8Array(count * 8);
-    for (let i = 0; i < count; i++) {
-      const o = i * 8;
-      f[o] = scene.ax[i];
-      f[o + 1] = scene.ay[i];
-      f[o + 2] = scene.bx[i];
-      f[o + 3] = scene.by[i];
-      f[o + 4] = scene.delay[i];
-      f[o + 5] = scene.bend[i];
-      f[o + 6] = scene.sizeA[i];
-      f[o + 7] = scene.sizeB[i];
-      const ta = scene.toneA[i] * 3;
-      const tb = scene.toneB[i] * 3;
-      b[o] = palette[ta];
-      b[o + 1] = palette[ta + 1];
-      b[o + 2] = palette[ta + 2];
-      b[o + 4] = palette[tb];
-      b[o + 5] = palette[tb + 1];
-      b[o + 6] = palette[tb + 2];
-    }
-
-    gl!.useProgram(program);
-    const attr = (name: string) => gl!.getAttribLocation(program!, name);
-
-    gl!.bindBuffer(gl!.ARRAY_BUFFER, floats);
-    gl!.bufferData(gl!.ARRAY_BUFFER, f, gl!.STATIC_DRAW);
-    const from = attr("aFrom");
-    const to = attr("aTo");
-    const move = attr("aMove");
-    gl!.enableVertexAttribArray(from);
-    gl!.vertexAttribPointer(from, 2, gl!.FLOAT, false, 32, 0);
-    gl!.enableVertexAttribArray(to);
-    gl!.vertexAttribPointer(to, 2, gl!.FLOAT, false, 32, 8);
-    gl!.enableVertexAttribArray(move);
-    gl!.vertexAttribPointer(move, 4, gl!.FLOAT, false, 32, 16);
-
-    gl!.bindBuffer(gl!.ARRAY_BUFFER, bytes);
-    gl!.bufferData(gl!.ARRAY_BUFFER, b, gl!.STATIC_DRAW);
-    const toneFrom = attr("aToneFrom");
-    const toneTo = attr("aToneTo");
-    gl!.enableVertexAttribArray(toneFrom);
-    gl!.vertexAttribPointer(toneFrom, 3, gl!.UNSIGNED_BYTE, true, 8, 0);
-    gl!.enableVertexAttribArray(toneTo);
-    gl!.vertexAttribPointer(toneTo, 3, gl!.UNSIGNED_BYTE, true, 8, 4);
-
-    const uniform = (name: string) => gl!.getUniformLocation(program!, name);
-    gl!.uniform2f(uniform("uSize"), scene.width, scene.height);
-    gl!.uniform1f(uniform("uDpr"), dpr);
-    gl!.uniform1f(uniform("uStagger"), STAGGER);
-    gl!.uniform1f(uniform("uAlpha"), ALPHA);
-    uMorph = uniform("uMorph");
-
-    gl!.viewport(0, 0, canvas.width, canvas.height);
-    gl!.disable(gl!.DEPTH_TEST);
-    gl!.enable(gl!.BLEND);
-    gl!.blendFunc(gl!.ONE, gl!.ONE_MINUS_SRC_ALPHA);
-    gl!.clearColor(0, 0, 0, 0);
-  }
-
-  function draw(morph: number) {
-    lastMorph = morph;
-    if (!program || gl!.isContextLost()) return;
-    gl!.clear(gl!.COLOR_BUFFER_BIT);
-    if (count === 0) return;
-    gl!.uniform1f(uMorph, morph);
-    gl!.drawArrays(gl!.POINTS, 0, count);
-  }
-
-  // A lost context drops every buffer. Rebuild from the last scene.
-  const onLost = (event: Event) => {
-    event.preventDefault();
-    program = null;
-  };
-  const onRestored = () => {
-    if (!link() || !last) return;
-    upload(last.scene, last.palette, last.dpr);
-    draw(lastMorph);
-  };
-  canvas.addEventListener("webglcontextlost", onLost);
-  canvas.addEventListener("webglcontextrestored", onRestored);
-
-  return {
-    kind: "webgl",
-    setScene(scene, palette, dpr) {
-      last = { scene, palette, dpr };
-      upload(scene, palette, dpr);
-    },
-    draw,
-    destroy() {
-      canvas.removeEventListener("webglcontextlost", onLost);
-      canvas.removeEventListener("webglcontextrestored", onRestored);
-      if (!gl.isContextLost()) {
-        gl.deleteBuffer(floats);
-        gl.deleteBuffer(bytes);
-        gl.deleteProgram(program);
-      }
-      last = null;
-      count = 0;
-    },
-  };
-}
-
-function create2d(canvas: HTMLCanvasElement): Renderer | null {
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return null;
+export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
+  const maybe = canvas.getContext("2d");
+  if (!maybe) return null;
+  const g: CanvasRenderingContext2D = maybe;
 
   let scene: Scene | null = null;
+  let palette: Palette | null = null;
   let dpr = 1;
-  let colors: string[] = [];
-  let xy = new Float32Array(0);
-  let ease = new Float32Array(0);
-  // Point indexes grouped by tone, so each tone sets the fill style once.
-  let byToneA: Uint32Array[] = [];
-  let byToneB: Uint32Array[] = [];
+  let outlines: Path2D | null = null;
 
-  function group(tones: Uint8Array, count: number, size: number) {
-    const lists: number[][] = Array.from({ length: size }, () => []);
-    for (let i = 0; i < count; i++) lists[tones[i]].push(i);
-    return lists.map((list) => Uint32Array.from(list));
+  /** A 1px line on whole pixels. */
+  function line(x1: number, y1: number, x2: number, y2: number) {
+    g.beginPath();
+    g.moveTo(Math.round(x1) + 0.5, Math.round(y1) + 0.5);
+    g.lineTo(Math.round(x2) + 0.5, Math.round(y2) + 0.5);
+    g.stroke();
+  }
+
+  function box(x: number, y: number, w: number, h: number) {
+    g.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, Math.round(w), Math.round(h));
+  }
+
+  function text(
+    value: string,
+    x: number,
+    y: number,
+    color: string,
+    px: number,
+    weight = "",
+    align: CanvasTextAlign = "left",
+  ) {
+    g.font = `${weight}${px}px ${palette!.mono}`;
+    g.fillStyle = color;
+    g.textAlign = align;
+    g.textBaseline = "alphabetic";
+    g.fillText(value, Math.round(x), Math.round(y));
+  }
+
+  function planePath(plane: Plane, u0: number, u1: number) {
+    const a = planePoint(plane, u0, 0);
+    const b = planePoint(plane, u1, 0);
+    const c = planePoint(plane, u1, 1);
+    const d = planePoint(plane, u0, 1);
+    g.beginPath();
+    g.moveTo(a[0], a[1]);
+    g.lineTo(b[0], b[1]);
+    g.lineTo(c[0], c[1]);
+    g.lineTo(d[0], d[1]);
+    g.closePath();
+  }
+
+  /** The connectors and names, drawn from the top down. */
+  function drawTree(s: Scene, c: Palette, p: number) {
+    const front = ((p - s.treeFrom) / s.treeSpan) * s.height;
+    const late = s.wide ? noteAlpha(p) : 1;
+    if (front > 0) {
+      g.save();
+      g.beginPath();
+      g.rect(0, 0, s.width, front + s.rowH / 2);
+      g.clip();
+      g.strokeStyle = c.ink3;
+      g.lineWidth = 1;
+      for (const trunk of s.trunks) line(trunk.x, trunk.y0, trunk.x, trunk.y1);
+      for (const row of s.rows) {
+        if (row.depth === 0) continue;
+        g.globalAlpha = row.kind === "light" ? late : 1;
+        const mid = row.y + s.rowH / 2;
+        line((row.depth - 1) * s.indent + 4, mid, row.x - 4, mid);
+      }
+      g.restore();
+    }
+    for (const row of s.rows) {
+      const shown = smooth(row.at - 0.02, row.at + 0.04, p);
+      const alpha = shown * (row.kind === "light" ? late : 1);
+      if (alpha <= 0) continue;
+      const strong = row.kind === "root" || row.kind === "dir" || row.kind === "data";
+      const color = strong ? c.ink : row.kind === "light" ? c.ink3 : c.ink2;
+      const base = row.y + 13;
+      g.globalAlpha = alpha;
+      text(row.name, row.x, base, color, s.fontPx, strong ? "600 " : "");
+      const nameW = g.measureText(row.name).width;
+      g.globalAlpha = shown * late;
+      if (row.note) {
+        text(row.note, Math.max(s.noteX, row.x + nameW + s.noteGap), base, c.ink3, LABEL_PX);
+      }
+      if (row.format) {
+        if (s.wide) text(row.format, row.x, base + 16, c.primaryInk, LABEL_PX);
+        else text(row.format, row.x + nameW + s.noteGap, base, c.primaryInk, LABEL_PX);
+      }
+    }
+    g.globalAlpha = 1;
+  }
+
+  /**
+   * GeoParquet. The map shows land outlines in three regions. Each region
+   * is one row group of the table and shares its tint with the geometry
+   * chunk of that row group. The footer strip closes the file.
+   */
+  function drawParquet(d: ParquetDrawing, c: Palette, p: number) {
+    const structure = structureAlpha(p);
+    const finish = finishAlpha(p);
+    const wipe = mapWipe(p);
+
+    if (structure > 0) {
+      g.lineWidth = 1;
+      d.bands.forEach((y, k) => {
+        let x = d.tx;
+        d.cols.forEach((w, col) => {
+          if (col === 2 && finish > 0) {
+            g.globalAlpha = structure * finish * TINTS[k];
+            g.fillStyle = c.primary;
+            g.fillRect(Math.round(x), Math.round(y), w, d.bandH);
+          }
+          g.globalAlpha = structure;
+          g.strokeStyle = c.ink;
+          box(x, y, w, d.bandH);
+          x += w;
+        });
+      });
+      g.globalAlpha = structure;
+      g.fillStyle = c.primary;
+      g.fillRect(d.tx, d.footY, d.tw + 1, 9);
+    }
+
+    if (wipe > 0 && outlines) {
+      g.save();
+      g.beginPath();
+      g.rect(d.mx - 2, d.my - 2, (d.mw + 4) * wipe, d.mh + 4);
+      g.clip();
+      REGIONS.forEach(([from, to], k) => {
+        g.save();
+        g.beginPath();
+        g.rect(d.mx + from * d.mw, d.my - 2, (to - from) * d.mw, d.mh + 4);
+        g.clip();
+        g.globalAlpha = TINTS[k];
+        g.fillStyle = c.primary;
+        g.fill(outlines!, "evenodd");
+        g.globalAlpha = 1;
+        g.strokeStyle = c.primaryInk;
+        g.lineWidth = 1;
+        g.lineJoin = "round";
+        g.stroke(outlines!);
+        g.restore();
+      });
+      g.restore();
+    }
+
+    if (finish > 0) {
+      g.globalAlpha = finish;
+      const geometryX = d.tx + d.cols[0] + d.cols[1];
+      text("geometry", geometryX + 1, d.labelY, c.primaryInk, LABEL_PX);
+      text("bbox", geometryX + d.cols[2] + 1, d.labelY, c.ink3, LABEL_PX);
+      text("footer + geo", d.tx - 8, d.footY + 9, c.ink3, LABEL_PX, "", "right");
+    }
+    g.globalAlpha = 1;
+  }
+
+  /**
+   * Cloud Optimized GeoTIFF. A small header bar, then the same raster at
+   * three resolutions as stacked planes. The full resolution plane shows
+   * its tile grid.
+   */
+  function drawCog(d: CogDrawing, c: Palette, p: number) {
+    const structure = structureAlpha(p);
+    const finish = finishAlpha(p);
+    const wipe = mapWipe(p);
+    const full = d.planes[0];
+    const top = d.planes[d.planes.length - 1];
+    g.lineWidth = 1;
+
+    if (structure > 0) {
+      g.globalAlpha = structure;
+      g.fillStyle = c.primary;
+      g.fillRect(d.x, d.y, d.barW, 8);
+      g.fillStyle = c.bg;
+      for (let k = 1; k < 4; k++) {
+        g.fillRect(d.x + Math.round((d.barW * k) / 4), d.y, 1, 8);
+      }
+      // Faint pyramid edges through the matching corners.
+      g.strokeStyle = c.lineSoft;
+      for (const [u, v] of [[0, 0], [1, 0], [1, 1], [0, 1]]) {
+        const a = planePoint(full, u, v);
+        const b = planePoint(top, u, v);
+        g.beginPath();
+        g.moveTo(a[0], a[1]);
+        g.lineTo(b[0], b[1]);
+        g.stroke();
+      }
+    }
+
+    d.planes.forEach((plane, k) => {
+      const isFull = k === 0;
+      if (structure > 0) {
+        g.globalAlpha = structure;
+        planePath(plane, 0, 1);
+        g.fillStyle = c.bg;
+        g.fill();
+      }
+      // The full resolution pixels follow the points. Overviews come last.
+      const landAlpha = isFull ? 1 : finish * structure;
+      if (landAlpha > 0 && (!isFull || wipe > 0)) {
+        g.save();
+        if (isFull && wipe < 1) {
+          planePath(plane, 0, wipe);
+          g.clip();
+        }
+        g.globalAlpha = landAlpha * 0.55;
+        g.fillStyle = c.primary;
+        g.beginPath();
+        const { nx, ny, runs } = plane.level;
+        for (const [col, row, length] of runs) {
+          const a = planePoint(plane, col / nx, row / ny);
+          const b = planePoint(plane, (col + length) / nx, row / ny);
+          const e = planePoint(plane, (col + length) / nx, (row + 1) / ny);
+          const f = planePoint(plane, col / nx, (row + 1) / ny);
+          g.moveTo(a[0], a[1]);
+          g.lineTo(b[0], b[1]);
+          g.lineTo(e[0], e[1]);
+          g.lineTo(f[0], f[1]);
+          g.closePath();
+        }
+        g.fill();
+        g.restore();
+      }
+      if (structure > 0) {
+        if (isFull) {
+          g.globalAlpha = structure * 0.7;
+          g.strokeStyle = c.ink3;
+          for (let i = 1; i < 8; i++) {
+            const a = planePoint(plane, i / 8, 0);
+            const b = planePoint(plane, i / 8, 1);
+            g.beginPath();
+            g.moveTo(a[0], a[1]);
+            g.lineTo(b[0], b[1]);
+            g.stroke();
+          }
+          for (let i = 1; i < 3; i++) {
+            const a = planePoint(plane, 0, i / 3);
+            const b = planePoint(plane, 1, i / 3);
+            line(a[0], a[1] - 0.5, b[0], b[1] - 0.5);
+          }
+        }
+        g.globalAlpha = structure;
+        g.strokeStyle = c.ink;
+        planePath(plane, 0, 1);
+        g.stroke();
+      }
+    });
+
+    if (finish > 0) {
+      g.globalAlpha = finish;
+      const middle = d.planes[1];
+      const rows: Array<[string, number, number]> = [
+        ["header", d.y + 4, d.x + d.barW],
+        ["overviews", middle.y0 + middle.depth / 2, middle.x0 + middle.shear / 2 + middle.w],
+        ["tiles", full.y0 + full.depth / 2, full.x0 + full.shear / 2 + full.w],
+      ];
+      for (const [label, y, from] of rows) {
+        g.strokeStyle = c.lineSoft;
+        line(from + 6, y, d.labelX - 6, y);
+        text(label, d.labelX, y + 4, c.ink3, LABEL_PX);
+      }
+    }
+    g.globalAlpha = 1;
+  }
+
+  /** The globe outline, the graticule, and every point that still shows. */
+  function drawGlobe(s: Scene, c: Palette, stage: Stage) {
+    const { world, globe } = s;
+    const p = stage.p;
+    const slide = globeSlide(p);
+    const cx = globe.cx0 + (globe.cx1 - globe.cx0) * slide;
+    const cy = globe.cy;
+    const r = globe.r0 + (globe.r1 - globe.r0) * slide;
+
+    const sinLon = Math.sin(-stage.lon);
+    const cosLon = Math.cos(-stage.lon);
+    const sinTip = Math.sin(TIP);
+    const cosTip = Math.cos(TIP);
+    const sinRoll = Math.sin(ROLL);
+    const cosRoll = Math.cos(ROLL);
+    let sx = 0;
+    let sy = 0;
+    let sz = 0;
+    /** Turn, tip, and roll a unit vector, then place it on the figure. */
+    const project = (x0: number, y0: number, z0: number) => {
+      const x = x0 * cosLon + z0 * sinLon;
+      const z = -x0 * sinLon + z0 * cosLon;
+      const y = y0 * cosTip - z * sinTip;
+      sz = y0 * sinTip + z * cosTip;
+      sx = cx + (x * cosRoll - y * sinRoll) * r;
+      sy = cy - (x * sinRoll + y * cosRoll) * r;
+    };
+
+    const outline = globeAlpha(p, s.wide);
+    if (outline > 0) {
+      g.globalAlpha = outline;
+      g.lineWidth = 1;
+      g.strokeStyle = c.lineSoft;
+      for (const path of world.graticule) {
+        g.beginPath();
+        let pen = false;
+        for (let k = 0; k < path.length; k += 3) {
+          project(path[k], path[k + 1], path[k + 2]);
+          if (sz > 0) {
+            if (pen) g.lineTo(sx, sy);
+            else g.moveTo(sx, sy);
+            pen = true;
+          } else pen = false;
+        }
+        g.stroke();
+      }
+      g.strokeStyle = c.ink3;
+      g.beginPath();
+      g.arc(cx, cy, r, 0, Math.PI * 2);
+      g.stroke();
+    }
+    if (p >= 1) {
+      g.globalAlpha = 1;
+      return;
+    }
+
+    g.fillStyle = c.primary;
+    const dot = Math.max(1.4, r / 150);
+    for (let i = 0; i < world.count; i++) {
+      project(world.gx[i], world.gy[i], world.gz[i]);
+      const facing = smooth(0, 0.3, sz);
+      const share = world.u[i];
+      const e = flightEase(p, share);
+      let alpha =
+        (facing + (1 - facing) * smooth(0, 0.5, e)) * landedAlpha(p, share);
+      // A point outside the map window has no place. It fades on the way.
+      if (world.v[i] < 0 || world.v[i] > 1) alpha *= 1 - smooth(0.2, 0.9, e);
+      // In the stacked form a point shows on the globe or near its place.
+      if (!s.wide) alpha *= Math.max(outline * (1 - e), smooth(0.72, 0.95, e));
+      if (alpha <= 0.01) continue;
+      let x = sx;
+      let y = sy;
+      if (e > 0) {
+        const dx = s.tx[i] - sx;
+        const dy = s.ty[i] - sy;
+        const bend = Math.sin(e * Math.PI) * 0.07;
+        x = sx + dx * e - dy * bend;
+        y = sy + dy * e + dx * bend;
+      }
+      const size = dot + (1.2 - dot) * e;
+      g.globalAlpha = alpha * (0.9 - 0.1 * e);
+      g.fillRect(x - size / 2, y - size / 2, size, size);
+    }
+    g.globalAlpha = 1;
   }
 
   return {
-    kind: "2d",
-    setScene(next, palette, nextDpr) {
+    setScene(next, colors, ratio) {
       scene = next;
-      dpr = nextDpr;
-      sizeCanvas(canvas, next, dpr);
-      const size = palette.length / 3;
-      colors = [];
-      for (let i = 0; i < size; i++) {
-        colors.push(
-          `rgb(${palette[i * 3]},${palette[i * 3 + 1]},${palette[i * 3 + 2]})`,
-        );
-      }
-      xy = new Float32Array(next.count * 2);
-      ease = new Float32Array(next.count);
-      byToneA = group(next.toneA, next.count, size);
-      byToneB = group(next.toneB, next.count, size);
-    },
-    draw(morph) {
-      if (!scene) return;
-      const { sizeA, sizeB } = scene;
-      computeFrame(scene, morph, xy, ease);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, scene.width, scene.height);
-      ctx.globalAlpha = ALPHA;
-      // A point shows its map tone for the first half of its flight and its
-      // file tone for the second half.
-      for (let pass = 0; pass < 2; pass++) {
-        const lists = pass === 0 ? byToneA : byToneB;
-        for (let t = 0; t < lists.length; t++) {
-          const list = lists[t];
-          if (list.length === 0) continue;
-          ctx.fillStyle = colors[t];
-          for (let k = 0; k < list.length; k++) {
-            const i = list[k];
-            const e = ease[i];
-            if (pass === 0 ? e >= 0.5 : e < 0.5) continue;
-            const s = sizeA[i] + (sizeB[i] - sizeA[i]) * e;
-            ctx.fillRect(xy[i * 2] - s / 2, xy[i * 2 + 1] - s / 2, s, s);
-          }
+      palette = colors;
+      dpr = ratio;
+      canvas.width = Math.round(next.width * dpr);
+      canvas.height = Math.round(next.height * dpr);
+      // The outlines as one path, placed on the vector map.
+      const d = next.parquet;
+      outlines = new Path2D();
+      for (const ring of next.world.rings) {
+        for (let k = 0; k < ring.length; k += 2) {
+          const x = d.mx + ring[k] * d.mw;
+          const y = d.my + ring[k + 1] * d.mh;
+          if (k === 0) outlines.moveTo(x, y);
+          else outlines.lineTo(x, y);
         }
+        outlines.closePath();
       }
     },
+
+    draw(stage) {
+      if (!scene || !palette) return;
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.clearRect(0, 0, scene.width, scene.height);
+      if (stage.p > 0) {
+        drawTree(scene, palette, stage.p);
+        drawParquet(scene.parquet, palette, stage.p);
+        drawCog(scene.cog, palette, stage.p);
+      }
+      drawGlobe(scene, palette, stage);
+    },
+
     destroy() {
       scene = null;
+      palette = null;
+      outlines = null;
     },
   };
-}
-
-/** Make a renderer for the canvas. Returns null when neither path works. */
-export function createRenderer(
-  canvas: HTMLCanvasElement,
-  prefer: "webgl" | "2d" = "webgl",
-): Renderer | null {
-  if (prefer === "webgl") {
-    const webgl = createWebgl(canvas);
-    if (webgl) return webgl;
-  }
-  return create2d(canvas);
 }

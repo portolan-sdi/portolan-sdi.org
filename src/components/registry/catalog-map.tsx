@@ -86,7 +86,24 @@ interface CatalogMapProps {
   onMove: (state: MapState) => void;
   /** Where to open, restored from the URL. Null opens the whole world. */
   initialView: { longitude: number; latitude: number; zoom: number } | null;
+  /**
+   * The frame's height and rules. The default is the registry page's own
+   * frame. An embed passes its own, for example to run edge to edge.
+   */
+  frameClassName?: string;
+  /** The region search box. On by default. An embed can leave it off. */
+  geocoder?: boolean;
+  /**
+   * Turns on cooperative gestures, for a map that sits in a long page. The
+   * wheel then scrolls the page unless Ctrl or the command key is held, and
+   * one finger scrolls the page while two move the map. The strings are the
+   * hints MapLibre shows when it lets a gesture pass. Off by default, so the
+   * registry page keeps its plain wheel zoom and one-finger pan.
+   */
+  gestureHelp?: { windows: string; mac: string; mobile: string };
 }
+
+const DEFAULT_FRAME = "h-[440px] md:h-[540px] border border-p-line";
 
 function readState(map: MapRef): MapState {
   const bounds = map.getBounds();
@@ -148,6 +165,9 @@ export default function CatalogMap({
   onSelect,
   onMove,
   initialView,
+  frameClassName = DEFAULT_FRAME,
+  geocoder = true,
+  gestureHelp,
 }: CatalogMapProps) {
   const t = useTranslations("registry");
 
@@ -156,6 +176,19 @@ export default function CatalogMap({
   const [zoom, setZoom] = useState(initialView?.zoom ?? WORLD_VIEW.zoom);
   const [infoOpen, setInfoOpen] = useState(false);
   const [hover, setHover] = useState<Hover | null>(null);
+
+  // MapLibre reads the locale once, when the map is built.
+  const gestureLocale = useMemo(
+    () =>
+      gestureHelp
+        ? {
+            "CooperativeGesturesHandler.WindowsHelpText": gestureHelp.windows,
+            "CooperativeGesturesHandler.MacHelpText": gestureHelp.mac,
+            "CooperativeGesturesHandler.MobileHelpText": gestureHelp.mobile,
+          }
+        : undefined,
+    [gestureHelp]
+  );
 
   // A catalog with one place needs no rank. One with seven does, or its seven
   // squares all read the same.
@@ -311,7 +344,7 @@ export default function CatalogMap({
   return (
     <div
       dir="ltr"
-      className="relative h-[440px] md:h-[540px] border border-p-line overflow-hidden"
+      className={`relative overflow-hidden ${frameClassName}`}
       role="application"
       aria-label={t("map.label")}
     >
@@ -322,6 +355,8 @@ export default function CatalogMap({
         attributionControl={false}
         dragRotate={false}
         touchPitch={false}
+        cooperativeGestures={gestureHelp !== undefined}
+        locale={gestureLocale}
         onLoad={report}
         onMoveEnd={report}
         onClick={handleMapClick}
@@ -409,9 +444,11 @@ export default function CatalogMap({
       </MapGL>
 
       {/* Region search (top-left) */}
-      <div className="absolute top-3 start-3 z-10">
-        <MapGeocoder onSelect={handleGeocode} />
-      </div>
+      {geocoder && (
+        <div className="absolute top-3 start-3 z-10">
+          <MapGeocoder onSelect={handleGeocode} />
+        </div>
+      )}
 
       {/* Zoom stack (top-right) */}
       <div className="absolute top-3 end-3 z-10 flex flex-col overflow-hidden border border-p-line">

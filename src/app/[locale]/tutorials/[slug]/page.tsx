@@ -69,7 +69,7 @@ export default async function Tutorial({ params }: PageProps) {
   if (!tutorial) notFound();
 
   const { default: Body } = await import(`@/content/tutorials/${slug}.mdx`);
-  // The rail lists the body's sections. The page prerenders, so this read
+  // `PostToc` lists the body's sections. The page prerenders, so this read
   // runs at build time.
   const sections = extractHeadings(
     await readFile(

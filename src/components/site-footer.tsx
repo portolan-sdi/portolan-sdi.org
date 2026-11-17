@@ -5,7 +5,7 @@ import { PortolanLogo } from "./portolan-logo";
 import { Ltr } from "./ui";
 
 // The picture behind the footer. Swap this path to change it, and update
-// `footer.imageCredit` in messages/ to match. The file is grayscale: the
+// the image credit in README.md to match. The file is grayscale, and the
 // blend below supplies the color.
 const FOOTER_IMAGE = "/img/footer/monterrey.webp";
 
@@ -27,7 +27,7 @@ export function SiteFooter() {
   return (
     // `isolate` keeps the blend inside the footer, so the image multiplies
     // with the footer's own blue and not with the page behind it.
-    <footer className="relative isolate flex min-h-[clamp(260px,30vw,420px)] flex-col justify-end overflow-hidden border-t border-p-line bg-p-primary px-[var(--p-pad-section-x)] pb-6 pt-16 text-p-on-primary">
+    <footer className="relative isolate flex min-h-[clamp(260px,30vw,420px)] flex-col overflow-hidden border-t border-p-line bg-p-primary px-[var(--p-pad-section-x)] pb-6 pt-[clamp(32px,4vw,56px)] text-p-on-primary">
       {/* A grayscale photograph multiplied over the brand blue. Multiply only
           darkens, so no pixel ends up lighter than --p-primary. White text on
           --p-primary is 5.3:1, so white text clears 4.5:1 over every part of
@@ -42,12 +42,13 @@ export function SiteFooter() {
         className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover mix-blend-multiply"
       />
 
-      <div className="mx-auto w-full max-w-[1240px]">
-        {/* Logo on the inline-start edge, the link columns beside it. The
-            rail indexes the page, so every destination that leaves the page
-            lives here instead. The logo sits above the columns until lg: from
-            md the pinned rail narrows the content, and beside the logo a
-            column is too narrow for one long word such as "demostraciones". */}
+      {/* The content starts at the top of the band and at the inline-start
+          edge. The license line stays at the bottom edge of the band. */}
+      <div className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col">
+        {/* Logo on the inline-start edge, the link columns beside it. Every
+            destination that leaves the site is here. The logo is above the
+            columns until lg. Beside the logo, a column is too narrow for one
+            long word such as "demostraciones". */}
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:gap-20">
           <Link
             href="/"
@@ -139,7 +140,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <p className="mt-12 text-center text-small text-p-on-primary">
+        <p className="mt-auto pt-12 text-start text-small text-p-on-primary">
           {t.rich("footer.contentLicense", {
             cc: (chunks) => (
               <a href={LICENSE_LINKS.content} className={licenseLink}>
@@ -155,10 +156,6 @@ export function SiteFooter() {
               </a>
             ),
           })}
-        </p>
-
-        <p className="mt-3 text-center font-mono text-eyebrow text-p-on-primary">
-          {t("footer.imageCredit")}
         </p>
       </div>
     </footer>
