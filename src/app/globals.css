@@ -807,3 +807,21 @@ body {
     opacity: 1;
   }
 }
+
+/* Graph-paper wash for annotated figures and the solution section. The grid
+   lines mix the primary color into transparent, so the wash follows the
+   palette and adds no token. */
+.graph-wash {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--p-primary) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--p-primary) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 24px 24px;
+}
