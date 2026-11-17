@@ -529,8 +529,19 @@ body {
     transform: translateX(-50%);
   }
 }
+/* In RTL the track overflows toward the left, so the strip travels right.
+   It has its own keyframes. A reversed `logo-scroll` held the paused strip
+   on its last frame, which put every logo off screen. */
 [dir="rtl"] .logo-marquee {
-  animation-direction: reverse;
+  animation-name: logo-scroll-rtl;
+}
+@keyframes logo-scroll-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
 }
 
 /* --- Demo video frame ---------------------------------------------------- */

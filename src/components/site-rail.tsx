@@ -62,11 +62,12 @@ export type RailItem = {
 
 // The homepage sections, in document order.
 const OVERVIEW_CHILDREN: RailItem[] = [
-  { id: "demo", label: "demo.navLabel" },
-  { id: "why", label: "nav.why" },
+  { id: "challenge", label: "nav.challenge" },
+  { id: "solution", label: "nav.solution" },
   { id: "who", label: "nav.who" },
-  { id: "how", label: "howItWorks.eyebrow" },
+  { id: "use", label: "nav.use" },
   { id: "coverage", label: "nav.coverage" },
+  { id: "how", label: "howItWorks.eyebrow" },
   { id: "ecosystem", label: "ecosystem.eyebrow" },
   { id: "involved", label: "getInvolved.title" },
 ];
@@ -78,7 +79,7 @@ const HOME_ITEMS: RailItem[] = [
     id: "overview",
     label: "nav.overview",
     href: "/",
-    // The homepage hero. It is the section the other seven anchors sit under,
+    // The homepage hero. It is the section the other eight anchors sit under,
     // so Overview reaches the top of the page from anywhere on it.
     anchor: "top",
     children: OVERVIEW_CHILDREN,
@@ -100,7 +101,7 @@ const HOME_ITEMS: RailItem[] = [
 
 /**
  * The same index for a page that is not the homepage. Every section anchor
- * becomes a route to the homepage's copy of it, because a bare `#why` on
+ * becomes a route to the homepage's copy of it, because a bare `#who` on
  * /faq points at an element that does not exist there. A group keeps whatever
  * `href` it has, so Resources stays a label rather than becoming `/#resources`.
  *
