@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { monoChunk } from "@/components/ui";
+import { Link } from "@/i18n/navigation";
 import { SPEC_URL } from "@/lib/site";
 import { HeroFigure } from "./hero-figure";
 
@@ -67,9 +68,9 @@ export function HeroSection() {
                   </a>
                 ),
                 eco: (chunks) => (
-                  <a href="#ecosystem" className={proseLink}>
+                  <Link href="/ecosystem" className={proseLink}>
                     {chunks}
-                  </a>
+                  </Link>
                 ),
               })}
             </p>

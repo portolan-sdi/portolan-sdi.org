@@ -1,16 +1,12 @@
 "use client";
 
 import { SiteShell } from "./site-rail";
-import { EcosystemSection } from "./ecosystem-section";
-import { InvolvedSection } from "./involved-section";
-import { GetInvolvedSection } from "./get-involved-section";
-import { WhoForSection } from "./who-for-section";
-import { CoverageSection } from "./coverage-section";
+import { AboutSection } from "./home/about-section";
 import { HeroSection } from "./home/hero-section";
 import { ChallengeSection } from "./home/challenge-section";
 import { SolutionSection } from "./home/solution-section";
-import { PracticeSection } from "./home/practice-section";
-import { HowSection } from "./home/how-section";
+import { WhySection } from "./home/why-section";
+import { CaseStudiesSection } from "./home/case-studies-section";
 
 /** The homepage. The sections follow a challenge, solution, impact order. */
 export function HomePage() {
@@ -26,28 +22,14 @@ export function HomePage() {
       {/* The solution, on the graph-paper wash. */}
       <SolutionSection />
 
-      {/* What Portolan makes possible, with the cost figure. */}
-      <WhoForSection />
+      {/* Three reasons, on a satellite image band. */}
+      <WhySection />
 
-      {/* Portolan in practice. The second solid band, in ink. */}
-      <PracticeSection />
+      {/* Case studies, with the cost figure. */}
+      <CaseStudiesSection />
 
-      {/* Users and supporters. The logo strip follows the practice band, so
-          the reader sees who uses Portolan after the examples. */}
-      <InvolvedSection />
-
-      {/* Toward a federated network. The coverage map and the IDE Pergamino
-          block run full bleed. */}
-      <CoverageSection />
-
-      {/* How it works, with the quickstart prompt. */}
-      <HowSection />
-
-      {/* Ecosystem. The hero's toolkit link targets this section. */}
-      <EcosystemSection />
-
-      {/* Community contribution paths. */}
-      <GetInvolvedSection />
+      {/* Who supports the project, and the way in to the community. */}
+      <AboutSection />
     </SiteShell>
   );
 }

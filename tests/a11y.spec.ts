@@ -11,6 +11,8 @@ const routes = [
   { id: "home", path: "" },
   { id: "faq", path: "/faq" },
   { id: "talks", path: "/talks" },
+  { id: "ecosystem", path: "/ecosystem" },
+  { id: "how-it-works", path: "/how-it-works" },
   { id: "registry", path: "/registry" },
 ] as const;
 
@@ -152,10 +154,10 @@ test("Registry exposes a live submit failure", async ({ page }) => {
 });
 
 test("video-only demos expose localized text alternatives", async ({ page }) => {
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/how-it-works", { waitUntil: "domcontentloaded" });
   const videos = page.locator("video");
-  // The QGIS clip in "Portolan in practice", then the catalog build in
-  // "How it works".
+  // The catalog build beside the four steps, then the QGIS clip in
+  // "Portolan in practice". The homepage has no video.
   await expect(videos).toHaveCount(2);
   for (let index = 0; index < 2; index += 1) {
     const describedBy = await videos.nth(index).getAttribute("aria-describedby");

@@ -36,6 +36,7 @@ const PAGES: NavPage[] = [
   { href: "/blog", label: "nav.blog" },
   { href: "/tutorials", label: "nav.tutorials" },
   { href: "/talks", label: "nav.talks" },
+  { href: "/ecosystem", label: "nav.ecosystem" },
   { href: "/faq", label: "nav.faq" },
   { href: "/registry", label: "nav.registry" },
 ];
@@ -148,7 +149,7 @@ export function SiteShell({ children }: SiteShellProps) {
       {/* The bar. Solid page color over a black rule, no blur and no shadow.
           The header is the positioned box the panel hangs from, so the panel
           spans the viewport while the row keeps the 1240px content column. */}
-      <header className="sticky top-0 z-40 h-[var(--p-bar)] border-b border-p-line bg-p-bg px-[var(--p-pad-section-x)]">
+      <header className="sticky top-0 z-40 h-[var(--p-bar)] border-b-4 border-p-line bg-p-bg px-[var(--p-pad-section-x)]">
         <nav
           ref={navRef}
           aria-label={t("nav.mainAria")}
@@ -182,7 +183,7 @@ export function SiteShell({ children }: SiteShellProps) {
             ref={menuRef}
             className={`${
               menuOpen ? "flex" : "hidden"
-            } absolute inset-x-0 top-full max-h-[calc(100dvh-var(--p-bar))] flex-col overflow-y-auto border-y border-p-line bg-p-bg px-[var(--p-pad-section-x)] py-2 md:static md:ms-6 md:flex md:max-h-none md:min-w-0 md:flex-1 md:flex-row md:items-center md:overflow-visible md:border-0 md:p-0 lg:ms-10`}
+            } absolute inset-x-0 top-full max-h-[calc(100dvh-var(--p-bar))] flex-col overflow-y-auto border-y border-p-line bg-p-bg px-[var(--p-pad-section-x)] py-2 md:static md:ms-3 lg:ms-6 md:flex md:max-h-none md:min-w-0 md:flex-1 md:flex-row md:items-center md:overflow-visible md:border-0 md:p-0 lg:ms-10`}
           >
             <ul className="flex flex-col md:flex-row md:items-center lg:gap-1">
               {PAGES.map(({ href, label }) => {
@@ -193,7 +194,7 @@ export function SiteShell({ children }: SiteShellProps) {
                       href={href}
                       onClick={() => closeMenu()}
                       aria-current={current ? "page" : undefined}
-                      className={`flex h-11 items-center whitespace-nowrap text-body transition-colors md:h-10 md:px-2 md:text-small lg:px-3 lg:text-body ${
+                      className={`flex h-11 items-center whitespace-nowrap text-body transition-colors md:h-10 md:px-0.5 md:text-small lg:px-3 lg:text-body ${
                         current
                           ? "text-p-primary"
                           : "text-p-ink hover:text-p-primary"

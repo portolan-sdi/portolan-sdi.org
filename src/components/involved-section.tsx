@@ -14,7 +14,7 @@ import { Ltr } from "./ui";
 // .logo-marquee), then scrolls as a seamless marquee: the list is rendered
 // twice so the pair loops without a seam. Reaching it also lights the row in
 // the accent blue. Reduced-motion drops the clone and wraps the row flat.
-type Org =
+export type Org =
   | { name: string; href: string; text: true }
   | { name: string; href: string; file: string; h: number; aspect: number };
 
@@ -34,7 +34,7 @@ const orgs: readonly Org[] = [
 // One logo link. Clones (the second track) are decorative: hidden from the
 // accessibility tree and removed from the tab order so each org is announced
 // and focusable exactly once.
-function LogoLink({ org, clone }: { org: Org; clone: boolean }) {
+export function LogoLink({ org, clone }: { org: Org; clone: boolean }) {
   return (
     <a
       href={org.href}

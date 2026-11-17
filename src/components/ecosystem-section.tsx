@@ -121,21 +121,15 @@ export function EcosystemSection() {
   );
 
   return (
-    <section
-      id="ecosystem"
-      className="px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line"
-    >
+    // The page header band above owns the h1, so this section sets no title
+    // and opens with the tightened top padding.
+    <section className="px-[var(--p-pad-section-x)] pb-[var(--p-pad-section-y)] pt-[clamp(28px,3.5vw,48px)]">
       <div className="max-w-[1240px] mx-auto">
-        {/* No eyebrow: the title is the section label, so a kicker would
-            repeat it. */}
         <div className="mb-[clamp(2rem,4vw,3rem)]">
-          <h2 className="text-section font-extrabold tracking-[-0.03em] leading-[1.05]">
-            {t("title")}
-          </h2>
           {/* The intro runs the full container width. A `ch` cap wrapped it
               mid-page, which read as a broken column beside the full-width
               card grid below. */}
-          <p className="mt-5 text-lead leading-relaxed text-p-ink-2">
+          <p className="text-lead leading-relaxed text-p-ink-2">
             {t("intro")}
           </p>
         </div>
@@ -307,9 +301,9 @@ export function EcosystemSection() {
             narrow to read, so the section stacks until there is room for
             both columns. */}
         <div className="mt-[clamp(2.5rem,5vw,4rem)] grid grid-cols-1 gap-2 border-t border-p-line pt-7 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:gap-12">
-          <h3 className="text-card-title font-bold tracking-[-0.02em]">
+          <h2 className="text-card-title font-bold tracking-[-0.02em]">
             {t("commercial.title")}
-          </h3>
+          </h2>
           <p className="text-body text-p-ink-2 leading-relaxed text-pretty max-w-[72ch]">
             {t.rich("commercial.body", {
               m: monoChunk,

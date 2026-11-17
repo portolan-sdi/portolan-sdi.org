@@ -218,7 +218,7 @@ export function HeroFigure({ className = "" }: { className?: string }) {
       <figcaption className="sr-only">{t("description")}</figcaption>
       <div
         ref={frameRef}
-        className="relative h-[532px] @[520px]:h-[496px]"
+        className="relative h-[465px] @[520px]:h-[429px]"
       >
         <canvas
           ref={canvasRef}

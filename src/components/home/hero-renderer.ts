@@ -83,11 +83,10 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
     color: string,
     px: number,
     weight = "",
-    align: CanvasTextAlign = "left",
   ) {
     g.font = `${weight}${px}px ${palette!.mono}`;
     g.fillStyle = color;
-    g.textAlign = align;
+    g.textAlign = "left";
     g.textBaseline = "alphabetic";
     g.fillText(value, Math.round(x), Math.round(y));
   }
@@ -119,7 +118,6 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
       for (const trunk of s.trunks) line(trunk.x, trunk.y0, trunk.x, trunk.y1);
       for (const row of s.rows) {
         if (row.depth === 0) continue;
-        g.globalAlpha = row.kind === "light" ? late : 1;
         const mid = row.y + s.rowH / 2;
         line((row.depth - 1) * s.indent + 4, mid, row.x - 4, mid);
       }
@@ -127,12 +125,11 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
     }
     for (const row of s.rows) {
       const shown = smooth(row.at - 0.02, row.at + 0.04, p);
-      const alpha = shown * (row.kind === "light" ? late : 1);
-      if (alpha <= 0) continue;
+      if (shown <= 0) continue;
       const strong = row.kind === "root" || row.kind === "dir" || row.kind === "data";
-      const color = strong ? c.ink : row.kind === "light" ? c.ink3 : c.ink2;
+      const color = strong ? c.ink : c.ink2;
       const base = row.y + 13;
-      g.globalAlpha = alpha;
+      g.globalAlpha = shown;
       text(row.name, row.x, base, color, s.fontPx, strong ? "600 " : "");
       const nameW = g.measureText(row.name).width;
       g.globalAlpha = shown * late;
@@ -150,7 +147,7 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
   /**
    * GeoParquet. The map shows land outlines in three regions. Each region
    * is one row group of the table and shares its tint with the geometry
-   * chunk of that row group. The footer strip closes the file.
+   * chunk of that row group. `geometry` is the one label.
    */
   function drawParquet(d: ParquetDrawing, c: Palette, p: number) {
     const structure = structureAlpha(p);
@@ -173,9 +170,6 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
           x += w;
         });
       });
-      g.globalAlpha = structure;
-      g.fillStyle = c.primary;
-      g.fillRect(d.tx, d.footY, d.tw + 1, 9);
     }
 
     if (wipe > 0 && outlines) {
@@ -205,16 +199,14 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
       g.globalAlpha = finish;
       const geometryX = d.tx + d.cols[0] + d.cols[1];
       text("geometry", geometryX + 1, d.labelY, c.primaryInk, LABEL_PX);
-      text("bbox", geometryX + d.cols[2] + 1, d.labelY, c.ink3, LABEL_PX);
-      text("footer + geo", d.tx - 8, d.footY + 9, c.ink3, LABEL_PX, "", "right");
     }
     g.globalAlpha = 1;
   }
 
   /**
-   * Cloud Optimized GeoTIFF. A small header bar, then the same raster at
-   * three resolutions as stacked planes. The full resolution plane shows
-   * its tile grid.
+   * Cloud Optimized GeoTIFF. The same raster at three resolutions as
+   * stacked planes. The full resolution plane shows its tile grid. The
+   * drawing has no labels.
    */
   function drawCog(d: CogDrawing, c: Palette, p: number) {
     const structure = structureAlpha(p);
@@ -226,12 +218,6 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
 
     if (structure > 0) {
       g.globalAlpha = structure;
-      g.fillStyle = c.primary;
-      g.fillRect(d.x, d.y, d.barW, 8);
-      g.fillStyle = c.bg;
-      for (let k = 1; k < 4; k++) {
-        g.fillRect(d.x + Math.round((d.barW * k) / 4), d.y, 1, 8);
-      }
       // Faint pyramid edges through the matching corners.
       g.strokeStyle = c.lineSoft;
       for (const [u, v] of [[0, 0], [1, 0], [1, 1], [0, 1]]) {
@@ -303,20 +289,6 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
       }
     });
 
-    if (finish > 0) {
-      g.globalAlpha = finish;
-      const middle = d.planes[1];
-      const rows: Array<[string, number, number]> = [
-        ["header", d.y + 4, d.x + d.barW],
-        ["overviews", middle.y0 + middle.depth / 2, middle.x0 + middle.shear / 2 + middle.w],
-        ["tiles", full.y0 + full.depth / 2, full.x0 + full.shear / 2 + full.w],
-      ];
-      for (const [label, y, from] of rows) {
-        g.strokeStyle = c.lineSoft;
-        line(from + 6, y, d.labelX - 6, y);
-        text(label, d.labelX, y + 4, c.ink3, LABEL_PX);
-      }
-    }
     g.globalAlpha = 1;
   }
 
@@ -350,9 +322,11 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
 
     const outline = globeAlpha(p, s.wide);
     if (outline > 0) {
-      g.globalAlpha = outline;
+      // The whole globe is the primary blue. The graticule is fainter, so
+      // the land reads first.
       g.lineWidth = 1;
-      g.strokeStyle = c.lineSoft;
+      g.strokeStyle = c.primary;
+      g.globalAlpha = outline * 0.26;
       for (const path of world.graticule) {
         g.beginPath();
         let pen = false;
@@ -366,7 +340,7 @@ export function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
         }
         g.stroke();
       }
-      g.strokeStyle = c.ink3;
+      g.globalAlpha = outline * 0.8;
       g.beginPath();
       g.arc(cx, cy, r, 0, Math.PI * 2);
       g.stroke();

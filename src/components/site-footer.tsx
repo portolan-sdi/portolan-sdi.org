@@ -27,7 +27,7 @@ export function SiteFooter() {
   return (
     // `isolate` keeps the blend inside the footer, so the image multiplies
     // with the footer's own blue and not with the page behind it.
-    <footer className="relative isolate flex min-h-[clamp(260px,30vw,420px)] flex-col overflow-hidden border-t border-p-line bg-p-primary px-[var(--p-pad-section-x)] pb-6 pt-[clamp(32px,4vw,56px)] text-p-on-primary">
+    <footer className="relative isolate flex min-h-[clamp(260px,30vw,420px)] flex-col overflow-hidden border-t-4 border-p-line bg-p-primary px-[var(--p-pad-section-x)] pb-6 pt-[clamp(32px,4vw,56px)] text-p-on-primary">
       {/* A grayscale photograph multiplied over the brand blue. Multiply only
           darkens, so no pixel ends up lighter than --p-primary. White text on
           --p-primary is 5.3:1, so white text clears 4.5:1 over every part of
@@ -116,6 +116,11 @@ export function SiteFooter() {
               <p className={columnLabel}>{t("footer.resources")}</p>
               <ul className="flex flex-col items-start gap-1">
                 <li>
+                  <Link href="/how-it-works" className={footLink}>
+                    {t("howItWorks.title")}
+                  </Link>
+                </li>
+                <li>
                   <Link href="/blog" className={footLink}>
                     {t("nav.blog")}
                   </Link>
@@ -128,6 +133,11 @@ export function SiteFooter() {
                 <li>
                   <Link href="/talks" className={footLink}>
                     {t("nav.talks")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/ecosystem" className={footLink}>
+                    {t("nav.ecosystem")}
                   </Link>
                 </li>
                 <li>
