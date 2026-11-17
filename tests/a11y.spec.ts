@@ -154,8 +154,10 @@ test("Registry exposes a live submit failure", async ({ page }) => {
 test("video-only demos expose localized text alternatives", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   const videos = page.locator("video");
-  await expect(videos).toHaveCount(1);
-  for (let index = 0; index < 1; index += 1) {
+  // The QGIS clip in "Portolan in practice", then the catalog build in
+  // "How it works".
+  await expect(videos).toHaveCount(2);
+  for (let index = 0; index < 2; index += 1) {
     const describedBy = await videos.nth(index).getAttribute("aria-describedby");
     expect(describedBy, `video ${index + 1} needs a text equivalent`).toBeTruthy();
     const description = page.locator("[id=\"" + describedBy + "\"]");

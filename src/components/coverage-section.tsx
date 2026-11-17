@@ -1,22 +1,20 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { getBrowserUrl } from "@/lib/catalogs";
-import { DirArrow } from "./ui";
+import { RegistryMapEmbed } from "./registry/registry-map-embed";
+import { Btn, DirArrow } from "./ui";
 
 /**
- * The network section: the registry's coverage map, one featured catalog, and
- * three short stories about catalogs people built.
+ * The network section: the registry map, one featured catalog, and three
+ * short stories about catalogs people built.
  *
- * The section reads no registry data. The map loads its own baked cells and
- * the stories are written copy, so the section renders, and the `#coverage`
- * anchor exists, even when the registry returns nothing.
+ * The section takes no registry data from the server. The map fetches its
+ * own coverage in the browser, as it does on the registry page, and the
+ * stories are written copy. The section renders, and the `#coverage` anchor
+ * exists, even when the registry returns nothing.
  */
-
-/** The map's own ratio. It holds the box until the map chunk loads. */
-const MAP_RATIO = "1600/779";
 
 const PERGAMINO_CATALOG =
   "https://data.source.coop/nlebovits/pergamino-ide/catalog.json";
@@ -25,15 +23,6 @@ const FTW_CATALOG = "https://data.source.coop/ftw/global-data/catalog.json";
 /** The registry's link style: it underlines on hover, not at rest. */
 const storyLink =
   "inline-flex items-baseline gap-2 text-body text-p-primary hover:underline";
-
-function MapSkeleton() {
-  return <div className="w-full" style={{ aspectRatio: MAP_RATIO }} />;
-}
-
-const CoverageFlat = dynamic(() => import("./registry/coverage-flat"), {
-  ssr: false,
-  loading: () => <MapSkeleton />,
-});
 
 /**
  * The stories with a screenshot, in order. Both link to a page on this site.
@@ -70,57 +59,65 @@ export function CoverageSection() {
           <h2 className="text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-balance">
             {t("title")}
           </h2>
-          <div>
-            <p className="max-w-[60ch] text-lead leading-relaxed">
-              {t("lead")}
-            </p>
-            <Link href="/registry" className={`mt-4 ${storyLink}`}>
-              {t("cta")} <DirArrow />
-            </Link>
+          <div className="flex min-w-0 flex-col items-start gap-6">
+            <p className="max-w-[60ch] text-lead leading-relaxed">{t("lead")}</p>
+            {/* The one way from the section to the whole registry. It is
+                under the lead, above the map, so it takes no row of its
+                own. */}
+            <Btn asChild variant="primary">
+              <Link href="/registry" data-track="coverage-registry">
+                {t("registryLink")} <DirArrow />
+              </Link>
+            </Btn>
           </div>
         </div>
       </div>
 
       {/* Full bleed. The negative inline margin cancels the section padding,
-          so the block spans the content area and never exceeds it. The map
-          and the feature below it share one rule. */}
+          so the block spans the content area and never exceeds it. Each
+          block draws its own top rule and the last one closes the stack. */}
       <div className="-mx-[var(--p-pad-section-x)] mt-[clamp(2.5rem,5vw,4rem)]">
-        {/* The map component owns its caption. The caption takes the section
-            inset here so it does not touch the edge of the page. The frame
-            keeps the drawing's ratio at every width, because nothing beside
-            it sets a height to fill. */}
-        <div className="border-t border-p-line [&_figcaption]:px-[var(--p-pad-section-x)] [&_figcaption]:pb-4 [&_figure>div]:aspect-[1600/779]">
-          <CoverageFlat />
-        </div>
+        {/* The registry map alone, with no search and no cards. The map sets
+            `dir="ltr"` on its own frame and never mirrors. */}
+        <RegistryMapEmbed />
 
-        <article className="grid grid-cols-1 border-y border-p-line lg:grid-cols-[minmax(0,57fr)_minmax(0,43fr)]">
-          {/* A screenshot. It does not mirror in RTL. */}
-          <div dir="ltr" className="min-w-0">
+        {/* The text runs above the screenshot, so the screenshot takes the
+            full width of the block and shows whole at every width. */}
+        <article className="border-y border-p-line">
+          <div className="px-[var(--p-pad-section-x)] py-[clamp(24px,4vw,40px)]">
+            <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-start gap-x-16 gap-y-4 lg:grid-cols-2">
+              <h3 className="text-feature font-bold text-balance">
+                {t("pergamino.title")}
+              </h3>
+              <div className="flex min-w-0 flex-col items-start">
+                <p className="text-body text-p-ink-2">{t("pergamino.body")}</p>
+                {/* TODO: add the statement from the Municipality of Pergamino here when it arrives. */}
+                <a
+                  href={getBrowserUrl(PERGAMINO_CATALOG)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-4 ${storyLink}`}
+                >
+                  {t("pergamino.link")} <DirArrow kind="external" />
+                </a>
+              </div>
+            </div>
+          </div>
+          {/* A screenshot. It does not mirror in RTL. The width drives the
+              height, so the file's own 1800 by 1125 ratio holds and nothing
+              is cropped. The cap is the file's pixel width, so it never
+              scales up. */}
+          <div dir="ltr" className="border-t border-p-line bg-p-paper">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/img/home/pergamino-categories.webp"
               alt={t("pergamino.alt")}
-              width={1719}
-              height={930}
+              width={1800}
+              height={1125}
               loading="lazy"
               decoding="async"
-              className="block h-auto w-full object-cover object-left-top lg:h-full lg:min-h-[280px]"
+              className="mx-auto block h-auto w-full max-w-[1800px]"
             />
-          </div>
-          <div className="flex min-w-0 flex-col justify-center border-t border-p-line p-[clamp(24px,4vw,40px)] lg:border-t-0 lg:border-s">
-            <h3 className="text-feature font-bold">{t("pergamino.title")}</h3>
-            <p className="mt-3 text-body text-p-ink-2">
-              {t("pergamino.body")}
-            </p>
-            {/* TODO: add the statement from the Municipality of Pergamino here when it arrives. */}
-            <a
-              href={getBrowserUrl(PERGAMINO_CATALOG)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`mt-5 self-start ${storyLink}`}
-            >
-              {t("pergamino.link")} <DirArrow kind="external" />
-            </a>
           </div>
         </article>
       </div>

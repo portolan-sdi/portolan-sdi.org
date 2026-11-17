@@ -1,11 +1,16 @@
 /**
  * Pure math for the homepage hero figure.
  *
- * The figure is one cloud of points with two homes. In the map state the
- * points draw the world's land. In the files state the same points fill the
- * blocks of a file listing in a storage bucket. This module samples the
- * points, lays out both states, pairs each map point with a file slot, and
- * computes a frame. It touches no DOM, so a test harness can run it alone.
+ * The figure has two states. A globe turns, with the land drawn as points.
+ * Then the points move into a Portolan catalog, drawn as a directory tree
+ * under `s3://your-bucket/`. Two files in the tree have a drawing. The
+ * GeoParquet file shows a map of land outlines beside a table of row
+ * groups. The COG shows the same map as a pyramid of rasters. Then the same
+ * move runs backward, on a loop.
+ *
+ * This module decodes the land mask, derives the map geometry from it, lays
+ * out the tree and both drawings, and reports where the loop stands. It
+ * touches no DOM, so a test harness can run it alone.
  */
 
 /** The run-length land mask written by scripts/bake-land-mask.mjs. */
@@ -16,834 +21,781 @@ export interface LandMaskFile {
   rle: number[][];
 }
 
-/** The elevation grid written by scripts/bake-world-map.mjs. */
-export interface ReliefFile {
-  n: number;
-  x: number[];
-  y: number[];
-  z: number[];
-}
-
-/** Decoded inputs. Build this once and reuse it for every layout. */
-export interface World {
+/** The decoded land mask, one byte per cell. */
+export interface Land {
   mask: Uint8Array;
-  maskW: number;
-  maskH: number;
-  relief: ReliefFile;
+  w: number;
+  h: number;
 }
 
-export interface Label {
-  /** Stable key for the renderer. */
-  id: string;
-  x: number;
-  y: number;
-  name: string;
-  /** The format the file is written in. Empty when the name says enough. */
-  note: string;
-  /** True when the note sits on its own line under the name. */
-  stacked: boolean;
-  /** True for the bucket address at the head of the listing. */
-  head: boolean;
+const RAD = Math.PI / 180;
+
+function clamp01(v: number): number {
+  return v < 0 ? 0 : v > 1 ? 1 : v;
 }
 
-export interface Scene {
-  width: number;
-  height: number;
-  count: number;
-  /** Map position, in CSS pixels. */
-  ax: Float32Array;
-  ay: Float32Array;
-  /** File position, in CSS pixels. */
-  bx: Float32Array;
-  by: Float32Array;
-  /** When a point leaves, from 0 for the first to 1 for the last. */
-  delay: Float32Array;
-  /** Sideways swing of the flight path, as a share of its length. */
-  bend: Float32Array;
-  sizeA: Float32Array;
-  sizeB: Float32Array;
-  /** Indexes into the palette from `buildPalette`. */
-  toneA: Uint8Array;
-  toneB: Uint8Array;
-  labels: Label[];
-  /** Label font size in CSS pixels, 11 or 13. */
-  fontPx: number;
-  /** The rule under the bucket address. */
-  rule: { x: number; y: number; w: number };
+/** Smooth step from 0 at `a` to 1 at `b`. */
+export function smooth(a: number, b: number, v: number): number {
+  const t = clamp01((v - a) / (b - a));
+  return t * t * (3 - 2 * t);
 }
 
 /* --- Timeline ------------------------------------------------------------ */
 
-export const HOLD_MAP = 4;
-export const MORPH = 2.8;
-export const HOLD_FILES = 4.8;
-export const LOOP = HOLD_MAP + MORPH + HOLD_FILES + MORPH;
+const HOLD_GLOBE = 3.2;
+const MOVE = 4.6;
+const HOLD_CATALOG = 4.4;
+const MOVE_BACK = 3.2;
+const LOOP = HOLD_GLOBE + MOVE + HOLD_CATALOG + MOVE_BACK;
 
-/** Share of a morph spent waiting for the last point to leave. */
-export const STAGGER = 0.5;
+/** The globe turns this far each second, in radians. */
+const SPIN = 9 * RAD;
+const LON_START = 20 * RAD;
 
-/** Seconds the labels take to fade out before the points leave the files. */
-const LABEL_OUT = 0.45;
+/** The north pole leans toward the viewer by this angle. */
+export const TIP = 20 * RAD;
+
+/** The axis leans sideways by this angle. */
+export const ROLL = 12 * RAD;
+
+/** Shares of the move. The first point leaves at DEPART. */
+const DEPART = 0.3;
+/** The last point leaves this much later. Points leave from west to east. */
+const SWEEP = 0.4;
+/** A point takes this share of the move to reach its place. */
+const FLIGHT = 0.22;
+
+export interface Stage {
+  /** The longitude at the center of the globe, in radians. */
+  lon: number;
+  /** Progress of the move. 0 is the globe and 1 is the catalog. */
+  p: number;
+}
 
 /**
  * Where the loop stands at a given time.
  *
- * `morph` runs from 0 on the map to 1 on the files. `label` is the opacity
- * of the file labels. They fade in while the last points settle and fade out
- * before the first point leaves.
+ * The move back is the same move with `p` running from 1 to 0. The globe
+ * angle steps back while the catalog is on screen and no globe shows, so
+ * every loop shows the same stretch of the Earth.
  */
-export function timeline(seconds: number): { morph: number; label: number } {
+export function stageAt(seconds: number): Stage {
   const t = ((seconds % LOOP) + LOOP) % LOOP;
-  const filesAt = HOLD_MAP + MORPH;
-  const leaveAt = filesAt + HOLD_FILES;
-  if (t < HOLD_MAP) return { morph: 0, label: 0 };
-  if (t < filesAt) {
-    const m = (t - HOLD_MAP) / MORPH;
-    return { morph: m, label: clamp01((m - 0.74) / 0.26) };
-  }
-  if (t < leaveAt) {
-    return { morph: 1, label: clamp01((leaveAt - t) / LABEL_OUT) };
-  }
-  return { morph: 1 - (t - leaveAt) / MORPH, label: 0 };
+  const restAt = HOLD_GLOBE + MOVE;
+  const backAt = restAt + HOLD_CATALOG;
+  const lon =
+    LON_START - SPIN * (t < restAt + HOLD_CATALOG / 2 ? t : t - LOOP);
+  let p = 0;
+  if (t >= backAt) p = 1 - (t - backAt) / MOVE_BACK;
+  else if (t >= HOLD_GLOBE) p = clamp01((t - HOLD_GLOBE) / MOVE);
+  return { lon, p };
 }
 
-/** Eased progress of one point. The GLSL in hero-figure.tsx mirrors this. */
-export function pointEase(morph: number, delay: number): number {
-  const local = clamp01((morph - delay * STAGGER) / (1 - STAGGER));
-  return local * local * local * (local * (local * 6 - 15) + 10);
+/** The one frame drawn under reduced motion: the catalog. */
+export const STILL: Stage = { lon: LON_START, p: 1 };
+
+/** Eased progress of a point toward its place. `share` runs west to east. */
+export function flightEase(p: number, share: number): number {
+  const leave = DEPART + SWEEP * share;
+  return smooth(leave, leave + FLIGHT, p);
 }
 
-/* --- Palette ------------------------------------------------------------- */
-
-export type Rgb = [number, number, number];
-
-export interface PaletteInput {
-  bg: Rgb;
-  primary: Rgb;
-  primaryInk: Rgb;
-  ink: Rgb;
+/** Opacity of a point at its place. The crisp map takes over from it. */
+export function landedAlpha(p: number, share: number): number {
+  const arrive = DEPART + SWEEP * share + FLIGHT;
+  return 1 - smooth(arrive + 0.01, arrive + 0.05, p);
 }
 
-/** Number of steps in the map ramp. The file tones follow it. */
-export const RAMP = 64;
-export const TONE_INK = RAMP;
-export const TONE_PRIMARY = RAMP + 1;
-export const TONE_PRIMARY_INK = RAMP + 2;
-export const TONE_PRIMARY_SOFT = RAMP + 3;
-export const PALETTE_SIZE = RAMP + 4;
+/** How much of each map is drawn, from the west edge, from 0 to 1. */
+export function mapWipe(p: number): number {
+  return clamp01((p - DEPART - FLIGHT - 0.01) / SWEEP);
+}
 
-function mix(a: Rgb, b: Rgb, t: number): Rgb {
-  return [
-    a[0] + (b[0] - a[0]) * t,
-    a[1] + (b[1] - a[1]) * t,
-    a[2] + (b[2] - a[2]) * t,
-  ];
+/** Opacity of the table and the raster planes. They wait for the globe. */
+export function structureAlpha(p: number): number {
+  return smooth(0.66, 0.84, p);
+}
+
+/** Opacity of the tints, the overview pixels, and the labels. */
+export function finishAlpha(p: number): number {
+  return smooth(0.88, 0.99, p);
+}
+
+/** Opacity of the role notes and the light rows in the wide form. */
+export function noteAlpha(p: number): number {
+  return smooth(0.62, 0.8, p);
+}
+
+/** How far the globe has moved to the drawing column in the wide form. */
+export function globeSlide(p: number): number {
+  return smooth(0.02, 0.27, p);
 }
 
 /**
- * Build the palette as RGB bytes, three per entry.
- *
- * The map ramp runs from a pale blue wash through the brand blue to a blue
- * ink. Every stop is a mix of the brand tokens, so the figure stays in the
- * one blue family.
+ * Opacity of the globe outline and graticule. In the stacked form the globe
+ * fades before the tree shows, so no point crosses the tree text.
  */
-export function buildPalette(input: PaletteInput): Uint8Array {
-  const stops: Array<[number, Rgb]> = [
-    [0, mix(input.bg, input.primary, 0.34)],
-    [0.3, mix(input.bg, input.primary, 0.7)],
-    [0.55, input.primary],
-    [0.78, input.primaryInk],
-    [1, mix(input.primaryInk, input.ink, 0.72)],
-  ];
-  const out = new Uint8Array(PALETTE_SIZE * 3);
-  const put = (i: number, c: Rgb) => {
-    out[i * 3] = Math.round(c[0]);
-    out[i * 3 + 1] = Math.round(c[1]);
-    out[i * 3 + 2] = Math.round(c[2]);
-  };
-  for (let i = 0; i < RAMP; i++) {
-    const v = i / (RAMP - 1);
-    let k = 0;
-    while (k < stops.length - 2 && v > stops[k + 1][0]) k++;
-    const [v0, c0] = stops[k];
-    const [v1, c1] = stops[k + 1];
-    put(i, mix(c0, c1, clamp01((v - v0) / (v1 - v0))));
-  }
-  put(TONE_INK, input.ink);
-  put(TONE_PRIMARY, input.primary);
-  put(TONE_PRIMARY_INK, input.primaryInk);
-  put(TONE_PRIMARY_SOFT, mix(input.bg, input.primary, 0.72));
-  return out;
+export function globeAlpha(p: number, wide: boolean): number {
+  return wide ? 1 - smooth(0.32, 0.62, p) : 1 - smooth(0.14, 0.4, p);
 }
 
-/* --- Inputs -------------------------------------------------------------- */
+/* --- Land ---------------------------------------------------------------- */
 
 /**
  * Decode the land mask at half resolution, one byte per cell.
  *
  * Each row holds run lengths that alternate ocean, land, ocean. The first
  * run is ocean and may be zero long. Half resolution is 0.2 degrees, which
- * is finer than one point at any size the figure draws.
+ * is finer than anything the figure draws.
  */
-export function decodeWorld(mask: LandMaskFile, relief: ReliefFile): World {
-  const maskW = mask.width >> 1;
-  const maskH = mask.height >> 1;
-  const out = new Uint8Array(maskW * maskH);
-  const row = new Uint8Array(mask.width);
-  for (let r = 0; r < maskH; r++) {
-    const runs = mask.rle[r * 2];
+export function decodeLand(file: LandMaskFile): Land {
+  const w = file.width >> 1;
+  const h = file.height >> 1;
+  const mask = new Uint8Array(w * h);
+  const row = new Uint8Array(file.width);
+  for (let r = 0; r < h; r++) {
     let c = 0;
     let land = 0;
-    for (const run of runs) {
-      if (land) row.fill(1, c, c + run);
-      else row.fill(0, c, c + run);
+    for (const run of file.rle[r * 2]) {
+      row.fill(land, c, c + run);
       c += run;
       land ^= 1;
     }
-    const base = r * maskW;
-    for (let x = 0; x < maskW; x++) out[base + x] = row[x * 2];
+    const base = r * w;
+    for (let x = 0; x < w; x++) mask[base + x] = row[x * 2];
   }
-  return { mask: out, maskW, maskH, relief };
+  return { mask, w, h };
 }
 
-const RAD = Math.PI / 180;
-
-function isLand(world: World, lon: number, lat: number): boolean {
-  let c = Math.floor(((lon + 180) / 360) * world.maskW);
-  const r = Math.floor(((90 - lat) / 180) * world.maskH);
-  if (r < 0 || r >= world.maskH) return false;
-  c = ((c % world.maskW) + world.maskW) % world.maskW;
-  return world.mask[r * world.maskW + c] === 1;
+function isLand(land: Land, lon: number, lat: number): boolean {
+  const r = Math.floor(((90 - lat) / 180) * land.h);
+  if (r < 0 || r >= land.h) return false;
+  let c = Math.floor(((lon + 180) / 360) * land.w);
+  c = ((c % land.w) + land.w) % land.w;
+  return land.mask[r * land.w + c] === 1;
 }
 
-/** Bilinear elevation. The grid spaces latitude on a Mercator axis. */
-function elevation(world: World, lon: number, lat: number): number {
-  const { n, x, z } = world.relief;
-  const w = n + 1;
-  const clamped = Math.max(-84.9, Math.min(84.9, lat)) * RAD;
-  // The grid's latitude axis runs from north at -1 to south at 1.
-  const my = -Math.log(Math.tan(Math.PI / 4 + clamped / 2)) / Math.PI;
-  let lo = 0;
-  let hi = n;
-  while (hi - lo > 1) {
-    const mid = (lo + hi) >> 1;
-    if (x[mid] <= my) lo = mid;
-    else hi = mid;
-  }
-  const fx = clamp01((my - x[lo]) / (x[hi] - x[lo]));
-  const gy = clamp01((lon + 180) / 360) * n;
-  const j = Math.min(n - 1, Math.floor(gy));
-  const fy = gy - j;
-  const a = z[j * w + lo];
-  const b = z[j * w + hi];
-  const c = z[(j + 1) * w + lo];
-  const d = z[(j + 1) * w + hi];
-  return (a + (b - a) * fx) * (1 - fy) + (c + (d - c) * fx) * fy;
+/* --- The world, derived once from the land mask -------------------------- */
+
+/** Both drawings show the same window of the world, 78 N to 57 S. */
+const LAT_TOP = 78;
+const LAT_SPAN = 135;
+
+function uOf(lon: number): number {
+  return (lon + 180) / 360;
 }
 
-/* --- Projection ---------------------------------------------------------- */
-
-// Equal Earth, after Savric, Patterson, and Jenny (2018).
-const A1 = 1.340264;
-const A2 = -0.081106;
-const A3 = 0.000893;
-const A4 = 0.003796;
-const M = Math.sqrt(3) / 2;
-
-function eeY(lat: number): number {
-  const t = Math.asin(M * Math.sin(lat * RAD));
-  const t2 = t * t;
-  const t6 = t2 * t2 * t2;
-  return t * (A1 + A2 * t2 + t6 * (A3 + A4 * t2));
+function vOf(lat: number): number {
+  return (LAT_TOP - lat) / LAT_SPAN;
 }
 
-/** Invert Equal Earth. Returns false for a point off the globe. */
-function eeInverse(px: number, py: number, out: Float64Array): boolean {
-  let t = py;
-  for (let i = 0; i < 8; i++) {
-    const t2 = t * t;
-    const t6 = t2 * t2 * t2;
-    const f = t * (A1 + A2 * t2 + t6 * (A3 + A4 * t2)) - py;
-    const df = A1 + 3 * A2 * t2 + t6 * (7 * A3 + 9 * A4 * t2);
-    const step = f / df;
-    t -= step;
-    if (Math.abs(step) < 1e-9) break;
-  }
-  const s = Math.sin(t) / M;
-  if (s < -1 || s > 1) return false;
-  const t2 = t * t;
-  const t6 = t2 * t2 * t2;
-  const lon =
-    (M * px * (A1 + 3 * A2 * t2 + t6 * (7 * A3 + 9 * A4 * t2))) / Math.cos(t);
-  if (lon < -Math.PI || lon > Math.PI) return false;
-  out[0] = lon / RAD;
-  out[1] = Math.asin(s) / RAD;
-  return true;
+/** One level of the raster: land as runs of cells, row by row. */
+export interface RasterLevel {
+  nx: number;
+  ny: number;
+  /** Each run is `[column, row, length]`. */
+  runs: Array<[number, number, number]>;
 }
 
-// The map leaves out Antarctica and the empty sea north of the land.
-const LAT_TOP = 84;
-const LAT_BOTTOM = -57;
-const EE_HALF_W = 2.7066;
-const EE_TOP = eeY(LAT_TOP);
-const EE_BOTTOM = eeY(LAT_BOTTOM);
-
-/* --- Small helpers ------------------------------------------------------- */
-
-function clamp01(v: number): number {
-  return v < 0 ? 0 : v > 1 ? 1 : v;
+export interface World {
+  /** Land outlines as closed rings of `u, v` pairs in the map window. */
+  rings: Float32Array[];
+  /** The raster at full resolution, then two overviews. */
+  levels: RasterLevel[];
+  /** The land points of the globe. */
+  count: number;
+  /** Place on the unit sphere, with longitude 0 facing the viewer. */
+  gx: Float32Array;
+  gy: Float32Array;
+  gz: Float32Array;
+  /** Place in the map window. `v` is outside 0 to 1 near the poles. */
+  u: Float32Array;
+  v: Float32Array;
+  /** 0 for the vector map and 1 for the raster. */
+  target: Uint8Array;
+  /** The graticule lines, each as unit vectors in threes. */
+  graticule: Float32Array[];
 }
 
-/** Seeded generator, so every build draws the same cloud. */
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+/** The three regions of the vector map, as longitude bounds in `u`. */
+export const REGIONS: Array<[number, number]> = [
+  [uOf(-180), uOf(-27)],
+  [uOf(-27), uOf(60)],
+  [uOf(60), uOf(180)],
+];
+
+type Edge = "T" | "R" | "B" | "L";
+
+/** The edges each marching squares case joins. Bits are TL, TR, BR, BL. */
+const CASES: Array<Array<[Edge, Edge]>> = [
+  [],
+  [["L", "B"]],
+  [["B", "R"]],
+  [["L", "R"]],
+  [["T", "R"]],
+  [
+    ["T", "L"],
+    ["B", "R"],
+  ],
+  [["T", "B"]],
+  [["T", "L"]],
+  [["T", "L"]],
+  [["T", "B"]],
+  [
+    ["T", "R"],
+    ["L", "B"],
+  ],
+  [["T", "R"]],
+  [["L", "R"]],
+  [["B", "R"]],
+  [["L", "B"]],
+  [],
+];
+
+interface Segment {
+  keys: [number, number];
+  ends: [[number, number], [number, number]];
+  used: boolean;
 }
-
-function hash2(ix: number, iy: number): number {
-  let h = Math.imul(ix, 374761393) + Math.imul(iy, 668265263);
-  h = Math.imul(h ^ (h >>> 13), 1274126177);
-  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-}
-
-/** Smooth value noise in 0 to 1. */
-function valueNoise(x: number, y: number): number {
-  const ix = Math.floor(x);
-  const iy = Math.floor(y);
-  const fx = x - ix;
-  const fy = y - iy;
-  const ux = fx * fx * (3 - 2 * fx);
-  const uy = fy * fy * (3 - 2 * fy);
-  const a = hash2(ix, iy);
-  const b = hash2(ix + 1, iy);
-  const c = hash2(ix, iy + 1);
-  const d = hash2(ix + 1, iy + 1);
-  return (a + (b - a) * ux) * (1 - uy) + (c + (d - c) * ux) * uy;
-}
-
-/** Position of a cell along a Hilbert curve of the given order. */
-function hilbert(order: number, x: number, y: number): number {
-  let d = 0;
-  for (let s = 1 << (order - 1); s > 0; s >>= 1) {
-    const rx = (x & s) > 0 ? 1 : 0;
-    const ry = (y & s) > 0 ? 1 : 0;
-    d += s * s * ((3 * rx) ^ ry);
-    if (ry === 0) {
-      if (rx === 1) {
-        x = s - 1 - x;
-        y = s - 1 - y;
-      }
-      const t = x;
-      x = y;
-      y = t;
-    }
-  }
-  return d;
-}
-
-/* --- Point budget -------------------------------------------------------- */
-
-/** How much the device can draw. `canvas` is the Canvas 2D fallback. */
-export type Tier = "full" | "low" | "canvas";
-
-const TIER_CAP: Record<Tier, number> = {
-  full: 60000,
-  low: 30000,
-  canvas: 14000,
-};
 
 /**
- * How many points to draw for a canvas of the given CSS size.
+ * Trace the land outlines.
  *
- * The count follows the canvas area, so the cloud keeps one density from a
- * phone to a wide desktop. Each tier caps the count at what it can move at
- * 60 frames a second.
+ * The land share on a 3 degree grid is smoothed a little, then contoured at
+ * one half with marching squares. The segments chain into closed rings. The
+ * border of the grid is ocean, so every ring closes.
  */
-export function pointBudget(width: number, height: number, tier: Tier): number {
-  const byArea = Math.round(width * Math.min(height, width * 0.62) * 0.13);
-  return Math.max(10000, Math.min(TIER_CAP[tier], byArea));
+function buildRings(land: Land): Float32Array[] {
+  const step = 3;
+  const nx = 360 / step;
+  const ny = LAT_SPAN / step;
+  const w = nx + 1;
+  const raw = new Float32Array(w * (ny + 1));
+  for (let j = 1; j < ny; j++) {
+    for (let i = 1; i < nx; i++) {
+      let hit = 0;
+      for (let a = -2; a <= 2; a++) {
+        for (let b = -2; b <= 2; b++) {
+          const lon = -180 + i * step + a * 0.6;
+          const lat = LAT_TOP - j * step + b * 0.6;
+          if (isLand(land, lon, lat)) hit++;
+        }
+      }
+      raw[j * w + i] = hit / 25;
+    }
+  }
+  const f = new Float32Array(raw.length);
+  for (let j = 1; j < ny; j++) {
+    for (let i = 1; i < nx; i++) {
+      const k = j * w + i;
+      f[k] = (raw[k] * 6 + raw[k - 1] + raw[k + 1] + raw[k - w] + raw[k + w]) / 10;
+    }
+  }
+
+  const cross = (a: number, b: number) => (0.5 - a) / (b - a);
+  const segments: Segment[] = [];
+  const byKey = new Map<number, Segment[]>();
+  // An edge key is unique per grid edge. Horizontal edges are even.
+  const hKey = (i: number, j: number) => (j * w + i) * 2;
+  const vKey = (i: number, j: number) => (j * w + i) * 2 + 1;
+
+  for (let j = 0; j < ny; j++) {
+    for (let i = 0; i < nx; i++) {
+      const tl = f[j * w + i];
+      const tr = f[j * w + i + 1];
+      const bl = f[(j + 1) * w + i];
+      const br = f[(j + 1) * w + i + 1];
+      const index =
+        (tl >= 0.5 ? 8 : 0) |
+        (tr >= 0.5 ? 4 : 0) |
+        (br >= 0.5 ? 2 : 0) |
+        (bl >= 0.5 ? 1 : 0);
+      const edge = (e: Edge): [number, [number, number]] => {
+        if (e === "T") return [hKey(i, j), [i + cross(tl, tr), j]];
+        if (e === "B") return [hKey(i, j + 1), [i + cross(bl, br), j + 1]];
+        if (e === "L") return [vKey(i, j), [i, j + cross(tl, bl)]];
+        return [vKey(i + 1, j), [i + 1, j + cross(tr, br)]];
+      };
+      for (const [from, to] of CASES[index]) {
+        const a = edge(from);
+        const b = edge(to);
+        const segment: Segment = {
+          keys: [a[0], b[0]],
+          ends: [a[1], b[1]],
+          used: false,
+        };
+        segments.push(segment);
+        for (const key of segment.keys) {
+          const list = byKey.get(key);
+          if (list) list.push(segment);
+          else byKey.set(key, [segment]);
+        }
+      }
+    }
+  }
+
+  const rings: Float32Array[] = [];
+  for (const first of segments) {
+    if (first.used) continue;
+    first.used = true;
+    const ring: number[] = [...first.ends[0], ...first.ends[1]];
+    let key = first.keys[1];
+    for (;;) {
+      const next = byKey.get(key)?.find((s) => !s.used);
+      if (!next) break;
+      next.used = true;
+      const far = next.keys[0] === key ? 1 : 0;
+      ring.push(...next.ends[far]);
+      key = next.keys[far];
+    }
+    // Drop specks of a cell or two.
+    if (ring.length <= 10) continue;
+    const out = new Float32Array(ring.length);
+    for (let k = 0; k < ring.length; k += 2) {
+      out[k] = ring[k] / nx;
+      out[k + 1] = ring[k + 1] / ny;
+    }
+    rings.push(out);
+  }
+  return rings;
 }
 
-/* --- File layout --------------------------------------------------------- */
+/** Sample the land into a raster of `nx` columns over the map window. */
+function buildLevel(land: Land, nx: number): RasterLevel {
+  const ny = (nx * LAT_SPAN) / 360;
+  const runs: Array<[number, number, number]> = [];
+  for (let r = 0; r < ny; r++) {
+    let start = -1;
+    for (let c = 0; c <= nx; c++) {
+      let cell = false;
+      if (c < nx) {
+        let hit = 0;
+        for (let a = 0; a < 3; a++) {
+          for (let b = 0; b < 3; b++) {
+            const lon = -180 + ((c + (a + 0.5) / 3) * 360) / nx;
+            const lat = LAT_TOP - ((r + (b + 0.5) / 3) * LAT_SPAN) / ny;
+            if (isLand(land, lon, lat)) hit++;
+          }
+        }
+        cell = hit >= 4;
+      }
+      if (cell && start < 0) start = c;
+      if (!cell && start >= 0) {
+        runs.push([start, r, c - start]);
+        start = -1;
+      }
+    }
+  }
+  return { nx, ny, runs };
+}
 
-interface Rect {
+/** Lattice points over the whole sphere. About three in ten fall on land. */
+const LATTICE = 15000;
+
+function unit(lon: number, lat: number): [number, number, number] {
+  const c = Math.cos(lat * RAD);
+  return [c * Math.sin(lon * RAD), Math.sin(lat * RAD), c * Math.cos(lon * RAD)];
+}
+
+function polyline(points: Array<[number, number]>): Float32Array {
+  const out = new Float32Array(points.length * 3);
+  points.forEach(([lon, lat], i) => out.set(unit(lon, lat), i * 3));
+  return out;
+}
+
+function buildGraticule(): Float32Array[] {
+  const lines: Float32Array[] = [];
+  for (let lon = -180; lon < 180; lon += 30) {
+    const line: Array<[number, number]> = [];
+    for (let lat = -80; lat <= 80; lat += 4) line.push([lon, lat]);
+    lines.push(polyline(line));
+  }
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const line: Array<[number, number]> = [];
+    for (let lon = -180; lon <= 180; lon += 4) line.push([lon, lat]);
+    lines.push(polyline(line));
+  }
+  return lines;
+}
+
+/**
+ * Derive everything the figure draws from the land mask. This runs once.
+ *
+ * The land points are on rings of equal latitude. Each ring holds as many
+ * points as its length allows, so the points space evenly over the sphere.
+ * Alternate rings go to the vector map and to the raster, so each drawing
+ * receives the whole world and every point has its own place in it.
+ */
+export function buildWorld(land: Land): World {
+  const lon: number[] = [];
+  const lat: number[] = [];
+  const which: number[] = [];
+  const spacing = Math.sqrt((4 * Math.PI) / LATTICE);
+  const rings = Math.round(Math.PI / spacing);
+  for (let ring = 0; ring < rings; ring++) {
+    const pointLat = 90 - ((ring + 0.5) * 180) / rings;
+    const around = Math.max(
+      1,
+      Math.round((2 * Math.PI * Math.cos(pointLat * RAD)) / spacing),
+    );
+    for (let k = 0; k < around; k++) {
+      const pointLon = ((k + (ring % 2) * 0.5) / around) * 360 - 180;
+      if (!isLand(land, pointLon, pointLat)) continue;
+      lon.push(pointLon);
+      lat.push(pointLat);
+      which.push(ring % 2);
+    }
+  }
+  const count = lon.length;
+  const world: World = {
+    rings: buildRings(land),
+    levels: [64, 32, 16].map((nx) => buildLevel(land, nx)),
+    count,
+    gx: new Float32Array(count),
+    gy: new Float32Array(count),
+    gz: new Float32Array(count),
+    u: new Float32Array(count),
+    v: new Float32Array(count),
+    target: new Uint8Array(count),
+    graticule: buildGraticule(),
+  };
+  for (let i = 0; i < count; i++) {
+    const [x, y, z] = unit(lon[i], lat[i]);
+    world.gx[i] = x;
+    world.gy[i] = y;
+    world.gz[i] = z;
+    world.u[i] = uOf(lon[i]);
+    world.v[i] = vOf(lat[i]);
+    world.target[i] = which[i];
+  }
+  return world;
+}
+
+/* --- The catalog tree ---------------------------------------------------- */
+
+export type RowKind = "root" | "dir" | "file" | "light" | "data";
+export type DrawingKind = "parquet" | "cog";
+
+interface RowSpec {
+  depth: number;
+  name: string;
+  kind: RowKind;
+  /** The role of the file, shown beside its name. */
+  note?: string;
+  /** The format name of a data file. */
+  format?: string;
+  drawing?: DrawingKind;
+}
+
+/**
+ * The tree follows portolan-spec. Every catalog and collection holds its
+ * STAC JSON, an AGENTS.md, and a README.md, and every collection holds a
+ * thumbnail. A collection of one file holds that file with no item folder.
+ * PMTiles is the visualization derivative and needs a style in `styles/`.
+ */
+const TREE: RowSpec[] = [
+  { depth: 0, name: "s3://your-bucket/", kind: "root" },
+  { depth: 1, name: "catalog.json", kind: "file", note: "STAC catalog" },
+  { depth: 1, name: "README.md", kind: "file", note: "for people" },
+  { depth: 1, name: "AGENTS.md", kind: "file", note: "for agents" },
+  { depth: 1, name: "boundaries/", kind: "dir" },
+  { depth: 2, name: "collection.json", kind: "file", note: "STAC collection" },
+  { depth: 2, name: "README.md  AGENTS.md  thumbnail.png", kind: "light" },
+  {
+    depth: 2,
+    name: "boundaries.parquet",
+    kind: "data",
+    format: "GeoParquet",
+    drawing: "parquet",
+  },
+  {
+    depth: 2,
+    name: "boundaries.pmtiles",
+    kind: "file",
+    note: "for visualization",
+  },
+  { depth: 2, name: "styles/", kind: "file" },
+  { depth: 1, name: "landcover/", kind: "dir" },
+  { depth: 2, name: "collection.json", kind: "file", note: "STAC collection" },
+  { depth: 2, name: "README.md  AGENTS.md  thumbnail.png", kind: "light" },
+  {
+    depth: 2,
+    name: "landcover.tif",
+    kind: "data",
+    format: "COG",
+    drawing: "cog",
+  },
+];
+
+export interface Row extends RowSpec {
   x: number;
   y: number;
+  /** The share of the move at which the row shows. */
+  at: number;
+}
+
+export interface Trunk {
+  x: number;
+  y0: number;
+  y1: number;
+}
+
+/** The GeoParquet drawing: a map of outlines beside a table. */
+export interface ParquetDrawing {
+  /** The map rectangle. */
+  mx: number;
+  my: number;
+  mw: number;
+  mh: number;
+  /** The table: its left edge, its width, and the column widths. */
+  tx: number;
+  tw: number;
+  cols: number[];
+  /** The top of each row group, and their shared height. */
+  bands: number[];
+  bandH: number;
+  /** The top of the footer strip and of the column labels. */
+  footY: number;
+  labelY: number;
+}
+
+/** One oblique plane of the raster pyramid. */
+export interface Plane {
+  level: RasterLevel;
+  x0: number;
+  y0: number;
   w: number;
-  h: number;
-  /** Fixed tone, or -1 to keep the tone the point has on the map. */
-  tone: number;
+  depth: number;
+  shear: number;
 }
 
-interface FileBlock {
-  rects: Rect[];
+/** The COG drawing: a header bar over a pyramid of planes. */
+export interface CogDrawing {
+  x: number;
+  y: number;
+  barW: number;
+  /** The planes from full resolution up to the smallest overview. */
+  planes: Plane[];
+  /** The left edge of the labels. */
+  labelX: number;
 }
 
-interface FilesLayout {
-  files: FileBlock[];
-  labels: Label[];
-  fontPx: number;
-  rule: { x: number; y: number; w: number };
-}
-
-const FILES = [
-  { id: "catalog", name: "catalog.json", note: "STAC" },
-  { id: "readme", name: "README.md", note: "" },
-  { id: "agents", name: "AGENTS.md", note: "" },
-  { id: "parquet", name: "parcels/parcels.parquet", note: "GeoParquet" },
-  { id: "pmtiles", name: "parcels/parcels.pmtiles", note: "PMTiles" },
-  { id: "tif", name: "orthophoto/2025.tif", note: "COG" },
-] as const;
-
-const BUCKET = "s3://your-bucket/";
-
-/**
- * A Parquet file is a stack of row groups with a footer after them.
- * The bands are the row groups. The thin block at the end is the footer.
- */
-function parquetRects(x: number, y: number, w: number, h: number): Rect[] {
-  const gap = 3;
-  const bands = h >= 64 ? 4 : 3;
-  const footer = Math.max(5, Math.round(w * 0.018));
-  const bandW = w - footer - gap;
-  const bandH = (h - gap * (bands - 1)) / bands;
-  const rects: Rect[] = [];
-  for (let i = 0; i < bands; i++) {
-    rects.push({
-      x,
-      y: y + i * (bandH + gap),
-      w: bandW,
-      h: bandH,
-      tone: TONE_PRIMARY,
-    });
-  }
-  rects.push({ x: x + bandW + gap, y, w: footer, h, tone: TONE_PRIMARY_INK });
-  return rects;
-}
-
-/**
- * A PMTiles archive is a tile pyramid. Each square is one zoom level, cut
- * into the tiles that level holds: 1, then 4, then 16, and so on.
- */
-function pmtilesRects(x: number, y: number, w: number, h: number): Rect[] {
-  const gap = Math.max(6, Math.round(h * 0.12));
-  const rects: Rect[] = [];
-  let left = x;
-  for (let z = 0; z < 5; z++) {
-    const cells = 1 << z;
-    const seam = z === 0 ? 0 : 1.6;
-    const cell = (h - seam * (cells - 1)) / cells;
-    if (cell < 5.5 || left + h > x + w + 0.5) break;
-    for (let r = 0; r < cells; r++) {
-      for (let c = 0; c < cells; c++) {
-        rects.push({
-          x: left + c * (cell + seam),
-          y: y + r * (cell + seam),
-          w: cell,
-          h: cell,
-          tone: TONE_PRIMARY_INK,
-        });
-      }
-    }
-    left += h + gap;
-  }
-  return rects;
-}
-
-/**
- * A COG is a raster with its overviews. The wide block is the full image.
- * Each block after it is the same image at half the size of the last.
- * The points keep their map tone here, so the raster reads as imagery.
- */
-function cogRects(x: number, y: number, w: number, h: number): Rect[] {
-  const gap = Math.max(6, Math.round(h * 0.08));
-  const full = Math.min((w - gap * 3) / 1.875, h * 3.1);
-  const rects: Rect[] = [];
-  let left = x;
-  for (let level = 0; level < 4; level++) {
-    const scale = 1 / (1 << level);
-    if (h * scale < 5) break;
-    rects.push({ x: left, y, w: full * scale, h: h * scale, tone: -1 });
-    left += full * scale + gap;
-  }
-  return rects;
-}
-
-/**
- * Lay out the listing for a canvas of the given CSS size.
- *
- * A wide canvas runs two columns, names on the left and blocks on the right.
- * A narrow canvas stacks each data file's name over its block, so the names
- * keep a readable size on a phone.
- */
-function layoutFiles(width: number, height: number): FilesLayout {
-  const wide = width >= 600;
-  const fontPx = wide ? 13 : 11;
-  const ch = fontPx * 0.6;
-  const line = Math.round(fontPx * 1.5);
-  const pad = Math.max(12, Math.min(28, Math.round(width * 0.052)));
-  const x0 = pad;
-  const right = width - pad;
-
-  const headH = line + 12;
-  const smallH = line + (wide ? 6 : 3);
-  const rowGap = wide ? 18 : 9;
-  const labelH = wide ? 0 : line + 2;
-
-  // The three data files share the height the head and text files leave.
-  const fixed = headH + smallH * 3 + rowGap * 3 + labelH * 3;
-  const maxBody = wide ? width * 0.42 : width * 0.62;
-  const body = Math.max(60, Math.min(height - pad * 2 - fixed, maxBody));
-  const shares = [0.25, 0.3, 0.45];
-  const top = Math.max(pad, Math.round((height - fixed - body) / 2));
-
-  const labels: Label[] = [];
-  const files: FileBlock[] = [];
-  let y = top;
-
-  labels.push({
-    id: "bucket",
-    x: x0,
-    y,
-    name: BUCKET,
-    note: "",
-    stacked: false,
-    head: true,
-  });
-  const rule = { x: x0, y: y + line + 4, w: right - x0 };
-  y += headH;
-
-  const blockX = wide ? x0 + Math.round(ch * 25) : x0;
-  const blockW = right - blockX;
-  const sliverX = wide ? blockX : x0 + Math.round(ch * 19);
-  const sliverH = Math.max(5, Math.round(fontPx * 0.5));
-  const sliverW = [34, 22, 14];
-
-  for (let i = 0; i < 3; i++) {
-    const file = FILES[i];
-    labels.push({
-      id: file.id,
-      x: x0,
-      y,
-      name: file.name,
-      note: file.note,
-      stacked: false,
-      head: false,
-    });
-    files.push({
-      rects: [
-        {
-          x: sliverX,
-          y: y + (line - sliverH) / 2,
-          w: sliverW[i],
-          h: sliverH,
-          tone: TONE_INK,
-        },
-      ],
-    });
-    y += smallH;
-  }
-  y += rowGap - (wide ? 6 : 3);
-
-  const makers = [parquetRects, pmtilesRects, cogRects];
-  for (let i = 0; i < 3; i++) {
-    const file = FILES[i + 3];
-    const h = Math.round(body * shares[i]);
-    labels.push({
-      id: file.id,
-      x: x0,
-      y,
-      name: file.name,
-      note: file.note,
-      stacked: wide,
-      head: false,
-    });
-    y += labelH;
-    const w = i === 0 ? blockW * (wide ? 0.82 : 0.9) : blockW;
-    files.push({ rects: makers[i](blockX, y, w, h) });
-    y += h + rowGap;
-  }
-
-  return { files, labels, fontPx, rule };
-}
-
-/** Lattice size of a block at a given dot pitch. */
-function latticeOf(rect: Rect, pitch: number): [number, number] {
+/** Map a place on a plane, `u` and `v` from 0 to 1, to the figure. */
+export function planePoint(plane: Plane, u: number, v: number): [number, number] {
   return [
-    Math.max(1, Math.round(rect.w / pitch)),
-    Math.max(1, Math.round(rect.h / pitch)),
+    plane.x0 + plane.shear * (1 - v) + u * plane.w,
+    plane.y0 + v * plane.depth,
   ];
 }
 
-function capacityAt(layout: FilesLayout, pitch: number): number {
-  let total = 0;
-  for (const file of layout.files) {
-    for (const rect of file.rects) {
-      const [cols, rows] = latticeOf(rect, pitch);
-      total += cols * rows;
-    }
-  }
-  return total;
-}
-
-/* --- Scene --------------------------------------------------------------- */
+/** The figure takes the wide form from this width up. */
+const WIDE_FROM = 520;
 
 /**
- * Build both states for a canvas of the given CSS size.
- *
- * The pairing keeps motion coherent. Points are ordered along a Hilbert
- * curve over the map, so each file takes one compact region of the world.
- * Inside a file the slots follow a second curve over the block, and the two
- * orders are matched one to one. Points that start as neighbours end as
- * neighbours, so a region travels as one stream.
+ * The row and drawing heights fix the height of each form: 496px wide and
+ * 532px stacked. `hero-figure.tsx` reserves the same heights in CSS, so
+ * change both together.
  */
-export function buildScene(
-  world: World,
-  width: number,
-  height: number,
-  budget: number,
-): Scene {
-  const rand = mulberry32(0x504f5254);
-  const layout = layoutFiles(width, height);
+const ROW = 18;
+const PARQUET_H = 112;
+const COG_H = 130;
 
-  // Probe the projection on a coarse grid. The probe finds the box the
-  // land fills and the share of that box that is land.
-  const lonLat = new Float64Array(2);
-  const PROBE_W = 200;
-  const PROBE_H = 90;
-  const probeX = (2 * EE_HALF_W) / PROBE_W;
-  const probeY = (EE_TOP - EE_BOTTOM) / PROBE_H;
-  let west = Infinity;
-  let east = -Infinity;
-  let north = -Infinity;
-  let south = Infinity;
-  let hits = 0;
-  for (let r = 0; r < PROBE_H; r++) {
-    for (let c = 0; c < PROBE_W; c++) {
-      const px = (c + 0.5) * probeX - EE_HALF_W;
-      const py = EE_TOP - (r + 0.5) * probeY;
-      if (eeInverse(px, py, lonLat) && isLand(world, lonLat[0], lonLat[1])) {
-        hits++;
-        west = Math.min(west, px);
-        east = Math.max(east, px);
-        north = Math.max(north, py);
-        south = Math.min(south, py);
-      }
+function layoutParquet(x: number, y: number, w: number): ParquetDrawing {
+  const mw = w >= 350 ? 170 : w >= 300 ? 148 : 112;
+  const mh = Math.round((mw * LAT_SPAN) / 360);
+  const gap = w >= 300 ? 18 : 12;
+  const tx = x + mw + gap;
+  const tw = Math.min(190, x + w - tx - 1);
+  const top = y + 16;
+  const bandH = 24;
+  const bandGap = 4;
+  const bands = [0, 1, 2].map((i) => top + i * (bandH + bandGap));
+  const cols = [0.13, 0.13, 0.49].map((share) => Math.round(tw * share));
+  cols.push(tw - cols[0] - cols[1] - cols[2]);
+  return {
+    mx: x,
+    my: Math.round(top + (3 * bandH + 2 * bandGap - mh) / 2),
+    mw,
+    mh,
+    tx,
+    tw,
+    cols,
+    bands,
+    bandH,
+    footY: bands[2] + bandH + 6,
+    labelY: y + 11,
+  };
+}
+
+function layoutCog(
+  x: number,
+  y: number,
+  w: number,
+  levels: RasterLevel[],
+): CogDrawing {
+  const roomy = w >= 290;
+  const cell = roomy ? 3 : 2.2;
+  const cellDepth = 2;
+  const slant = 0.62;
+  const full = levels[0].nx * cell;
+  const shearMax = levels[0].ny * cellDepth * slant;
+  const center = x + (full + shearMax) / 2;
+  const planes: Plane[] = [];
+  let top = y + 20;
+  for (let k = levels.length - 1; k >= 0; k--) {
+    const level = levels[k];
+    const pw = level.nx * cell;
+    const depth = level.ny * cellDepth;
+    const shear = depth * slant;
+    planes[k] = { level, x0: center - (pw + shear) / 2, y0: top, w: pw, depth, shear };
+    top += depth + 11;
+  }
+  return { x, y, barW: 72, planes, labelX: x + full + shearMax + (roomy ? 12 : 8) };
+}
+
+export interface Scene {
+  width: number;
+  height: number;
+  /** The wide form has the tree on the left and the drawings on the right. */
+  wide: boolean;
+  /** Size of the tree text, in CSS pixels. */
+  fontPx: number;
+  indent: number;
+  rowH: number;
+  rows: Row[];
+  trunks: Trunk[];
+  /** The left edge of the role notes, and their least gap from a name. */
+  noteX: number;
+  noteGap: number;
+  /** The tree draws from the top down between these shares of the move. */
+  treeFrom: number;
+  treeSpan: number;
+  parquet: ParquetDrawing;
+  cog: CogDrawing;
+  world: World;
+  /** The place of each point in its drawing, in CSS pixels. */
+  tx: Float32Array;
+  ty: Float32Array;
+  /** The globe at rest, and where it moves to before its points leave. */
+  globe: { cx0: number; cx1: number; cy: number; r0: number; r1: number };
+}
+
+/**
+ * Lay out the tree and both drawings for a figure of the given width, and
+ * give each point its place.
+ *
+ * In the wide form each drawing is beside its file name. In the stacked
+ * form it is under the name. A point goes to its own longitude and latitude
+ * on the vector map or on the full resolution raster, so the globe unwraps
+ * into both maps.
+ */
+export function buildScene(world: World, width: number): Scene {
+  const wide = width >= WIDE_FROM;
+  const small = width < 340;
+  const fontPx = small ? 12 : 13;
+  const indent = small ? 12 : 18;
+  const drawX = wide ? 196 : 0;
+
+  let y = 4;
+  let parquet: ParquetDrawing | null = null;
+  let cog: CogDrawing | null = null;
+  const rows: Row[] = [];
+  for (const spec of TREE) {
+    const x = spec.depth * indent;
+    if (!spec.drawing) {
+      rows.push({ ...spec, x, y, at: 0 });
+      y += ROW;
+      continue;
+    }
+    const h = spec.drawing === "parquet" ? PARQUET_H : COG_H;
+    let rowY = y;
+    let dx = x + 2;
+    let dy = y + ROW + 6;
+    if (wide) {
+      rowY = y + 6;
+      dx = drawX;
+      dy = rowY + 2;
+      y = rowY + h + 10;
+    } else {
+      y += ROW + 6 + h + 10;
+    }
+    if (spec.drawing === "parquet") parquet = layoutParquet(dx, dy, width - dx);
+    else cog = layoutCog(dx, dy, width - dx, world.levels);
+    rows.push({ ...spec, x, y: rowY, at: 0 });
+  }
+  const height = y + 2;
+  if (!parquet || !cog) throw new Error("hero tree lacks a drawing");
+  const parquetDrawing: ParquetDrawing = parquet;
+  const cogDrawing: CogDrawing = cog;
+
+  const treeFrom = wide ? 0.24 : 0.42;
+  const treeSpan = wide ? 0.3 : 0.34;
+  for (const row of rows) row.at = treeFrom + treeSpan * (row.y / height);
+
+  // One trunk per folder, down to its last child.
+  const trunks: Trunk[] = [];
+  const trunkOf = new Map<number, Trunk>();
+  rows.forEach((row, i) => {
+    if (row.depth === 0) return;
+    let parent = i - 1;
+    while (rows[parent].depth !== row.depth - 1) parent--;
+    let trunk = trunkOf.get(parent);
+    if (!trunk) {
+      trunk = {
+        x: (row.depth - 1) * indent + 4,
+        y0: rows[parent].y + ROW - 1,
+        y1: 0,
+      };
+      trunkOf.set(parent, trunk);
+      trunks.push(trunk);
+    }
+    trunk.y1 = row.y + ROW / 2;
+  });
+
+  const tx = new Float32Array(world.count);
+  const ty = new Float32Array(world.count);
+  const fullPlane = cogDrawing.planes[0];
+  for (let i = 0; i < world.count; i++) {
+    const u = world.u[i];
+    const v = clamp01(world.v[i]);
+    if (world.target[i] === 0) {
+      tx[i] = parquetDrawing.mx + u * parquetDrawing.mw;
+      ty[i] = parquetDrawing.my + v * parquetDrawing.mh;
+    } else {
+      const [px, py] = planePoint(fullPlane, u, v);
+      tx[i] = px;
+      ty[i] = py;
     }
   }
-  west -= probeX;
-  east += probeX;
-  north += probeY;
-  south -= probeY;
-  const aspect = (east - west) / (north - south);
 
-  // Fit that box inside the canvas with a small margin. Cropping to the
-  // land draws the continents larger than the whole projection would.
-  const padX = Math.max(8, Math.round(width * 0.025));
-  const padY = Math.max(8, Math.round(height * 0.03));
-  const mapW = Math.min(width - padX * 2, (height - padY * 2) * aspect);
-  const mapH = mapW / aspect;
-  const mapX = (width - mapW) / 2;
-  const mapY = (height - mapH) / 2;
-  const unit = mapW / (east - west);
-
-  // Size the sampling grid so the land holds a little over the budget.
-  const landArea = hits * probeX * probeY * unit * unit;
-  const cell = Math.sqrt(landArea / (budget * 1.05));
-
-  // A jittered grid spreads the points evenly without a visible lattice.
-  const cols = Math.ceil(mapW / cell);
-  const rows = Math.ceil(mapH / cell);
-  const sx: number[] = [];
-  const sy: number[] = [];
-  const slon: number[] = [];
-  const slat: number[] = [];
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const x = (c + 0.5 + (rand() - 0.5) * 0.92) * cell;
-      const y = (r + 0.5 + (rand() - 0.5) * 0.92) * cell;
-      const px = west + x / unit;
-      const py = north - y / unit;
-      if (!eeInverse(px, py, lonLat)) continue;
-      if (!isLand(world, lonLat[0], lonLat[1])) continue;
-      sx.push(mapX + x);
-      sy.push(mapY + y);
-      slon.push(lonLat[0]);
-      slat.push(lonLat[1]);
-    }
-  }
-  const sampled = sx.length;
-
-  // Pick the dot pitch that fills the blocks with the points on hand.
-  let pitch = 6;
-  while (pitch > 0.9 && capacityAt(layout, pitch * 0.995) <= sampled) {
-    pitch *= 0.995;
-  }
-  const count = Math.min(sampled, capacityAt(layout, pitch));
-
-  // Drop the surplus points evenly, so no region thins out.
-  const keep = new Uint8Array(sampled).fill(1);
-  const surplus = sampled - count;
-  if (surplus > 0) {
-    const stride = sampled / surplus;
-    for (let k = 0; k < surplus; k++) {
-      keep[Math.min(sampled - 1, Math.floor((k + rand()) * stride))] = 0;
-    }
-  }
-  const order: number[] = [];
-  for (let i = 0; i < sampled; i++) if (keep[i]) order.push(i);
-
-  // Order the map points along a Hilbert curve.
-  const ORDER = 9;
-  const side = 1 << ORDER;
-  const span = Math.max(mapW, mapH);
-  const key = new Float64Array(sampled);
-  for (const i of order) {
-    const hx = Math.min(side - 1, Math.floor(((sx[i] - mapX) / span) * side));
-    const hy = Math.min(side - 1, Math.floor(((sy[i] - mapY) / span) * side));
-    key[i] = hilbert(ORDER, hx, hy);
-  }
-  order.sort((a, b) => key[a] - key[b]);
-
-  const scene: Scene = {
+  const r0 = Math.floor(Math.min(width * 0.42, height * 0.44, 235));
+  const r1 = wide
+    ? Math.floor(Math.min((width - drawX) / 2 - 6, height * 0.4, 185))
+    : r0;
+  return {
     width,
     height,
-    count,
-    ax: new Float32Array(count),
-    ay: new Float32Array(count),
-    bx: new Float32Array(count),
-    by: new Float32Array(count),
-    delay: new Float32Array(count),
-    bend: new Float32Array(count),
-    sizeA: new Float32Array(count),
-    sizeB: new Float32Array(count),
-    toneA: new Uint8Array(count),
-    toneB: new Uint8Array(count),
-    labels: layout.labels,
-    fontPx: layout.fontPx,
-    rule: layout.rule,
+    wide,
+    fontPx,
+    indent,
+    rowH: ROW,
+    rows,
+    trunks,
+    noteX: wide ? drawX : small ? 150 : 176,
+    noteGap: small ? 6 : 12,
+    treeFrom,
+    treeSpan,
+    parquet: parquetDrawing,
+    cog: cogDrawing,
+    world,
+    tx,
+    ty,
+    globe: {
+      cx0: width / 2,
+      cx1: wide ? drawX + (width - drawX) / 2 : width / 2,
+      cy: Math.round(height / 2),
+      r0,
+      r1,
+    },
   };
-
-  // Collect every slot, file by file.
-  const dotB = Math.max(1, Math.min(1.9, pitch * 0.62));
-  let cursor = 0;
-  let out = 0;
-  for (const file of layout.files) {
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-    for (const rect of file.rects) {
-      minX = Math.min(minX, rect.x);
-      minY = Math.min(minY, rect.y);
-      maxX = Math.max(maxX, rect.x + rect.w);
-      maxY = Math.max(maxY, rect.y + rect.h);
-    }
-    const reach = Math.max(maxX - minX, maxY - minY, 1);
-
-    const slots: Array<{ x: number; y: number; tone: number; k: number }> = [];
-    for (const rect of file.rects) {
-      const [lc, lr] = latticeOf(rect, pitch);
-      const stepX = rect.w / lc;
-      const stepY = rect.h / lr;
-      for (let r = 0; r < lr; r++) {
-        for (let c = 0; c < lc; c++) {
-          const x = rect.x + (c + 0.5) * stepX;
-          const y = rect.y + (r + 0.5) * stepY;
-          const hx = Math.min(side - 1, Math.floor(((x - minX) / reach) * side));
-          const hy = Math.min(side - 1, Math.floor(((y - minY) / reach) * side));
-          slots.push({ x, y, tone: rect.tone, k: hilbert(ORDER, hx, hy) });
-        }
-      }
-    }
-    slots.sort((a, b) => a.k - b.k);
-
-    for (const slot of slots) {
-      if (out >= count || cursor >= order.length) break;
-      const i = order[cursor++];
-      const lon = slon[i];
-      const lat = slat[i];
-
-      // Tone on the map: height, a north-west light, and a little grain.
-      const z = elevation(world, lon, lat);
-      // Greenland's ice sheet is high ground. Hold it pale, as ice.
-      const ice = lat > 58 && lon > -75 && lon < -10 ? 0.3 : 1;
-      const high = Math.pow(clamp01(z / 0.042), 0.6) * ice;
-      const dzx =
-        elevation(world, lon + 2.5, lat) - elevation(world, lon - 2.5, lat);
-      const dzy =
-        elevation(world, lon, lat + 2.5) - elevation(world, lon, lat - 2.5);
-      const shade = Math.max(-1, Math.min(1, (dzx - dzy) * 60 * ice));
-      const grain =
-        valueNoise(lon * 0.09, lat * 0.09) * 0.45 +
-        valueNoise(lon * 0.31 + 40, lat * 0.31) * 0.55;
-
-      // Count the land around the point. A low count marks a coast.
-      let near = 0;
-      for (let k = 0; k < 8; k++) {
-        const ang = (k / 8) * Math.PI * 2;
-        if (isLand(world, lon + Math.cos(ang) * 1.6, lat + Math.sin(ang) * 1.2)) {
-          near++;
-        }
-      }
-      const inland = near / 8;
-
-      const tone = clamp01(
-        0.1 +
-          high * 0.56 +
-          shade * 0.3 +
-          (grain - 0.5) * 0.22 +
-          inland * 0.16 +
-          (rand() - 0.5) * 0.22,
-      );
-      const toneA = Math.round(tone * (RAMP - 1));
-
-      scene.ax[out] = sx[i];
-      scene.ay[out] = sy[i];
-      scene.bx[out] = slot.x;
-      scene.by[out] = slot.y;
-      scene.toneA[out] = toneA;
-      scene.toneB[out] = slot.tone < 0 ? toneA : slot.tone;
-      scene.sizeA[out] = 1.1 + tone * 0.6 + rand() * 0.5;
-      scene.sizeB[out] = dotB;
-
-      // The west leaves first, so the change crosses the map as a wave.
-      const across = (sx[i] - mapX) / mapW;
-      scene.delay[out] = clamp01(across * 0.6 + rand() * 0.4);
-      scene.bend[out] = 0.22 + (rand() - 0.5) * 0.08;
-      out++;
-    }
-  }
-  scene.count = out;
-  return scene;
-}
-
-/**
- * Write one frame's positions and sizes for the Canvas 2D renderer.
- *
- * The WebGL renderer does the same work in its vertex shader. `xyOut` holds
- * x and y pairs. `easeOut` holds each point's eased progress.
- */
-export function computeFrame(
-  scene: Scene,
-  morph: number,
-  xyOut: Float32Array,
-  easeOut: Float32Array,
-): void {
-  const { ax, ay, bx, by, delay, bend, count } = scene;
-  for (let i = 0; i < count; i++) {
-    const e = pointEase(morph, delay[i]);
-    const dx = bx[i] - ax[i];
-    const dy = by[i] - ay[i];
-    const swing = Math.sin(e * Math.PI) * bend[i];
-    xyOut[i * 2] = ax[i] + dx * e - dy * swing;
-    xyOut[i * 2 + 1] = ay[i] + dy * e + dx * swing;
-    easeOut[i] = e;
-  }
 }

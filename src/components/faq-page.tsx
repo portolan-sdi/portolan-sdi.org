@@ -11,7 +11,7 @@ import { useTranslations } from "next-intl";
 import { COMMUNITY_LINKS, SPEC_URL } from "@/lib/site";
 import { PageHero } from "./page-hero";
 import { FAQ_ITEMS as ITEMS } from "@/lib/faq";
-import { AWAY_ITEMS, SiteShell } from "./site-rail";
+import { SiteShell } from "./site-rail";
 import { monoChunk, PROSE_LINK } from "./ui";
 
 // Frequently asked questions.
@@ -25,8 +25,8 @@ import { monoChunk, PROSE_LINK } from "./ui";
 // no scroll reveal: the homepage already authors entrances, and a second
 // generic one here would be decoration rather than a moment.
 //
-// The rail keeps the site index and highlights its own FAQ entry. It does not
-// list the nine questions. That list would repeat the page without helping
+// The top bar marks the FAQ link. Nothing in the chrome lists the nine
+// questions. That list would repeat the page without helping
 // the reader.
 
 const RASHID_URL = "https://github.com/portolan-sdi/rashid";
@@ -87,7 +87,7 @@ export function FaqPage() {
   // rest: what Portolan adds on top of the standards it builds on.
   const [openId, setOpenId] = useState<string | null>(ITEMS[0].key);
 
-  // A link to /faq#lockIn, from the rail or from anywhere else, opens that
+  // A link to /faq#lockIn, from anywhere, opens that
   // answer and scrolls to it. `hashchange` covers later clicks; the first run
   // covers arriving with the hash already set.
   const pendingScroll = useRef<{ id: string; smooth: boolean } | null>(null);
@@ -99,7 +99,7 @@ export function FaqPage() {
 
   useEffect(() => {
     // An arrival is instant: the reader followed a link to this answer and
-    // expects to be there already. A later run is a click from the rail, where
+    // expects to be there already. A later run is a click on a link in the page, where
     // the movement shows the reader where the page went, so that one animates.
     let smooth = false;
     const apply = () => {
@@ -150,7 +150,7 @@ export function FaqPage() {
       setOpenId((prev) => (isOpen ? key : prev === key ? null : prev));
 
       // A row closed by hand while the hash still names it would swallow the
-      // next click on its own rail link, because the hash would not change.
+      // next click on a link to it, because the hash would not change.
       if (!isOpen && window.location.hash.slice(1) === key) {
         window.history.replaceState(
           null,
@@ -163,7 +163,7 @@ export function FaqPage() {
   );
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId="faq">
+    <SiteShell>
       <PageHero title={t("title")} />
 
       <section className="px-[var(--p-pad-section-x)] pb-[var(--p-pad-section-y)] pt-[clamp(28px,3.5vw,48px)]">
@@ -179,7 +179,7 @@ export function FaqPage() {
                 open={openId === key}
                 onToggle={handleToggle(key)}
                 data-instant={arrivalId === key ? "true" : undefined}
-                className="faq-row group/row scroll-mt-[76px] border-b border-p-line md:scroll-mt-6"
+                className="faq-row group/row scroll-mt-6 border-b border-p-line"
               >
                 <summary
                   className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--p-primary)_4%,var(--p-paper))] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-[-3px] focus-visible:outline-p-primary"

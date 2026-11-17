@@ -6,30 +6,19 @@
   "nav": {
     "registry": "Registro",
     "homeAria": "Inicio de Portolan",
+    "mainAria": "Principal",
     "languageAria": "Cambiar idioma",
     "index": "Índice",
-    "who": "Lo que hace posible",
-    "collapse": "Contraer el índice",
-    "expand": "Índice",
     "faq": "Preguntas frecuentes",
-    "coverage": "La red",
-    "overview": "Vista general",
-    "resources": "Recursos",
     "talks": "Charlas",
-    "toggleGroup": "Enlaces de {section}",
     "blog": "Blog",
-    "tutorials": "Guías y demostraciones",
-    "challenge": "El desafío",
-    "solution": "La solución",
-    "use": "En la práctica"
+    "tutorials": "Guías y demostraciones"
   },
   "hero": {
     "title": "Publica datos geoespaciales sin servidores, bases de datos ni APIs personalizadas.",
     "description": "Portolan es una <spec>especificación</spec> y un <eco>conjunto de herramientas</eco> de código abierto para publicar datos geoespaciales como archivos en almacenamiento en la nube compatible con S3.",
-    "howItWorks": "Cómo funciona",
-    "browseRegistry": "Ver el registro de catálogos",
     "figure": {
-      "description": "Un mapa animado. Miles de puntos dibujan los continentes y después se reorganizan en una lista de archivos dentro de un bucket de almacenamiento en la nube. La lista muestra un catálogo, su documentación y archivos de datos GeoParquet, PMTiles y COG. Luego los puntos vuelven a formar el mapa."
+      "description": "Una figura animada. Unos puntos dibujan la tierra firme sobre un globo que gira. Los puntos pasan a un catálogo de archivos en un bucket de almacenamiento en la nube. El catálogo es un catálogo STAC con su documentación, un archivo GeoParquet dibujado como una tabla de grupos de filas junto a un mapa de contornos de la tierra firme, y un COG dibujado como una pirámide del mismo mapa en tres resoluciones. Después los puntos vuelven al globo."
     }
   },
   "involved": {
@@ -50,8 +39,7 @@
     "development": "Desarrollo",
     "resources": "Recursos",
     "roadmap": "Hoja de ruta",
-    "github": "GitHub",
-    "imageCredit": "Fotografía de astronauta ISS075-E-70481, cortesía de la Earth Science and Remote Sensing Unit, NASA Johnson Space Center."
+    "github": "GitHub"
   },
   "whoFor": {
     "title": "Lo que Portolan hace posible",
@@ -92,7 +80,6 @@
     }
   },
   "howItWorks": {
-    "eyebrow": "Cómo funciona",
     "title": "Cómo funciona",
     "intro": "Usa la <cli>CLI de Portolan</cli> o las <skills>habilidades de agente</skills> para transformar tus datos existentes en un catálogo Portolan.",
     "steps": {
@@ -127,7 +114,9 @@
   "demo": {
     "title": "Una mejor forma de trabajar con datos geoespaciales",
     "blurb": "Empieza con preguntas reales, no con un guion. Mira cómo un agente encuentra catálogos relevantes en el registro de Portolan y responde preguntas complejas en lenguaje natural sobre el riesgo de inundación en Moldavia.",
-    "transcriptFloodRisk": "Una grabación solo de terminal muestra a un agente encontrar datos sobre el riesgo de inundación en Chisináu a través del registro activo de Portolan. Inspecciona el catálogo de datos geoespaciales de Moldavia y otros catálogos relacionados para buscar extensiones y profundidad de inundación, edificios, población, cobertura del suelo, hidrografía, carreteras, servicios y límites. Informa de escenarios de inundación de Moldavia con probabilidades anuales del 1%, 0,5% y 0,1%, extensiones por rotura de presas, capas de profundidad JRC GLOFAS y cuadrículas de población GHSL. Después calcula estimaciones de cribado de edificios y población expuestos y clasifica varios corredores de planificación. El resultado indica que las estimaciones no incluyen profundidad local, velocidad, tiempo de llegada ni datos de vulnerabilidad de edificios.",
+    "captionPhiladelphia": "Creando <catalog>un catálogo de Portolan</catalog> de principio a fin a partir de datos de vivienda de Filadelfia.",
+    "transcriptPhiladelphia": "Una grabación solo de terminal muestra a un agente crear y publicar un catálogo Portolan con diez conjuntos de datos de Open Data Philly. La solicitud nombra parcelas, uso del suelo, distritos base y superposiciones de zonificación, descripciones de zonificación, indicadores de propiedades vacantes, distritos del Ayuntamiento, huellas de edificios y producción de viviendas asequibles. El agente carga la habilidad de arranque de Portolan, investiga y descarga las fuentes, mejora los metadatos, crea miniaturas y estilos de mapa, valida el catálogo y lo publica. La terminal informa de unos 1,78 millones de entidades y confirma que todas las comprobaciones del catálogo pasan. También registra campos de origen sin resolver, detalles de licencia y problemas de herramientas antes de sincronizar los archivos y las guías de agentes publicados.",
+    "transcriptFloodRisk":"Una grabación solo de terminal muestra a un agente encontrar datos sobre el riesgo de inundación en Chisináu a través del registro activo de Portolan. Inspecciona el catálogo de datos geoespaciales de Moldavia y otros catálogos relacionados para buscar extensiones y profundidad de inundación, edificios, población, cobertura del suelo, hidrografía, carreteras, servicios y límites. Informa de escenarios de inundación de Moldavia con probabilidades anuales del 1%, 0,5% y 0,1%, extensiones por rotura de presas, capas de profundidad JRC GLOFAS y cuadrículas de población GHSL. Después calcula estimaciones de cribado de edificios y población expuestos y clasifica varios corredores de planificación. El resultado indica que las estimaciones no incluyen profundidad local, velocidad, tiempo de llegada ni datos de vulnerabilidad de edificios.",
     "play": "Reproducir la demo",
     "pause": "Pausar la demo",
     "fullscreen": "Ver la demo en pantalla completa",
@@ -135,7 +124,6 @@
     "seek": "Avanzar en la demo"
   },
   "ecosystem": {
-    "eyebrow": "Ecosistema",
     "title": "Ecosistema",
     "intro": "La especificación de Portolan se puede implementar de muchas maneras. Esta es una lista de herramientas del núcleo, aportadas por la comunidad y comerciales para facilitar la publicación y el uso de datos de Portolan.",
     "submit": "Proponer una herramienta",
@@ -171,7 +159,13 @@
   },
   "coverage": {
     "title": "Hacia una red federada",
-    "cta": "Explorar el registro",
+    "registryLink": "Abrir el registro completo",
+    "mapUnavailable": "El mapa no se cargó.",
+    "gestures": {
+      "windows": "Usa Ctrl + desplazamiento para acercar el mapa",
+      "mac": "Usa ⌘ + desplazamiento para acercar el mapa",
+      "mobile": "Usa dos dedos para mover el mapa"
+    },
     "about": "Este mapa muestra dónde hay datos disponibles en el registro de Portolan. Cada hexágono se sombrea según el número de catálogos distintos que tienen al menos una colección sobre esa zona.",
     "cell": {
       "catalogs": "{count, plural, one {# catálogo} other {# catálogos}}"
@@ -432,11 +426,13 @@
     }
   },
   "challenge": {
+    "eyebrow": "El desafío",
     "title": "Publicar datos geoespaciales todavía implica operar servidores, bases de datos y APIs.",
     "p1": "Durante décadas, publicar datos geoespaciales ha supuesto desplegar y mantener una infraestructura compleja y cara, mientras que usar esos datos ha exigido herramientas y conocimientos especializados.",
     "p2": "Esto tenía sentido cuando los archivos espaciales no podían consultarse de forma eficiente a través de la red. A medida que los conjuntos de datos se vuelven más grandes y complejos, y los agentes generan volúmenes de consultas para los que la infraestructura de servicio tradicional nunca fue diseñada, este modelo de infraestructura de datos espaciales resulta cada vez menos sostenible."
   },
   "solution": {
+    "eyebrow": "La solución",
     "title": "Una SDI ya puede ser archivos en almacenamiento en la nube.",
     "p1": "Los formatos de archivo optimizados para la nube y los metadatos STAC permiten organizar conjuntos de datos a escala de petabytes en almacenamiento de objetos y acceder a ellos de forma eficiente con herramientas estándar como QGIS y Python, o entregárselos a un agente.",
     "p2": "Cuando los usuarios pueden consultar los archivos directamente, los publicadores no necesitan mantener un servicio cuya función principal es situarse entre los usuarios y los datos.",
@@ -496,10 +492,9 @@
       },
       "agent": {
         "title": "Con un agente",
-        "caption": "La respuesta de un agente a partir del catálogo de TriMet y un conjunto de datos de arbolado viario",
-        "body": "El almacenamiento en la nube y los formatos optimizados para la nube pueden absorber los volúmenes de consultas mucho mayores que generan los agentes, mientras que los metadatos STAC y una documentación sólida les dan una forma consistente de descubrir los datos y usarlos correctamente.",
-        "question": "¿En qué paradas de autobús es peor esperar en un día caluroso?",
-        "answer": "El 23% de las paradas de autobús de Portland no tiene ningún árbol viario a menos de 100 ft, y el 59% no tiene ningún árbol de copa grande."
+        "alt": "Una terminal. Una persona pregunta a un agente qué datos del registro de Portolan ayudan a entender el riesgo de inundación en Chisináu, y el agente empieza a buscar en el registro.",
+        "caption": "Un agente evalúa el riesgo de inundación en Chisináu con catálogos del registro de Portolan",
+        "body": "El almacenamiento en la nube y los formatos optimizados para la nube pueden absorber los volúmenes de consultas mucho mayores que generan los agentes, mientras que los metadatos STAC y una documentación sólida les dan una forma consistente de descubrir los datos y usarlos correctamente."
       }
     }
   }

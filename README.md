@@ -28,3 +28,10 @@ pnpm lint     # eslint
 
 - Website: [portolan-sdi.org](https://portolan-sdi.org)
 - Source: [github.com/portolan-sdi](https://github.com/portolan-sdi)
+
+## Image credit
+
+The footer image is astronaut photograph ISS075-E-70481. It is courtesy of
+the Earth Science and Remote Sensing Unit, NASA Johnson Space Center. The
+source is the NASA Earth Observatory article
+[Monterrey Amid Mountains](https://science.nasa.gov/earth/earth-observatory/monterrey-amid-mountains/).

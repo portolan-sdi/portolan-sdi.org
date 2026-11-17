@@ -6,30 +6,19 @@
   "nav": {
     "registry": "Registry",
     "homeAria": "Portolan home",
+    "mainAria": "Main",
     "languageAria": "Change language",
     "index": "Index",
-    "who": "What it makes possible",
-    "collapse": "Collapse the index",
-    "expand": "Index",
     "faq": "FAQ",
-    "coverage": "The network",
-    "overview": "Overview",
-    "resources": "Resources",
     "talks": "Talks",
-    "toggleGroup": "{section} links",
     "blog": "Blog",
-    "tutorials": "Guides & demos",
-    "challenge": "The challenge",
-    "solution": "The solution",
-    "use": "In practice"
+    "tutorials": "Guides & demos"
   },
   "hero": {
     "title": "Publish geospatial data with no servers, databases, or custom APIs.",
     "description": "Portolan is an open-source <spec>specification</spec> and <eco>toolkit</eco> for publishing geospatial data as files in S3-compatible cloud storage.",
-    "howItWorks": "How it works",
-    "browseRegistry": "Browse the catalog registry",
     "figure": {
-      "description": "An animated map. Thousands of points draw the world's continents, then move into a list of files in a cloud storage bucket: a catalog, its documentation, and GeoParquet, PMTiles, and COG data files. Then the points move back into the map."
+      "description": "An animated figure. Points draw the land on a turning globe. The points move into a catalog of files in a cloud storage bucket. The catalog is a STAC catalog with its documentation, a GeoParquet file drawn as a table of row groups beside a map of land outlines, and a COG drawn as a pyramid of the same map at three resolutions. Then the points move back onto the globe."
     }
   },
   "involved": {
@@ -50,8 +39,7 @@
     "development": "Development",
     "resources": "Resources",
     "roadmap": "Roadmap",
-    "github": "GitHub",
-    "imageCredit": "Astronaut photograph ISS075-E-70481, courtesy of the Earth Science and Remote Sensing Unit, NASA Johnson Space Center."
+    "github": "GitHub"
   },
   "whoFor": {
     "title": "What Portolan makes possible",
@@ -92,7 +80,6 @@
     }
   },
   "howItWorks": {
-    "eyebrow": "How it works",
     "title": "How it works",
     "intro": "Use the <cli>Portolan CLI</cli> or <skills>agent skills</skills> to transform your existing data into a Portolan catalog.",
     "steps": {
@@ -127,7 +114,9 @@
   "demo": {
     "title": "A better way to work with geospatial data",
     "blurb": "Start with real questions, not a script. Watch an agent find relevant catalogs in the Portolan registry and answer complex, natural-language questions about flood risk in Moldova.",
-    "transcriptFloodRisk": "A terminal-only recording shows an agent find data about flood risk in Chisinau through the live Portolan registry. It inspects the Moldova geodata catalog and related catalogs for flood extents, flood depth, buildings, population, land cover, hydrography, roads, utilities, and boundaries. It reports Moldova flood scenarios for 1%, 0.5%, and 0.1% annual probabilities, dam-breach extents, JRC GLOFAS depth layers, and GHSL population grids. It then calculates screening estimates for exposed buildings and population, and ranks several planning corridors. The result notes that the estimates lack local depth, velocity, arrival time, and building-vulnerability data.",
+    "captionPhiladelphia": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
+    "transcriptPhiladelphia": "A terminal-only recording shows an agent create and publish a Portolan catalog from ten Open Data Philly datasets. The request names property parcels, land use, zoning base districts and overlays, zoning descriptions, vacant-property indicators, City Council districts, building footprints, and affordable housing production. The agent loads the Portolan bootstrap skill, researches and downloads the sources, enriches metadata, creates thumbnails and map styles, validates the catalog, and publishes it. The terminal reports about 1.78 million features and that all catalog gates pass. It also records unresolved source fields, license details, and upstream tool issues before it syncs the published catalog files and agent guides.",
+    "transcriptFloodRisk":"A terminal-only recording shows an agent find data about flood risk in Chisinau through the live Portolan registry. It inspects the Moldova geodata catalog and related catalogs for flood extents, flood depth, buildings, population, land cover, hydrography, roads, utilities, and boundaries. It reports Moldova flood scenarios for 1%, 0.5%, and 0.1% annual probabilities, dam-breach extents, JRC GLOFAS depth layers, and GHSL population grids. It then calculates screening estimates for exposed buildings and population, and ranks several planning corridors. The result notes that the estimates lack local depth, velocity, arrival time, and building-vulnerability data.",
     "play": "Play the demo",
     "pause": "Pause the demo",
     "fullscreen": "Show the demo full screen",
@@ -135,7 +124,6 @@
     "seek": "Seek in the demo"
   },
   "ecosystem": {
-    "eyebrow": "Ecosystem",
     "title": "Ecosystem",
     "intro": "The Portolan specification can be implemented in a number of ways. Here is a list of core, community-contributed, and commercial tools to make publishing and working with Portolan data easy.",
     "submit": "Submit a tool",
@@ -171,7 +159,13 @@
   },
   "coverage": {
     "title": "Toward a federated network",
-    "cta": "Browse the registry",
+    "registryLink": "Open the full registry",
+    "mapUnavailable": "The map did not load.",
+    "gestures": {
+      "windows": "Use Ctrl + scroll to zoom the map",
+      "mac": "Use ⌘ + scroll to zoom the map",
+      "mobile": "Use two fingers to move the map"
+    },
     "about": "This map shows where data in the Portolan registry is available. Each hexagon is shaded by the number of distinct catalogs with at least one collection covering that area.",
     "cell": {
       "catalogs": "{count, plural, one {# catalog} other {# catalogs}}"
@@ -432,11 +426,13 @@
     }
   },
   "challenge": {
+    "eyebrow": "The challenge",
     "title": "Publishing geospatial data still means running servers, databases, and APIs.",
     "p1": "For decades, publishing geospatial data has meant deploying and maintaining complex, expensive infrastructure, while using that data has required specialized tools and expertise.",
     "p2": "This made sense when spatial files couldn't be queried efficiently over the network. As datasets grow larger and more complex, and agents generate query volumes that traditional serving infrastructure was never designed for, this model of Spatial Data Infrastructure is becoming less sustainable."
   },
   "solution": {
+    "eyebrow": "The solution",
     "title": "An SDI can now be files in cloud storage.",
     "p1": "Cloud-optimized file formats and STAC metadata make it possible to organize petabyte-scale datasets in object storage and efficiently access them with standard tools like QGIS and Python, or hand them to an agent.",
     "p2": "Once users can query files directly, publishers don't need to maintain a service whose main job is to stand between users and the data.",
@@ -496,10 +492,9 @@
       },
       "agent": {
         "title": "With an agent",
-        "caption": "An agent's answer from the TriMet catalog and a street tree dataset",
-        "body": "Cloud storage and cloud-optimized formats can handle the much higher query volumes agents generate, while STAC metadata and strong documentation give them a consistent way to discover data and use it correctly.",
-        "question": "Which bus stops are the worst place to wait on a hot day?",
-        "answer": "23% of Portland bus stops have no street tree at all within 100 ft, and 59% have no large-canopy tree."
+        "alt": "A terminal. A person asks an agent what data in the Portolan registry helps to understand flood risk in Chisinau, and the agent starts to search the registry.",
+        "caption": "An agent ranks flood risk in Chisinau from catalogs in the Portolan registry",
+        "body": "Cloud storage and cloud-optimized formats can handle the much higher query volumes agents generate, while STAC metadata and strong documentation give them a consistent way to discover data and use it correctly."
       }
     }
   }

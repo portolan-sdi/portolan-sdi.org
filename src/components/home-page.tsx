@@ -12,18 +12,13 @@ import { SolutionSection } from "./home/solution-section";
 import { PracticeSection } from "./home/practice-section";
 import { HowSection } from "./home/how-section";
 
-/** The homepage. The sections follow a challenge, solution, impact order, and
- *  the rail lists them in the same order. */
+/** The homepage. The sections follow a challenge, solution, impact order. */
 export function HomePage() {
   return (
     <SiteShell>
       {/* Hero. The figure beside the headline is the one moving element on
           the page. */}
       <HeroSection />
-
-      {/* Users and supporters. The strip sits under the hero, so the reader
-          meets the organizations before the argument starts. */}
-      <InvolvedSection />
 
       {/* The challenge. One of two solid color bands on the page. */}
       <ChallengeSection />
@@ -36,6 +31,10 @@ export function HomePage() {
 
       {/* Portolan in practice. The second solid band, in ink. */}
       <PracticeSection />
+
+      {/* Users and supporters. The logo strip follows the practice band, so
+          the reader sees who uses Portolan after the examples. */}
+      <InvolvedSection />
 
       {/* Toward a federated network. The coverage map and the IDE Pergamino
           block run full bleed. */}

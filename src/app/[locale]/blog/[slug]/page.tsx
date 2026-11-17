@@ -71,7 +71,7 @@ export default async function Post({ params }: PageProps) {
   if (!post) notFound();
 
   const { default: Body } = await import(`@/content/blog/${slug}.mdx`);
-  // The rail lists the body's sections. The page prerenders, so this read
+  // `PostToc` lists the body's sections. The page prerenders, so this read
   // runs at build time.
   const sections = extractHeadings(
     await readFile(

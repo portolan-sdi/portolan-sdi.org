@@ -58,9 +58,16 @@ export function SolutionSection() {
     >
       <div className="max-w-[1240px] mx-auto flex flex-col gap-[clamp(40px,5vw,56px)]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-7 items-start">
-          <h2 className="text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-balance">
-            {t("title")}
-          </h2>
+          <div>
+            {/* One of the two eyebrows on the homepage. The other is on the
+                challenge section. */}
+            <p className="font-mono rtl:font-sans! text-eyebrow text-p-ink-3">
+              {t("eyebrow")}
+            </p>
+            <h2 className="mt-3 text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-balance">
+              {t("title")}
+            </h2>
+          </div>
           <div className="flex flex-col gap-5 max-w-[60ch] text-p-ink-2">
             <p className="text-lead leading-relaxed">{t("p1")}</p>
             <p className="text-lead leading-relaxed">{t("p2")}</p>

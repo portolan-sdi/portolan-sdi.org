@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRevealed } from "@/hooks/use-revealed";
 import { PageHero } from "./page-hero";
-import { AWAY_ITEMS, SiteShell } from "./site-rail";
+import { SiteShell } from "./site-rail";
 import { DirArrow, Ltr, monoChunk } from "./ui";
 
 // Talks & demos as a source wall: white paper cards, ruled in black, carrying a
@@ -20,7 +20,7 @@ import { DirArrow, Ltr, monoChunk } from "./ui";
 //
 // This was a homepage section until the site went multi-page. It now owns a
 // route, so the page header band above carries the h1 and this section carries
-// no id (the rail entry is named by activeId).
+// no id.
 
 type Item = {
   key: string;
@@ -81,7 +81,7 @@ export function TalksPage() {
   const { ref, revealed } = useRevealed<HTMLElement>();
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId="talks">
+    <SiteShell>
       <PageHero title={t("title")} />
 
       <section
