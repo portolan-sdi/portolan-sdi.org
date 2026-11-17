@@ -930,210 +930,14 @@ html {
 /* ======================================================================
    Pipeline figure (`pipe-`)
    The figure in the homepage solution section, in
-   `src/components/home/pipeline-figure.tsx`. Two halves on one clock. The
-   left half is a Claude Code session, in DOM. The right half is one canvas,
-   drawn by `pipeline-renderer.ts`. The four step labels sit under the
-   canvas. The figure is LTR in every locale, so the sides here are
-   physical. Only the step labels follow the page direction.
+   `src/components/home/pipeline-figure.tsx`. One canvas, drawn by
+   `pipeline-renderer.ts`, with the four step labels under it. The figure
+   is LTR in every locale. Only the step labels follow the page direction.
    ====================================================================== */
 .pipe-fig {
-  /* The session is the one dark surface. Each step mixes palette tokens,
-     so the session adds no hex. */
-  --pipe-t-bg: var(--p-ink);
-  --pipe-t-fg: color-mix(in srgb, var(--p-bg-soft) 70%, var(--p-line-soft));
-  --pipe-t-dim: color-mix(in srgb, var(--p-ink-3) 72%, var(--p-bg));
-  /* For glyphs only. Text needs a contrast of 4.5 to 1 on the ground. */
-  --pipe-t-dimmer: color-mix(in srgb, var(--p-ink-3) 91%, var(--p-ink));
-  --pipe-t-rule: color-mix(in srgb, var(--p-ink-2) 92%, var(--p-ink));
-  --pipe-t-band: color-mix(in srgb, var(--p-ink-2) 56%, var(--p-ink));
-  --pipe-t-accent: var(--p-primary);
-  --pipe-t-accent-text: color-mix(in srgb, var(--p-primary) 50%, var(--p-paper));
-
-  /* The fixed heights. The session and the scene share one height from
-     `lg`, where they sit side by side. */
-  --pipe-h: 560px;
-  --pipe-session-h: 420px;
+  /* The fixed height of the scene. It is taller from `lg`, where the
+     figure sits beside the text of the section. */
   --pipe-scene-h: 540px;
-}
-.pipe-halves {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 20px;
-}
-
-/* The session. It keeps the glyphs of Claude Code. */
-.pipe-session {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  height: var(--pipe-session-h);
-  overflow: hidden;
-  background: var(--pipe-t-bg);
-  color: var(--pipe-t-fg);
-  font-family: var(--p-mono);
-  font-size: var(--text-eyebrow);
-  line-height: 19px;
-}
-.pipe-session b {
-  font-weight: 700;
-  color: var(--pipe-t-fg);
-}
-.pipe-view {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-.pipe-scroll {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding-top: 14px;
-  will-change: transform;
-}
-.pipe-welcome {
-  padding: 0 16px 14px;
-}
-.pipe-box {
-  border: 1px solid var(--pipe-t-accent);
-  border-radius: var(--p-code-radius);
-  padding: 8px 12px;
-}
-.pipe-box p {
-  margin: 0;
-  color: var(--pipe-t-fg);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.pipe-box .star {
-  color: var(--pipe-t-accent-text);
-}
-.pipe-box .dim {
-  color: var(--pipe-t-dim);
-}
-.pipe-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.pipe-row,
-.pipe-pin,
-.pipe-input,
-.pipe-foot {
-  display: grid;
-  grid-template-columns: 20px minmax(0, 1fr);
-  padding-left: 12px;
-  padding-right: 12px;
-}
-.pipe-row > span:last-child {
-  min-width: 0;
-}
-.pipe-row .g {
-  color: var(--pipe-t-fg);
-}
-.pipe-row .tok {
-  color: var(--pipe-t-accent-text);
-}
-.pipe-row.is-nw > span:last-child,
-.pipe-row.is-res > span:last-child,
-.pipe-row.is-list > span:last-child,
-.pipe-row.is-spin > span:last-child,
-.pipe-pin > span:last-child {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.pipe-row.is-user {
-  padding-top: 3px;
-  padding-bottom: 3px;
-  background: var(--pipe-t-band);
-}
-.pipe-row.is-user .g,
-.pipe-row.is-done .g,
-.pipe-pin .g {
-  color: var(--pipe-t-dimmer);
-}
-.pipe-row.is-tool .g {
-  color: var(--pipe-t-accent);
-}
-.pipe-row.is-tool.is-running .g {
-  color: var(--pipe-t-dim);
-}
-.pipe-row.is-tool .arg {
-  color: var(--pipe-t-fg);
-}
-.pipe-row.is-res,
-.pipe-row.is-list {
-  margin-top: -6px;
-}
-.pipe-row.is-res > span:last-child,
-.pipe-row.is-spin > span:last-child,
-.pipe-row.is-done > span:last-child {
-  color: var(--pipe-t-dim);
-}
-.pipe-row.is-res .hi {
-  color: var(--pipe-t-fg);
-}
-.pipe-row.is-res.is-running .hi,
-.pipe-row.is-spin .verb {
-  color: var(--pipe-t-accent-text);
-}
-.pipe-row.is-spin .g {
-  color: var(--pipe-t-accent);
-}
-/* The prompt stays pinned at the top once the transcript scrolls past it,
-   so the request stays in view next to the work it started. */
-.pipe-pin {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  padding-top: 9px;
-  padding-bottom: 6px;
-  background: var(--pipe-t-band);
-  border-bottom: 1px solid var(--pipe-t-rule);
-  visibility: hidden;
-}
-.pipe-input {
-  flex: none;
-  align-items: center;
-  padding-top: 9px;
-  padding-bottom: 9px;
-  border-top: 1px solid var(--pipe-t-rule);
-  border-bottom: 1px solid var(--pipe-t-rule);
-}
-.pipe-field {
-  display: flex;
-  align-items: center;
-  min-height: 19px;
-  overflow: hidden;
-  white-space: pre;
-}
-.pipe-caret {
-  flex: none;
-  display: inline-block;
-  width: 8px;
-  height: 16px;
-  background: var(--pipe-t-accent-text);
-}
-.pipe-foot {
-  flex: none;
-  padding-top: 6px;
-  padding-bottom: 9px;
-  color: var(--pipe-t-dim);
-  white-space: nowrap;
-}
-.pipe-foot > span:last-child {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pipe-foot strong {
-  color: var(--pipe-t-accent-text);
-  font-weight: 700;
 }
 
 /* The scene. The canvas paints its own ground in --p-bg, so the
@@ -1154,10 +958,6 @@ html {
 
 /* The four steps, named under the scene. The arrow points the way the
    page reads. */
-.pipe-under {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-}
 .pipe-steps {
   display: flex;
   flex-wrap: wrap;
@@ -1190,26 +990,8 @@ html {
   color: var(--p-primary-ink);
 }
 
-/* From `lg` the halves sit side by side at one height. */
 @media (min-width: 64rem) {
   .pipe-fig {
-    --pipe-session-h: var(--pipe-h);
-    --pipe-scene-h: var(--pipe-h);
-  }
-  .pipe-halves,
-  .pipe-under {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 32px;
-  }
-  .pipe-row,
-  .pipe-pin,
-  .pipe-input,
-  .pipe-foot {
-    grid-template-columns: 24px minmax(0, 1fr);
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-  .pipe-steps {
-    grid-column: 2;
+    --pipe-scene-h: 560px;
   }
 }
