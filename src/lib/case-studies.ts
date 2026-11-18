@@ -33,15 +33,15 @@ export type CaseStudy = CaseStudyMeta & { slug: string };
 
 // Turbopack resolves this pattern at build time. The keys are the file
 // paths, sorted by name.
-const FILES = import.meta.glob<CaseStudyMeta>(
+const FILES = import.meta.glob<{ default: CaseStudyMeta }>(
   "../content/case-studies/*.meta.ts",
-  { eager: true, import: "default" },
+  { eager: true },
 );
 
 /** Every study, newest first. Studies of one date are in slug order. */
 export const CASE_STUDIES: CaseStudy[] = Object.entries(FILES)
-  .map(([path, meta]) => ({
-    ...meta,
+  .map(([path, file]) => ({
+    ...file.default,
     slug: path.replace(/^.*\//, "").replace(/\.meta\.ts$/, ""),
   }))
   .sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug));
