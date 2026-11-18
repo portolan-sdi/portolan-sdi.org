@@ -1,29 +1,25 @@
-import localFont from "next/font/local";
+import { Montserrat, Open_Sans } from "next/font/google";
 
-// The two faces of Rowhouse Atlas, the fictional publisher whose portal ends
-// the solution figure. They draw only on that figure's canvas, so they are
-// not part of the site type. Both are under the SIL Open Font License 1.1,
-// and the licence texts are next to the files in `./fonts/`. The files are
-// subset to Latin-1. The italic is one static instance, because it sets one
-// word.
+// The two faces of the sample portal that ends the solution figure. They
+// are the faces of the City of Philadelphia digital standards, and they
+// draw only on that figure's canvas, so they are not part of the site
+// type. Both are under the SIL Open Font License 1.1.
 //
 // Neither face is preloaded. The figure is below the fold, and its canvas
 // asks for the faces itself before its first frame.
-export const portalSerif = localFont({
-  src: [
-    { path: "./fonts/Fraunces.woff2", weight: "100 900", style: "normal" },
-    { path: "./fonts/FrauncesItalic.woff2", weight: "400", style: "italic" },
-  ],
-  variable: "--pipe-font-serif",
+export const portalHead = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--pipe-font-head",
   display: "swap",
   preload: false,
   adjustFontFallback: false,
 });
 
-export const portalSans = localFont({
-  src: "./fonts/InstrumentSans.woff2",
-  weight: "400 700",
-  variable: "--pipe-font-sans",
+export const portalBody = Open_Sans({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--pipe-font-body",
   display: "swap",
   preload: false,
   adjustFontFallback: false,

@@ -432,12 +432,13 @@
     "p2": "Cuando los usuarios pueden consultar los archivos directamente, los publicadores no necesitan mantener un servicio cuya función principal es situarse entre los usuarios y los datos.",
     "figure": {
       "steps": {
-        "ingest": "Ingerir",
-        "convert": "Convertir",
-        "catalog": "Catalogar",
-        "publish": "Publicar"
+        "extract": "Extraer y convertir",
+        "catalog": "Publicar un catálogo",
+        "build": "Construir encima"
       },
-      "description": "Una figura animada en dos mitades. A la izquierda, una sesión de Claude Code con las habilidades de Portolan publica cuatro capas de Filadelfia que están en cuatro sistemas existentes. Las parcelas son un Shapefile en una unidad compartida y el uso del suelo es un GeoPackage en un escritorio. Las huellas de los edificios están detrás de un servicio de entidades ArcGIS REST y las zonas base están detrás de un servicio WFS. A la derecha, los archivos se copian y los servicios se consultan página por página. Cada capa se convierte en GeoParquet y PMTiles. Las cuatro colecciones pasan a un catálogo en s3://your-bucket/, junto a catalog.json, README.md y AGENTS.md. Tras la subida, el catálogo se convierte en el portal de datos de un editor ficticio, servido desde el mismo bucket."
+      "previous": "Paso anterior",
+      "next": "Paso siguiente",
+      "description": "Una figura animada en tres pasos. En el primer paso, cuatro capas de Filadelfia salen de cuatro sistemas existentes, que son un Shapefile, un GeoPackage, un servicio de entidades ArcGIS REST y un servicio WFS. Cada capa se convierte en GeoParquet y PMTiles. En el segundo paso, las cuatro colecciones pasan a un catálogo en s3://your-bucket/, junto a catalog.json, README.md y AGENTS.md. En el tercer paso, el catálogo se convierte en el portal de datos de un editor ficticio, servido desde el mismo bucket. Los botones bajo la figura reproducen cada paso."
     },
     "blocks": {
       "standards": {

@@ -40,3 +40,12 @@ The image behind the "Why Portolan" band on the homepage is a NASA Earth
 Observatory image made with Landsat data from the U.S. Geological Survey.
 The source is the NASA Earth Observatory article
 [An Agricultural Mosaic in Taiwan](https://science.nasa.gov/earth/earth-observatory/an-agricultural-mosaic-in-taiwan/).
+
+The figure in the solution section of the homepage uses three more items.
+The QGIS icon in `public/img/home/pipeline/qgis.svg` is from the
+[QGIS repository](https://github.com/qgis/QGIS/blob/master/images/icons/qgis_icon.svg).
+QGIS is a trademark of QGIS.ORG. The robot icon is the "bot" icon of
+[Lucide](https://lucide.dev/icons/bot), under the ISC license. The sample
+portal uses the colors and the faces of the
+[City of Philadelphia digital standards](https://standards.phila.gov/).
+The City of Philadelphia did not make or approve the portal.
