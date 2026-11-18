@@ -26,7 +26,7 @@ export function CaseStudiesIndexPage() {
                 <h2>
                   <Link href={`/case-studies/${study.slug}`} className="inline-block">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={study.logo} alt={study.title} width={2500} height={600} className="h-12 w-auto max-w-full object-contain brightness-0 sm:h-16" />
+                    <img src={study.logo} alt={study.title} width={2500} height={600} className={`h-12 w-auto max-w-full object-contain sm:h-16${study.preserveLogoColors ? "" : " brightness-0"}`} />
                   </Link>
                 </h2>
                 <p className="mt-4 text-body leading-relaxed text-p-ink-2" dir="ltr">{study.summary}</p>

@@ -5,6 +5,7 @@ export type CaseStudy = BlogPost & {
   image: string;
   imageAlt: string;
   logo: string;
+  preserveLogoColors?: boolean;
 };
 
 export const CASE_STUDIES: CaseStudy[] = [
@@ -14,9 +15,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     subtitle: "Connecting water data with GeoConnex",
     date: "2026-11-18",
     summary: "The Lincoln Institute's Center for Geospatial Solutions publishes GeoConnex water data as a Portolan catalog. Draft for Colton Loftus.",
-    image: "/img/case-studies/geoconnex-watersheds.jpg",
-    imageAlt: "GeoConnex watershed boundaries across the central United States, rendered from its published PMTiles data.",
-    logo: "/logos/lincoln-institute.png",
+    image: "/img/case-studies/geoconnex-colorado.jpg",
+    imageAlt: "GeoConnex stream gages and river-basin boundaries around Denver and Boulder, Colorado, on a labeled map.",
+    logo: "/img/case-studies/lincoln-color-logo.png",
+    preserveLogoColors: true,
   },
   {
     slug: "epoch-blue",

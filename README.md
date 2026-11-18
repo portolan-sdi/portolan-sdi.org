@@ -58,7 +58,10 @@ The case study list shows a screenshot of the
 by Jake Wilkins, built with deck.gl-raster by Kyle Barron. The article embeds
 that viewer directly.
 
-The GeoConnex case study uses the existing Lincoln Institute wordmark and
-embeds the [GeoConnex catalog](https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json).
-Its thumbnail renders the catalog's [HUC12 watershed PMTiles](https://storage.googleapis.com/harvest-geoconnex-us/exports/pmtiles/ref:hu12.pmtiles)
-with MapLibre, under the collection's CC0-1.0 license.
+The GeoConnex case study uses the unmodified color horizontal logo from
+[Lincoln Institute's official brand kit](https://www.lincolninst.edu/app/uploads/2024/09/lilp-brand-manual-and-logos.zip)
+and embeds the [GeoConnex catalog](https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json).
+Its thumbnail maps [Colorado stream gages](https://storage.googleapis.com/harvest-geoconnex-us/exports/pmtiles/iow:state_gages:cdss.pmtiles)
+and [HUC08 river basins](https://storage.googleapis.com/harvest-geoconnex-us/exports/pmtiles/ref:hu08.pmtiles)
+around Denver and Boulder. Both layers are CC0-1.0. The labeled basemap is
+© OpenStreetMap contributors © CARTO, with attribution in the image.
