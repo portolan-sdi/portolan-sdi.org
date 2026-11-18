@@ -43,6 +43,9 @@ is from the
 [NASA Earth Observatory image library](https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/154000/154789/iss073e0176299_lrg.jpg).
 The site shows it in grayscale, cropped.
 
+Each case study lists the sources of its own media in
+`src/content/case-studies/<slug>.credits.md`.
+
 The figure in the solution section of the homepage uses three more items.
 The QGIS icon in `public/img/home/pipeline/qgis.svg` is from the
 [QGIS repository](https://github.com/qgis/QGIS/blob/master/images/icons/qgis_icon.svg).

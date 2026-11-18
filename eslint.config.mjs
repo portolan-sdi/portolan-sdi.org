@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Git worktrees of other branches, with their own build output.
+    ".worktrees/**",
   ]),
 ]);
 

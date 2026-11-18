@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { readdirSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 
 const locales = [
@@ -7,14 +8,30 @@ const locales = [
   { id: "ar", prefix: "/ar" },
 ] as const;
 
-const routes = [
+interface Route {
+  id: string;
+  path: string;
+  /** True for a case study, which can embed a frame from another site. */
+  study?: boolean;
+}
+
+// One route for each case study body in the folder. A new study gets its
+// scan with no edit to this file.
+const CASE_STUDY_ROUTES: Route[] = readdirSync("src/content/case-studies")
+  .filter((file) => file.endsWith(".mdx"))
+  .map((file) => file.replace(/\.mdx$/, ""))
+  .map((slug) => ({ id: slug, path: `/case-studies/${slug}`, study: true }));
+
+const routes: Route[] = [
   { id: "home", path: "" },
   { id: "faq", path: "/faq" },
+  { id: "case-studies", path: "/case-studies" },
+  ...CASE_STUDY_ROUTES,
   { id: "talks", path: "/talks" },
   { id: "ecosystem", path: "/ecosystem" },
   { id: "how-it-works", path: "/how-it-works" },
   { id: "registry", path: "/registry" },
-] as const;
+];
 
 const viewports = [
   { id: "mobile", width: 390, height: 844 },
@@ -51,6 +68,12 @@ for (const locale of locales) {
         // marker button, so axe sees a third-party nested-control violation.
         // Keep the wrapper out of axe and enforce our own marker-size rule.
         if (route.id === "registry") axe.exclude(".maplibregl-marker");
+        if (route.study) {
+          // A study can embed a viewer from another site. That site owns
+          // the styles and the controls inside its frame.
+          axe.exclude(".post-figure iframe");
+        }
+
         const results = await axe.analyze();
         const seriousViolations = results.violations.filter((violation) =>
           seriousImpacts.has(violation.impact ?? ""),

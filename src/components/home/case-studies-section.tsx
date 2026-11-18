@@ -10,6 +10,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { getBrowserUrl } from "@/lib/catalogs";
+import { getCaseStudyForCard } from "@/lib/case-studies";
 import { getDirection } from "@/i18n/direction";
 import { DirArrow } from "../ui";
 
@@ -90,6 +91,16 @@ const CASES = [
     internal: false,
   },
 ] as const;
+
+// A card opens its case study when a study names the card in its
+// `homeCard` field. Until then the card keeps the link above. So a new
+// study changes its own files only, and this file stays as it is.
+const CARDS = CASES.map((item) => {
+  const study = getCaseStudyForCard(item.key);
+  return study
+    ? { ...item, href: `/case-studies/${study.slug}`, internal: true, study: true }
+    : { ...item, study: false };
+});
 
 /** The card is one link, so a tag inside its text renders as plain text. */
 const PLAIN_TAGS = {
@@ -196,7 +207,7 @@ export function CaseStudiesSection() {
           tabIndex={0}
           className="mt-[clamp(2rem,3.5vw,3rem)] flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 me-[calc((100%_-_100vw)/2)] pe-[var(--p-pad-section-x)] [scrollbar-width:thin] [scrollbar-color:var(--p-ink)_transparent]"
         >
-          {CASES.map((item) => {
+          {CARDS.map((item) => {
             const cardClass = `${CARD} bg-p-ink`;
             const inner = (
               <>
@@ -251,7 +262,7 @@ export function CaseStudiesSection() {
                 {/* TODO: add the statement from the Municipality of Pergamino to its card when it arrives. */}
                 <span className="mt-auto pt-7">
                   <span className="inline-flex items-center gap-2 border-b-2 border-p-bg pb-1 font-sans text-body font-semibold leading-snug text-p-bg transition-colors group-hover:border-p-primary group-hover:text-p-primary group-focus-visible:border-p-primary group-focus-visible:text-p-primary">
-                    {t(`items.${item.key}.link`)}
+                    {item.study ? t("readStudy") : t(`items.${item.key}.link`)}
                     <DirArrow kind={item.internal ? "forward" : "external"} />
                   </span>
                 </span>

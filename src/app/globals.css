@@ -1023,3 +1023,10 @@ html {
     --pipe-scene-h: 560px;
   }
 }
+
+@media (min-width: 1024px) {
+  .post-figure.post-figure-wide {
+    display: block;
+    width: min(1240px, calc(100vw - 2 * var(--p-pad-section-x)));
+  }
+}
