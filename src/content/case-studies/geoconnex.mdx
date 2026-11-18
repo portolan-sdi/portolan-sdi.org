@@ -1,0 +1,78 @@
+import { PostFigure } from "@/components/blog/post-figure";
+
+*Draft for Colton Loftus · Water data · Linked data · Open formats*
+
+## Background
+
+A river can have monitoring stations, water-quality samples, and infrastructure records spread across different organizations. [GeoConnex](https://internetofwater.org/geoconnex/) gives those organizations a shared way to identify the river and connect their data to it.
+
+The Lincoln Institute of Land Policy's [Center for Geospatial Solutions](https://www.lincolninst.edu/centers-initiatives/center-geospatial-solutions/key-initiatives/) develops GeoConnex with USGS and the Internet of Water Coalition. Publishers keep responsibility for their source data. GeoConnex harvests their metadata and builds the links that make it discoverable across organizational boundaries.
+
+<PostFigure
+  n={1}
+  wide
+  src="/img/case-studies/geoconnex-explorer.webp"
+  alt="The GeoConnex Explorer showing the Mississippi River highlighted through a network of rivers, with orange clusters of linked data sites."
+  caption="GeoConnex in action. The team's published Explorer view highlights the Mississippi River and linked data sites. Screenshot published by the Internet of Water Coalition."
+  href="https://explorer.geoconnex.us/"
+/>
+
+## Challenge
+
+Finding water data is more complicated than searching for a river's name. The [Internet of Water describes](https://internetofwater.org/blog/uncategorized/geoconnex-community-system-for-water-data-management-usgs) incompatible naming conventions and metadata spread across agencies. Even a name such as Colorado River can refer to [different rivers](https://internetofwater.org/blog/unlocking-the-full-potential-of-water-data-usgs-and-the-internet-of-water). An analyst needs to establish which feature a record describes before combining it with anything else.
+
+GeoConnex addresses that problem with persistent identifiers and a knowledge graph. The next publishing problem is making those linked features convenient for people working with spatial tables and web maps. A graph relationship, a queryable table, and a map each serve a different task.
+
+*Colton — describe one actual request that motivated the exports. Who needed which data, and what steps did they previously take through the graph, APIs, or source files? Give the old workflow and its main obstacle.*
+
+## Solution, results, and impact
+
+### Publish the features as well as the links
+
+The [GeoConnex scheduler](https://github.com/internetofwater/scheduler/blob/main/userCode/lib/stac_catalog.py) now registers its existing exports in a Portolan catalog. It describes the files where they already live in cloud storage, with collection metadata, provenance, checksums, and documentation.
+
+[GeoParquet](https://geoparquet.org/) provides the spatial tables for analysis, and [PMTiles](https://docs.protomaps.com/pmtiles/) provides the tiles for web maps. A separate export retains the original linked-data records for rebuilding the graph. The shared river identifiers connect these different views of the data.
+
+*Colton — explain why you chose Portolan for this publication step. What did it provide beyond the existing graph and file exports? Identify the tools you evaluated and the catalog work you could reuse.*
+
+### One river, a concrete query
+
+The published reference-gage table includes a river identifier in its `mainstem_uri` column. Filtering it for the [Willamette River](https://geoconnex.us/ref/mainstems/1426120) returned **718 reference-gage records** on 2026-11-18. The graphic below plots that query's actual geometries and identifies records at Portland, Salem, and Eugene. The records include historical sites and are not a count of operating stations.
+
+<PostFigure n={2} wide caption="A query of the published GeoParquet links 718 reference-gage records to the Willamette River identifier. Three records are marked for orientation. Data measured 2026-11-18.">
+  <picture>
+    <source media="(max-width: 639px)" srcSet="/img/case-studies/geoconnex-willamette-query-mobile.jpg" />
+    <img
+      src="/img/case-studies/geoconnex-willamette-query.jpg"
+      alt="An annotated map of the Willamette River and its linked reference-gage records. Three examples at Portland, Salem, and Eugene share the same mainstem URI."
+      loading="lazy"
+      decoding="async"
+      className="block h-auto w-full"
+    />
+  </picture>
+</PostFigure>
+
+The same snapshot contains **852,673 mainstem records**, **203,525 reference-gage records**, and **49,346 public-water-system records** across those three exports. The [root catalog](https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json) links 38 top-level collections. [The measurements and source files](/img/case-studies/geoconnex-measurements.json) document these figures.
+
+These are concrete publication results. To establish the impact on users, the story still needs a measured before-and-after workflow.
+
+*Colton — repeat one real task with the old access path and the Portolan export. Measure the time to a usable result and the data transferred. If publishing effort changed, quantify that separately. State the dataset size, tools, and test conditions. Link a notebook, query, or user example that supports the comparison.*
+
+<PostFigure n={3} wide caption="Try a published collection. The Portolan browser exposes the reference-gage map, files, and collection documentation.">
+  <iframe
+    src="https://browser.portolan-sdi.org/#/external/storage.googleapis.com/harvest-geoconnex-us/stac/ref-gages/collection.json"
+    title="GeoConnex reference stream gages in the Portolan browser"
+    loading="lazy"
+    allow="fullscreen"
+    allowFullScreen
+    className="block h-[560px] w-full border-0 md:h-[680px]"
+  />
+</PostFigure>
+
+[Explore the full catalog](https://browser.portolan-sdi.org/#/external/storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json) or [open GeoConnex Explorer](https://explorer.geoconnex.us/).
+
+### A quote and the next step
+
+> *Quote to obtain from Colton — what specific analysis or publishing task became easier with the Portolan catalog, and why did that change matter? Add the speaker's role and approve the wording before publication.*
+
+*Colton — finish with the next confirmed use of Portolan. Which collection, publishing improvement, or user-facing integration comes next? Give a date or milestone if committed, and distinguish it from an idea still being evaluated.*
