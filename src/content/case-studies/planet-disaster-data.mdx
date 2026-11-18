@@ -1,0 +1,50 @@
+import { PostFigure } from "@/components/blog/post-figure";
+
+*Draft · Disaster response · Satellite imagery · Source Cooperative*
+
+[Planet](https://www.planet.com/disasterdata/) operates Earth-observation satellites. Its Crisis Response Program shares imagery to help teams respond to disasters. Those teams need suitable before-and-after scenes with clear documentation of gaps in coverage.
+
+> "Accelerate humanitarian response with Planet imagery"
+>
+> — [Planet Crisis Response Program](https://www.planet.com/disasterdata/)
+
+## One catalog, direct access
+
+Planet publishes its [disaster releases](https://source.coop/planet/disasterdata) as a Portolan catalog on Source Cooperative. Each event brings together imagery, dates, footprints, quality masks, and documentation for people and agents.
+
+Readers can browse the catalog or query scene indexes with DuckDB. Geospatial tools stream imagery without downloading entire scenes. Public releases need no account or API key.
+
+<PostFigure n={1} wide caption="Explore Planet's disaster releases in the Portolan browser.">
+  <iframe
+    src="https://browser.portolan-sdi.org/#/external/data.source.coop/planet/disasterdata/catalog.json"
+    title="Planet disaster-data catalog in the Portolan browser"
+    loading="lazy"
+    allow="fullscreen"
+    allowFullScreen
+    className="block h-[560px] w-full border-0 md:h-[680px]"
+  />
+</PostFigure>
+
+[Open the catalog browser](https://browser.portolan-sdi.org/#/external/data.source.coop/planet/disasterdata/catalog.json).
+
+## At street scale
+
+The [Philippines earthquake release](https://source.coop/planet/disasterdata/philippines-earthquake-2026-06-08) contains five SkySat scenes acquired on 2026-06-08 and 2026-06-09. This detail of General Santos comes directly from the full-resolution imagery.
+
+<PostFigure
+  n={2}
+  wide
+  src="/img/case-studies/planet-general-santos.webp"
+  alt="A close-up of dense city blocks, tree-lined streets, and parks in General Santos, Philippines."
+  caption="General Santos, Philippines. SkySat, 2026-06-08 UTC. © Planet Labs PBC, CC BY-NC 4.0."
+/>
+
+## Reach so far
+
+On 2026-11-18, the catalog covered **9 disaster events**. [Source Cooperative reported](https://source.coop/planet/disasterdata) **2.2 million downloads and 1.3 TB served across 86 countries** over 28 days. These figures measure repository traffic.
+
+New events join the same catalog. Imagery is [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/), with an OpenStreetMap waiver in the repository docs.
+
+*Still needed from Planet — selection rationale, a customer quote, measured outcomes, and future plans.*
+
+{/* Checked 2026-11-18 against the root catalog, README, AGENTS.md, llms.txt, and Philippines event docs. Source Cooperative displayed 2,223,460 downloads, 1.3 TB, and 86 countries for its 28-day window. The quote is published program copy, not an interview endorsement. */}
