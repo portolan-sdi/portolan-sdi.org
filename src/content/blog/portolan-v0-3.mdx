@@ -91,8 +91,10 @@ v0.3 defines how a Portolan catalog publishes itself as
 One GeoParquet file holds every catalog and collection in the tree, with its
 extent, time range, keywords, links, and full original JSON. The catalog
 becomes a table that any Parquet reader can open. The JSON stays the normative
-form, and the layout follows the shape agreed upstream in the
-[stac-geoparquet spec](https://github.com/radiantearth/stac-geoparquet-spec).
+form. The layout follows the shape proposed upstream in the [stac-geoparquet
+spec](https://github.com/radiantearth/stac-geoparquet-spec/issues/17), which is
+still under discussion and not released. The schema can still change a bit,
+and Portolan will follow upstream when it does.
 Many catalogs in the registry already publish one, and the registry will
 publish one for all of them. I will write a separate post about STAC-GeoParquet as a
 catalog.
