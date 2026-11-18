@@ -10,13 +10,17 @@ export type CaseStudyMeta = Omit<BlogPost, "slug"> & {
   /** The picture on the case study index, as a path under `public/`. */
   image: string;
   imageAlt: string;
-  /** The mark of the publisher. It is the heading of the study. */
+  /**
+   * The mark of the publisher, in its own colors. It is the heading of the
+   * study. It shows on the light page ground, so use the version of the
+   * mark for a light background.
+   */
   logo: string;
   /**
-   * The mark shows in one color, `--p-ink`, by default. Set this for a mark
-   * that must keep its own colors.
+   * Set this only for a mark that exists in white alone. The site then
+   * shows it in `--p-ink`. A color mark is always better.
    */
-  preserveLogoColors?: boolean;
+  inkLogo?: boolean;
   /**
    * The key of a card in the homepage case study row. When a study names
    * a card, that card opens the study.

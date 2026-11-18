@@ -37,10 +37,10 @@ const meta: CaseStudyMeta = {
   // The picture on the index page. A 16:9 crop shows whole.
   image: "/img/case-studies/example-agency-map.webp",
   imageAlt: "What the picture shows, for a reader who cannot see it.",
-  // The mark of the publisher. It shows in one color by default.
+  // The mark of the publisher, in color, for a light background.
   logo: "/img/case-studies/example-agency-logo.svg",
-  // Optional. Set it when the mark must keep its own colors.
-  // preserveLogoColors: true,
+  // Optional. Only for a mark that exists in white alone.
+  // inkLogo: true,
   // Optional. The key of a homepage card that opens this study.
   // homeCard: "example",
 };

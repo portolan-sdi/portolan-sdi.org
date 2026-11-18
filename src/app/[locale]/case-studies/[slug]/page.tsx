@@ -87,7 +87,7 @@ export default async function CaseStudy({ params }: PageProps) {
           alt={study.title}
           width={2500}
           height={600}
-          className={`h-16 w-auto max-w-full object-contain sm:h-20${study.preserveLogoColors ? "" : " brightness-0"}`}
+          className={`h-16 w-auto max-w-full object-contain sm:h-20${study.inkLogo ? " brightness-0" : ""}`}
         />
       }
     >

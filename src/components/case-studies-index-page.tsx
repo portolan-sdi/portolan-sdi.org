@@ -26,13 +26,20 @@ export function CaseStudiesIndexPage() {
                 <h2>
                   <Link href={`/case-studies/${study.slug}`} className="inline-block">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={study.logo} alt={study.title} width={2500} height={600} className={`h-12 w-auto max-w-full object-contain sm:h-16${study.preserveLogoColors ? "" : " brightness-0"}`} />
+                    <img src={study.logo} alt={study.title} width={2500} height={600} className={`h-12 w-auto max-w-full object-contain sm:h-16${study.inkLogo ? " brightness-0" : ""}`} />
                   </Link>
                 </h2>
-                <p className="mt-4 text-body leading-relaxed text-p-ink-2" dir="ltr">{study.summary}</p>
-                <Link href={`/case-studies/${study.slug}`} className="mt-6 inline-flex items-center gap-3 border-b-2 border-p-line pb-1 text-body font-semibold hover:border-p-primary hover:text-p-primary">
-                  {t("readStudy")} <DirArrow />
-                </Link>
+                {/* The link follows the summary on the same line. It has the
+                    look of the text links on the homepage. */}
+                <p className="mt-4 text-body leading-loose text-p-ink-2">
+                  <span dir="ltr">{study.summary}</span>{" "}
+                  <Link
+                    href={`/case-studies/${study.slug}`}
+                    className="ms-1 inline-flex items-center gap-2 whitespace-nowrap border-b-2 border-p-line pb-0.5 font-semibold leading-snug text-p-ink transition-colors hover:border-p-primary hover:text-p-primary"
+                  >
+                    {t("readStudy")} <DirArrow />
+                  </Link>
+                </p>
               </div>
             </article>
           ))}
