@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
@@ -5,6 +6,13 @@ import { BlogPostPage } from "@/components";
 import { fullTitle } from "@/lib/blog";
 import { CASE_STUDIES, getCaseStudy } from "@/lib/case-studies";
 import { alternateLanguages, localeUrl } from "@/lib/site";
+
+// Every body in the folder, as a function that loads it. A template import
+// with the slug in it fails to build while the folder has no body. This
+// pattern is correct for any number of bodies.
+const BODIES = import.meta.glob<{ default: ComponentType }>(
+  "/src/content/case-studies/*.mdx",
+);
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -65,7 +73,9 @@ export default async function CaseStudy({ params }: PageProps) {
   const study = getCaseStudy(slug);
   if (!study) notFound();
 
-  const { default: Body } = await import(`@/content/case-studies/${slug}.mdx`);
+  const load = BODIES[`/src/content/case-studies/${slug}.mdx`];
+  if (!load) notFound();
+  const { default: Body } = await load();
   return (
     <BlogPostPage
       post={study}
@@ -77,7 +87,7 @@ export default async function CaseStudy({ params }: PageProps) {
           alt={study.title}
           width={2500}
           height={600}
-          className={`h-16 w-auto max-w-full object-contain sm:h-20${study.preserveLogoColors ? "" : " brightness-0"}`}
+          className={`h-16 w-auto max-w-full object-contain sm:h-20${study.inkLogo ? " brightness-0" : ""}`}
         />
       }
     >

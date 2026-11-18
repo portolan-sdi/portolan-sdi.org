@@ -43,6 +43,9 @@ is from the
 [NASA Earth Observatory image library](https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/154000/154789/iss073e0176299_lrg.jpg).
 The site shows it in grayscale, cropped.
 
+Each case study lists the sources of its own media in
+`src/content/case-studies/<slug>.credits.md`.
+
 The figure in the solution section of the homepage uses three more items.
 The QGIS icon in `public/img/home/pipeline/qgis.svg` is from the
 [QGIS repository](https://github.com/qgis/QGIS/blob/master/images/icons/qgis_icon.svg).
@@ -51,17 +54,3 @@ QGIS is a trademark of QGIS.ORG. The robot icon is the "bot" icon of
 portal uses the colors and the faces of the
 [City of Philadelphia digital standards](https://standards.phila.gov/).
 The City of Philadelphia did not make or approve the portal.
-
-The Epoch case study uses the original [Epoch logo](https://epoch.blue/static/img/brands/epoch-logo-text-white.svg).
-The case study list shows a screenshot of the
-[Epoch open data explorer](https://jakenotjay.github.io/me/explorer/),
-by Jake Wilkins, built with deck.gl-raster by Kyle Barron. The article embeds
-that viewer directly.
-
-The GeoConnex case study uses the unmodified color horizontal logo from
-[Lincoln Institute's official brand kit](https://www.lincolninst.edu/app/uploads/2024/09/lilp-brand-manual-and-logos.zip)
-and embeds the [GeoConnex catalog](https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json).
-Its thumbnail maps [Colorado stream gages](https://storage.googleapis.com/harvest-geoconnex-us/exports/pmtiles/iow:state_gages:cdss.pmtiles)
-and [HUC08 river basins](https://storage.googleapis.com/harvest-geoconnex-us/exports/pmtiles/ref:hu08.pmtiles)
-around Denver and Boulder. Both layers are CC0-1.0. The labeled basemap is
-© OpenStreetMap contributors © CARTO, with attribution in the image.

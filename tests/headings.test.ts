@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import test from "node:test";
-import { CASE_STUDIES } from "../src/lib/case-studies";
 import { POSTS } from "../src/lib/blog";
 import { extractHeadings, slugify } from "../src/lib/headings";
 import { TUTORIALS } from "../src/lib/tutorials";
@@ -35,7 +34,11 @@ test("extractHeadings skips lines inside fenced code", () => {
 
 test("every article has unique section ids", () => {
   const bodies = [
-    ...CASE_STUDIES.map(({ slug }) => `src/content/case-studies/${slug}.mdx`),
+    // The case study list comes from the folder. The registry uses a
+    // bundler feature, so this test does not import it.
+    ...readdirSync("src/content/case-studies")
+      .filter((file) => file.endsWith(".mdx"))
+      .map((file) => `src/content/case-studies/${file}`),
     ...POSTS.map(({ slug }) => `src/content/blog/${slug}.mdx`),
     ...TUTORIALS.map(({ slug }) => `src/content/tutorials/${slug}.mdx`),
   ];

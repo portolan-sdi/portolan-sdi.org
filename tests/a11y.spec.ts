@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { readdirSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 
 const locales = [
@@ -7,16 +8,30 @@ const locales = [
   { id: "ar", prefix: "/ar" },
 ] as const;
 
-const routes = [
+interface Route {
+  id: string;
+  path: string;
+  /** True for a case study, which can embed a frame from another site. */
+  study?: boolean;
+}
+
+// One route for each case study body in the folder. A new study gets its
+// scan with no edit to this file.
+const CASE_STUDY_ROUTES: Route[] = readdirSync("src/content/case-studies")
+  .filter((file) => file.endsWith(".mdx"))
+  .map((file) => file.replace(/\.mdx$/, ""))
+  .map((slug) => ({ id: slug, path: `/case-studies/${slug}`, study: true }));
+
+const routes: Route[] = [
   { id: "home", path: "" },
   { id: "faq", path: "/faq" },
   { id: "case-studies", path: "/case-studies" },
-  { id: "epoch-blue", path: "/case-studies/epoch-blue" },
+  ...CASE_STUDY_ROUTES,
   { id: "talks", path: "/talks" },
   { id: "ecosystem", path: "/ecosystem" },
   { id: "how-it-works", path: "/how-it-works" },
   { id: "registry", path: "/registry" },
-] as const;
+];
 
 const viewports = [
   { id: "mobile", width: 390, height: 844 },
@@ -53,13 +68,10 @@ for (const locale of locales) {
         // marker button, so axe sees a third-party nested-control violation.
         // Keep the wrapper out of axe and enforce our own marker-size rule.
         if (route.id === "registry") axe.exclude(".maplibregl-marker");
-        if (route.id === "epoch-blue") {
-          // The external viewer owns its styles and controls. Check our
-          // embedding and fallback link, and scan the host page with axe.
-          const viewer = page.locator('iframe[title="Epoch open data explorer"]');
-          await expect(viewer).toHaveAttribute("src", /^https:\/\/jakenotjay\.github\.io\/me\/explorer\//);
-          await expect(page.getByRole("link", { name: /Open the explorer in a new tab/ })).toBeVisible();
-          axe.exclude('iframe[title="Epoch open data explorer"]');
+        if (route.study) {
+          // A study can embed a viewer from another site. That site owns
+          // the styles and the controls inside its frame.
+          axe.exclude(".post-figure iframe");
         }
 
         const results = await axe.analyze();

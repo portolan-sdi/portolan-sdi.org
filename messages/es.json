@@ -128,6 +128,7 @@
   },
   "cases": {
     "title": "Casos de estudio",
+    "readStudy": "Leer el caso de estudio",
     "items": {
       "pergamino": {
         "title": "IDE Pergamino, una SDI municipal en 390 MB de archivos",

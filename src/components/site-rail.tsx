@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import { CASE_STUDIES } from "@/lib/case-studies";
 import { PortolanLogo } from "./portolan-logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { SiteFooter } from "./site-footer";
@@ -32,7 +33,7 @@ type NavPage = {
   label: string;
 };
 
-const PAGES: NavPage[] = [
+const ALL_PAGES: NavPage[] = [
   { href: "/blog", label: "nav.blog" },
   { href: "/case-studies", label: "nav.caseStudies" },
   { href: "/tutorials", label: "nav.tutorials" },
@@ -41,6 +42,12 @@ const PAGES: NavPage[] = [
   { href: "/faq", label: "nav.faq" },
   { href: "/registry", label: "nav.registry" },
 ];
+
+// The case study link shows only when the site has a case study, so the
+// bar never opens an empty list.
+const PAGES = ALL_PAGES.filter(
+  (page) => page.href !== "/case-studies" || CASE_STUDIES.length > 0,
+);
 
 const MENU_ID = "site-menu";
 
