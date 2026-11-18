@@ -133,17 +133,39 @@ GeoParquet 2.0 data files. It works in both directions: a publisher can
 register existing GeoParquet as a table, or point the catalog at files an
 Iceberg engine wrote first.
 
+## Validate with rashid 0.4
+
+A spec release is only useful if a validator checks it. [rashid
+0.4.0](https://github.com/portolan-sdi/rashid/releases/tag/v0.4.0) came out
+on the same day, 2026-11-17, and it implements the v0.3 rules. It bundles the
+v0.3.0 profile schema, so it reads native geospatial Parquet, checks column
+descriptions and raster classes, and requires absolute partition globs. It
+also checks the incubating parts: it checks a Zarr store against the
+incubating profile and reports spatial order as a warning.
+
+rashid applies the newest rules it knows, whatever version your catalog
+declares, and it reports both versions. So it shows you what v0.3 would flag
+before you move.
+
+```bash
+uv tool install rashid
+rashid check path/to/catalog
+```
+
 ## Try it
 
 Read the [specification](https://spec.portolan-sdi.org/), and declare v0.3 in
 your catalog with
 `https://schemas.portolan-sdi.org/portolan/v0.3.0/schema.json` in
 `stac_extensions`. The earlier schemas stay published, so nothing changes for
-a catalog until you move it. Then validate it with
-[rashid](https://github.com/portolan-sdi/rashid). rashid applies the newest rules it
-knows, whatever version your catalog declares, and reports both versions. So
-it shows you what v0.3 would flag before you move. And tell us what works and
-what does not in the [Portolan Google
-Group](https://groups.google.com/g/portolan) or the [Portolan
+a catalog until you move it. Then run rashid, and tell us what works and what
+does not in the [Portolan Google Group](https://groups.google.com/g/portolan)
+or the [Portolan
 channel](https://cloudnativegeo.slack.com/archives/C0A1JBH9529) in
 Cloud-Native Geo Slack.
+
+Thanks to everyone who shaped this release. Matthias Mohr reviewed changes
+across the whole spec. Bjorn Sandvik, Michael Sumner, Jeff Albrecht, and Maya
+Midzik helped shape the Zarr profile. Marshall, Pedro-Juan Ferrer, and
+Giovanni Antoniazzi opened the issues behind several new rules. Isaac Corley
+and Daniel Silk contributed to rashid.
