@@ -31,12 +31,30 @@ bounding box statistics for each row group. It also keeps the `geo` metadata,
 so the CRS travels with the file.
 
 For a data team, this means files that come out of the lakehouse they
-already use can go straight into a catalog. v0.3 also starts an [incubating
-convention for Apache
-Iceberg](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/iceberg.md)
-that works in the other direction. A catalog can publish an Iceberg table over
-the GeoParquet it already serves, so Iceberg engines get a second way to query
-the same files.
+already use can go straight into a catalog.
+
+## Apache Iceberg (incubating)
+
+Iceberg is new in v0.3. The [incubating
+convention](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/iceberg.md)
+lets a catalog publish an [Apache Iceberg](https://iceberg.apache.org/) table
+over the GeoParquet it already serves. STAC stays the catalog: it says what the
+data is, who published it, and how to draw it. The Iceberg table is a second
+way in, for the engines that speak Iceberg.
+
+Both paths end at the same bytes. The live data files of the table are exactly
+the collection's data assets, so the table adds metadata, not a second copy of
+the data. A reader also needs no server. The collection points to the table's
+metadata file, and an engine opens the table from that file alone.
+
+A static catalog gains a lot from this. The table's manifests list every file,
+so a client can read a partitioned collection over plain HTTPS without listing
+the bucket. Per-file bounds let an engine skip a file without opening it. And
+one `ATTACH` exposes the catalog as a SQL namespace. The convention uses
+Iceberg format version 3, the first with a native geometry type, over
+GeoParquet 2.0 data files. It works in both directions: a publisher can
+register existing GeoParquet as a table, or point the catalog at files an
+Iceberg engine wrote first.
 
 ## Rasters you can see and read (normative)
 
@@ -89,17 +107,18 @@ In its place, an **incubating** method measures what spatial order is for:
 the share of a file that a typical query can skip. Validators report it as a
 warning only, while we calibrate it on real catalogs.
 
-## Search a whole catalog with one query (incubating)
+## STAC-GeoParquet as a catalog (incubating)
 
-Earlier versions had only a short paragraph about
-[stac-geoparquet](https://github.com/radiantearth/stac-geoparquet-spec). v0.3
-defines a [catalog
-index](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/stac-geoparquet.md):
-one GeoParquet file with one row for each catalog and collection in the tree.
-A client can find collections by place, time, and keywords with one query,
-and it does not need to read each `collection.json`. The layout follows the
-shape agreed upstream, and catalogs in the registry already publish it. I will
-write a separate post about stac-geoparquet as a catalog, with the details.
+v0.3 defines how a Portolan catalog publishes itself as
+[STAC-GeoParquet](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/stac-geoparquet.md).
+One GeoParquet file holds every catalog and collection in the tree, with its
+extent, time range, keywords, links, and full original JSON. The catalog
+becomes a table that any Parquet reader can open. The JSON stays the normative
+form, and the layout follows the shape agreed upstream in the
+[stac-geoparquet spec](https://github.com/radiantearth/stac-geoparquet-spec).
+Many catalogs in the registry already publish one, and the registry will
+publish one for all of them. I will write a separate post about STAC-GeoParquet as a
+catalog.
 
 ## Zarr (incubating)
 
