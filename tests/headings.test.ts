@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { CASE_STUDIES } from "../src/lib/case-studies";
 import { POSTS } from "../src/lib/blog";
 import { extractHeadings, slugify } from "../src/lib/headings";
 import { TUTORIALS } from "../src/lib/tutorials";
@@ -32,8 +33,9 @@ test("extractHeadings skips lines inside fenced code", () => {
   assert.deepEqual(extractHeadings(source), [{ id: "real", text: "Real" }]);
 });
 
-test("every post and tutorial has unique section ids", () => {
+test("every article has unique section ids", () => {
   const bodies = [
+    ...CASE_STUDIES.map(({ slug }) => `src/content/case-studies/${slug}.mdx`),
     ...POSTS.map(({ slug }) => `src/content/blog/${slug}.mdx`),
     ...TUTORIALS.map(({ slug }) => `src/content/tutorials/${slug}.mdx`),
   ];

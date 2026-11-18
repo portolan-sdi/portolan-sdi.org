@@ -32,6 +32,7 @@ import { SiteShell } from "./site-rail";
 
 interface BlogPostPageProps {
   post: BlogPost;
+  heading?: ReactNode;
   section?: ArticleSection;
   /** The body's `##` headings, read from the MDX source by the route. */
   sections?: Heading[];
@@ -49,6 +50,7 @@ function Arrow({ back = false }: { back?: boolean }) {
 
 export function BlogPostPage({
   post,
+  heading,
   section = "blog",
   sections,
   children,
@@ -70,7 +72,7 @@ export function BlogPostPage({
       {/* The headline runs the full 1240px band, like every other page header.
           Only the body below it takes the narrow reading measure. */}
       <PageHero
-        title={post.title}
+        title={heading ?? post.title}
         subtitle={post.subtitle}
         eyebrow={
           <>
@@ -128,7 +130,7 @@ export function BlogPostPage({
                 above it. */}
             <div dir="ltr">{children}</div>
 
-            <PostToc sections={sections ?? []} />
+            {section !== "case-studies" && <PostToc sections={sections ?? []} />}
 
             {(older || newer) && (
               <nav

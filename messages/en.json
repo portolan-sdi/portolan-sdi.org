@@ -13,7 +13,8 @@
     "talks": "Talks",
     "blog": "Blog",
     "tutorials": "Guides & demos",
-    "ecosystem": "Ecosystem"
+    "ecosystem": "Ecosystem",
+    "caseStudies": "Case studies"
   },
   "hero": {
     "title": "Publish geospatial data with no servers, databases, or custom APIs.",
@@ -477,5 +478,16 @@
   "about": {
     "lead": "<line>Portolan is an open-source, community-driven project.</line><line><slack>Join us on Slack</slack> and get involved.</line>",
     "logosLabel": "With contributions from"
+  },
+  "case-studies": {
+    "meta": {
+      "title": "Case studies",
+      "description": "How people publish and use geospatial data with Portolan."
+    },
+    "title": "Case studies",
+    "intro": "How people publish and use geospatial data with Portolan.",
+    "backToIndex": "All case studies",
+    "englishNotice": "This content is available in English only. The rest of the site is translated.",
+    "readStudy": "Read case study"
   }
 }

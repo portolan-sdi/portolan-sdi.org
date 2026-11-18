@@ -10,6 +10,8 @@ const locales = [
 const routes = [
   { id: "home", path: "" },
   { id: "faq", path: "/faq" },
+  { id: "case-studies", path: "/case-studies" },
+  { id: "epoch-blue", path: "/case-studies/epoch-blue" },
   { id: "talks", path: "/talks" },
   { id: "ecosystem", path: "/ecosystem" },
   { id: "how-it-works", path: "/how-it-works" },
@@ -51,6 +53,15 @@ for (const locale of locales) {
         // marker button, so axe sees a third-party nested-control violation.
         // Keep the wrapper out of axe and enforce our own marker-size rule.
         if (route.id === "registry") axe.exclude(".maplibregl-marker");
+        if (route.id === "epoch-blue") {
+          // The external viewer owns its styles and controls. Check our
+          // embedding and fallback link, and scan the host page with axe.
+          const viewer = page.locator('iframe[title="Epoch open data explorer"]');
+          await expect(viewer).toHaveAttribute("src", /^https:\/\/jakenotjay\.github\.io\/me\/explorer\//);
+          await expect(page.getByRole("link", { name: /Open the explorer in a new tab/ })).toBeVisible();
+          axe.exclude('iframe[title="Epoch open data explorer"]');
+        }
+
         const results = await axe.analyze();
         const seriousViolations = results.violations.filter((violation) =>
           seriousImpacts.has(violation.impact ?? ""),

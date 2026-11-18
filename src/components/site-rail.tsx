@@ -11,8 +11,8 @@ import { SiteFooter } from "./site-footer";
 // the left side rail, and it lists pages only: the homepage sections are
 // reached by scrolling or by `#hash` links in the page itself.
 //
-// From md up the bar holds the logo, the page links, and the locale control
-// on one row. Below md it holds the logo and a mono "Index" button, which
+// From xl up the bar holds the logo, the page links, and the locale control
+// on one row. Below xl it holds the logo and a mono "Index" button, which
 // opens the same links and the locale control as a panel under the bar.
 //
 // The links and the locale control render once. The same element is the row
@@ -34,6 +34,7 @@ type NavPage = {
 
 const PAGES: NavPage[] = [
   { href: "/blog", label: "nav.blog" },
+  { href: "/case-studies", label: "nav.caseStudies" },
   { href: "/tutorials", label: "nav.tutorials" },
   { href: "/talks", label: "nav.talks" },
   { href: "/ecosystem", label: "nav.ecosystem" },
@@ -124,10 +125,10 @@ export function SiteShell({ children }: SiteShellProps) {
     };
   }, [menuOpen, closeMenu]);
 
-  // The panel should not remain open across the breakpoint. From md up the
+  // The panel should not remain open across the breakpoint. From xl up the
   // links are a row, and an open panel would leave the page inert under it.
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
+    const mq = window.matchMedia("(min-width: 1280px)");
     const onChange = () => {
       if (mq.matches) setMenuOpen(false);
     };
@@ -137,11 +138,11 @@ export function SiteShell({ children }: SiteShellProps) {
 
   return (
     <div className="min-h-screen bg-p-bg font-sans">
-      {/* Scrim under the open panel. Below md only. */}
+      {/* Scrim under the open panel. Below xl only. */}
       <div
         onClick={() => closeMenu(true)}
         aria-hidden="true"
-        className={`fixed inset-0 z-[39] bg-[rgba(22,23,15,0.32)] transition-opacity md:hidden ${
+        className={`fixed inset-0 z-[39] bg-[rgba(22,23,15,0.32)] transition-opacity xl:hidden ${
           menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
@@ -171,21 +172,21 @@ export function SiteShell({ children }: SiteShellProps) {
             onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
             aria-controls={MENU_ID}
             aria-expanded={menuOpen}
-            className="ms-auto border border-p-line px-3 py-1.5 text-small text-p-ink hover:bg-p-bg-soft md:hidden"
+            className="ms-auto border border-p-line px-3 py-1.5 text-small text-p-ink hover:bg-p-bg-soft xl:hidden"
           >
             {t("nav.index")}
           </button>
 
           {/* The page links and the locale control. A panel under the bar
-              below md, the rest of the row from md up. */}
+              below xl, the rest of the row from xl up. */}
           <div
             id={MENU_ID}
             ref={menuRef}
             className={`${
               menuOpen ? "flex" : "hidden"
-            } absolute inset-x-0 top-full max-h-[calc(100dvh-var(--p-bar))] flex-col overflow-y-auto border-y border-p-line bg-p-bg px-[var(--p-pad-section-x)] py-2 md:static md:ms-3 lg:ms-6 md:flex md:max-h-none md:min-w-0 md:flex-1 md:flex-row md:items-center md:overflow-visible md:border-0 md:p-0 lg:ms-10`}
+            } absolute inset-x-0 top-full max-h-[calc(100dvh-var(--p-bar))] flex-col overflow-y-auto border-y border-p-line bg-p-bg px-[var(--p-pad-section-x)] py-2 xl:static xl:ms-8 xl:flex xl:max-h-none xl:min-w-0 xl:flex-1 xl:flex-row xl:items-center xl:overflow-visible xl:border-0 xl:p-0`}
           >
-            <ul className="flex flex-col md:flex-row md:items-center lg:gap-1">
+            <ul className="flex flex-col xl:flex-row xl:items-center xl:gap-1">
               {PAGES.map(({ href, label }) => {
                 const current = isCurrent(href);
                 return (
@@ -194,7 +195,7 @@ export function SiteShell({ children }: SiteShellProps) {
                       href={href}
                       onClick={() => closeMenu()}
                       aria-current={current ? "page" : undefined}
-                      className={`flex h-11 items-center whitespace-nowrap text-body transition-colors md:h-10 md:px-0.5 md:text-small lg:px-3 lg:text-body ${
+                      className={`flex h-11 items-center whitespace-nowrap text-body transition-colors xl:h-10 xl:px-3 xl:text-body ${
                         current
                           ? "text-p-primary"
                           : "text-p-ink hover:text-p-primary"
@@ -207,7 +208,7 @@ export function SiteShell({ children }: SiteShellProps) {
               })}
             </ul>
 
-            <div className="mt-2 border-t border-p-line-soft py-2 md:ms-auto md:mt-0 md:border-0 md:py-0">
+            <div className="mt-2 border-t border-p-line-soft py-2 xl:ms-auto xl:mt-0 xl:border-0 xl:py-0">
               <LocaleSwitcher />
             </div>
           </div>
