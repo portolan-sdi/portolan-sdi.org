@@ -17,6 +17,17 @@ const nextConfig: NextConfig = {
   // next-intl proxy so all three locales land on the right anchor.
   async redirects() {
     return [
+      // The Epoch Blue story moved from the blog to the case studies.
+      {
+        source: "/blog/epoch-blue",
+        destination: "/case-studies/epoch-blue",
+        permanent: false,
+      },
+      {
+        source: "/:locale(es|ar)/blog/epoch-blue",
+        destination: "/:locale/case-studies/epoch-blue",
+        permanent: false,
+      },
       // The quickstart page took the place of "How it works" and of the
       // ecosystem page.
       {
