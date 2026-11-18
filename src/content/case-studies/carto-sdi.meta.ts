@@ -10,8 +10,6 @@ const meta: CaseStudyMeta = {
   imageAlt:
     "CARTO SDI showing a Canadian data catalog, a map, and an analysis assistant.",
   logo: "/logos/carto.png",
-  // The CARTO card on the homepage opens this study.
-  homeCard: "carto",
 };
 
 export default meta;
