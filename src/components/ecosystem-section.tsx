@@ -141,7 +141,7 @@ export function EcosystemSection() {
         <div
           role="group"
           aria-label={t("filterLabel")}
-          className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-p-line pb-3 font-mono text-eyebrow"
+          className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-p-line pb-3 text-small"
         >
           {FILTERS.map((key) => {
             const active = key === filter;
@@ -216,7 +216,7 @@ export function EcosystemSection() {
                   <p className="text-body text-p-ink-2 leading-snug flex-1">
                     {t(`projects.${project.slug}`)}
                   </p>
-                  <div className="mt-auto flex items-center gap-3 font-mono text-small text-p-ink-3">
+                  <div className="mt-auto flex items-center gap-3 text-small text-p-ink-3">
                     {project.license && (
                       <span>
                         <Ltr>{project.license}</Ltr>
@@ -236,7 +236,7 @@ export function EcosystemSection() {
         {/* Pager on the start edge, the invitation to grow on the end edge.
             The pager prints only when the current filter overflows one page,
             so a short list carries no dead control. */}
-        <div className="mt-[18px] flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-eyebrow">
+        <div className="mt-[18px] flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-small">
           {pageCount > 1 ? (
             <nav aria-label={t("pagination.label")} className="inline-flex items-center gap-3">
               <button

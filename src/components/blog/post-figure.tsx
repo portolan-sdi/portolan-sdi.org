@@ -69,11 +69,11 @@ export function PostFigure({
             className="flex flex-col items-center justify-center gap-2 bg-p-bg-soft p-6 text-center"
             style={{ aspectRatio: ratio }}
           >
-            <span className="font-mono text-eyebrow uppercase tracking-[0.08em] text-p-primary">
+            <span className="text-small text-p-primary">
               {t("figurePending")}
             </span>
             {pending && (
-              <span className="font-mono text-small text-p-ink-3">
+              <span className="text-small text-p-ink-3">
                 {pending}
               </span>
             )}
@@ -82,7 +82,7 @@ export function PostFigure({
       </div>
 
       <figcaption className="flex items-baseline gap-3 border border-p-line px-4 py-3">
-        <span className="shrink-0 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3">
+        <span className="shrink-0 text-small text-p-ink-3">
           {t("figureLabel", { n })}
         </span>
         <span className="text-small leading-[1.55] text-p-ink-2 text-pretty">

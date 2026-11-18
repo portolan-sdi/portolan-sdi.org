@@ -79,7 +79,7 @@ export function HowSteps() {
             {/* Pulled back over the rule by half its own width, with the
                 page ground behind it, so the line reads as broken by the
                 number and not crossed out by it. */}
-            <span className="absolute start-0 top-[4px] -ms-[13px] bg-p-bg px-1.5 font-mono text-eyebrow leading-none text-p-primary">
+            <span className="absolute start-0 top-[4px] -ms-[13px] bg-p-bg px-1.5 text-small leading-none text-p-primary">
               {t(`howItWorks.steps.${step}.id`)}
             </span>
             <h2 className="text-card-title font-bold tracking-[-0.02em] leading-none">

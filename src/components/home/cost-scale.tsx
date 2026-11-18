@@ -58,7 +58,7 @@ export function CostScale() {
               className="cost-tick"
               style={{ "--f": i / (TICKS.length - 1) } as CSSProperties}
             >
-              <span className="font-mono text-eyebrow text-p-primary-ink">
+              <span className="text-small text-p-primary-ink">
                 {tick}
               </span>
             </div>
@@ -84,7 +84,7 @@ export function CostScale() {
           </div>
         ))}
       </div>
-      <figcaption className="border-t border-p-line bg-p-bg px-[clamp(16px,3vw,40px)] py-3.5 font-mono text-small leading-relaxed text-p-ink-2">
+      <figcaption className="border-t border-p-line bg-p-bg px-[clamp(16px,3vw,40px)] py-3.5 text-small leading-relaxed text-p-ink-2">
         {t.rich("costs.caption", { cost: costLink })}
       </figcaption>
     </figure>

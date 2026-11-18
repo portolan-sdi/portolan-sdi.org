@@ -72,7 +72,7 @@ function Pager({
 
   return (
     <div className="mt-8 flex items-center justify-end gap-4">
-      <span className="font-mono text-small text-p-ink-3">
+      <span className="text-small text-p-ink-3">
         {t("status", { page: String(page + 1), total: String(pageCount) })}
       </span>
       <div className="flex border border-p-line">
@@ -109,7 +109,7 @@ function MapSkeleton() {
     // The frame does not pulse. A pulse fades the text with the frame, and a
     // contrast check then reads a different value on each run.
     <div className="h-[440px] md:h-[540px] border border-p-line bg-p-bg-soft flex items-center justify-center">
-      <span className="text-small text-p-ink-2 font-mono">{t("map.loading")}</span>
+      <span className="text-small text-p-ink-2">{t("map.loading")}</span>
     </div>
   );
 }
@@ -367,7 +367,7 @@ export function RegistryPage({
 
             {/* What matches, what the map cannot draw, and when the registry
                 last read the catalogs. The count follows the map. */}
-            <p className="mt-3 flex flex-wrap items-center gap-x-1.5 font-mono text-small text-p-ink-3">
+            <p className="mt-3 flex flex-wrap items-center gap-x-1.5 text-small text-p-ink-3">
               <span className="text-p-primary">
                 {geoActive
                   ? t("registry.results.inView", { count: filteredCatalogs.length })

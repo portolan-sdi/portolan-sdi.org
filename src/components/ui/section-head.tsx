@@ -35,7 +35,7 @@ export function SectionHead({
     >
       <div>
         {eyebrow && (
-          <div className="font-mono text-eyebrow text-p-ink-3 tracking-[0.04em]">
+          <div className="text-small text-p-ink-3">
             {eyebrow}
           </div>
         )}

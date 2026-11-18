@@ -7,6 +7,7 @@ import { ChallengeSection } from "./home/challenge-section";
 import { SolutionSection } from "./home/solution-section";
 import { WhySection } from "./home/why-section";
 import { CaseStudiesSection } from "./home/case-studies-section";
+import { NetworkSection } from "./home/network-section";
 
 /** The homepage. The sections follow a challenge, solution, impact order. */
 export function HomePage() {
@@ -25,8 +26,11 @@ export function HomePage() {
       {/* Three reasons, on a satellite image band. */}
       <WhySection />
 
-      {/* Case studies, with the cost figure. */}
+      {/* Case studies, one row of cards. */}
       <CaseStudiesSection />
+
+      {/* The registry: the text, and a small map of its coverage. */}
+      <NetworkSection />
 
       {/* Who supports the project, and the way in to the community. */}
       <AboutSection />

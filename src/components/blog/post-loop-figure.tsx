@@ -123,7 +123,7 @@ export function PostLoopFigure({
       </div>
 
       <figcaption className="flex items-baseline gap-3 border border-p-line px-4 py-3">
-        <span className="shrink-0 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3">
+        <span className="shrink-0 text-small text-p-ink-3">
           {t("figureLabel", { n })}
         </span>
         <span className="text-small leading-[1.55] text-p-ink-2 text-pretty">

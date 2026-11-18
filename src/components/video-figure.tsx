@@ -259,7 +259,7 @@ export function VideoFigure({
             />
 
             {/* Tabular figures so the row does not twitch every second. */}
-            <span className="shrink-0 font-mono text-eyebrow text-p-ink-3 tabular-nums">
+            <span className="shrink-0 text-small text-p-ink-3 tabular-nums">
               {clock(time)} / {clock(duration)}
             </span>
 

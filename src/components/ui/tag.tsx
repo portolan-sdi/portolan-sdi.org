@@ -27,7 +27,7 @@ export function Tag({
     <span
       className={`
         inline-flex items-center gap-2
-        text-eyebrow font-mono
+        text-small 
         px-2.5 py-1 rounded-[var(--p-r-sm)]
         tracking-[0.02em] uppercase
         border

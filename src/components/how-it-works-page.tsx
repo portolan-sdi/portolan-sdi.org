@@ -48,7 +48,7 @@ export function HowItWorksPage() {
                   </li>
                 ))}
               </ul>
-              <Btn asChild variant="primary" className="mt-7">
+              <Btn asChild variant="link" className="mt-7">
                 <Link href="/ecosystem" data-track="how-ecosystem">
                   {t("nav.ecosystem")} <DirArrow />
                 </Link>
