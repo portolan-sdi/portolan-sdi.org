@@ -18,6 +18,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/blog/epoch-blue",
+        destination: "/case-studies/epoch-blue",
+        permanent: false,
+      },
+      {
+        source: "/:locale(es|ar)/blog/epoch-blue",
+        destination: "/:locale/case-studies/epoch-blue",
+        permanent: false,
+      },
+      {
         source: "/quickstart",
         destination: "/#quickstart",
         permanent: true,
