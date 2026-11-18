@@ -26,7 +26,7 @@ metadata.
 v0.3 accepts GeoParquet 1.1, GeoParquet 2.0, and Parquet with native geometry
 types, and it applies the same vector rules to all three. We recommend
 GeoParquet 2.0 when your tools can write it. It stores geometry in Parquet's
-own geometry type, so any Parquet reader recognizes it, and the file includes
+own geometry type, which any Parquet reader recognizes. The file also includes
 bounding box statistics for each row group. It also keeps the `geo` metadata,
 which records the CRS in the file.
 
@@ -90,8 +90,8 @@ v0.3 defines how a Portolan catalog publishes itself as
 [STAC-GeoParquet](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/stac-geoparquet.md).
 One GeoParquet file has a row for every catalog and collection in the tree, with its
 extent, time range, keywords, links, and full original JSON. The catalog
-becomes a table that any Parquet reader can open. The JSON stays the normative
-form. The layout follows the shape proposed upstream in the [stac-geoparquet
+becomes a table that any Parquet reader can open. The JSON is still the normative
+form. The layout follows the column layout proposed upstream in the [stac-geoparquet
 spec](https://github.com/radiantearth/stac-geoparquet-spec/issues/17), which is
 still under discussion and not released. The schema can still change a bit,
 and Portolan will follow upstream when it does.
@@ -120,7 +120,7 @@ describes the data. The Iceberg table is a second
 way in, for the engines that speak Iceberg.
 
 Both paths end at the same bytes. The live data files of the table are exactly
-the collection's data assets, so the table adds metadata, not a second copy of
+the collection's data assets. The table adds metadata and no second copy of
 the data. A reader also needs no server. The collection points to the table's
 metadata file, and an engine opens the table from that file alone.
 
