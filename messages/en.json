@@ -295,7 +295,6 @@
       "description": "Writing from the Portolan project on serverless spatial data infrastructure, the specification, and the tools that build on it."
     },
     "title": "Blog",
-    "intro": "Notes from the Portolan project on the specification, the tooling, and what we learn from publishing real catalogs.",
     "backToIndex": "All posts",
     "englishNotice": "This post is available in English only. The rest of the site is translated.",
     "figureLabel": "Fig. {n}",
@@ -306,6 +305,8 @@
       "failed": "Copy failed. Select and copy the text."
     },
     "by": "By",
+    "team": "The Portolan team",
+    "readingTime": "{minutes} min read",
     "feed": "RSS feed",
     "previous": "Previous",
     "next": "Next",
@@ -318,7 +319,6 @@
       "description": "Tutorials, demos, and walkthroughs for publishing and using Portolan catalogs."
     },
     "title": "Guides & demos",
-    "intro": "Tutorials, demos, and walkthroughs for publishing and using Portolan catalogs.",
     "backToIndex": "All guides & demos",
     "englishNotice": "This content is available in English only. The rest of the site is translated."
   },

@@ -1,6 +1,10 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BlogIndexPage } from "@/components";
+import { POSTS } from "@/lib/blog";
+import { readingMinutes } from "@/lib/reading-time";
 import { FEED_URL } from "@/lib/feed";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
@@ -51,5 +55,21 @@ export default async function Blog({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <BlogIndexPage />;
+  // Each card shows a reading time. The count comes from the MDX source,
+  // which this route reads when the page is built.
+  const minutes = Object.fromEntries(
+    await Promise.all(
+      POSTS.map(async (post) => [
+        post.slug,
+        readingMinutes(
+          await readFile(
+            path.join(process.cwd(), "src/content/blog", `${post.slug}.mdx`),
+            "utf8",
+          ),
+        ),
+      ]),
+    ),
+  );
+
+  return <BlogIndexPage readingMinutes={minutes} />;
 }

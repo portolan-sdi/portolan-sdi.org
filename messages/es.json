@@ -14,7 +14,7 @@
     "blog": "Blog",
     "tutorials": "Guías y demostraciones",
     "caseStudies": "Casos de estudio",
-    "docs": "Documentación",
+    "docs": "Docs",
     "stories": "Historias",
     "community": "Comunidad",
     "quickstart": "Primeros pasos",
@@ -295,7 +295,6 @@
       "description": "Textos del proyecto Portolan sobre infraestructuras de datos espaciales sin servidores, la especificación y las herramientas que se apoyan en ella."
     },
     "title": "Blog",
-    "intro": "Notas del proyecto Portolan sobre la especificación, las herramientas y lo que aprendemos al publicar catálogos reales.",
     "backToIndex": "Todas las entradas",
     "englishNotice": "Esta entrada está disponible solo en inglés. El resto del sitio está traducido.",
     "figureLabel": "Fig. {n}",
@@ -306,6 +305,8 @@
       "failed": "No se pudo copiar. Seleccione y copie el texto."
     },
     "by": "Por",
+    "team": "El equipo de Portolan",
+    "readingTime": "{minutes} min de lectura",
     "feed": "Feed RSS",
     "previous": "Anterior",
     "next": "Siguiente",
@@ -318,7 +319,6 @@
       "description": "Tutoriales, demostraciones y ejemplos prácticos para publicar y usar catálogos Portolan."
     },
     "title": "Guías y demostraciones",
-    "intro": "Tutoriales, demostraciones y ejemplos prácticos para publicar y usar catálogos Portolan.",
     "backToIndex": "Todas las guías y demostraciones",
     "englishNotice": "Este contenido está disponible solo en inglés. El resto del sitio está traducido."
   },

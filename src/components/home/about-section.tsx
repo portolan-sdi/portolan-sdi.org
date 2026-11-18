@@ -19,6 +19,12 @@ const CONTRIBUTORS: readonly Org[] = [
   { name: "moreGeo", href: "https://www.moregeo.it/", file: "moregeo.png", h: 32, aspect: 1.313 },
   { name: "Walkthru Earth", href: "https://walkthru.earth/", file: "logo-wte.svg", h: 29, aspect: 4.5 },
   { name: "Lincoln Institute of Land Policy", href: "https://www.lincolninst.edu/", file: "lincoln-institute.png", h: 27, aspect: 4.36 },
+  { name: "Toitū Te Whenua Land Information New Zealand", href: "https://www.linz.govt.nz/", file: "linz.svg", h: 30, aspect: 4.327 },
+  { name: "VIDA", href: "https://vida.place/", file: "vida.svg", h: 17, aspect: 5.169 },
+  { name: "Epoch", href: "https://epoch.blue/", file: "epoch-blue.svg", h: 28, aspect: 4.167 },
+  // The Geomermaids logo is a full-color drawing beside a red wordmark. The
+  // file here is a one-color mask of the dark lines and of the wordmark.
+  { name: "Geomermaids", href: "https://geomermaids.com/", file: "geomermaids.png", h: 36, aspect: 3.824 },
 ];
 
 /**

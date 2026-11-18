@@ -263,7 +263,7 @@ export function PipelineFigure() {
     motion.addEventListener("change", onMotion);
 
     // Two observers. The first starts the downloads a little before the
-    // figure scrolls in. The second runs the clock only while it is seen.
+    // figure scrolls in. The second runs the clock only while most of it is seen.
     let near: IntersectionObserver | null = null;
     let viewport: IntersectionObserver | null = null;
     if (typeof IntersectionObserver === "undefined") {
@@ -278,10 +278,28 @@ export function PipelineFigure() {
         },
         { rootMargin: "800px 0px" },
       );
-      viewport = new IntersectionObserver((entries) => {
-        for (const entry of entries) onScreen = entry.isIntersecting;
-        sync();
-      });
+      // The clock starts when most of the figure is in view, not when its
+      // top edge comes in. A reader at the top of the page sees only the
+      // top of the figure, and the story must not start without them. The
+      // figure must show 70% of its height to start. A window that is too
+      // short to show that much asks for what it can show. The clock stops
+      // again below half of that share, so a small scroll at the edge does
+      // not start and stop it.
+      const START = 0.7;
+      viewport = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const height = entry.boundingClientRect.height || 1;
+            const fits = (0.9 * (entry.rootBounds?.height ?? height)) / height;
+            const start = Math.min(START, fits);
+            const ratio = entry.intersectionRatio;
+            if (ratio >= start) onScreen = true;
+            else if (ratio < start / 2) onScreen = false;
+          }
+          sync();
+        },
+        { threshold: Array.from({ length: 21 }, (_, i) => i / 20) },
+      );
       near.observe(fig);
       viewport.observe(fig);
     }

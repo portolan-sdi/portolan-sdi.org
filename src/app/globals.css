@@ -1008,11 +1008,17 @@ html {
 .pipe-nav {
   display: flex;
   flex: none;
-  gap: 14px;
-  padding-inline-end: 3px;
+  gap: 6px;
 }
-/* The two arrows stay in the mono face, for its long arrow. */
+/* The two arrows stay in the mono face, for its long arrow. Each button is
+   28px square with no visible box, so the tap target is above the 24px
+   minimum of WCAG 2.2 and the arrows keep their look. */
 .pipe-nav button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
   color: var(--p-ink);
   font-family: var(--p-mono);
   font-size: var(--text-body);
