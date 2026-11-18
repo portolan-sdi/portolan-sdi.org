@@ -129,38 +129,6 @@
   "cases": {
     "title": "Case studies",
     "readStudy": "Read the case study",
-    "items": {
-      "pergamino": {
-        "title": "IDE Pergamino: a municipal SDI in 390 MB of files",
-        "body": "The catalog mirrors the SDI of the Municipality of Pergamino, Argentina: 183 layers in 13 categories and 1,024,255 features.",
-        "link": "Open IDE Pergamino",
-        "alt": "The categories of IDE Pergamino: cadastre, roads, transport, water and sanitation, energy, health, education, security, demography, environment, administrative boundaries, and municipal services."
-      },
-      "trimet": {
-        "title": "TriMet: three hours from shapefiles to a live catalog",
-        "body": "TriMet publishes eight geospatial datasets as plain files. Mirroring them into a Portolan catalog, with a custom-themed browser, took about three hours of work on a plane.",
-        "link": "Read the post",
-        "alt": "The TriMet catalog in a Portolan browser themed with TriMet's colors."
-      },
-      "ftw": {
-        "title": "Fields of the World: 369 TB with no serving layer",
-        "body": "Its global dataset of agricultural field boundaries is published as a Portolan catalog on object storage, and served 106.6 TB in the 28 days ending August 27, 2026.",
-        "link": "Open the catalog",
-        "alt": "The Fields of The World explorer, a world map with agricultural field density drawn over satellite imagery."
-      },
-      "firms": {
-        "title": "NASA FIRMS mirror · 632,405,531 fire detections",
-        "body": "The mirror carries the whole archive as year-partitioned GeoParquet and PMTiles, which an explorer reads to draw every detection since 2000.",
-        "link": "Open the explorer",
-        "alt": "A web map of global fire detections with a timeline, reading the NASA FIRMS mirror catalog."
-      },
-      "carto": {
-        "title": "CARTO SDI · built on Portolan",
-        "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over.",
-        "link": "Visit CARTO SDI",
-        "alt": "The CARTO SDI web page, with a catalog of Canada that shows a list of collections, a map, and an assistant panel with a chart."
-      }
-    },
     "costs": {
       "municipality": {
         "figure": "~€0.47",

@@ -129,38 +129,6 @@
   "cases": {
     "title": "Casos de estudio",
     "readStudy": "Leer el caso de estudio",
-    "items": {
-      "pergamino": {
-        "title": "IDE Pergamino, una SDI municipal en 390 MB de archivos",
-        "body": "El catálogo replica la SDI de la Municipalidad de Pergamino, Argentina, con 183 capas en 13 categorías y 1,024,255 entidades.",
-        "link": "Abrir IDE Pergamino",
-        "alt": "Las categorías de IDE Pergamino, que son catastro, vialidad, transporte, agua y saneamiento, energía, salud, educación, seguridad, demografía, ambiente, límites administrativos y servicios municipales."
-      },
-      "trimet": {
-        "title": "TriMet, tres horas de los shapefiles a un catálogo en línea",
-        "body": "TriMet publica ocho conjuntos de datos geoespaciales como archivos simples. Replicarlos en un catálogo Portolan, con un navegador de tema personalizado, llevó unas tres horas de trabajo en un avión.",
-        "link": "Leer la entrada",
-        "alt": "El catálogo de TriMet en un navegador de Portolan con un tema basado en los colores de TriMet."
-      },
-      "ftw": {
-        "title": "Fields of the World, 369 TB sin capa de servicio",
-        "body": "Su conjunto de datos global de límites de parcelas agrícolas se publica como un catálogo Portolan en almacenamiento de objetos, y sirvió 106.6 TB en los 28 días que terminaron el 27 de agosto de 2026.",
-        "link": "Abrir el catálogo",
-        "alt": "El explorador de Fields of The World, un mapa del mundo con la densidad de campos agrícolas sobre imágenes de satélite."
-      },
-      "firms": {
-        "title": "Réplica de NASA FIRMS · 632,405,531 detecciones de incendios",
-        "body": "La réplica contiene todo el archivo como GeoParquet y PMTiles particionados por año, que un explorador lee para dibujar cada detección desde 2000.",
-        "link": "Abrir el explorador",
-        "alt": "Un mapa web de detecciones de incendios en todo el mundo con una línea de tiempo, que lee el catálogo réplica de NASA FIRMS."
-      },
-      "carto": {
-        "title": "CARTO SDI · construido sobre Portolan",
-        "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO SDI</carto> extiende Portolan para organizaciones con conjuntos de datos privados, gobernanza y auditorías, comercialización de datos y conjuntos de datos escribibles. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo.",
-        "link": "Visitar CARTO SDI",
-        "alt": "La página web de CARTO SDI, con un catálogo de Canadá que muestra una lista de colecciones, un mapa y un panel de asistente con un gráfico."
-      }
-    },
     "costs": {
       "municipality": {
         "figure": "~€0.47",
