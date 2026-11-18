@@ -5,7 +5,8 @@ adds its own files and edits no shared file. So two studies never conflict,
 and each study can be its own pull request.
 
 The layout, the index page, the navigation, and the homepage card come from
-the shared system. A study supplies content only.
+the shared system. The homepage section and the navigation link show only
+when at least one study exists. A study supplies content only.
 
 ## The files of one study
 
@@ -41,12 +42,24 @@ const meta: CaseStudyMeta = {
   logo: "/img/case-studies/example-agency-logo.svg",
   // Optional. Only for a mark that exists in white alone.
   // inkLogo: true,
-  // Optional. The key of a homepage card that opens this study.
-  // homeCard: "example",
+  // Optional. The title of the homepage card. The default is `subtitle`.
+  // cardTitle: "Example Agency: a state SDI in 2 GB of files",
+  // Optional. A mark for the dark homepage card. See below.
+  // cardLogo: "/img/case-studies/example-agency-logo-light.svg",
 };
 
 export default meta;
 ```
+
+## The homepage card
+
+Each study gets a card in the case study row of the homepage, with no extra
+file. The card shows `image`, the mark, `cardTitle` or `subtitle`, and
+`summary`.
+
+The card is dark, so it shows `logo` in one light color. That works for a
+mark with a transparent background. For a mark with a solid background, add
+a light version of the mark and set `cardLogo`.
 
 ## The body
 

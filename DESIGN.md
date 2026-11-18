@@ -291,9 +291,9 @@ caption and no visible caption. The homepage hero does not use `GlyphMap` or
 The homepage sections run in this order: hero `#top`, `#challenge`,
 `#solution`, `#why`, `#cases`, `#network`, `#about`. A 1px `#16170f` rule
 opens each section. `#why` is an ink band with a night photograph of Buenos
-Aires, whose lights show in `#4163cc`. Case studies is one row of five ink
-cards that scrolls on the inline axis and runs to the inline-end edge of the
-window. Two drawn arrows beside its heading step the row. They have no box,
+Aires, whose lights show in `#4163cc`. Case studies is one row of ink cards, one for each case study, that scrolls
+on the inline axis and runs to the inline-end edge of the window. The
+section does not render while the site has no study. Two drawn arrows beside its heading step the row. They have no box,
 and their size comes from the heading. `#network` is an ink band for the
 registry. Its text is on the inline-start side, and the words "Portolan
 registry" in it are a link. The live registry map is on the inline-end
