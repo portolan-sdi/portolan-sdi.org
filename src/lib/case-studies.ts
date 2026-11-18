@@ -22,10 +22,16 @@ export type CaseStudyMeta = Omit<BlogPost, "slug"> & {
    */
   inkLogo?: boolean;
   /**
-   * The key of a card in the homepage case study row. When a study names
-   * a card, that card opens the study.
+   * The title of the homepage card. The card shows `subtitle` when a study
+   * does not set this.
    */
-  homeCard?: string;
+  cardTitle?: string;
+  /**
+   * A mark for the homepage card, which is dark. The card shows `logo` in
+   * one light color by default. Set this only when that result is poor,
+   * for example for a mark with a solid background.
+   */
+  cardLogo?: string;
 };
 
 /** Case studies are English MDX, separate from the blog and its feed. */
@@ -48,9 +54,4 @@ export const CASE_STUDIES: CaseStudy[] = Object.entries(FILES)
 
 export function getCaseStudy(slug: string): CaseStudy | undefined {
   return CASE_STUDIES.find((study) => study.slug === slug);
-}
-
-/** The study that a homepage card opens, if one names that card. */
-export function getCaseStudyForCard(card: string): CaseStudy | undefined {
-  return CASE_STUDIES.find((study) => study.homeCard === card);
 }
