@@ -6,7 +6,7 @@ cubes in Zarr. Catalogs so large that finding a collection meant reading
 hundreds of JSON files. This release is our answer to those questions. Some
 of the answers are firm, and some are first drafts that we want you to try.
 
-That difference matters, so the post marks it everywhere. **Normative**
+The post marks each change as one of two kinds. **Normative**
 changes are part of conformance. Validators check them, and a conformant
 catalog follows them. **Incubating** specs are written down, with their own
 requirement IDs, but they are not part of conformance yet. They can change
@@ -16,8 +16,8 @@ lists every change.
 
 ## Parquet that geospatial tools did not write (normative)
 
-Until v0.3, Portolan vector data had to be GeoParquet 1.1. Meanwhile, Parquet
-itself learned about geometry. The format now has native `GEOMETRY` and
+Until v0.3, Portolan vector data had to be GeoParquet. Meanwhile, Parquet
+added its own support for geometry. The format now has native `GEOMETRY` and
 `GEOGRAPHY` types, and more engines write them, including Apache Iceberg
 writers. A table written that way is clearly vector data, but earlier
 validators treated it as a plain table, because it had no GeoParquet `geo`
@@ -26,17 +26,17 @@ metadata.
 v0.3 accepts GeoParquet 1.1, GeoParquet 2.0, and Parquet with native geometry
 types, and it applies the same vector rules to all three. We recommend
 GeoParquet 2.0 when your tools can write it. It stores geometry in Parquet's
-own geometry type, so any Parquet reader recognizes it, and the file carries
+own geometry type, so any Parquet reader recognizes it, and the file includes
 bounding box statistics for each row group. It also keeps the `geo` metadata,
-so the CRS travels with the file.
+which records the CRS in the file.
 
 For a data team, this means files that come out of the lakehouse they
 already use can go straight into a catalog.
 
 ## Rasters you can see and read (normative)
 
-A collection of hundreds of raster tiles is hard to look at. A browser either
-draws one tile or tries to draw all of them. v0.3 says that a collection of
+With a collection of hundreds of raster tiles, a browser either draws one
+tile or tries to draw all of them. v0.3 says that a collection of
 many rasters should include an overview COG: one small image in a web map
 projection that shows the whole collection at once.
 
@@ -67,16 +67,16 @@ only the metadata can be a plain static server.
 This is also where v0.3 breaks things. Partition globs must now be absolute
 bucket URLs, such as `s3://` or `gs://`. A reader has to list the files that
 match a glob, and you cannot list files over plain HTTP or with a relative
-path. In October 2026, this affected 9 of 37 collections in the registry. The
-fix is one line: replace the relative glob with the bucket URL. Two related
-rules can also fail existing catalogs. A data asset must link to one file, not
-a glob. And PMTiles cannot be a collection's only data: it is the visual
-layer, and it must point to the GeoParquet it was made from.
+path. In October 2026, this affected 9 of 37 collections in the registry. To fix
+it, replace the relative glob with the bucket URL. A related rule requires each
+data asset to link to one file. Another says that PMTiles cannot be a
+collection's only data. PMTiles is the visual layer, and it must point to the
+GeoParquet it was made from.
 
 ## Spatial order, measured differently
 
-Rows in a GeoParquet file must still follow a spatial order. That rule stays
-**normative**. What changed is how we check it. The old test looked at how
+Rows in a GeoParquet file must still follow a spatial order. That rule is still
+**normative**. We changed how we check it. The old test looked at how
 much the row groups overlapped, and it failed files that were well sorted but
 had only a few row groups. We removed it.
 
@@ -88,7 +88,7 @@ warning only, while we calibrate it on real catalogs.
 
 v0.3 defines how a Portolan catalog publishes itself as
 [STAC-GeoParquet](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/stac-geoparquet.md).
-One GeoParquet file holds every catalog and collection in the tree, with its
+One GeoParquet file has a row for every catalog and collection in the tree, with its
 extent, time range, keywords, links, and full original JSON. The catalog
 becomes a table that any Parquet reader can open. The JSON stays the normative
 form. The layout follows the shape proposed upstream in the [stac-geoparquet
@@ -103,7 +103,7 @@ catalog.
 
 Portolan started with [GeoParquet](https://geoparquet.org/),
 [PMTiles](https://docs.protomaps.com/pmtiles/), and [COG](https://cogeo.org/).
-But a lot of climate, weather, and Earth observation data lives in
+But a lot of climate, weather, and Earth observation data is published as
 [Zarr](https://geozarr.org/), and we do not want those publishers to convert
 their data cubes to fit us. v0.3 adds an [incubating Zarr
 profile](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/zarr.md)
@@ -115,8 +115,8 @@ release where we most need your feedback.
 Iceberg is new in v0.3. The [incubating
 convention](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/iceberg.md)
 lets a catalog publish an [Apache Iceberg](https://iceberg.apache.org/) table
-over the GeoParquet it already serves. STAC stays the catalog: it says what the
-data is, who published it, and how to draw it. The Iceberg table is a second
+over the GeoParquet it already serves. STAC is still the catalog, and it
+describes the data. The Iceberg table is a second
 way in, for the engines that speak Iceberg.
 
 Both paths end at the same bytes. The live data files of the table are exactly
@@ -126,8 +126,8 @@ metadata file, and an engine opens the table from that file alone.
 
 A static catalog gains a lot from this. The table's manifests list every file,
 so a client can read a partitioned collection over plain HTTPS without listing
-the bucket. Per-file bounds let an engine skip a file without opening it. And
-one `ATTACH` exposes the catalog as a SQL namespace. The convention uses
+the bucket. Per-file bounds let an engine skip a file without opening it. The
+convention uses
 Iceberg format version 3, the first with a native geometry type, over
 GeoParquet 2.0 data files. It works in both directions: a publisher can
 register existing GeoParquet as a table, or point the catalog at files an
@@ -138,8 +138,8 @@ Iceberg engine wrote first.
 A spec release is only useful if a validator checks it. [rashid
 0.4.0](https://github.com/portolan-sdi/rashid/releases/tag/v0.4.0) came out
 on the same day, 2026-11-17, and it implements the v0.3 rules. It bundles the
-v0.3.0 profile schema, so it reads native geospatial Parquet, checks column
-descriptions and raster classes, and requires absolute partition globs. It
+v0.3.0 profile schema and checks the new rules, such as native geospatial
+Parquet, column descriptions, raster classes, and absolute partition globs. It
 also checks the incubating parts: it checks a Zarr store against the
 incubating profile and reports spatial order as a warning.
 
@@ -157,17 +157,21 @@ rashid check path/to/catalog
 Read the [specification](https://spec.portolan-sdi.org/), and declare v0.3 in
 your catalog with
 `https://schemas.portolan-sdi.org/portolan/v0.3.0/schema.json` in
-`stac_extensions`. The earlier schemas stay published, so nothing changes for
+`stac_extensions`. The earlier schemas are still published, so nothing changes for
 a catalog until you move it. Then run rashid, and tell us what works and what
 does not in the [Portolan Google Group](https://groups.google.com/g/portolan)
 or the [Portolan
 channel](https://cloudnativegeo.slack.com/archives/C0A1JBH9529) in
 Cloud-Native Geo Slack.
 
-Thanks to the team that worked hard on this release over the last months:
-Nissim Lebovits, Chris Holmes, Matthias Mohr, and Youssef Harby. Thanks also
-to Pete Gadomski for his work on STAC-GeoParquet, and to Javier de la Torre
-for his work on Iceberg. Bjorn Sandvik, Michael Sumner, Jeff Albrecht, and
-Maya Midzik helped shape the Zarr profile. Marshall, Pedro-Juan Ferrer, and
-Giovanni Antoniazzi opened the issues behind several new rules. Isaac Corley
-and Daniel Silk contributed to rashid.
+Thanks to everyone who made this release possible:
+
+- Nissim Lebovits, Chris Holmes, Matthias Mohr, and Youssef Harby, the team
+  that worked hard on it over the last months.
+- Pete Gadomski, for his work on STAC-GeoParquet.
+- Javier de la Torre, for his work on Iceberg.
+- Bjorn Sandvik, Michael Sumner, Jeff Albrecht, and Maya Midzik, who helped
+  shape the Zarr profile.
+- Marshall, Pedro-Juan Ferrer, and Giovanni Antoniazzi, who opened the issues
+  behind several new rules.
+- Isaac Corley and Daniel Silk, who contributed to rashid.
