@@ -1,0 +1,101 @@
+import { PostFigure } from "@/components/blog/post-figure";
+
+*Draft for CARTO review. Product details and measured results need confirmation from Youssef and Cayetano. Final copy and visuals also need their approval.*
+
+## Background
+
+[CARTO](https://carto.com/) builds software for spatial analytics and visualization. Its platform helps people work with location data through maps, analytical workflows, and AI agents.
+
+[CARTO SDI](https://carto.com/spatial-data-infrastructure/) applies that work to spatial data infrastructure. It builds commercial services around a Portolan catalog that stays in storage controlled by the publisher.
+
+<PostFigure
+  n={1}
+  wide
+  src="https://carto.com/cdn.prod.website-files.com/63483ad423421bd16e7a7ae7/spatial-data-infrastructure-hero.webp"
+  alt="CARTO SDI displaying Canadian datasets beside a map and a wildfire analysis assistant."
+  ratio="1999 / 1080"
+  href="https://carto.com/spatial-data-infrastructure/"
+  caption="CARTO's Canada catalog example brings discovery, mapping, and an assistant together. Image from CARTO's product page."
+/>
+
+## The challenge
+
+Data publishers need to keep authoritative data available while maintaining the systems that serve it. Traditional portals add databases, map services, and APIs to that responsibility. Users still need specialist knowledge to find and combine datasets.
+
+CARTO wanted an approach that also gives organizations control over storage location, query engines, and approved AI models. Public, internal, and licensed data need operational controls without making the underlying publication dependent on one vendor.
+
+## Why Portolan
+
+Portolan defines the shared publication underneath those services. [STAC](https://stacspec.org/en/) metadata describes the assets. [GeoParquet](https://geoparquet.org/), [COG](https://cogeo.org/), and [PMTiles](https://docs.protomaps.com/pmtiles/) let clients read data directly from storage. `README.md` and `AGENTS.md` explain the same data to people and agents.
+
+For CARTO, that provides a foundation it can extend while preserving the publisher's choice of tools.
+
+> The published data remains a standard Portolan catalog in the publisher's storage.
+
+— Javier de la Torre, [CARTO's introduction to Portolan and CARTO SDI](https://carto.com/blog/introducing-portolan-and-carto-sdi/), September 2, 2026.
+
+*Reviewer input — Youssef or Cayetano can add a quote about the decision to build on Portolan and the tradeoffs encountered.*
+
+## The solution
+
+CARTO SDI adds three parts around the open catalog.
+
+- **A catalog interface** for discovering and accessing public, private, and licensed datasets.
+- **An AI interface** for asking questions and receiving maps, source references, and reproducible queries.
+- **A publisher control plane** for access requests, governance, usage analytics, quality feedback, and monetization.
+
+Those services are CARTO's product features. The Portolan specification defines the published catalog they build on.
+
+<PostFigure
+  n={2}
+  wide
+  src="https://carto.com/cdn.prod.website-files.com/63483ad423421bd16e7a7ae7/spatial-data-infrastructure-control-plane.webp"
+  alt="CARTO SDI control plane showing access requests, catalog quality, usage, and revenue panels."
+  ratio="2160 / 1205"
+  href="https://carto.com/spatial-data-infrastructure/"
+  caption="The publisher's view. Usage and revenue figures shown here are part of CARTO's product illustration, not measured outcomes for this case study. Image from CARTO."
+/>
+
+## Results and impact
+
+CARTO's OGC Connect Helsinki demonstration assessed a proposed data center location in Espoo using several publishers' catalogs. The assessment linked its findings to source data and repeatable queries, while identifying data that still needed preparation.
+
+The demonstration used storage in Finland, DuckDB, and Mistral. It showed how publishers can retain separate catalogs while people ask questions across them.
+
+<PostFigure
+  n={3}
+  wide
+  src="https://carto.com/cdn.prod.website-files.com/63483ad423421bd16e7a7ae7/introducing-portolan-and-carto-sdi-finland-sdi-agent.webp"
+  alt="Finland SDI demonstration mapping a proposed Espoo data center beside power lines, water, and protected areas, with sources attached to the assessment."
+  ratio="1600 / 1040"
+  href="https://www.youtube.com/watch?v=fijSkOLFUPE"
+  caption="A site assessment in the Helsinki demonstration. This is a demonstration of the workflow, not a production customer result. Image from CARTO's launch article."
+/>
+
+The practical benefits are direct access from existing tools, traceable answers, and publisher control over infrastructure. Their size still needs measurement in a production deployment.
+
+*Reviewer input — add a named deployment and its scope. Useful measures include dataset count and volume, time to publish, monthly operating cost, and time to answer a representative question. Give each comparison a baseline, measurement period, and source. Customer savings and adoption figures are pending confirmation.*
+
+<PostFigure n={4} wide caption="Javier de la Torre at OGC Connect Helsinki, including the site assessment demonstration.">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/fijSkOLFUPE"
+    title="Geospatial sovereignty in the age of AI — Javier de la Torre at OGC Connect Helsinki"
+    loading="lazy"
+    allow="encrypted-media; picture-in-picture; fullscreen"
+    allowFullScreen
+    className="block aspect-video w-full border-0"
+  />
+</PostFigure>
+
+[Watch the full talk on YouTube](https://www.youtube.com/watch?v=fijSkOLFUPE).
+
+## Future plans
+
+CARTO describes investment in Apache Iceberg to connect this publishing approach with analytical tables that support updates and governance. That work extends beyond Portolan's current core format requirements.
+
+*Reviewer input — confirm the next Portolan milestones for CARTO SDI, which capabilities are available or planned, and any deployment that CARTO can name publicly.*
+
+## Sources
+
+- [CARTO SDI product overview](https://carto.com/spatial-data-infrastructure/)
+- [Spatial data infrastructure, rebuilt for the age of AI](https://carto.com/blog/introducing-portolan-and-carto-sdi/) — Javier de la Torre, September 2, 2026
