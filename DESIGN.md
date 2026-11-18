@@ -287,29 +287,36 @@ scrolls on the inline axis and runs to the inline-end edge of the window.
 the organizations that the text names. The four steps and the recorded catalog build are the `/how-it-works` route. The tool list is the `/ecosystem` route. The homepage plays no terminal recording.
 
 The solution section has `PipelineFigure` in
-`src/components/home/pipeline-figure.tsx`, under its head. The figure has
-two halves on one 23.2 second clock. From `lg` they sit side by side at
-560px. Below `lg` they stack, the session first. The left half is a Claude
-Code session that fetches four Philadelphia layers, converts them,
-catalogs them, and pushes the catalog. It is `#16170f` with `#4163cc` as
-its accent, and it is the one sanctioned terminal mock-up. The right half
-is one canvas, drawn by `pipeline-renderer.ts`, with a camera that only
-moves down. The four sources sit at the top in their own systems: a
-Shapefile on a share, a GeoPackage on a desktop, an ArcGIS REST service,
-and a WFS service. The files are copied and the services are paged down
-their lanes into `~/phl-housing`, where each layer turns into GeoParquet
-and PMTiles. The plates drop into a catalog tree under
-`s3://your-bucket/`, and the tree becomes the portal of Rowhouse Atlas, a
-fictional publisher. The camera then carries on down to a fresh start, so
-the loop never runs backward. Four mono step labels under the canvas
-(Ingest, Convert, Catalog, Publish) mark the current step in `#2d4aa8`.
-By the owner's choice the figure is a second moving element, next to
-`HeroFigure`. The session styles are the `pipe-` block in `globals.css`,
-with no hex of their own. The portal is the one place on the site with
-another brand. Its paper, ink, and brick colors are canvas constants in
-the renderer, and its faces, Fraunces and Instrument Sans, are local files
-in `src/components/home/fonts/` that only the figure loads. The figure is
-`dir="ltr"`, has fixed heights, holds the finished portal under reduced
+`src/components/home/pipeline-figure.tsx`. From `lg` it sits beside the
+text of the section. Below `lg` it is under the text. The figure is one
+canvas, drawn by `pipeline-renderer.ts`, with a camera that only moves
+down and a 17.6 second loop. It tells three steps. In the first step,
+four sources sit at the top with the types of their endpoints as labels:
+Shapefile, GeoPackage, ArcGIS REST, and WFS. Each layer travels down its
+lane, crosses one `#4163cc` line, and lands with two labels, GeoParquet
+and PMTiles. In the second step, the plates drop into a catalog tree
+under `s3://your-bucket/`, inside a frame with a `#16170f` head that says
+`S3 BUCKET`. In the third step, the tree becomes a sample data portal.
+The camera then carries on down to a fresh start, so the loop never runs
+backward. The figure shows no row counts, no file sizes, and no request
+lines.
+
+The viewer steps through the figure. Under the canvas, after one rule,
+are three numbered step names and two arrow buttons. A step name plays
+its step and stops on the finished frame. The figure has no play button.
+It loops until the viewer uses a control. The current step is `#2d4aa8`.
+
+The portal is the one place on the site with another look. It uses the
+colors and the faces of the City of Philadelphia digital standards, with
+no logo and no name of a publisher: `#0f4d90` for the head, `#f0f0f0`
+cards with a `#2176d2` rule, a `#f3c613` button for QGIS, `#25cef7` for
+the send button, and `#444444` text, in Montserrat and Open Sans. The
+colors are canvas constants in the renderer, and only the figure loads
+the two faces. The portal has a featured layer, three smaller layers, and
+a chat panel named PhiLLM. By the owner's choice the figure is a second
+moving element, next to `HeroFigure`. The control styles are the `pipe-`
+block in `globals.css`, with no hex of their own. The figure is
+`dir="ltr"`, has fixed heights, shows the finished portal under reduced
 motion, and pauses off screen and in a hidden tab.
 
 Every route except the homepage opens with `PageHero` in `page-hero.tsx`,
@@ -475,8 +482,7 @@ The mark never mirrors in RTL. It never takes a gradient.
   `SiteShell`.
 - **Don't** use a compass rose or a rhumb line. The motif was tried
   repeatedly and rejected.
-- **Don't** add a terminal or code-session mockup. The Claude Code session
-  in `PipelineFigure` is the one sanctioned exception.
+- **Don't** add a terminal or code-session mockup.
 - **Don't** add an emoji. The permitted Unicode marks are ↗, →, and ·.
 - **Don't** give every card in a grid the same anatomy. Ragged is deliberate.
 - **Don't** number a card grid that is not a real sequence.

@@ -931,8 +931,8 @@ html {
    Pipeline figure (`pipe-`)
    The figure in the homepage solution section, in
    `src/components/home/pipeline-figure.tsx`. One canvas, drawn by
-   `pipeline-renderer.ts`, with the four step labels under it. The figure
-   is LTR in every locale. Only the step labels follow the page direction.
+   `pipeline-renderer.ts`, with the controls under it. The figure is LTR
+   in every locale. Only the controls follow the page direction.
    ====================================================================== */
 .pipe-fig {
   /* The fixed height of the scene. It is taller from `lg`, where the
@@ -956,38 +956,67 @@ html {
   height: 100%;
 }
 
-/* The four steps, named under the scene. The arrow points the way the
-   page reads. */
+/* The controls under the scene. The three steps are text buttons in one
+   row, each with its number. Two arrow buttons at the end of the row go
+   one step back and one step on. */
+.pipe-ctl {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  border-top: 1px solid var(--p-line);
+  padding-top: 10px;
+}
 .pipe-steps {
   display: flex;
+  flex: 1;
+  min-width: 0;
   flex-wrap: wrap;
-  gap: 4px 0;
-  margin: 14px 0 0;
+  gap: 2px 20px;
+  margin: 0;
   padding: 0;
   list-style: none;
+}
+.pipe-steps button,
+.pipe-nav button {
+  border: 0;
+  padding: 0;
+  background: transparent;
   font-family: var(--p-mono);
   font-size: var(--text-eyebrow);
-  line-height: 18px;
+  line-height: 22px;
   color: var(--p-ink-3);
+  cursor: pointer;
+  transition: color 200ms ease;
 }
-.pipe-steps:dir(rtl) {
+.pipe-steps button {
+  display: flex;
+  gap: 7px;
+  text-align: start;
+}
+.pipe-steps:dir(rtl) button {
   font-family: var(--p-sans);
 }
-.pipe-steps li {
-  display: flex;
-  align-items: center;
-  transition: color 240ms ease;
+.pipe-steps button:hover,
+.pipe-steps button:focus-visible,
+.pipe-nav button:hover,
+.pipe-nav button:focus-visible {
+  color: var(--p-ink);
 }
-.pipe-steps li + li::before {
-  content: "→";
-  margin: 0 10px;
-  color: var(--p-ink-3);
-}
-.pipe-steps:dir(rtl) li + li::before {
-  content: "←";
-}
-.pipe-steps li.is-on {
+.pipe-steps button[aria-current="step"] {
   color: var(--p-primary-ink);
+  font-weight: 600;
+}
+.pipe-nav {
+  display: flex;
+  flex: none;
+  gap: 14px;
+  padding-inline-end: 3px;
+}
+.pipe-nav button {
+  color: var(--p-ink);
+  font-size: var(--text-body);
 }
 
 @media (min-width: 64rem) {

@@ -432,12 +432,13 @@
     "p2": "Once users can query files directly, publishers don't need to maintain a service whose main job is to stand between users and the data.",
     "figure": {
       "steps": {
-        "ingest": "Ingest",
-        "convert": "Convert",
-        "catalog": "Catalog",
-        "publish": "Publish"
+        "extract": "Extract and convert",
+        "catalog": "Publish a catalog",
+        "build": "Build on top"
       },
-      "description": "An animated figure in two halves. On the left, a Claude Code session with the Portolan skills publishes four Philadelphia layers that live in four existing systems. The property parcels are a Shapefile on a shared drive, and the land use is a GeoPackage on a desktop. The building footprints are behind an ArcGIS REST feature service, and the zoning base districts are behind a WFS service. On the right, the files are copied in and the services are queried page by page. Each layer becomes GeoParquet and PMTiles. The four collections move into one catalog under s3://your-bucket/, beside catalog.json, README.md, and AGENTS.md. After the push, the catalog becomes the data portal of a fictional publisher, served from the same bucket."
+      "previous": "Previous step",
+      "next": "Next step",
+      "description": "An animated figure in three steps. In the first step, four Philadelphia layers leave four existing systems, which are a Shapefile, a GeoPackage, an ArcGIS REST feature service, and a WFS service. Each layer becomes GeoParquet and PMTiles. In the second step, the four collections move into one catalog under s3://your-bucket/, beside catalog.json, README.md, and AGENTS.md. In the third step, the catalog becomes the data portal of a fictional publisher, served from the same bucket. The buttons under the figure play each step."
     },
     "blocks": {
       "standards": {
