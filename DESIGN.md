@@ -339,8 +339,10 @@ block in `globals.css`, with no hex of their own. The figure is
 `dir="ltr"`, has fixed heights, shows the finished portal under reduced
 motion, and pauses off screen and in a hidden tab.
 
-Every route except the homepage opens with `PageHero` in `page-hero.tsx`,
-which draws the still glyph relief map under `--hero-scrim`. That band owns
+Every route except the homepage opens with `PageHero` in `page-hero.tsx`.
+It is not a color band. The title and the text under it are on the page
+ground, and one `#16170f` rule closes the block. Do not give this header a
+band, a picture, or a map. That header owns
 the page `h1`, so the section below it sets no second `h1` and opens with
 `pt-[clamp(28px,3.5vw,48px)]` instead of full section padding.
 

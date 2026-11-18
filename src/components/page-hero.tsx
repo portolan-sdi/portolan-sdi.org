@@ -1,23 +1,22 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { GlyphMap } from "./glyph-map";
 
-// The header band on every page that is not the homepage.
+// The header of every page that is not the homepage.
 //
-// It is the homepage hero, shortened and held still. The same glyph relief
-// map, the same scrim, the same headline treatment. Two things differ. The
-// band is shorter, because a secondary page has to show its content sooner.
-// And the map does not drift, because the homepage carries the one moving
-// element on the site.
+// It is not a color band. The title and the text under it are on the page
+// ground, and one `--p-line` rule closes the block. The top bar closes with
+// the same rule, so the title sits between two rules. The ink bands are for
+// the homepage only.
 //
-// The band owns the page's <h1>. Do not set a second one in the body below.
+// The header owns the page's <h1>. Do not set a second one in the body
+// below.
 
 interface PageHeroProps {
   title: ReactNode;
   /** Second line of a two-part headline, set lighter and one step down. */
   subtitle?: ReactNode;
-  /** Mono line above the title, such as a date. */
+  /** Small line above the title, such as a date. */
   eyebrow?: ReactNode;
   /** Anything that follows the headline inside the band. */
   children?: ReactNode;
@@ -25,14 +24,8 @@ interface PageHeroProps {
 
 export function PageHero({ title, subtitle, eyebrow, children }: PageHeroProps) {
   return (
-    <section className="relative isolate overflow-hidden border-b border-p-line">
-      <GlyphMap className="absolute inset-0 h-full w-full" still />
-      <div
-        className="absolute inset-0"
-        style={{ background: "var(--hero-scrim)" }}
-      />
-
-      <div className="relative z-10 px-[var(--p-pad-section-x)] pb-[clamp(32px,4vw,56px)] pt-[clamp(40px,5vw,72px)]">
+    <section className="border-b border-p-line">
+      <div className="px-[var(--p-pad-section-x)] pb-[clamp(32px,4vw,56px)] pt-[clamp(40px,5vw,72px)]">
         <div className="mx-auto max-w-[1240px]">
           {eyebrow && (
             <div className="mb-3 text-small text-p-ink-3">
