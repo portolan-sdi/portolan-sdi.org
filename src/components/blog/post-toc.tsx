@@ -59,7 +59,7 @@ export function PostToc({ sections }: PostTocProps) {
         aria-label={t("inThisArticle")}
         className="pointer-events-auto sticky top-[calc(var(--p-bar)+2rem)] bg-p-bg/90 py-3"
       >
-        <p className="font-mono text-eyebrow text-p-ink-3">
+        <p className="text-small text-p-ink-3">
           {t("inThisArticle")}
         </p>
         {/* The headings are English, like the body, so the list stays

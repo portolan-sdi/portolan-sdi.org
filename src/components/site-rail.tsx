@@ -149,7 +149,7 @@ export function SiteShell({ children }: SiteShellProps) {
       {/* The bar. Solid page color over a black rule, no blur and no shadow.
           The header is the positioned box the panel hangs from, so the panel
           spans the viewport while the row keeps the 1240px content column. */}
-      <header className="sticky top-0 z-40 h-[var(--p-bar)] border-b-4 border-p-line bg-p-bg px-[var(--p-pad-section-x)]">
+      <header className="sticky top-0 z-40 h-[var(--p-bar)] border-b border-p-line bg-p-bg px-[var(--p-pad-section-x)]">
         <nav
           ref={navRef}
           aria-label={t("nav.mainAria")}
@@ -171,7 +171,7 @@ export function SiteShell({ children }: SiteShellProps) {
             onClick={() => (menuOpen ? closeMenu() : setMenuOpen(true))}
             aria-controls={MENU_ID}
             aria-expanded={menuOpen}
-            className="ms-auto border border-p-line px-3 py-1.5 font-mono text-eyebrow uppercase tracking-[0.1em] text-p-ink hover:bg-p-bg-soft md:hidden rtl:tracking-normal"
+            className="ms-auto border border-p-line px-3 py-1.5 text-small text-p-ink hover:bg-p-bg-soft md:hidden"
           >
             {t("nav.index")}
           </button>

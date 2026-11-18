@@ -32,8 +32,8 @@
     "community": "Portolan es un proyecto comunitario de código abierto. Damos la bienvenida a nuevos usuarios y colaboradores. Únete al <slack>canal de Portolan en Slack</slack> y sigue el <group>Grupo de Google de Portolan</group> para conocer los detalles de nuestras reuniones semanales."
   },
   "footer": {
-    "contentLicense": "El contenido del sitio tiene una licencia <cc>CC BY 4.0</cc>.",
-    "sourceLicense": "El código fuente del sitio tiene una licencia <apache>Apache-2.0</apache>.",
+    "contentLicense": "Contenido del sitio <cc>CC BY 4.0</cc>",
+    "sourceLicense": "Código del sitio <apache>Apache-2.0</apache>",
     "googleGroup": "Grupo de Google",
     "slack": "Slack",
     "community": "Comunidad",
@@ -157,12 +157,6 @@
         "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO SDI</carto> extiende Portolan para organizaciones con conjuntos de datos privados, gobernanza y auditorías, comercialización de datos y conjuntos de datos escribibles. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo.",
         "link": "Visitar CARTO SDI",
         "alt": "La página web de CARTO SDI, con un catálogo de Canadá que muestra una lista de colecciones, un mapa y un panel de asistente con un gráfico."
-      },
-      "registry": {
-        "title": "Hacia una red federada",
-        "body": "Nuestro objetivo a largo plazo es que Portolan se convierta en la forma predeterminada de publicar datos geoespaciales. El registro es el primer paso, un catálogo de catálogos alojados de forma independiente. Los bytes subyacentes nunca salen del almacenamiento del publicador, y los usuarios los consultan directamente en la fuente.",
-        "link": "Abrir el registro completo",
-        "alt": "Un mapa del mundo con un marcador por cada grupo de catálogos del registro de Portolan."
       }
     },
     "costs": {
@@ -186,7 +180,20 @@
     "previous": "Caso anterior",
     "next": "Caso siguiente"
   },
+  "network": {
+    "title": "Hacia una red federada",
+    "body": "Nuestro objetivo a largo plazo es que Portolan se convierta en la forma predeterminada de publicar datos geoespaciales. El <reg>registro de Portolan</reg> es el primer paso, un catálogo de catálogos alojados de forma independiente. Los bytes subyacentes nunca salen del almacenamiento del publicador, y los usuarios los consultan directamente en la fuente.",
+    "link": "Abrir el registro completo",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa"
+  },
   "coverage": {
+    "gestures": {
+      "windows": "Usa Ctrl + desplazamiento para acercar el mapa",
+      "mac": "Usa ⌘ + desplazamiento para acercar el mapa",
+      "mobile": "Usa dos dedos para mover el mapa"
+    },
+    "mapUnavailable": "El mapa no se cargó.",
     "about": "Este mapa muestra dónde hay datos disponibles en el registro de Portolan. Cada hexágono se sombrea según el número de catálogos distintos que tienen al menos una colección sobre esa zona.",
     "cell": {
       "catalogs": "{count, plural, one {# catálogo} other {# catálogos}}"
@@ -468,7 +475,6 @@
     }
   },
   "about": {
-    "title": "Acerca de",
     "lead": "<line>Portolan es un proyecto de código abierto impulsado por la comunidad.</line><line><slack>Únete a nosotros en Slack</slack> y participa.</line>",
     "logosLabel": "Con contribuciones de"
   }

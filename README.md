@@ -36,10 +36,12 @@ the Earth Science and Remote Sensing Unit, NASA Johnson Space Center. The
 source is the NASA Earth Observatory article
 [Monterrey Amid Mountains](https://science.nasa.gov/earth/earth-observatory/monterrey-amid-mountains/).
 
-The image behind the "Why Portolan" band on the homepage is a NASA Earth
-Observatory image made with Landsat data from the U.S. Geological Survey.
-The source is the NASA Earth Observatory article
-[An Agricultural Mosaic in Taiwan](https://science.nasa.gov/earth/earth-observatory/an-agricultural-mosaic-in-taiwan/).
+The image behind the "Why Portolan" band on the homepage is astronaut
+photograph ISS073-E-176299, Buenos Aires at night. It is courtesy of the
+Earth Science and Remote Sensing Unit, NASA Johnson Space Center. The file
+is from the
+[NASA Earth Observatory image library](https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/154000/154789/iss073e0176299_lrg.jpg).
+The site shows it in grayscale, cropped.
 
 The figure in the solution section of the homepage uses three more items.
 The QGIS icon in `public/img/home/pipeline/qgis.svg` is from the

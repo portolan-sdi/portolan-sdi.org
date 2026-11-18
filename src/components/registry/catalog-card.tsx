@@ -26,7 +26,7 @@ function MetaRow({ children }: { children: ReactNode[] }) {
   if (items.length === 0) return null;
 
   return (
-    <p className="flex flex-wrap items-center gap-x-1.5 text-small text-p-ink-3 font-mono">
+    <p className="flex flex-wrap items-center gap-x-1.5 text-small text-p-ink-3">
       {items.map((item, i) => (
         <Fragment key={i}>
           {i > 0 && <span aria-hidden="true">·</span>}
@@ -169,7 +169,7 @@ function CatalogCredit({
   const hasDetail = rest.length > 0 || derived.length > 0 || serves !== null;
 
   return (
-    <p className="group/credit relative text-small text-p-ink-3 font-mono">
+    <p className="group/credit relative text-small text-p-ink-3">
       {/* Focusable so the detail is reachable without a pointer. */}
       <span tabIndex={hasDetail ? 0 : undefined} className="outline-p-primary">
         {t("card.dataSourceProducer")}{" "}

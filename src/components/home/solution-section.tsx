@@ -19,13 +19,13 @@ export function SolutionSection() {
   return (
     <section
       id="solution"
-      className="graph-wash border-t-4 border-p-line px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]"
+      className="graph-wash border-t border-p-line px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]"
     >
       <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-[clamp(40px,5vw,56px)] items-center">
         <div>
           {/* One of the two eyebrows on the homepage. The other is on the
               challenge section. */}
-          <p className="font-mono rtl:font-sans! text-eyebrow text-p-ink-3">
+          <p className="text-small text-p-ink-3">
             {t("eyebrow")}
           </p>
           <h2 className="mt-3 text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-balance">
@@ -36,8 +36,8 @@ export function SolutionSection() {
             <p className="text-lead leading-relaxed">{t("p2")}</p>
             {/* The two ways on from here. The quickstart is the East
                 Hampton guide, which starts from one prompt. */}
-            <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Btn asChild variant="primary">
+            <div className="mt-2 flex flex-wrap items-center gap-x-8 gap-y-3">
+              <Btn asChild variant="link">
                 <Link
                   href="/tutorials/mirroring-east-hampton"
                   data-track="solution-quickstart"
@@ -45,7 +45,7 @@ export function SolutionSection() {
                   {tHow("quickstart.title")} <DirArrow />
                 </Link>
               </Btn>
-              <Btn asChild variant="ghost">
+              <Btn asChild variant="link">
                 <Link href="/how-it-works" data-track="solution-how">
                   {tHow("title")} <DirArrow />
                 </Link>

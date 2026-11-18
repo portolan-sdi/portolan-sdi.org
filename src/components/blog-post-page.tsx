@@ -103,7 +103,7 @@ export function BlogPostPage({
       >
         <Link
           href={`/${section}`}
-          className="mt-8 inline-flex items-center gap-2 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3 transition-colors hover:text-p-primary"
+          className="mt-8 inline-flex items-center gap-2 text-small text-p-ink-3 transition-colors hover:text-p-primary"
         >
           <Arrow back />
           {t("backToIndex")}
@@ -137,7 +137,7 @@ export function BlogPostPage({
               >
                 {older && (
                   <Link href={`/${section}/${older.slug}`} className="group block">
-                    <span className="font-mono text-eyebrow text-p-ink-3">
+                    <span className="text-small text-p-ink-3">
                       <Arrow back /> {tBlog("previous")}
                     </span>
                     <span className="mt-1 block text-body font-bold leading-snug text-pretty text-p-ink transition-colors group-hover:text-p-primary">
@@ -150,7 +150,7 @@ export function BlogPostPage({
                     href={`/${section}/${newer.slug}`}
                     className="group block sm:col-start-2 sm:text-end"
                   >
-                    <span className="font-mono text-eyebrow text-p-ink-3">
+                    <span className="text-small text-p-ink-3">
                       {tBlog("next")} <Arrow />
                     </span>
                     <span className="mt-1 block text-body font-bold leading-snug text-pretty text-p-ink transition-colors group-hover:text-p-primary">

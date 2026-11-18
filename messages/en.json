@@ -32,8 +32,8 @@
     "community": "Portolan is an open-source community project. We welcome new users and contributors. Join the <slack>Portolan channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
   },
   "footer": {
-    "contentLicense": "Site content is licensed under <cc>CC BY 4.0</cc>.",
-    "sourceLicense": "Website source is licensed under <apache>Apache-2.0</apache>.",
+    "contentLicense": "Site content <cc>CC BY 4.0</cc>",
+    "sourceLicense": "Website source <apache>Apache-2.0</apache>",
     "googleGroup": "Google Group",
     "slack": "Slack",
     "community": "Community",
@@ -157,12 +157,6 @@
         "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over.",
         "link": "Visit CARTO SDI",
         "alt": "The CARTO SDI web page, with a catalog of Canada that shows a list of collections, a map, and an assistant panel with a chart."
-      },
-      "registry": {
-        "title": "Toward a federated network",
-        "body": "Our long-term goal is for Portolan to become the default way of publishing geospatial data. The registry is the first step: a catalog of independently hosted catalogs. The underlying bytes never leave the publisher's storage, and users query them directly from the source.",
-        "link": "Open the full registry",
-        "alt": "A world map with a marker for each group of catalogs in the Portolan registry."
       }
     },
     "costs": {
@@ -186,7 +180,20 @@
     "previous": "Previous case",
     "next": "Next case"
   },
+  "network": {
+    "title": "Toward a federated network",
+    "body": "Our long-term goal is for Portolan to become the default way of publishing geospatial data. The <reg>Portolan registry</reg> is the first step: a catalog of independently hosted catalogs. The underlying bytes never leave the publisher's storage, and users query them directly from the source.",
+    "link": "Open the full registry",
+    "fullscreen": "Full screen",
+    "exitFullscreen": "Exit full screen"
+  },
   "coverage": {
+    "gestures": {
+      "windows": "Use Ctrl + scroll to zoom the map",
+      "mac": "Use ⌘ + scroll to zoom the map",
+      "mobile": "Use two fingers to move the map"
+    },
+    "mapUnavailable": "The map did not load.",
     "about": "This map shows where data in the Portolan registry is available. Each hexagon is shaded by the number of distinct catalogs with at least one collection covering that area.",
     "cell": {
       "catalogs": "{count, plural, one {# catalog} other {# catalogs}}"
@@ -468,7 +475,6 @@
     }
   },
   "about": {
-    "title": "About",
     "lead": "<line>Portolan is an open-source, community-driven project.</line><line><slack>Join us on Slack</slack> and get involved.</line>",
     "logosLabel": "With contributions from"
   }

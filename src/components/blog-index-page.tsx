@@ -51,7 +51,7 @@ export function BlogIndexPage({ section = "blog" }: BlogIndexPageProps) {
           <a
             href={FEED_PATH}
             type="application/rss+xml"
-            className="mt-4 inline-flex items-center gap-2 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3 transition-colors hover:text-p-primary rtl:tracking-normal"
+            className="mt-4 inline-flex items-center gap-2 text-small text-p-ink-3 transition-colors hover:text-p-primary"
           >
             {/* The feed mark, drawn square to match the site's corners: a
                 square source and two arcs with butt caps. It takes the link
@@ -84,7 +84,7 @@ export function BlogIndexPage({ section = "blog" }: BlogIndexPageProps) {
               >
                 <time
                   dateTime={post.date}
-                  className="block font-mono text-eyebrow uppercase tracking-[0.06em] text-p-ink-3"
+                  className="block text-small text-p-ink-3"
                 >
                   {format.dateTime(new Date(post.date), "postDate")}
                 </time>
@@ -93,7 +93,7 @@ export function BlogIndexPage({ section = "blog" }: BlogIndexPageProps) {
                     It carries no link here: the only hit target on a card is
                     the title. */}
                 {post.author && (
-                  <p className="mt-1 font-mono text-eyebrow uppercase tracking-[0.06em] text-p-ink-3 md:col-start-1">
+                  <p className="mt-1 text-small text-p-ink-3 md:col-start-1">
                     {tBlog("by")} <Ltr>{post.author}</Ltr>
                   </p>
                 )}

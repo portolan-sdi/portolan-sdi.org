@@ -19,11 +19,11 @@ colors:
   danger: "#a3271f"
 typography:
   eyebrow:
-    fontFamily: "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
+    fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
     fontSize: "13px"
     fontWeight: 400
     lineHeight: 1.4
-    letterSpacing: "0.04em"
+    letterSpacing: "normal"
   small:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
@@ -181,9 +181,16 @@ that needs more weight takes a thicker border, not a lighter color.
 **Mono:** JetBrains Mono, loaded at 400, 500, and 600.
 **Arabic:** Cairo, loaded at 400, 500, 600, 700, and 800.
 
-The split between sans and mono is a register split. Sans sets prose and
-headlines. Mono sets code, labels, eyebrows, kickers, data, statuses, paths,
-numbers, and controls. Never set a headline or a body paragraph in mono.
+Mono is for code only. It sets code blocks, inline code, typeable
+identifiers in prose, repository names, the text inside the two homepage
+figures, and arrows. Sans sets everything else, in sentence case: prose,
+headlines, kickers, labels, dates, captions, tags, buttons, and controls.
+Mono labels in capitals with wide tracking left in November 2026, because
+they read as agent output. Do not put a label or a button back in mono.
+
+Every link arrow comes from `DirArrow` in `src/components/ui/dir-arrow.tsx`,
+which sets `→` or `↗` in the mono face. The mono arrow has a body that is
+longer than its head. Do not type an arrow in the sans face.
 
 ### Hierarchy
 
@@ -192,8 +199,8 @@ such as `text-[13px]`.
 
 | Step | Size | Line height | Use |
 |---|---|---|---|
-| `text-eyebrow` | 13px | 1.4 | Mono kickers, tags, and labels |
-| `text-small` | 14px | 1.5 | Secondary text and button labels |
+| `text-eyebrow` | 13px | 1.4 | The license line in the footer |
+| `text-small` | 14px | 1.5 | Secondary text, kickers, tags, and labels |
 | `text-body` | 16px | 1.6 | Body prose |
 | `text-lead` | clamp(17px, 0.4vw + 15.5px, 19px) | 1.6 | Supporting copy under a heading |
 | `text-card-title` | 20px | 1.3 | Card and list-item titles |
@@ -208,11 +215,10 @@ hierarchy. `text-lead` caps at 19px so `text-card-title` outranks it at every
 width.
 
 Headings take negative tracking, from `-0.015em` at card title to `-0.03em`
-at section and hero. Mono labels take positive tracking, `0.04em` on kickers
-and `0.08em` on buttons.
+at section and hero. Labels and buttons take no tracking.
 
 Arabic never takes letterspacing. The script is connected, and tracking
-breaks it. Buttons neutralize their tracking with `rtl:tracking-normal`.
+breaks it. Headings neutralize their tracking with `rtl:tracking-normal`.
 Arabic always renders in Cairo, because Hanken Grotesk carries no Arabic
 glyphs. On RTL pages `--p-sans` re-points to Cairo, so body, headings, and
 the `font-sans` utility all resolve to Cairo.
@@ -239,7 +245,7 @@ links Blog, Guides & demos, Talks, Ecosystem, FAQ, and Registry, then the locale
 on the inline-end side. The locale control shows a globe icon beside the locale code. The globe is the only icon in the bar, and the page links take none. It lists pages only, with no homepage section
 anchors, no scroll-spy, and no collapse control. The link for the current
 page takes `aria-current="page"` and `#4163cc`. Below `md` the bar shows the
-logo and a mono "Index" button, which opens a panel under the bar with the
+logo and an "Index" button, which opens a panel under the bar with the
 same links and the locale control. The word "Index" is the control, never a
 hamburger icon. Links that leave the site are in `SiteFooter`. Every item is
 a real link, never a dead span.
@@ -247,9 +253,12 @@ a real link, never a dead span.
 `SiteHeader` was removed in July 2026 and the collapsible left side rail in
 November 2026. Do not reintroduce the rail or a second header component.
 
-In the footer, content starts at the top of the band and aligns to the
-inline-start edge. The license line is at the bottom edge of the band,
-start-aligned.
+In the footer, the logo is at the top on the inline-start side, at 30px.
+The three link columns are at the top on the inline-end side, with their
+text end-aligned from `sm`. Each column head is sans in bold, with no rule,
+so it reads as a head and not as a link. The license line is at the bottom
+edge of the band, start-aligned, at `text-eyebrow`. It is short: "Site
+content CC BY 4.0 · Website source Apache-2.0".
 
 The homepage hero section takes the `graph-wash` class. From `lg` up it has
 two columns. The headline and the description are on the inline-start side.
@@ -280,11 +289,22 @@ caption and no visible caption. The homepage hero does not use `GlyphMap` or
 `--hero-scrim`.
 
 The homepage sections run in this order: hero `#top`, `#challenge`,
-`#solution`, `#why`, `#cases`, `#about`. `#why` is a satellite image band
-with the footer treatment. Case studies is one row of six cards that
-scrolls on the inline axis and runs to the inline-end edge of the window.
-`#about` has the about text, the "Join us on Slack" button, and the logos of
-the organizations that the text names. The four steps and the recorded catalog build are the `/how-it-works` route. The tool list is the `/ecosystem` route. The homepage plays no terminal recording.
+`#solution`, `#why`, `#cases`, `#network`, `#about`. A 1px `#16170f` rule
+opens each section. `#why` is an ink band with a night photograph of Buenos
+Aires, whose lights show in `#4163cc`. Case studies is one row of five ink
+cards that scrolls on the inline axis and runs to the inline-end edge of the
+window. Two drawn arrows beside its heading step the row. They have no box,
+and their size comes from the heading. `#network` is an ink band for the
+registry. Its text is on the inline-start side, and the words "Portolan
+registry" in it are a link. The live registry map is on the inline-end
+side, in a plain frame, 400px tall from `lg`. The map opens on the whole
+world. Two square icon buttons sit on its inline-start side: the one at the
+top opens `/registry`, and the one at the bottom shows the map on the full
+screen. `#about` has the about text with the "Join us on Slack" link, and
+the logos of the organizations that the text names. It has no eyebrow. The
+four steps and the recorded catalog build are the `/how-it-works` route. The
+tool list is the `/ecosystem` route. The homepage plays no terminal
+recording.
 
 The solution section has `PipelineFigure` in
 `src/components/home/pipeline-figure.tsx`. From `lg` it sits beside the
@@ -325,6 +345,8 @@ the page `h1`, so the section below it sets no second `h1` and opens with
 `pt-[clamp(28px,3.5vw,48px)]` instead of full section padding.
 
 Content keeps a 1240px column. No homepage section runs media edge to edge.
+The case study row is the one exception: it runs past the column to the
+inline-end edge of the window.
 
 Shared UI uses logical properties (`ps`/`pe`, `ms`/`me`, `text-start`/`end`,
 `border-s`/`e`, `inset-s`/`e`), never physical ones. Prefer `gap-*` over
@@ -341,18 +363,24 @@ content with a `#16170f` rule. Do not introduce a card with a soft shadow, a
 glassy blur, or an alternating background band. There is no `--p-bg-soft`
 section band on the page.
 
-The permitted full-bleed color fields are solid, and there are four.
+The permitted full-bleed color fields are these.
 
 - **Challenge section** (homepage): `#16170f` with `#ffffff` text. It has no
   large heading. Its eyebrow is its `h2`, its first paragraph is the
   statement in bold, and its second paragraph supports it.
-- **Case study cards** (homepage): `#16170f` with `#fcfcfa` text. The registry card takes the primary color.
+- **Why Portolan** (homepage): `#16170f` with `#ffffff` text. A grayscale
+  NASA photograph of Buenos Aires at night sits on the ink, and a `#4163cc`
+  layer multiplies over it. The city lights are blue and the dark stays ink.
+- **Registry section** (homepage): `#16170f` with `#ffffff` text.
 - **Footer** (every page): a grayscale NASA astronaut photograph
   multiplied over `#4163cc`, so it reads as one-color blue, with `#ffffff`
   text. Multiply can only darken, so text contrast never drops below white
-  on `#4163cc`. The footer shows no image credit. The credit for the
-  photograph is in `README.md`.
+  on `#4163cc`.
 - **Talks band** (`/talks` route): a `#4163cc` band behind the talk cards.
+
+The case study cards are `#16170f` with `#fcfcfa` text, on the page ground.
+Neither photograph shows a credit on the page. The credits are in
+`README.md`.
 
 No other section takes a color band.
 
@@ -386,28 +414,30 @@ and format and tool names inside them stay in Latin.
 
 ### Buttons
 
-`Btn` in `src/components/ui/btn.tsx`. Three variants and three sizes.
+`Btn` in `src/components/ui/btn.tsx`. A call to action is a text link over a
+rule, not a filled block.
 
-- **Shape:** square (`rounded-[var(--p-r-md)]`, which is `0px`).
-- **Type:** mono, uppercase, `tracking-[0.08em]`, weight 500, neutralized
-  with `rtl:tracking-normal`.
-- **Sizes:** `sm` is `px-4 py-2` at `text-eyebrow`; `md` is `px-5 py-2.5` at
-  `text-small`; `lg` is `px-6 py-3` at `text-small`.
-- **Primary:** `#4163cc` fill, `#ffffff` text. Hover fills `#2d4aa8`.
-- **Secondary:** `#ffffff` fill, `#16170f` text, 1px `#16170f` border. Hover
-  fills `#f5f5f1`.
-- **Ghost:** no fill, no horizontal padding, a 2px bottom border in
-  `#16170f`. Hover thickens that border to 4px and removes 2px of bottom
-  padding, so the label does not move.
+- **Type:** sans, sentence case, weight 600, no tracking, in every variant.
+- **Link:** `text-body`, `#16170f` text, no fill, no horizontal padding, a
+  2px bottom rule in `#16170f`. On hover the text and the rule turn `#4163cc`
+  together. A link never changes only its rule or only its text. The
+  homepage and `/how-it-works` use this variant only.
+- **On an ink card:** the same link in `#fcfcfa` over a `#fcfcfa` rule, with
+  the same hover.
+- **Arrow:** a link ends with `DirArrow`, `→` for a page of the site and `↗`
+  for a link that leaves it.
+- **Primary, secondary, ghost:** the filled and bordered variants remain for
+  a call to action inside a blog post (`PostCta`). Primary is a `#4163cc`
+  fill with `#ffffff` text. Do not use them on the homepage.
 - **Transition:** 150ms on background, border, and text color only.
 
-Never pull a filled button with a negative margin to align its label. The
-block edge is the alignment signal.
+The homepage had filled mono buttons in capitals. They left in November
+2026, because they read as agent output.
 
 ### Tags
 
-`Tag` in `src/components/ui/tag.tsx`. Mono, uppercase, `text-eyebrow`,
-`tracking-[0.02em]`, `px-2.5 py-1`, 1px border, square corners.
+`Tag` in `src/components/ui/tag.tsx`. Sans, sentence case, `text-small`,
+`px-2.5 py-1`, 1px border, square corners.
 
 - **Default:** `#f5f5f1` fill, `#3d3f33` text, `#16170f` border.
 - **Primary:** 12% `#4163cc` fill, `#2d4aa8` text, 25% `#4163cc` border.
@@ -424,17 +454,18 @@ inline-start side and supporting copy or a call to action on the inline-end
 side, bottom-aligned from `md` up. The grid is
 `minmax(0,1fr) minmax(0,46ch)` unless `wide` is set.
 
-The kicker is mono, `text-eyebrow`, `#74766a`, `tracking-[0.04em]`, and holds
-the label string only. It carries no `NN ·` index prefix, no `//` punctuation,
-no uppercase, and no wide tracking. Omit the kicker where the title below
-already names the section.
+The kicker is sans, `text-small`, `#74766a`, and holds the label string
+only. It carries no `NN ·` index prefix, no `//` punctuation, no uppercase,
+no mono, and no wide tracking. Omit the kicker where the title below already
+names the section.
 
 The homepage has exactly two eyebrows, and neither uses `SectionHead`. "The
 challenge" is above the challenge statement and "The solution" is above the
-solution heading (`challenge.eyebrow`, `solution.eyebrow`). Both are mono
-`text-eyebrow`, in sentence case at default tracking. The challenge eyebrow
-is `#ffffff` on the ink band, and the solution eyebrow is `#74766a`. Put no
-small label above any other homepage heading, card title, or figure.
+solution heading (`challenge.eyebrow`, `solution.eyebrow`). Both are sans
+`text-small`, in sentence case. The challenge eyebrow is `#ffffff` on the
+ink band, and the solution eyebrow is `#74766a`. The about section has no
+eyebrow. Put no small label above any other homepage heading, card title, or
+figure.
 
 The title is `text-section`, weight 800, `tracking-[-0.03em]`,
 `leading-[1.05]`, and balanced.
@@ -483,6 +514,10 @@ The mark never mirrors in RTL. It never takes a gradient.
 - **Don't** use a compass rose or a rhumb line. The motif was tried
   repeatedly and rejected.
 - **Don't** add a terminal or code-session mockup.
+- **Don't** set a label, a kicker, or a button in mono, in capitals, or with
+  wide tracking.
+- **Don't** put a filled call-to-action block on the homepage. Use a text
+  link over a rule.
 - **Don't** add an emoji. The permitted Unicode marks are ↗, →, and ·.
 - **Don't** give every card in a grid the same anatomy. Ragged is deliberate.
 - **Don't** number a card grid that is not a real sequence.

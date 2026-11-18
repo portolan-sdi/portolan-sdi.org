@@ -127,7 +127,7 @@ export function TalksPage() {
                     <Shot item={item} alt={alt} />
 
                     <div className="p-5">
-                      <p className="mb-4 font-mono text-small text-p-ink-3">
+                      <p className="mb-4 text-small text-p-ink-3">
                         <Ltr>{t(`items.${item.key}.attribution`)}</Ltr>
                       </p>
 

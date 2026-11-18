@@ -983,8 +983,8 @@ html {
   border: 0;
   padding: 0;
   background: transparent;
-  font-family: var(--p-mono);
-  font-size: var(--text-eyebrow);
+  font-family: var(--p-sans);
+  font-size: var(--text-small);
   line-height: 22px;
   color: var(--p-ink-3);
   cursor: pointer;
@@ -994,9 +994,6 @@ html {
   display: flex;
   gap: 7px;
   text-align: start;
-}
-.pipe-steps:dir(rtl) button {
-  font-family: var(--p-sans);
 }
 .pipe-steps button:hover,
 .pipe-steps button:focus-visible,
@@ -1014,8 +1011,10 @@ html {
   gap: 14px;
   padding-inline-end: 3px;
 }
+/* The two arrows stay in the mono face, for its long arrow. */
 .pipe-nav button {
   color: var(--p-ink);
+  font-family: var(--p-mono);
   font-size: var(--text-body);
 }
 

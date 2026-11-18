@@ -186,7 +186,7 @@ export default function CoverageFlat() {
 
         {shown && (
           <div
-            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full border border-p-line bg-p-paper px-2 py-1 font-mono text-eyebrow text-p-ink"
+            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full border border-p-line bg-p-paper px-2 py-1 text-small text-p-ink"
             style={{ left: `${shown.x}%`, top: `calc(${shown.y}% - 8px)` }}
           >
             {t("cell.catalogs", { count: shown.count })}
@@ -194,7 +194,7 @@ export default function CoverageFlat() {
         )}
       </div>
 
-      <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-eyebrow text-p-ink-3">
+      <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-small text-p-ink-3">
         <span>{t("caption")}</span>
         <span className="flex items-center gap-2">
           <span>{t("legend")}</span>

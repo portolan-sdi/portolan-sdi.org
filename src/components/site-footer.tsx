@@ -18,7 +18,9 @@ const licenseLink = `text-p-on-primary underline underline-offset-2 ${onBand}`;
 
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-const columnLabel = "mb-2 font-mono text-eyebrow text-p-on-primary";
+// A column head. It is bold, in the body face, so it reads as a head and
+// not as one more link.
+const columnLabel = "mb-2 font-sans text-body font-bold text-p-on-primary";
 const footLink = `inline-flex min-h-6 items-center text-p-on-primary underline-offset-4 hover:underline ${onBand}`;
 
 export function SiteFooter() {
@@ -27,7 +29,7 @@ export function SiteFooter() {
   return (
     // `isolate` keeps the blend inside the footer, so the image multiplies
     // with the footer's own blue and not with the page behind it.
-    <footer className="relative isolate flex min-h-[clamp(260px,30vw,420px)] flex-col overflow-hidden border-t-4 border-p-line bg-p-primary px-[var(--p-pad-section-x)] pb-6 pt-[clamp(32px,4vw,56px)] text-p-on-primary">
+    <footer className="relative isolate flex min-h-[clamp(260px,30vw,420px)] flex-col overflow-hidden border-t border-p-line bg-p-primary px-[var(--p-pad-section-x)] pb-6 pt-[clamp(32px,4vw,56px)] text-p-on-primary">
       {/* A grayscale photograph multiplied over the brand blue. Multiply only
           darkens, so no pixel ends up lighter than --p-primary. White text on
           --p-primary is 5.3:1, so white text clears 4.5:1 over every part of
@@ -42,14 +44,13 @@ export function SiteFooter() {
         className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover mix-blend-multiply"
       />
 
-      {/* The content starts at the top of the band and at the inline-start
-          edge. The license line stays at the bottom edge of the band. */}
+      {/* The link columns are at the top of the band, on the inline-end
+          side, and the logo is at the top on the inline-start side. The
+          license line is at the bottom edge, at the inline-start corner.
+          The logo is about as wide as that line. */}
       <div className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col">
-        {/* Logo on the inline-start edge, the link columns beside it. Every
-            destination that leaves the site is here. The logo is above the
-            columns until lg. Beside the logo, a column is too narrow for one
-            long word such as "demostraciones". */}
-        <div className="flex flex-col items-start gap-8 lg:flex-row lg:gap-20">
+        {/* Every destination that leaves the site is here. */}
+        <div className="flex flex-col items-start gap-10 lg:flex-row lg:justify-between">
           <Link
             href="/"
             aria-label={t("nav.homeAria")}
@@ -62,11 +63,10 @@ export function SiteFooter() {
               className="text-p-on-primary! [&_g]:fill-p-on-primary"
             />
           </Link>
-
-          <div className="grid w-full grid-cols-1 gap-8 text-start text-small sm:grid-cols-3 sm:gap-10">
+          <div className="grid w-full grid-cols-1 gap-8 text-start text-small sm:w-auto sm:grid-cols-[repeat(3,minmax(9rem,auto))] sm:gap-12 sm:text-end">
             <div>
               <p className={columnLabel}>{t("footer.development")}</p>
-              <ul className="flex flex-col items-start gap-1">
+              <ul className="flex flex-col items-start gap-1 sm:items-end">
                 <li>
                   <a
                     href={COMMUNITY_LINKS.roadmap}
@@ -90,7 +90,7 @@ export function SiteFooter() {
 
             <div>
               <p className={columnLabel}>{t("footer.community")}</p>
-              <ul className="flex flex-col items-start gap-1">
+              <ul className="flex flex-col items-start gap-1 sm:items-end">
                 <li>
                   <a
                     href={COMMUNITY_LINKS.googleGroup}
@@ -114,7 +114,7 @@ export function SiteFooter() {
 
             <div>
               <p className={columnLabel}>{t("footer.resources")}</p>
-              <ul className="flex flex-col items-start gap-1">
+              <ul className="flex flex-col items-start gap-1 sm:items-end">
                 <li>
                   <Link href="/how-it-works" className={footLink}>
                     {t("howItWorks.title")}
@@ -150,23 +150,25 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <p className="mt-auto pt-12 text-start text-small text-p-on-primary">
-          {t.rich("footer.contentLicense", {
-            cc: (chunks) => (
-              <a href={LICENSE_LINKS.content} className={licenseLink}>
-                <Ltr>{chunks}</Ltr>
-              </a>
-            ),
-          })}{" "}
-          ·{" "}
-          {t.rich("footer.sourceLicense", {
-            apache: (chunks) => (
-              <a href={LICENSE_LINKS.source} className={licenseLink}>
-                <Ltr>{chunks}</Ltr>
-              </a>
-            ),
-          })}
-        </p>
+        <div className="mt-auto pt-14">
+          <p className="text-eyebrow text-p-on-primary">
+            {t.rich("footer.contentLicense", {
+              cc: (chunks) => (
+                <a href={LICENSE_LINKS.content} className={licenseLink}>
+                  <Ltr>{chunks}</Ltr>
+                </a>
+              ),
+            })}{" "}
+            ·{" "}
+            {t.rich("footer.sourceLicense", {
+              apache: (chunks) => (
+                <a href={LICENSE_LINKS.source} className={licenseLink}>
+                  <Ltr>{chunks}</Ltr>
+                </a>
+              ),
+            })}
+          </p>
+        </div>
       </div>
     </footer>
   );

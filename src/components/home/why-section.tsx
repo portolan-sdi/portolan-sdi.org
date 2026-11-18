@@ -7,7 +7,7 @@ const BLOCKS = ["standards", "docs", "sovereign"] as const;
 
 // The picture behind the band. The file is grayscale, and the blend below
 // supplies the color. The credit is in README.md.
-const BAND_IMAGE = "/img/home/taiwan-fields.webp";
+const BAND_IMAGE = "/img/home/buenos-aires-night.webp";
 
 const onBand =
   "text-p-on-primary underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-p-on-primary";
@@ -36,7 +36,7 @@ export function WhySection() {
   return (
     <section
       id="why"
-      className="relative isolate overflow-hidden border-t-4 border-p-line bg-p-primary px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] text-p-on-primary"
+      className="relative isolate overflow-hidden border-t border-p-line bg-p-ink px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] text-p-on-primary"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -45,7 +45,13 @@ export function WhySection() {
         aria-hidden="true"
         loading="lazy"
         decoding="async"
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover mix-blend-multiply"
+        className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover"
+      />
+      {/* Trial. The primary color multiplies over a grayscale night image,
+          so the city lights are blue and the dark stays ink. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-p-primary mix-blend-multiply"
       />
       <div className="mx-auto max-w-[1240px]">
         <h2 className="text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-p-on-primary">

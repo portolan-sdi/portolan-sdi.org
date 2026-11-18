@@ -13,12 +13,12 @@ export function ChallengeSection() {
   return (
     <section
       id="challenge"
-      className="border-t-4 border-p-line px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] bg-p-ink text-p-on-primary"
+      className="border-t border-p-line px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] bg-p-ink text-p-on-primary"
     >
       <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-7 items-start">
         <div>
           {/* The eyebrow is the h2, so the section keeps a heading. */}
-          <h2 className="font-mono rtl:font-sans! text-eyebrow font-normal tracking-normal text-p-on-primary">
+          <h2 className="text-small font-normal text-p-on-primary">
             {t("eyebrow")}
           </h2>
           <p className="mt-4 text-feature font-bold leading-[1.3] rtl:leading-[1.5] tracking-[-0.02em] rtl:tracking-normal text-p-on-primary text-pretty">

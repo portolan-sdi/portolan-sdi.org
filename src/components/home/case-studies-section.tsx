@@ -17,9 +17,9 @@ import { DirArrow } from "../ui";
 // costs each month.
 //
 // The cases set in one row of equal cards that scrolls on the inline axis,
-// by the owner's choice. Each card is one link. Five cards are `--p-ink`
-// and the registry card is `--p-primary`. The cost scale closes the section on the graph
-// wash, with the source and the exclusions in its caption row.
+// by the owner's choice. Each card is one link, and every card is `--p-ink`.
+// The registry had a card here. It is its own section now, in
+// `network-section.tsx`.
 //
 // Screenshots capture LTR interfaces, so each frame pins `dir="ltr"`.
 
@@ -35,14 +35,13 @@ const CARD =
 
 /** Square, mono controls for the row. */
 const STEP_BTN =
-  "inline-flex h-10 w-10 items-center justify-center border border-p-line bg-p-bg font-mono text-body text-p-ink transition-colors hover:bg-p-ink hover:text-p-bg disabled:opacity-35 disabled:hover:bg-p-bg disabled:hover:text-p-ink";
+  "cursor-pointer p-1 text-section leading-none text-p-ink transition-colors hover:text-p-primary disabled:cursor-default disabled:opacity-30 disabled:hover:text-p-ink";
 
 const FIRMS_EXPLORER = "https://portolan-mirrors.github.io/firms-catalog/";
 const CARTO_SDI = "https://carto.com/spatial-data-infrastructure/";
 
 /**
- * The cases, in scroll order. The sizes are the files' own pixels. The
- * registry is the last card, and it is the one `--p-primary` card.
+ * The cases, in scroll order. The sizes are the files' own pixels.
  */
 const CASES = [
   {
@@ -90,15 +89,6 @@ const CASES = [
     href: CARTO_SDI,
     internal: false,
   },
-  {
-    key: "registry",
-    logo: { file: "../logo-mark.svg", aspect: 1, name: "Portolan", label: "Portolan" },
-    src: "/img/home/registry-map.webp",
-    width: 1200,
-    height: 750,
-    href: "/registry",
-    internal: true,
-  },
 ] as const;
 
 /** The card is one link, so a tag inside its text renders as plain text. */
@@ -143,7 +133,7 @@ export function CaseStudiesSection() {
   return (
     <section
       id="cases"
-      className="overflow-x-clip px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t-4 border-p-line"
+      className="overflow-x-clip px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)] border-t border-p-line"
     >
       <div className="max-w-[1240px] mx-auto">
         {/* No eyebrow: the title names the section on its own. The two
@@ -152,7 +142,7 @@ export function CaseStudiesSection() {
           <h2 className="text-section font-extrabold tracking-[-0.03em] rtl:tracking-normal leading-[1.05] rtl:leading-[1.25] text-balance">
             {t("title")}
           </h2>
-          <div className="flex shrink-0 gap-2">
+          <div className="flex shrink-0 gap-5 pb-1">
             <button
               type="button"
               onClick={() => step(false)}
@@ -160,9 +150,17 @@ export function CaseStudiesSection() {
               aria-label={t("previous")}
               className={STEP_BTN}
             >
-              <span aria-hidden className="inline-block rtl:-scale-x-100">
-                ←
-              </span>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.25"
+                strokeLinecap="square"
+                className="block h-[0.6em] w-[0.6em] rtl:-scale-x-100"
+              >
+                <path d="M20 12H4M11 5l-7 7 7 7" />
+              </svg>
             </button>
             <button
               type="button"
@@ -171,9 +169,17 @@ export function CaseStudiesSection() {
               aria-label={t("next")}
               className={STEP_BTN}
             >
-              <span aria-hidden className="inline-block rtl:-scale-x-100">
-                →
-              </span>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.25"
+                strokeLinecap="square"
+                className="block h-[0.6em] w-[0.6em] rtl:-scale-x-100"
+              >
+                <path d="M4 12h16M13 5l7 7-7 7" />
+              </svg>
             </button>
           </div>
         </div>
@@ -191,9 +197,7 @@ export function CaseStudiesSection() {
           className="mt-[clamp(2rem,3.5vw,3rem)] flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 me-[calc((100%_-_100vw)/2)] pe-[var(--p-pad-section-x)] [scrollbar-width:thin] [scrollbar-color:var(--p-ink)_transparent]"
         >
           {CASES.map((item) => {
-            const cardClass = `${CARD} ${
-              item.key === "registry" ? "bg-p-primary" : "bg-p-ink"
-            }`;
+            const cardClass = `${CARD} bg-p-ink`;
             const inner = (
               <>
                 {/* One fixed window for each card. The screenshot shows
@@ -213,7 +217,7 @@ export function CaseStudiesSection() {
                     height={item.height}
                     loading="lazy"
                     decoding="async"
-                    className={`block h-auto max-h-full w-auto max-w-full border border-p-bg ${item.key === "registry" ? "shadow-[8px_8px_0_0_var(--p-ink)]" : "shadow-[8px_8px_0_0_var(--p-primary)]"}`}
+                    className="block h-auto max-h-full w-auto max-w-full border border-p-bg shadow-[8px_8px_0_0_var(--p-primary)]"
                   />
                 </div>
                 {/* The mark of the publisher, in the text color of the
@@ -241,12 +245,12 @@ export function CaseStudiesSection() {
                 <h3 className="mt-4 text-feature font-bold tracking-[-0.025em] rtl:tracking-normal leading-[1.15] rtl:leading-[1.3] text-p-bg text-balance">
                   {t(`items.${item.key}.title`)}
                 </h3>
-                <p className={`mt-3.5 text-body leading-[1.7] ${item.key === "registry" ? "text-p-on-primary" : "text-p-bg/85"}`}>
+                <p className="mt-3.5 text-body leading-[1.7] text-p-bg/85">
                   {t.rich(`items.${item.key}.body`, PLAIN_TAGS)}
                 </p>
                 {/* TODO: add the statement from the Municipality of Pergamino to its card when it arrives. */}
                 <span className="mt-auto pt-7">
-                  <span className={`inline-flex items-center gap-2.5 px-4 py-[11px] font-mono text-small font-medium uppercase leading-[1.2] tracking-[0.08em] rtl:tracking-normal transition-colors group-hover:bg-p-bg group-hover:text-p-ink group-focus-visible:bg-p-bg group-focus-visible:text-p-ink ${item.key === "registry" ? "bg-p-ink text-p-bg" : "bg-p-primary text-p-on-primary"}`}>
+                  <span className="inline-flex items-center gap-2 border-b-2 border-p-bg pb-1 font-sans text-body font-semibold leading-snug text-p-bg transition-colors group-hover:border-p-primary group-hover:text-p-primary group-focus-visible:border-p-primary group-focus-visible:text-p-primary">
                     {t(`items.${item.key}.link`)}
                     <DirArrow kind={item.internal ? "forward" : "external"} />
                   </span>

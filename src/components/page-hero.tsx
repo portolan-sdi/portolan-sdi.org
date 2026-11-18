@@ -35,7 +35,7 @@ export function PageHero({ title, subtitle, eyebrow, children }: PageHeroProps) 
       <div className="relative z-10 px-[var(--p-pad-section-x)] pb-[clamp(32px,4vw,56px)] pt-[clamp(40px,5vw,72px)]">
         <div className="mx-auto max-w-[1240px]">
           {eyebrow && (
-            <div className="mb-3 font-mono text-eyebrow uppercase tracking-[0.06em] text-p-ink-3">
+            <div className="mb-3 text-small text-p-ink-3">
               {eyebrow}
             </div>
           )}
