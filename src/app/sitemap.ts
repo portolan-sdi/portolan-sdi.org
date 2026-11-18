@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { CASE_STUDIES } from "@/lib/case-studies";
 import { POSTS } from "@/lib/blog";
 import { TUTORIALS } from "@/lib/tutorials";
 import { routing } from "@/i18n/routing";
@@ -17,6 +18,12 @@ const ROUTES = [
   { path: "/how-it-works", priority: 0.8, changeFrequency: "monthly" as const },
   { path: "/ecosystem", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/faq", priority: 0.7, changeFrequency: "monthly" as const },
+  { path: "/case-studies", priority: 0.7, changeFrequency: "monthly" as const },
+  ...CASE_STUDIES.map(({ slug }) => ({
+    path: `/case-studies/${slug}`,
+    priority: 0.6,
+    changeFrequency: "monthly" as const,
+  })),
   { path: "/blog", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/tutorials", priority: 0.7, changeFrequency: "monthly" as const },
   // One entry per post. A published post does not change, so it declares the

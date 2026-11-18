@@ -13,7 +13,8 @@
     "talks": "Charlas",
     "blog": "Blog",
     "tutorials": "Guías y demostraciones",
-    "ecosystem": "Ecosistema"
+    "ecosystem": "Ecosistema",
+    "caseStudies": "Casos de estudio"
   },
   "hero": {
     "title": "Publica datos geoespaciales sin servidores, bases de datos ni APIs personalizadas.",
@@ -127,6 +128,7 @@
   },
   "cases": {
     "title": "Casos de estudio",
+    "readStudy": "Leer el caso de estudio",
     "items": {
       "pergamino": {
         "title": "IDE Pergamino, una SDI municipal en 390 MB de archivos",
@@ -477,5 +479,16 @@
   "about": {
     "lead": "<line>Portolan es un proyecto de código abierto impulsado por la comunidad.</line><line><slack>Únete a nosotros en Slack</slack> y participa.</line>",
     "logosLabel": "Con contribuciones de"
+  },
+  "case-studies": {
+    "meta": {
+      "title": "Casos de estudio",
+      "description": "Cómo se publican y usan datos geoespaciales con Portolan."
+    },
+    "title": "Casos de estudio",
+    "intro": "Cómo se publican y usan datos geoespaciales con Portolan.",
+    "backToIndex": "Todos los casos de estudio",
+    "englishNotice": "Este contenido está disponible solo en inglés. El resto del sitio está traducido.",
+    "readStudy": "Leer el caso de estudio"
   }
 }

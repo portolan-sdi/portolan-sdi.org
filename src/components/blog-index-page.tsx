@@ -6,6 +6,7 @@ import { Ltr } from "./ui";
 import { POSTS } from "@/lib/blog";
 import { FEED_PATH } from "@/lib/feed";
 import { TUTORIALS } from "@/lib/tutorials";
+import { CASE_STUDIES } from "@/lib/case-studies";
 import { PageHero } from "./page-hero";
 import { SiteShell } from "./site-rail";
 
@@ -22,10 +23,10 @@ import { SiteShell } from "./site-rail";
 // The section picks the list, the route prefix, and the
 // message namespace for the page title and intro. Only the blog has a feed.
 
-export type ArticleSection = "blog" | "tutorials";
+export type ArticleSection = "blog" | "tutorials" | "case-studies";
 
 /** Each section's entries, newest first. The post page reads its neighbors here. */
-export const ENTRIES = { blog: POSTS, tutorials: TUTORIALS };
+export const ENTRIES = { blog: POSTS, tutorials: TUTORIALS, "case-studies": CASE_STUDIES };
 
 interface BlogIndexPageProps {
   section?: ArticleSection;

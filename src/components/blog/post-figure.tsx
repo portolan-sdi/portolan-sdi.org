@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
 // A figure inside a blog post: a screenshot, a recording, or an embed, with a
@@ -17,6 +18,8 @@ import { useTranslations } from "next-intl";
 interface PostFigureProps {
   /** Figure number, written by the post author. */
   n: number;
+  children?: ReactNode;
+  wide?: boolean;
   caption: string;
   /** Asset path under /public. Omit while the asset is pending. */
   src?: string;
@@ -32,6 +35,8 @@ interface PostFigureProps {
 
 export function PostFigure({
   n,
+  children,
+  wide = false,
   caption,
   src,
   alt,
@@ -42,7 +47,7 @@ export function PostFigure({
   const t = useTranslations("blog");
 
   return (
-    <figure dir="ltr" className="post-figure my-10">
+    <figure dir="ltr" className={`post-figure my-10${wide ? " post-figure-wide" : ""}`}>
       <div className="post-media-frame relative overflow-hidden border border-p-line bg-p-paper">
         {href && (
           <a
@@ -52,7 +57,7 @@ export function PostFigure({
             <span className="sr-only">{caption}</span>
           </a>
         )}
-        {src ? (
+        {children ?? (src ? (
           // The site does not use next/image anywhere. Remote and local assets
           // both render as a plain img, as in Shot (talks-page.tsx).
           // eslint-disable-next-line @next/next/no-img-element
@@ -78,7 +83,7 @@ export function PostFigure({
               </span>
             )}
           </div>
-        )}
+        ))}
       </div>
 
       <figcaption className="flex items-baseline gap-3 border border-p-line px-4 py-3">

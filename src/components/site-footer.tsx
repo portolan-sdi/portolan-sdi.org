@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { CASE_STUDIES } from "@/lib/case-studies";
 import { COMMUNITY_LINKS, LICENSE_LINKS } from "@/lib/site";
 import { PortolanLogo } from "./portolan-logo";
 import { Ltr } from "./ui";
@@ -125,6 +126,13 @@ export function SiteFooter() {
                     {t("nav.blog")}
                   </Link>
                 </li>
+                {CASE_STUDIES.length > 0 && (
+                  <li>
+                    <Link href="/case-studies" className={footLink}>
+                      {t("nav.caseStudies")}
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link href="/tutorials" className={footLink}>
                     {t("nav.tutorials")}
