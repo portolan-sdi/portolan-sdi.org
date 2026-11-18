@@ -287,7 +287,7 @@
         "q": "Isn’t Portolan just STAC and cloud-optimized formats?",
         "p1": "Portolan builds directly on STAC, GeoParquet, COG, PMTiles, and related standards. The difference is that those standards intentionally leave many implementation choices open, while Portolan defines and validates a quality floor for publishing geospatial data well.",
         "p2": "For example, Portolan requires GeoParquet to be spatially ordered and include spatial statistics that let clients skip irrelevant row groups. It requires COGs to include useful overviews and embedded statistics, and requires hosted assets to support HTTP range requests and browser access through CORS. The goal is not just to use cloud-native formats in name, but to use them in ways that reliably deliver the performance and ergonomics they are supposed to provide.",
-        "p3": "See the <spec>Portolan specification</spec> and <rashid>rashid</rashid>, the Portolan validator."
+        "p3": "See the <spec>Portolan specification</spec> (<downloads>PDF and EPUB</downloads>) and <rashid>rashid</rashid>, the Portolan validator."
       },
       "servers": {
         "q": "Why not just use GeoServer, PostGIS, or an OGC API?",
