@@ -15,7 +15,7 @@ export function CaseStudiesIndexPage() {
         <p className="mt-6 text-lead leading-relaxed text-p-ink-2">{t("intro")}</p>
       </PageHero>
       <section className="px-[var(--p-pad-section-x)] pb-[var(--p-pad-section-y)] pt-[clamp(28px,3.5vw,48px)]">
-        <div className="mx-auto max-w-[1240px]">
+        <div className="mx-auto max-w-[1240px] space-y-10">
           {CASE_STUDIES.map((study) => (
             <article key={study.slug} className="grid grid-cols-1 gap-8 border-b border-p-line pb-10 md:grid-cols-2 md:items-center md:gap-12">
               <Link href={`/case-studies/${study.slug}`} tabIndex={-1} aria-hidden="true">

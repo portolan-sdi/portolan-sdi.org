@@ -57,3 +57,8 @@ The case study list shows a screenshot of the
 [Epoch open data explorer](https://jakenotjay.github.io/me/explorer/),
 by Jake Wilkins, built with deck.gl-raster by Kyle Barron. The article embeds
 that viewer directly.
+
+The GeoConnex case study uses the existing Lincoln Institute wordmark and
+embeds the [GeoConnex catalog](https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json).
+Its thumbnail renders the catalog's [HUC12 watershed PMTiles](https://storage.googleapis.com/harvest-geoconnex-us/exports/pmtiles/ref:hu12.pmtiles)
+with MapLibre, under the collection's CC0-1.0 license.

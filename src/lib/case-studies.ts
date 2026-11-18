@@ -9,6 +9,16 @@ export type CaseStudy = BlogPost & {
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
+    slug: "geoconnex",
+    title: "Lincoln Institute of Land Policy",
+    subtitle: "Connecting water data with GeoConnex",
+    date: "2026-11-18",
+    summary: "The Lincoln Institute's Center for Geospatial Solutions publishes GeoConnex water data as a Portolan catalog. Draft for Colton Loftus.",
+    image: "/img/case-studies/geoconnex-watersheds.jpg",
+    imageAlt: "GeoConnex watershed boundaries across the central United States, rendered from its published PMTiles data.",
+    logo: "/logos/lincoln-institute.png",
+  },
+  {
     slug: "epoch-blue",
     title: "Epoch Blue",
     subtitle: "Making public forest data usable",
