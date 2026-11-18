@@ -68,7 +68,7 @@ export function HeroSection() {
                   </a>
                 ),
                 eco: (chunks) => (
-                  <Link href="/ecosystem" className={proseLink}>
+                  <Link href="/quickstart" className={proseLink}>
                     {chunks}
                   </Link>
                 ),

@@ -8,13 +8,21 @@
     "homeAria": "Portolan home",
     "mainAria": "Main",
     "languageAria": "Change language",
-    "index": "Index",
+    "index": "Menu",
     "faq": "FAQ",
     "talks": "Talks",
     "blog": "Blog",
     "tutorials": "Guides & demos",
-    "ecosystem": "Ecosystem",
-    "caseStudies": "Case studies"
+    "caseStudies": "Case studies",
+    "docs": "Docs",
+    "stories": "Stories",
+    "community": "Community",
+    "quickstart": "Getting started",
+    "cliDocs": "CLI docs",
+    "spec": "Specification",
+    "github": "GitHub",
+    "slack": "Slack",
+    "googleGroup": "Google Group"
   },
   "hero": {
     "title": "Publish geospatial data with no servers, databases, or custom APIs.",
@@ -34,46 +42,46 @@
   },
   "footer": {
     "contentLicense": "Site content <cc>CC BY 4.0</cc>",
-    "sourceLicense": "Website source <apache>Apache-2.0</apache>",
-    "googleGroup": "Google Group",
-    "slack": "Slack",
-    "community": "Community",
-    "development": "Development",
-    "resources": "Resources",
-    "roadmap": "Roadmap",
-    "github": "GitHub"
+    "sourceLicense": "Website source <apache>Apache-2.0</apache>"
   },
   "howItWorks": {
     "meta": {
-      "title": "How it works",
+      "title": "Getting started",
       "description": "Convert existing geospatial data, catalog it, publish it to cloud storage, and use it, in four steps."
     },
-    "title": "How it works",
-    "intro": "Use the <cli>Portolan CLI</cli> or <skills>agent skills</skills> to transform your existing data into a Portolan catalog.",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, your data end up as <geoparquet>GeoParquet</geoparquet> and <pmtiles>PMTiles</pmtiles> for vector and <cog>COG</cog> for raster."
+        "description": "The agent uses the <cli>Portolan CLI</cli> to extract the data from its upstream servers and convert it to cloud-optimized formats. Vector data end up as <geoparquet>GeoParquet</geoparquet> and <pmtiles>PMTiles</pmtiles>, and raster data as <cog>COG</cog>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalog",
-        "description": "Your cloud-optimized data are organized as a <stac>STAC</stac> catalog with clear metadata and docs, making the catalog easy to find, understand, and use for people and agents."
+        "description": "The CLI organizes the data as a <stac>STAC</stac> catalog and enriches it with metadata from the original source. The agent adds docs, thumbnails, and map styles, then validates the catalog with <rashid>rashid</rashid>, the Portolan validator."
       },
       "publish": {
         "id": "03",
         "title": "Publish",
-        "description": "Your catalog is published to any S3-compatible storage, such as AWS, GCS, Hetzner, or MinIO, with no servers or APIs to set up."
+        "description": "The agent publishes the catalog, here to <coop>Source Cooperative</coop>. Any S3-compatible storage works, with no servers or APIs to set up. The agent can also add the catalog to the <reg>Portolan registry</reg>, which is always opt-in."
       },
       "use": {
         "id": "04",
         "title": "Use",
-        "description": "Your data can now be dropped directly into tools like QGIS, ArcGIS, or Python, or you can pass the catalog URL to an agent and let it get to work."
+        "description": "Open the catalog in the <browser>Portolan browser</browser>, drop the data directly into tools like QGIS, ArcGIS, Python, or DuckDB, or pass the catalog URL to an agent and let it get to work."
       }
     },
     "quickstart": {
-      "title": "Quickstart"
+      "title": "Getting started",
+      "step": "Step {n}",
+      "install": {
+        "title": "Install the skills",
+        "body": "Run these commands in your terminal to add the skills to Claude Code. The skills repository has <install>instructions for other agents</install>."
+      },
+      "start": {
+        "title": "Tell your agent to start",
+        "body": "Give it the URL of your data and the cloud storage bucket where you want the catalog to be published."
+      }
     }
   },
   "demo": {
@@ -87,44 +95,6 @@
     "fullscreen": "Show the demo full screen",
     "exitFullscreen": "Leave full screen",
     "seek": "Seek in the demo"
-  },
-  "ecosystem": {
-    "meta": {
-      "title": "Ecosystem",
-      "description": "Core, community, and commercial tools for publishing and working with Portolan catalogs."
-    },
-    "title": "Ecosystem",
-    "intro": "The Portolan specification can be implemented in a number of ways. Here is a list of core, community-contributed, and commercial tools to make publishing and working with Portolan data easy.",
-    "submit": "Submit a tool",
-    "filterLabel": "Filter tools by tier",
-    "filters": {
-      "all": "all",
-      "core": "core",
-      "community": "community",
-      "commercial": "commercial"
-    },
-    "empty": "No tools in this tier yet.",
-    "proprietary": "Commercial",
-    "pagination": {
-      "label": "Ecosystem pages",
-      "previous": "Previous page",
-      "next": "Next page",
-      "page": "Page {page}"
-    },
-    "commercial": {
-      "title": "Commercial products on the open core",
-      "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over."
-    },
-    "projects": {
-      "spec": "The specification that defines a Portolan catalog.",
-      "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
-      "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
-      "registry": "A central registry of public Portolan catalogs.",
-      "browser": "A web interface for browsing and exploring Portolan catalogs.",
-      "skills": "Agent skills for creating and working with Portolan catalogs.",
-      "cartosdi": "A spatial data infrastructure for organizations, built on Portolan.",
-      "scout": "A geospatial ingestion platform that publishes Portolan-conformant catalogs and answers spatial questions with AI-generated maps and data."
-    }
   },
   "cases": {
     "title": "Case studies",

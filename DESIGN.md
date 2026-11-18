@@ -240,22 +240,15 @@ bar, which is the primary navigation and the one site header, and
 (68px), and `html` sets `scroll-padding-top` to that token, so an anchor jump
 stops below the bar.
 
-The bar shows the logo linking home on the inline-start side, then the page
-links Blog, Guides & demos, Talks, Ecosystem, FAQ, and Registry, then the locale control
-on the inline-end side. The locale control shows a globe icon beside the locale code. The globe is the only icon in the bar, and the page links take none. It lists pages only, with no homepage section
-anchors, no scroll-spy, and no collapse control. The link for the current
-page takes `aria-current="page"` and `#4163cc`. Below `md` the bar shows the
-logo and an "Index" button, which opens a panel under the bar with the
-same links and the locale control. The word "Index" is the control, never a
-hamburger icon. Links that leave the site are in `SiteFooter`. Every item is
-a real link, never a dead span.
+The bar shows the logo linking home on the inline-start side. The navigation and the locale control are together on the inline-end side. The navigation is the four groups of the site map in `src/lib/nav.ts`: Docs, Stories, Registry, and Community. The footer reads the same file, so the two never differ. Docs has Getting started, Guides & demos, FAQ, CLI docs, Specification, and GitHub. Stories has Case studies, Blog, and Talks. Community has Slack and the Google Group. Registry is one link, so it is a plain link with no menu. Each other group is a button with a small chevron, and it opens a menu under the bar. The menu opens when the pointer comes over the group, on a click, and on a key press. It fades in over 150ms. It is square, with one ink border and no shadow, and it starts at the rule of the bar. One menu is open at a time. The Escape key, a press outside, or a click on a link shuts it. A link that leaves the site shows the `↗` arrow from `DirArrow`. The locale control shows the translate mark (a character beside the letter A, the Lucide "languages" icon) beside the locale code. The globe icon left in November 2026. The bar has no other icon than the translate mark, the chevrons, and the menu button. It has no homepage section anchors, no scroll-spy, no tagline, no CTA, and no install button. The link for the current page takes `aria-current="page"` and `#4163cc`, and so does the button of its group. Below `md` the bar shows the logo and one button with three lines, which become a cross while the panel is open. The lines have square ends. The button opens a panel under the bar. The panel shows each group as a small head above its links, with the locale control at the end. The panel has no menus inside it. The roadmap and the ecosystem page left the navigation in November 2026, because both are in the GitHub organization. Every item is a real link, never a dead span.
 
 `SiteHeader` was removed in July 2026 and the collapsible left side rail in
 November 2026. Do not reintroduce the rail or a second header component.
 
 In the footer, the logo is at the top on the inline-start side, at 30px.
-The three link columns are at the top on the inline-end side, with their
-text end-aligned from `sm`. Each column head is sans in bold, with no rule,
+The three link columns (Docs, Stories, Community) are at the top on the
+inline-end side, with their text end-aligned from `sm`. They come from
+`src/lib/nav.ts`, as the top bar does. The Registry link is in the Docs column. Each column head is sans in bold, with no rule,
 so it reads as a head and not as a link. The license line is at the bottom
 edge of the band, start-aligned, at `text-eyebrow`. It is short: "Site
 content CC BY 4.0 · Website source Apache-2.0".
@@ -302,8 +295,9 @@ world. Two square icon buttons sit on its inline-start side: the one at the
 top opens `/registry`, and the one at the bottom shows the map on the full
 screen. `#about` has the about text with the "Join us on Slack" link, and
 the logos of the organizations that the text names. It has no eyebrow. The
-four steps and the recorded catalog build are the `/how-it-works` route. The
-tool list is the `/ecosystem` route. The homepage plays no terminal
+"Getting started" page at `/quickstart` has the install commands, an
+example prompt, and the four steps beside the recorded catalog build. It
+has no tool list. Each tool is a link in the text. The homepage plays no terminal
 recording.
 
 The solution section has `PipelineFigure` in
@@ -340,9 +334,10 @@ block in `globals.css`, with no hex of their own. The figure is
 motion, and pauses off screen and in a hidden tab.
 
 Every route except the homepage opens with `PageHero` in `page-hero.tsx`.
-It is not a color band. The title and the text under it are on the page
-ground, and one `#16170f` rule closes the block. Do not give this header a
-band, a picture, or a map. That header owns
+It is a picture band, with the treatment of the "Why Portolan" band: the
+grayscale night photograph of Buenos Aires on ink, with the brand blue
+multiplied over it. All text in the band is white, and one `#16170f` rule
+closes the band. That header owns
 the page `h1`, so the section below it sets no second `h1` and opens with
 `pt-[clamp(28px,3.5vw,48px)]` instead of full section padding.
 
@@ -423,7 +418,7 @@ rule, not a filled block.
 - **Link:** `text-body`, `#16170f` text, no fill, no horizontal padding, a
   2px bottom rule in `#16170f`. On hover the text and the rule turn `#4163cc`
   together. A link never changes only its rule or only its text. The
-  homepage and `/how-it-works` use this variant only.
+  homepage and `/quickstart` use this variant only.
 - **On an ink card:** the same link in `#fcfcfa` over a `#fcfcfa` rule, with
   the same hover.
 - **Arrow:** a link ends with `DirArrow`, `→` for a page of the site and `↗`

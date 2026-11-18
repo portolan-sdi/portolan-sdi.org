@@ -15,8 +15,7 @@ const ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
   { path: "/registry", priority: 0.8, changeFrequency: "weekly" as const },
   { path: "/talks", priority: 0.7, changeFrequency: "monthly" as const },
-  { path: "/how-it-works", priority: 0.8, changeFrequency: "monthly" as const },
-  { path: "/ecosystem", priority: 0.7, changeFrequency: "monthly" as const },
+  { path: "/quickstart", priority: 0.8, changeFrequency: "monthly" as const },
   { path: "/faq", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/case-studies", priority: 0.7, changeFrequency: "monthly" as const },
   ...CASE_STUDIES.map(({ slug }) => ({

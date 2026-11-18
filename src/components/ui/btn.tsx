@@ -8,7 +8,7 @@ import {
 
 // Every variant sets in the body face, in sentence case. "link" is ink
 // text over a 2px rule, and the text and the rule turn `--p-primary`
-// together on hover. The homepage and `/how-it-works` use it. The filled
+// together on hover. The homepage uses it. The filled
 // variants remain for a call to action inside a blog post.
 type BtnVariant = "primary" | "secondary" | "ghost" | "link";
 type BtnSize = "sm" | "md" | "lg";

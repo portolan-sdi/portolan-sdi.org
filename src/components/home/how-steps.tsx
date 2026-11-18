@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { VideoFigure } from "@/components/video-figure";
+import { Link } from "@/i18n/navigation";
 import { FORMAT_TAGS } from "./format-tags";
 
 const proseLink =
@@ -42,11 +43,38 @@ export const TOOL_TAGS = {
   ),
 };
 
+const out = (href: string) =>
+  function OutLink(chunks: ReactNode) {
+    return (
+      <a href={href} className={proseLink}>
+        {chunks}
+      </a>
+    );
+  };
+
+// Each tool is a link in the step that uses it. The page has no tool list.
+// The catalog in the recording is the target of the storage link and of
+// the browser link, so the reader can open what the recording made.
+const STEP_TAGS = {
+  ...FORMAT_TAGS,
+  ...TOOL_TAGS,
+  rashid: out("https://github.com/portolan-sdi/rashid"),
+  coop: out("https://source.coop/nlebovits/phl-housing-demo"),
+  browser: out(
+    "https://browser.portolan-sdi.org/#/external/data.source.coop/nlebovits/phl-housing-demo/catalog.json",
+  ),
+  reg: (chunks: ReactNode) => (
+    <Link href="/registry" className={proseLink}>
+      {chunks}
+    </Link>
+  ),
+};
+
 const HOW_STEPS = ["convert", "catalog", "publish", "use"] as const;
 
 /**
  * The recorded catalog build beside the four steps it carries out. The
- * `/how-it-works` page renders it under the page header band, so each step
+ * `/quickstart` page renders it under the page header band, so each step
  * title is an `h2`.
  */
 export function HowSteps() {
@@ -86,7 +114,7 @@ export function HowSteps() {
               {t(`howItWorks.steps.${step}.title`)}
             </h2>
             <p className="text-body text-p-ink-2 leading-relaxed text-pretty mt-3">
-              {t.rich(`howItWorks.steps.${step}.description`, FORMAT_TAGS)}
+              {t.rich(`howItWorks.steps.${step}.description`, STEP_TAGS)}
             </p>
           </li>
         ))}

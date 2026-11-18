@@ -28,8 +28,7 @@ const routes: Route[] = [
   { id: "case-studies", path: "/case-studies" },
   ...CASE_STUDY_ROUTES,
   { id: "talks", path: "/talks" },
-  { id: "ecosystem", path: "/ecosystem" },
-  { id: "how-it-works", path: "/how-it-works" },
+  { id: "quickstart", path: "/quickstart" },
   { id: "registry", path: "/registry" },
 ];
 
@@ -112,7 +111,7 @@ test.describe("shared keyboard interactions", () => {
 
   test("mobile navigation contains and restores focus", async ({ page }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
-    const trigger = page.locator("button[aria-expanded]").filter({ hasText: /Index|Índice|الفهرس/i }).first();
+    const trigger = page.locator('button[aria-controls="site-menu"]');
     await trigger.click();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
 
@@ -177,12 +176,12 @@ test("Registry exposes a live submit failure", async ({ page }) => {
 });
 
 test("video-only demos expose localized text alternatives", async ({ page }) => {
-  await page.goto("/how-it-works", { waitUntil: "domcontentloaded" });
+  await page.goto("/quickstart", { waitUntil: "domcontentloaded" });
   const videos = page.locator("video");
-  // The catalog build beside the four steps, then the QGIS clip in
-  // "Portolan in practice". The homepage has no video.
-  await expect(videos).toHaveCount(2);
-  for (let index = 0; index < 2; index += 1) {
+  // The one recording on the page: the catalog of the example in the
+  // browser. The homepage has no video.
+  await expect(videos).toHaveCount(1);
+  for (let index = 0; index < 1; index += 1) {
     const describedBy = await videos.nth(index).getAttribute("aria-describedby");
     expect(describedBy, `video ${index + 1} needs a text equivalent`).toBeTruthy();
     const description = page.locator("[id=\"" + describedBy + "\"]");

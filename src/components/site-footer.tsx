@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { CASE_STUDIES } from "@/lib/case-studies";
-import { COMMUNITY_LINKS, LICENSE_LINKS } from "@/lib/site";
+import { FOOTER_GROUPS } from "@/lib/nav";
+import { LICENSE_LINKS } from "@/lib/site";
 import { PortolanLogo } from "./portolan-logo";
 import { Ltr } from "./ui";
 
@@ -50,7 +50,6 @@ export function SiteFooter() {
           license line is at the bottom edge, at the inline-start corner.
           The logo is about as wide as that line. */}
       <div className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col">
-        {/* Every destination that leaves the site is here. */}
         <div className="flex flex-col items-start gap-10 lg:flex-row lg:justify-between">
           <Link
             href="/"
@@ -64,97 +63,37 @@ export function SiteFooter() {
               className="text-p-on-primary! [&_g]:fill-p-on-primary"
             />
           </Link>
-          <div className="grid w-full grid-cols-1 gap-8 text-start text-small sm:w-auto sm:grid-cols-[repeat(3,minmax(9rem,auto))] sm:gap-12 sm:text-end">
-            <div>
-              <p className={columnLabel}>{t("footer.development")}</p>
-              <ul className="flex flex-col items-start gap-1 sm:items-end">
-                <li>
-                  <a
-                    href={COMMUNITY_LINKS.roadmap}
-                    {...external}
-                    className={footLink}
-                  >
-                    {t("footer.roadmap")}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={COMMUNITY_LINKS.github}
-                    {...external}
-                    className={footLink}
-                  >
-                    <Ltr>{t("footer.github")}</Ltr>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <p className={columnLabel}>{t("footer.community")}</p>
-              <ul className="flex flex-col items-start gap-1 sm:items-end">
-                <li>
-                  <a
-                    href={COMMUNITY_LINKS.googleGroup}
-                    {...external}
-                    className={footLink}
-                  >
-                    {t("footer.googleGroup")}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={COMMUNITY_LINKS.slack}
-                    {...external}
-                    className={footLink}
-                  >
-                    <Ltr>{t("footer.slack")}</Ltr>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <p className={columnLabel}>{t("footer.resources")}</p>
-              <ul className="flex flex-col items-start gap-1 sm:items-end">
-                <li>
-                  <Link href="/how-it-works" className={footLink}>
-                    {t("howItWorks.title")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/blog" className={footLink}>
-                    {t("nav.blog")}
-                  </Link>
-                </li>
-                {CASE_STUDIES.length > 0 && (
-                  <li>
-                    <Link href="/case-studies" className={footLink}>
-                      {t("nav.caseStudies")}
-                    </Link>
-                  </li>
-                )}
-                <li>
-                  <Link href="/tutorials" className={footLink}>
-                    {t("nav.tutorials")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/talks" className={footLink}>
-                    {t("nav.talks")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/ecosystem" className={footLink}>
-                    {t("nav.ecosystem")}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/faq" className={footLink}>
-                    {t("nav.faq")}
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* The groups of the top bar, in the same order, from
+              `src/lib/nav.ts`. The Registry link is in the first column,
+              because a column with one link looks empty. */}
+          <div className="grid w-full grid-cols-2 gap-8 text-start text-small sm:w-auto sm:grid-cols-[repeat(3,minmax(8.5rem,auto))] sm:gap-12 sm:text-end">
+            {FOOTER_GROUPS.map((group) => (
+              <div key={group.key}>
+                <p className={columnLabel}>{t(`nav.${group.label}`)}</p>
+                <ul className="flex flex-col items-start gap-1 sm:items-end">
+                  {group.items.map((item) => {
+                    const label = item.latin ? (
+                      <Ltr>{t(`nav.${item.label}`)}</Ltr>
+                    ) : (
+                      t(`nav.${item.label}`)
+                    );
+                    return (
+                      <li key={item.href}>
+                        {item.external ? (
+                          <a href={item.href} {...external} className={footLink}>
+                            {label}
+                          </a>
+                        ) : (
+                          <Link href={item.href} className={footLink}>
+                            {label}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 

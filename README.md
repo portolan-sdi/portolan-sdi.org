@@ -50,7 +50,10 @@ The figure in the solution section of the homepage uses three more items.
 The QGIS icon in `public/img/home/pipeline/qgis.svg` is from the
 [QGIS repository](https://github.com/qgis/QGIS/blob/master/images/icons/qgis_icon.svg).
 QGIS is a trademark of QGIS.ORG. The robot icon is the "bot" icon of
-[Lucide](https://lucide.dev/icons/bot), under the ISC license. The sample
+[Lucide](https://lucide.dev/icons/bot), under the ISC license. The translate
+mark on the language control is the Lucide
+["languages"](https://lucide.dev/icons/languages) icon, under the same
+license. The sample
 portal uses the colors and the faces of the
 [City of Philadelphia digital standards](https://standards.phila.gov/).
 The City of Philadelphia did not make or approve the portal.

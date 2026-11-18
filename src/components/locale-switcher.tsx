@@ -106,24 +106,27 @@ export function LocaleSwitcher() {
         onClick={() => setOpen((v) => !v)}
         className="inline-flex items-center gap-1.5 h-8 px-2 rounded-[var(--p-r-md)] text-small text-p-ink-2 transition-colors hover:bg-p-bg-soft hover:text-p-ink"
       >
-        {/* No globe. Nav items in the bar carry no icons, and this control
-            sits beside them. The locale code names it. */}
-        {/* A globe marks the control as the language menu. The locale code
-            beside it stays, so the current language is readable. */}
+        {/* The translate mark: a character beside the letter A. It is the
+            Lucide "languages" icon, and it marks the control as the
+            language menu. The locale code beside it stays, so the current
+            language is readable. The mark never mirrors. */}
         <svg
-          width="16"
-          height="16"
+          width="18"
+          height="18"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
           aria-hidden="true"
         >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-          <path d="M2 12h20" />
+          <path d="m5 8 6 6" />
+          <path d="m4 14 6-6 2-3" />
+          <path d="M2 5h12" />
+          <path d="M7 2h1" />
+          <path d="m22 22-5-10-5 10" />
+          <path d="M14 18h6" />
         </svg>
         <Ltr>{locale.toUpperCase()}</Ltr>
         <svg

@@ -34,20 +34,12 @@ export function SolutionSection() {
           <div className="mt-7 flex flex-col gap-5 max-w-[60ch] text-p-ink-2">
             <p className="text-lead leading-relaxed">{t("p1")}</p>
             <p className="text-lead leading-relaxed">{t("p2")}</p>
-            {/* The two ways on from here. The quickstart is the East
-                Hampton guide, which starts from one prompt. */}
+            {/* The one way on from here. The quickstart page links to
+                the guides. */}
             <div className="mt-2 flex flex-wrap items-center gap-x-8 gap-y-3">
               <Btn asChild variant="link">
-                <Link
-                  href="/tutorials/mirroring-east-hampton"
-                  data-track="solution-quickstart"
-                >
+                <Link href="/quickstart" data-track="solution-quickstart">
                   {tHow("quickstart.title")} <DirArrow />
-                </Link>
-              </Btn>
-              <Btn asChild variant="link">
-                <Link href="/how-it-works" data-track="solution-how">
-                  {tHow("title")} <DirArrow />
                 </Link>
               </Btn>
             </div>

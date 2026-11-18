@@ -47,7 +47,7 @@ export function GetInvolvedSection() {
           <p>
             {t.rich("priority", {
               publish: (chunks) => (
-                <Link href="/how-it-works" className={proseLink}>
+                <Link href="/quickstart" className={proseLink}>
                   {chunks}
                 </Link>
               ),

@@ -8,13 +8,21 @@
     "homeAria": "Inicio de Portolan",
     "mainAria": "Principal",
     "languageAria": "Cambiar idioma",
-    "index": "Índice",
+    "index": "Menú",
     "faq": "Preguntas frecuentes",
     "talks": "Charlas",
     "blog": "Blog",
     "tutorials": "Guías y demostraciones",
-    "ecosystem": "Ecosistema",
-    "caseStudies": "Casos de estudio"
+    "caseStudies": "Casos de estudio",
+    "docs": "Documentación",
+    "stories": "Historias",
+    "community": "Comunidad",
+    "quickstart": "Primeros pasos",
+    "cliDocs": "Documentación de la CLI",
+    "spec": "Especificación",
+    "github": "GitHub",
+    "slack": "Slack",
+    "googleGroup": "Grupo de Google"
   },
   "hero": {
     "title": "Publica datos geoespaciales sin servidores, bases de datos ni APIs personalizadas.",
@@ -34,46 +42,46 @@
   },
   "footer": {
     "contentLicense": "Contenido del sitio <cc>CC BY 4.0</cc>",
-    "sourceLicense": "Código del sitio <apache>Apache-2.0</apache>",
-    "googleGroup": "Grupo de Google",
-    "slack": "Slack",
-    "community": "Comunidad",
-    "development": "Desarrollo",
-    "resources": "Recursos",
-    "roadmap": "Hoja de ruta",
-    "github": "GitHub"
+    "sourceLicense": "Código del sitio <apache>Apache-2.0</apache>"
   },
   "howItWorks": {
     "meta": {
-      "title": "Cómo funciona",
+      "title": "Primeros pasos",
       "description": "Convierte datos geoespaciales existentes, catalógalos, publícalos en almacenamiento en la nube y úsalos, en cuatro pasos."
     },
-    "title": "Cómo funciona",
-    "intro": "Usa la <cli>CLI de Portolan</cli> o las <skills>habilidades de agente</skills> para transformar tus datos existentes en un catálogo Portolan.",
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convertir",
-        "description": "Trabajes con Shapefiles y GeoPackages, con un endpoint WFS o con un servidor Esri, tus datos acaban como <geoparquet>GeoParquet</geoparquet> y <pmtiles>PMTiles</pmtiles> para vectores y <cog>COG</cog> para ráster."
+        "description": "El agente usa la <cli>CLI de Portolan</cli> para extraer los datos de sus servidores de origen y convertirlos a formatos optimizados para la nube. Los datos vectoriales terminan como <geoparquet>GeoParquet</geoparquet> y <pmtiles>PMTiles</pmtiles>, y los datos ráster como <cog>COG</cog>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalogar",
-        "description": "Tus datos optimizados para la nube se organizan como un catálogo <stac>STAC</stac> con metadatos y documentación claros, lo que hace que el catálogo sea fácil de encontrar, de entender y de usar para personas y agentes."
+        "description": "La CLI organiza los datos como un catálogo <stac>STAC</stac> y los enriquece con metadatos de la fuente original. El agente añade documentación, miniaturas y estilos de mapa, y después valida el catálogo con <rashid>rashid</rashid>, el validador de Portolan."
       },
       "publish": {
         "id": "03",
         "title": "Publicar",
-        "description": "Tu catálogo se publica en cualquier almacenamiento compatible con S3, como AWS, GCS, Hetzner o MinIO, sin servidores ni APIs que configurar."
+        "description": "El agente publica el catálogo, en este caso en <coop>Source Cooperative</coop>. Sirve cualquier almacenamiento compatible con S3, sin servidores ni API que configurar. El agente también puede añadir el catálogo al <reg>registro de Portolan</reg>, que es siempre opcional."
       },
       "use": {
         "id": "04",
         "title": "Usar",
-        "description": "Ya puedes llevar tus datos directamente a herramientas como QGIS, ArcGIS o Python, o pasar la URL del catálogo a un agente para que se ponga a trabajar."
+        "description": "Abre el catálogo en el <browser>navegador de Portolan</browser>, lleva los datos directamente a herramientas como QGIS, ArcGIS, Python o DuckDB, o pasa la URL del catálogo a un agente y deja que se ponga a trabajar."
       }
     },
     "quickstart": {
-      "title": "Inicio rápido"
+      "title": "Primeros pasos",
+      "step": "Paso {n}",
+      "install": {
+        "title": "Instala las skills",
+        "body": "Ejecuta estos comandos en tu terminal para añadir las skills a Claude Code. El repositorio de las skills tiene <install>instrucciones para otros agentes</install>."
+      },
+      "start": {
+        "title": "Pide a tu agente que empiece",
+        "body": "Dale la URL de tus datos y el bucket de almacenamiento en la nube donde quieres publicar el catálogo."
+      }
     }
   },
   "demo": {
@@ -87,44 +95,6 @@
     "fullscreen": "Ver la demo en pantalla completa",
     "exitFullscreen": "Salir de pantalla completa",
     "seek": "Avanzar en la demo"
-  },
-  "ecosystem": {
-    "meta": {
-      "title": "Ecosistema",
-      "description": "Herramientas principales, comunitarias y comerciales para publicar catálogos Portolan y trabajar con ellos."
-    },
-    "title": "Ecosistema",
-    "intro": "La especificación de Portolan se puede implementar de muchas maneras. Esta es una lista de herramientas del núcleo, aportadas por la comunidad y comerciales para facilitar la publicación y el uso de datos de Portolan.",
-    "submit": "Proponer una herramienta",
-    "filterLabel": "Filtrar herramientas por nivel",
-    "filters": {
-      "all": "todas",
-      "core": "núcleo",
-      "community": "comunidad",
-      "commercial": "comercial"
-    },
-    "empty": "Todavía no hay herramientas en este nivel.",
-    "proprietary": "Comercial",
-    "pagination": {
-      "label": "Páginas del ecosistema",
-      "previous": "Página anterior",
-      "next": "Página siguiente",
-      "page": "Página {page}"
-    },
-    "commercial": {
-      "title": "Productos comerciales sobre el núcleo abierto",
-      "body": "Portolan estandariza el catálogo publicado, no el software a su alrededor, así que las empresas pueden vender capacidades que las herramientas abiertas no cubren. <carto>CARTO SDI</carto> extiende Portolan para organizaciones con conjuntos de datos privados, gobernanza y auditorías, comercialización de datos y conjuntos de datos escribibles. Si un producto desaparece, el catálogo sigue funcionando y otra herramienta puede tomar el relevo."
-    },
-    "projects": {
-      "spec": "La especificación que define un catálogo Portolan.",
-      "rashid": "El validador que comprueba si un catálogo cumple la especificación Portolan.",
-      "cli": "Una herramienta de línea de comandos para crear, comprobar y publicar catálogos Portolan.",
-      "registry": "Un registro central de catálogos Portolan públicos.",
-      "browser": "Una interfaz web para navegar y explorar catálogos Portolan.",
-      "skills": "Habilidades de agente para crear catálogos Portolan y trabajar con ellos.",
-      "cartosdi": "Una infraestructura de datos espaciales para organizaciones, construida sobre Portolan.",
-      "scout": "Una plataforma de ingesta geoespacial que publica catálogos conformes con Portolan y responde preguntas espaciales con mapas y datos generados por IA."
-    }
   },
   "cases": {
     "title": "Casos de estudio",

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { HowItWorksPage } from "@/components";
+import { QuickstartPage } from "@/components";
 import { alternateLanguages, localeUrl } from "@/lib/site";
 
-const ROUTE = "/how-it-works";
+const ROUTE = "/quickstart";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -44,9 +44,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function HowItWorks({ params }: PageProps) {
+export default async function Quickstart({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <HowItWorksPage />;
+  return <QuickstartPage />;
 }
