@@ -39,7 +39,7 @@ export interface BlogPost {
   summary: string;
 }
 
-/** Newest first. The index renders this order as written. */
+g/** Newest first. The index renders this order as written. */
 export const POSTS: BlogPost[] = [
   {
     slug: "portolan-v0-3",

@@ -1,4 +1,4 @@
-Portolan v0.3.0 came out on November 17. When we started on it, most of the
+Portolan v0.3.0 came out on November 17th. When we started on it, most of the
 open questions came from the same place: people who wanted to publish data
 that didn't quite fit the specification yet. Tables written by lakehouse
 engines. Raster archives that a browser couldn't show at a glance. Data
@@ -14,9 +14,9 @@ normative, and your feedback decides how. The [full
 changelog](https://github.com/portolan-sdi/portolan-spec/releases/tag/v0.3.0)
 lists every change.
 
-## Parquet that geospatial tools did not write (normative)
+## Parquet with native geometry types (normative)
 
-Until v0.3, Portolan vector data had to be GeoParquet. Meanwhile, Parquet
+Until v0.3 of the spec, Portolan vector data had to be GeoParquet. Meanwhile, Parquet
 added its own support for geometry. The format now has native `GEOMETRY` and
 `GEOGRAPHY` types, and more engines write them, including Apache Iceberg
 writers. A table written that way is clearly vector data, but earlier
@@ -33,7 +33,7 @@ the file.
 For a data team, this means files that come out of the lakehouse they
 already use can go straight into a catalog.
 
-## Rasters you can see and read (normative)
+## Better raster visualization (normative)
 
 With a collection of hundreds of raster tiles, a browser either draws one
 tile or tries to draw all of them. v0.3 asks large raster collections to
@@ -43,28 +43,26 @@ the whole collection at once.
 Classified rasters, such as land cover, now describe their classes with the
 [STAC](https://stacspec.org/en/) classification extension. A client can then
 draw a legend that says "forest" and "water" and not "class 3" and "class 7".
-Imagery should also declare its nodata value, so clients stop drawing the
+Imagery should also declare its nodata value, so clients don't draw the
 empty edges of a scene as black.
 
-## Metadata that explains itself (normative)
+## Improved metadata and docs (normative)
 
-Portolan has always asked for documentation next to the data. v0.3 goes one
-level deeper. Table columns should have descriptions, and assets should have
-a title and a description. A column called `dtvw` means nothing until the
-catalog tells you it's the average weekday traffic count. People need that
-sentence, and so do agents.
+Portolan has always asked for documentation next to the data, but v0.3 takes it a step further. A column called `dtvw` means nothing to people or agents unless the
+catalog tells you it's the average weekday traffic counts. Going forward, table columns should have descriptions, and assets should have
+a title and a description.
 
 ## Data in the bucket where it lives (normative)
 
 Many catalogs keep their data in S3 or Google Cloud Storage. v0.3 lets assets
 link with `s3://` and similar schemes, as long as they also give an https
 alternate for clients that only speak HTTP. Servers that are S3-compatible but
-not on AWS are described with the STAC storage extension, so clients know
-where to send the request. Range requests are now required only for the data
-files that need them (COG, Parquet, PMTiles, and COPC), so a host that serves
-only the metadata can be a plain static server.
+not on AWS are described with the STAC storage extension so that clients know
+where to send the request. Because range requests are now required only for the data
+files that need them (COG, Parquet, PMTiles, and COPC), a host that serves
+only the metadata (like a metadata-only GitHub repo) can be a plain static server.
 
-This is also where v0.3 breaks things:
+This is also where v0.3 introduces breaking changes:
 
 - Partition globs must be absolute bucket URLs, such as `s3://` or `gs://`. A
   reader has to list the files that match a glob, and you can't list files
@@ -75,16 +73,13 @@ This is also where v0.3 breaks things:
 - PMTiles can't be a collection's only data. It's the visual layer, so it has
   to point to the GeoParquet it was made from.
 
-## Spatial order, measured differently
+## New metrics for spatial ordering
 
 Rows in a GeoParquet file must still follow a spatial order. That rule is still
-**normative**. We changed how we check it. The old test looked at how
-much the row groups overlapped, and it failed files that were well sorted but
-had only a few row groups. So we dropped it.
-
-In its place, an **incubating** method measures what spatial order is for:
-the share of a file that a typical query can skip. Validators report it as a
-warning only, while we calibrate it on real catalogs.
+**normative**, but we've changed how we check it. The old test looked at how
+much the row groups overlapped and failed files that were well sorted but
+had only a few row groups. We've replaced this with an **incubating** method that tries to more intelligently measure what spatial order is a proxy for:
+the share of a file that a typical query can skip. Until we've calibrated these metrics on real catalogs, `rashid` will report these measures as warnings only.
 
 ## STAC-GeoParquet as a catalog (incubating)
 
@@ -95,10 +90,9 @@ collection in the tree gets a row, with its extent, time range, keywords,
 links, and the full original JSON. The JSON is still the normative form. The
 layout follows the column layout proposed upstream in the [stac-geoparquet
 spec](https://github.com/radiantearth/stac-geoparquet-spec/issues/17), which is
-still under discussion and not released. The schema can still change a bit,
-and Portolan will follow upstream when it does.
+still under discussion and not released. The schema can still change a bit; Portolan will follow upstream when it does.
 Many catalogs in the registry already publish one, and the registry will
-publish one for all of them. We will write a separate post about STAC-GeoParquet as a
+publish one for all of them. Keep an eye out for our upcoming post about STAC-GeoParquet as a
 catalog.
 
 ## Zarr (incubating)
@@ -106,28 +100,25 @@ catalog.
 Portolan started with [GeoParquet](https://geoparquet.org/),
 [PMTiles](https://docs.protomaps.com/pmtiles/), and [COG](https://cogeo.org/).
 But a lot of climate, weather, and Earth observation data is published as
-[Zarr](https://zarr.dev/), and we don't want those publishers to convert
-their data cubes to fit us. v0.3 adds an [incubating Zarr
+[Zarr](https://zarr.dev/), which is a legitimately cloud-native file format, so v0.3 adds an [incubating Zarr
 profile](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/zarr.md)
 for Zarr v3 raster stores. If you publish data cubes, this is the part of the
-release where we most need your feedback.
+release where we most need your feedback; feel free to add your comments on [this tracking issue on GitHub](https://github.com/portolan-sdi/portolan-spec/issues/132).
 
 ## Apache Iceberg (incubating)
 
 Iceberg is new in v0.3. The [incubating
 convention](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/iceberg.md)
 lets a catalog publish an [Apache Iceberg](https://iceberg.apache.org/) table
-over the GeoParquet it already serves. STAC is still the catalog, and it
-describes the data. The Iceberg table is a second
-way in, for the engines that speak Iceberg.
+over the GeoParquet it already serves. STAC is still the catalog, and describes the data. The Iceberg table is a second
+way in for the engines that speak Iceberg.
 
 Both paths end at the same bytes. The live data files of the table are exactly
-the collection's data assets. The table adds metadata and no second copy of
-the data. A reader also needs no server. The collection points to the table's
-metadata file, and an engine opens the table from that file alone.
+the collection's data assets. The table adds metadata but no second copy of
+the data, nor does a reader need a server. The collection points to the table's
+metadata file so that an engine can open the table from that file alone.
 
-This matters most for static catalogs. The table's manifests list every file,
-so a client can read a partitioned collection over plain HTTPS without listing
+This matters most for static catalogs. Because the table's manifests list every file, a client can read a partitioned collection over plain HTTPS without listing
 the bucket. Per-file bounds let an engine skip a file without opening it. The
 convention uses Iceberg format version 3, the first with a native geometry
 type, over GeoParquet 2.0 data files. It works in both directions: a publisher
@@ -136,15 +127,13 @@ Iceberg engine wrote first.
 
 ## Validate with rashid 0.4
 
-A spec is only as good as the tool that checks it. [rashid
-0.4.0](https://github.com/portolan-sdi/rashid/releases/tag/v0.4.0) came out
-the same day, and it implements the v0.3 rules. It bundles the
+The canonical spec validator, `rashid`, has also been bumped [v0.4.0](https://github.com/portolan-sdi/rashid/releases/tag/v0.4.0) which implements the spec's v0.3 rules (spec and validator versioning are not aligned). `rashid` bundles the
 v0.3.0 profile schema and checks the new rules, such as native geospatial
 Parquet, column descriptions, raster classes, and absolute partition globs. For
 the incubating parts, it checks a Zarr store against the incubating profile and
 reports spatial order as a warning.
 
-rashid applies the newest rules it knows, whatever version your catalog
+`rashid` applies the newest rules it knows, whatever version your catalog
 declares, and it reports both versions. So it shows you what v0.3 would flag
 before you move.
 
