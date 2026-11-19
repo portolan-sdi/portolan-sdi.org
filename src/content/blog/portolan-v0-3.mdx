@@ -115,8 +115,11 @@ way in for the engines that speak Iceberg.
 
 Both paths end at the same bytes. The live data files of the table are exactly
 the collection's data assets. The table adds metadata but no second copy of
-the data, nor does a reader need a server. The collection points to the table's
-metadata file so that an engine can open the table from that file alone.
+the data, nor does a reader need a server. The collection describes the table
+with the [STAC Iceberg
+extension](https://github.com/portolan-sdi/stac-iceberg-extension) and points
+to the table's metadata file so that an engine can open the table from that
+file alone.
 
 This matters most for static catalogs. Because the table's manifests list every file, a client can read a partitioned collection over plain HTTPS without listing
 the bucket. Per-file bounds let an engine skip a file without opening it. The
