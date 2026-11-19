@@ -26,7 +26,7 @@ metadata.
 v0.3 accepts GeoParquet 1.1, GeoParquet 2.0, and Parquet with native geometry
 types, and it applies the same vector rules to all three. We recommend
 GeoParquet 2.0 when your tools can write it. It stores geometry in Parquet's
-own geometry type, which any Parquet reader recognizes. The file also includes
+own geometry type, which any Parquet reader recognizes. The file includes
 bounding box statistics for each row group. It also keeps the `geo` metadata,
 which records the CRS in the file.
 
@@ -104,7 +104,7 @@ catalog.
 Portolan started with [GeoParquet](https://geoparquet.org/),
 [PMTiles](https://docs.protomaps.com/pmtiles/), and [COG](https://cogeo.org/).
 But a lot of climate, weather, and Earth observation data is published as
-[Zarr](https://geozarr.org/), and we do not want those publishers to convert
+[Zarr](https://zarr.dev/), and we do not want those publishers to convert
 their data cubes to fit us. v0.3 adds an [incubating Zarr
 profile](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/zarr.md)
 for Zarr v3 raster stores. If you publish data cubes, this is the part of the
@@ -139,9 +139,9 @@ A spec release is only useful if a validator checks it. [rashid
 0.4.0](https://github.com/portolan-sdi/rashid/releases/tag/v0.4.0) came out
 on the same day, 2026-11-17, and it implements the v0.3 rules. It bundles the
 v0.3.0 profile schema and checks the new rules, such as native geospatial
-Parquet, column descriptions, raster classes, and absolute partition globs. It
-also checks the incubating parts: it checks a Zarr store against the
-incubating profile and reports spatial order as a warning.
+Parquet, column descriptions, raster classes, and absolute partition globs. For
+the incubating parts, it checks a Zarr store against the incubating profile and
+reports spatial order as a warning.
 
 rashid applies the newest rules it knows, whatever version your catalog
 declares, and it reports both versions. So it shows you what v0.3 would flag
