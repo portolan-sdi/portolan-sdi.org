@@ -41,9 +41,23 @@ const CARDS_PER_PAGE = 6;
 const URL_DEBOUNCE_MS = 300;
 
 const REGISTRY_REPO = "https://github.com/portolan-sdi/portolan-registry";
+const QGIS_PLUGIN = "https://plugins.qgis.org/plugins/portolan_registry_qgis/";
 
 // The <reg> tag is part of the message contract and carries the same text span
 // in every locale.
+function qgisLink(chunks: ReactNode) {
+  return (
+    <a
+      href={QGIS_PLUGIN}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={PROSE_LINK}
+    >
+      {chunks}
+    </a>
+  );
+}
+
 function registryLink(chunks: ReactNode) {
   return (
     <a
@@ -337,6 +351,11 @@ export function RegistryPage({
             repository the listing comes from. */}
         <p className="mt-6 text-lead text-p-ink-2">
           {t.rich("registry.intro", { reg: registryLink })}
+        </p>
+        {/* Every catalog listed here also opens in QGIS through the plugin,
+            so the page names it next to the description. */}
+        <p className="mt-4 text-body text-p-ink-2">
+          {t.rich("registry.qgis", { qgis: qgisLink })}
         </p>
         {/* Mirrors are a transition state, so the note sits with the
             description rather than beside the listing it qualifies. */}
