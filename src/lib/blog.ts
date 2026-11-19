@@ -42,6 +42,15 @@ export interface BlogPost {
 /** Newest first. The index renders this order as written. */
 export const POSTS: BlogPost[] = [
   {
+    slug: "portolan-v0-3",
+    title: "Portolan v0.3",
+    subtitle: "Meeting geospatial data where it already lives",
+    date: "2026-11-18",
+    author: "Cayetano Benavent",
+    summary:
+      "Portolan v0.3 accepts native geospatial Parquet, makes rasters easier to display and understand, and starts incubating a GeoParquet catalog index, a Zarr profile, and an Iceberg convention.",
+  },
+  {
     slug: "building-portolan-firms",
     title: "Building Portolan: FIRMS Mirror",
     subtitle: "More than 600 million fire detections on one timeline",
