@@ -1,16 +1,16 @@
-Portolan v0.3.0 came out on 2026-11-17. When we started on it, most of the
+Portolan v0.3.0 came out on November 17. When we started on it, most of the
 open questions came from the same place: people who wanted to publish data
-that did not quite fit the specification yet. Tables written by lakehouse
-engines. Raster archives that a browser could not show at a glance. Data
+that didn't quite fit the specification yet. Tables written by lakehouse
+engines. Raster archives that a browser couldn't show at a glance. Data
 cubes in Zarr. Catalogs so large that finding a collection meant reading
 hundreds of JSON files. This release is our answer to those questions. Some
 of the answers are firm, and some are first drafts that we want you to try.
 
-The post marks each change as one of two kinds. **Normative**
-changes are part of conformance. Validators check them, and a conformant
-catalog follows them. **Incubating** specs are written down, with their own
-requirement IDs, but they are not part of conformance yet. They can change
-before we make them normative, and your feedback decides how. The [full
+You'll see two labels in this post. **Normative** changes are part of
+conformance. Validators check them, and a conformant catalog follows them.
+**Incubating** specs are written down, with their own requirement IDs, but
+they aren't part of conformance yet. They can change before we make them
+normative, and your feedback decides how. The [full
 changelog](https://github.com/portolan-sdi/portolan-spec/releases/tag/v0.3.0)
 lists every change.
 
@@ -25,10 +25,10 @@ metadata.
 
 v0.3 accepts GeoParquet 1.1, GeoParquet 2.0, and Parquet with native geometry
 types, and it applies the same vector rules to all three. We recommend
-GeoParquet 2.0 when your tools can write it. It stores geometry in Parquet's
-own geometry type, which any Parquet reader recognizes. The file includes
-bounding box statistics for each row group. It also keeps the `geo` metadata,
-which records the CRS in the file.
+GeoParquet 2.0 when your tools can write it. Geometry uses Parquet's own type,
+so any Parquet reader recognizes it, and every row group has bounding box
+statistics. The `geo` metadata is still there too, and it records the CRS in
+the file.
 
 For a data team, this means files that come out of the lakehouse they
 already use can go straight into a catalog.
@@ -36,9 +36,9 @@ already use can go straight into a catalog.
 ## Rasters you can see and read (normative)
 
 With a collection of hundreds of raster tiles, a browser either draws one
-tile or tries to draw all of them. v0.3 says that a collection of
-many rasters should include an overview COG: one small image in a web map
-projection that shows the whole collection at once.
+tile or tries to draw all of them. v0.3 asks large raster collections to
+include an overview COG: one small image in a web map projection that shows
+the whole collection at once.
 
 Classified rasters, such as land cover, now describe their classes with the
 [STAC](https://stacspec.org/en/) classification extension. A client can then
@@ -51,7 +51,7 @@ empty edges of a scene as black.
 Portolan has always asked for documentation next to the data. v0.3 goes one
 level deeper. Table columns should have descriptions, and assets should have
 a title and a description. A column called `dtvw` means nothing until the
-catalog tells you it is the average weekday traffic count. People need that
+catalog tells you it's the average weekday traffic count. People need that
 sentence, and so do agents.
 
 ## Data in the bucket where it lives (normative)
@@ -64,21 +64,23 @@ where to send the request. Range requests are now required only for the data
 files that need them (COG, Parquet, PMTiles, and COPC), so a host that serves
 only the metadata can be a plain static server.
 
-This is also where v0.3 breaks things. Partition globs must now be absolute
-bucket URLs, such as `s3://` or `gs://`. A reader has to list the files that
-match a glob, and you cannot list files over plain HTTP or with a relative
-path. In October 2026, this affected 9 of 37 collections in the registry. To fix
-it, replace the relative glob with the bucket URL. A related rule requires each
-data asset to link to one file. Another says that PMTiles cannot be a
-collection's only data. PMTiles is the visual layer, and it must point to the
-GeoParquet it was made from.
+This is also where v0.3 breaks things:
+
+- Partition globs must be absolute bucket URLs, such as `s3://` or `gs://`. A
+  reader has to list the files that match a glob, and you can't list files
+  over plain HTTP or with a relative path. In October, this affected 9 of 37
+  collections in the registry. The fix is to replace the relative glob with
+  the bucket URL.
+- Each data asset links to exactly one file.
+- PMTiles can't be a collection's only data. It's the visual layer, so it has
+  to point to the GeoParquet it was made from.
 
 ## Spatial order, measured differently
 
 Rows in a GeoParquet file must still follow a spatial order. That rule is still
 **normative**. We changed how we check it. The old test looked at how
 much the row groups overlapped, and it failed files that were well sorted but
-had only a few row groups. We removed it.
+had only a few row groups. So we dropped it.
 
 In its place, an **incubating** method measures what spatial order is for:
 the share of a file that a typical query can skip. Validators report it as a
@@ -88,10 +90,10 @@ warning only, while we calibrate it on real catalogs.
 
 v0.3 defines how a Portolan catalog publishes itself as
 [STAC-GeoParquet](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/stac-geoparquet.md).
-One GeoParquet file has a row for every catalog and collection in the tree, with its
-extent, time range, keywords, links, and full original JSON. The catalog
-becomes a table that any Parquet reader can open. The JSON is still the normative
-form. The layout follows the column layout proposed upstream in the [stac-geoparquet
+In short, the whole catalog becomes one table you can query. Each catalog and
+collection in the tree gets a row, with its extent, time range, keywords,
+links, and the full original JSON. The JSON is still the normative form. The
+layout follows the column layout proposed upstream in the [stac-geoparquet
 spec](https://github.com/radiantearth/stac-geoparquet-spec/issues/17), which is
 still under discussion and not released. The schema can still change a bit,
 and Portolan will follow upstream when it does.
@@ -104,7 +106,7 @@ catalog.
 Portolan started with [GeoParquet](https://geoparquet.org/),
 [PMTiles](https://docs.protomaps.com/pmtiles/), and [COG](https://cogeo.org/).
 But a lot of climate, weather, and Earth observation data is published as
-[Zarr](https://zarr.dev/), and we do not want those publishers to convert
+[Zarr](https://zarr.dev/), and we don't want those publishers to convert
 their data cubes to fit us. v0.3 adds an [incubating Zarr
 profile](https://github.com/portolan-sdi/portolan-spec/blob/v0.3.0/specs/incubating/zarr.md)
 for Zarr v3 raster stores. If you publish data cubes, this is the part of the
@@ -124,20 +126,19 @@ the collection's data assets. The table adds metadata and no second copy of
 the data. A reader also needs no server. The collection points to the table's
 metadata file, and an engine opens the table from that file alone.
 
-A static catalog gains a lot from this. The table's manifests list every file,
+This matters most for static catalogs. The table's manifests list every file,
 so a client can read a partitioned collection over plain HTTPS without listing
 the bucket. Per-file bounds let an engine skip a file without opening it. The
-convention uses
-Iceberg format version 3, the first with a native geometry type, over
-GeoParquet 2.0 data files. It works in both directions: a publisher can
-register existing GeoParquet as a table, or point the catalog at files an
+convention uses Iceberg format version 3, the first with a native geometry
+type, over GeoParquet 2.0 data files. It works in both directions: a publisher
+can register existing GeoParquet as a table, or point the catalog at files an
 Iceberg engine wrote first.
 
 ## Validate with rashid 0.4
 
-A spec release is only useful if a validator checks it. [rashid
+A spec is only as good as the tool that checks it. [rashid
 0.4.0](https://github.com/portolan-sdi/rashid/releases/tag/v0.4.0) came out
-on the same day, 2026-11-17, and it implements the v0.3 rules. It bundles the
+the same day, and it implements the v0.3 rules. It bundles the
 v0.3.0 profile schema and checks the new rules, such as native geospatial
 Parquet, column descriptions, raster classes, and absolute partition globs. For
 the incubating parts, it checks a Zarr store against the incubating profile and
@@ -159,7 +160,7 @@ your catalog with
 `https://schemas.portolan-sdi.org/portolan/v0.3.0/schema.json` in
 `stac_extensions`. The earlier schemas are still published, so nothing changes for
 a catalog until you move it. Then run rashid, and tell us what works and what
-does not in the [Portolan Google Group](https://groups.google.com/g/portolan)
+doesn't in the [Portolan Google Group](https://groups.google.com/g/portolan)
 or the [Portolan
 channel](https://cloudnativegeo.slack.com/archives/C0A1JBH9529) in
 Cloud-Native Geo Slack.
