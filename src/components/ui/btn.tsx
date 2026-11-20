@@ -6,7 +6,11 @@ import {
   type ReactElement,
 } from "react";
 
-type BtnVariant = "primary" | "secondary" | "ghost";
+// Every variant sets in the body face, in sentence case. "link" is ink
+// text over a 2px rule, and the text and the rule turn `--p-primary`
+// together on hover. The homepage uses it. The filled
+// variants remain for a call to action inside a blog post.
+type BtnVariant = "primary" | "secondary" | "ghost" | "link";
 type BtnSize = "sm" | "md" | "lg";
 
 interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -16,9 +20,9 @@ interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const sizeClasses: Record<BtnSize, string> = {
-  sm: "py-2 text-eyebrow",
-  md: "py-2.5 text-small",
-  lg: "py-3 text-small",
+  sm: "py-2 text-small",
+  md: "py-2.5 text-body",
+  lg: "py-3 text-body",
 };
 
 const sizePadding: Record<BtnSize, string> = {
@@ -32,6 +36,7 @@ const variantClasses: Record<BtnVariant, string> = {
   secondary: "bg-p-paper text-p-ink border border-p-line hover:bg-p-bg-soft",
   ghost:
     "bg-transparent text-p-ink rounded-none border-b-2 border-p-line hover:border-b-4 hover:pb-[calc(0.75rem_-_2px)]",
+  link: "bg-transparent text-p-ink border-b-2 border-p-line pb-1 hover:border-p-primary hover:text-p-primary",
 };
 
 export function btnClassName(
@@ -39,13 +44,14 @@ export function btnClassName(
   size: BtnSize = "md",
   className?: string,
 ) {
+  const link = variant === "link";
   return [
     "inline-flex items-center justify-center gap-2",
-    "rounded-[var(--p-r-md)] font-mono font-medium uppercase tracking-[0.08em] rtl:tracking-normal",
+    "font-sans font-semibold leading-snug",
     "cursor-pointer whitespace-nowrap",
     "transition-[background-color,border-color,color] duration-150",
-    sizeClasses[size],
-    variant === "ghost" ? "" : sizePadding[size],
+    link ? "text-body" : sizeClasses[size],
+    link || variant === "ghost" ? "" : sizePadding[size],
     variantClasses[variant],
     className ?? "",
   ].filter(Boolean).join(" ");

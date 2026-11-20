@@ -35,8 +35,13 @@ export interface BlogPost {
   author?: string;
   /** Where the byline links. Requires `author`. */
   authorUrl?: string;
-  /** One or two sentences. Feeds the index card and the meta description. */
+  /** One or two sentences. Feeds the meta description and the feed. */
   summary: string;
+  /**
+   * A picture from the post body, as a path under `public/`. The blog index
+   * shows it on the card of the post. Choose one that the post itself shows.
+   */
+  image?: string;
 }
 
 /** Newest first. The index renders this order as written. */
@@ -57,6 +62,7 @@ export const POSTS: BlogPost[] = [
     date: "2026-10-13",
     author: "Chris Holmes",
     authorUrl: "https://9eo.org/",
+    image: "/video/firms-explorer.webp",
     summary:
       "NASA FIRMS publishes 25 years of active fire detections and updates them several times a day. The mirror carries the whole archive as year-partitioned GeoParquet and PMTiles, which an explorer reads to draw every detection since 2000.",
   },
@@ -67,6 +73,7 @@ export const POSTS: BlogPost[] = [
     date: "2026-09-16",
     author: "Chris Holmes",
     authorUrl: "https://9eo.org/",
+    image: "/img/blog/trimet-developer-page.webp",
     summary:
       "TriMet publishes eight geospatial datasets as plain files. Mirroring them into a Portolan catalog, with a custom-themed browser, took about three hours of work on a plane.",
   },
@@ -75,6 +82,7 @@ export const POSTS: BlogPost[] = [
     title: "Introducing Portolan",
     subtitle: "A serverless spatial data infrastructure",
     date: "2026-09-02",
+    image: "/video/portolan-demo-one.jpg",
     summary:
       "Cloud-optimized formats and STAC metadata make it possible to run a spatial data infrastructure as files in a bucket. Portolan is an open-source spec and toolkit for building one.",
   },

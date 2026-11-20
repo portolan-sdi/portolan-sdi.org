@@ -2,14 +2,16 @@
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { PageHero } from "./page-hero";
-import { AWAY_ITEMS, SiteShell } from "./site-rail";
+import { SiteShell } from "./site-rail";
 import { DirArrow, PROSE_LINK } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
+import { MapLoading } from "./registry/map-loading";
+import { RegistryCounts } from "./registry/registry-counts";
 import type { MapState } from "./registry/catalog-map";
 import type { Catalog } from "@/lib/catalogs";
-import { formatDate } from "@/lib/catalogs";
+import { catalogsInView } from "@/lib/registry-view";
 import {
   EMPTY_EXPLORER_STATE,
   explorerParamString,
@@ -17,7 +19,6 @@ import {
 } from "@/lib/explorer-url";
 import {
   buildIndex,
-  catalogsInViewport,
   fetchCoverage,
   type CoverageIndex,
 } from "@/lib/collection-points";
@@ -72,7 +73,7 @@ function Pager({
 
   return (
     <div className="mt-8 flex items-center justify-end gap-4">
-      <span className="font-mono text-small text-p-ink-3">
+      <span className="text-small text-p-ink-3">
         {t("status", { page: String(page + 1), total: String(pageCount) })}
       </span>
       <div className="flex border border-p-line">
@@ -106,8 +107,10 @@ function Pager({
 function MapSkeleton() {
   const t = useTranslations("registry");
   return (
-    <div className="h-[440px] md:h-[540px] border border-p-line bg-p-bg-soft animate-pulse flex items-center justify-center">
-      <span className="text-small text-p-ink-3 font-mono">{t("map.loading")}</span>
+    // The frame does not pulse. A pulse fades the text with the frame, and a
+    // contrast check then reads a different value on each run.
+    <div className="h-[440px] md:h-[540px] border border-p-line bg-p-bg-soft flex items-center justify-center">
+      <MapLoading label={t("map.loading")} />
     </div>
   );
 }
@@ -135,7 +138,6 @@ export function RegistryPage({
   initial = EMPTY_EXPLORER_STATE,
 }: RegistryPageProps) {
   const t = useTranslations();
-  const locale = useLocale();
 
   const [index, setIndex] = useState<CoverageIndex | null>(null);
   const [mapState, setMapState] = useState<MapState | null>(null);
@@ -169,34 +171,15 @@ export function RegistryPage({
     return () => controller.abort();
   }, []);
 
-  // Catalogs the crawl could place. The rest are named under the map.
-  const locatedIds = useMemo(
-    () => new Set((index?.catalogs ?? []).map((catalog) => catalog.id)),
-    [index]
-  );
-
   const titles = useMemo(
     () => new Map(catalogs.map((catalog) => [catalog.id, catalog.title])),
     [catalogs]
   );
 
   // viewport -> collection bbox overlap -> unique catalogs.
-  const geoIds = useMemo(() => {
-    if (!index || !mapState) return null;
-    return catalogsInViewport(index, mapState.viewport);
-  }, [index, mapState]);
-
-  // A catalog the crawl could not place cannot be ruled out by geography, so
-  // the viewport never hides it. A global catalog answers here through its own
-  // bboxes, which overlap every view, even though the map draws no point for it.
   const inView = useMemo(
-    () =>
-      geoIds
-        ? catalogs.filter(
-            (catalog) => geoIds.has(catalog.id) || !locatedIds.has(catalog.id)
-          )
-        : catalogs,
-    [catalogs, geoIds, locatedIds]
+    () => catalogsInView(catalogs, index, mapState?.viewport ?? null),
+    [catalogs, index, mapState]
   );
 
   // The opening view holds every catalog, so it reads as no filter at all.
@@ -277,16 +260,6 @@ export function RegistryPage({
     return () => window.clearTimeout(id);
   }, [mapState, searchQuery, page]);
 
-  const crawledAt = formatDate(catalogs[0]?.last_crawled ?? null, locale);
-
-  // Catalogs the map draws no point for. Either every extent is too broad to
-  // stand for a place, or the crawl found no extent at all. Both still answer
-  // the viewport filter and both still appear in the results.
-  const offMapCount = useMemo(() => {
-    const drawn = new Set(index?.points.map((point) => point.catalogId) ?? []);
-    return catalogs.filter((catalog) => !drawn.has(catalog.id)).length;
-  }, [catalogs, index]);
-
   const handleSubmitCatalog = async () => {
     if (!canSubmit || submitState === "submitting") return;
 
@@ -329,7 +302,7 @@ export function RegistryPage({
   };
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId="registry">
+    <SiteShell>
       {/* The header band renders whether or not the listing loaded, so a
           failed fetch still returns a page with a title. */}
       <PageHero title={t("registry.title")}>
@@ -363,27 +336,16 @@ export function RegistryPage({
               <MapSkeleton />
             )}
 
-            {/* What matches, what the map cannot draw, and when the registry
-                last read the catalogs. The count follows the map. */}
-            <p className="mt-3 flex flex-wrap items-center gap-x-1.5 font-mono text-small text-p-ink-3">
-              <span className="text-p-primary">
-                {geoActive
-                  ? t("registry.results.inView", { count: filteredCatalogs.length })
-                  : t("registry.results.all", { count: filteredCatalogs.length })}
-              </span>
-              {index && offMapCount > 0 && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>{t("registry.results.global", { count: offMapCount })}</span>
-                </>
-              )}
-              {crawledAt && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>{t("registry.lastChecked", { date: crawledAt })}</span>
-                </>
-              )}
-            </p>
+            {/* What matches, how much data it holds, what the map cannot
+                draw, and when the registry last read the catalogs. The
+                counts follow the map and the search. */}
+            <RegistryCounts
+              catalogs={filteredCatalogs}
+              geoActive={geoActive}
+              index={index}
+              all={catalogs}
+              className="mt-3"
+            />
 
             {/* Results */}
             <div className="mt-10 border-t border-p-line pt-8">

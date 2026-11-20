@@ -37,7 +37,11 @@ test("scroll and drag move the registry map without errors", async ({ page }) =>
   await page.goto("/registry");
   await expect(page.locator(".maplibregl-marker").first()).toBeAttached({ timeout: 30_000 });
 
+  // The page header is above the map, so the center of the map can be
+  // below the fold of the test window. A wheel event at a point outside
+  // the window reaches nothing, so bring the map into view first.
   const canvas = page.locator(".maplibregl-canvas");
+  await canvas.evaluate((element) => element.scrollIntoView({ block: "center" }));
   const box = await canvas.boundingBox();
   if (!box) throw new Error("The map canvas has no bounding box");
   const centerX = box.x + box.width / 2;

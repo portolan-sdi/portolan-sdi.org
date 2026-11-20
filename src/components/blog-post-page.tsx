@@ -9,10 +9,10 @@ import type { Heading } from "@/lib/headings";
 import { ENTRIES, type ArticleSection } from "./blog-index-page";
 import { PostToc } from "./blog/post-toc";
 import { PageHero } from "./page-hero";
-import { AWAY_ITEMS, SiteShell } from "./site-rail";
+import { SiteShell } from "./site-rail";
 
-// A single blog post or tutorial. The section picks the rail entry, the
-// back link, and the message namespace for the back link and the English
+// A single blog post or tutorial. The section picks the back link
+// and the message namespace for the back link and the English
 // notice.
 //
 // The body is the compiled MDX, passed in as children from the route so it
@@ -32,6 +32,7 @@ import { AWAY_ITEMS, SiteShell } from "./site-rail";
 
 interface BlogPostPageProps {
   post: BlogPost;
+  heading?: ReactNode;
   section?: ArticleSection;
   /** The body's `##` headings, read from the MDX source by the route. */
   sections?: Heading[];
@@ -49,6 +50,7 @@ function Arrow({ back = false }: { back?: boolean }) {
 
 export function BlogPostPage({
   post,
+  heading,
   section = "blog",
   sections,
   children,
@@ -66,11 +68,11 @@ export function BlogPostPage({
   const newer = index > 0 ? entries[index - 1] : undefined;
 
   return (
-    <SiteShell navItems={AWAY_ITEMS} activeId={section}>
+    <SiteShell>
       {/* The headline runs the full 1240px band, like every other page header.
           Only the body below it takes the narrow reading measure. */}
       <PageHero
-        title={post.title}
+        title={heading ?? post.title}
         subtitle={post.subtitle}
         eyebrow={
           <>
@@ -103,7 +105,7 @@ export function BlogPostPage({
       >
         <Link
           href={`/${section}`}
-          className="mt-8 inline-flex items-center gap-2 font-mono text-eyebrow uppercase tracking-[0.08em] text-p-ink-3 transition-colors hover:text-p-primary"
+          className="mt-8 inline-flex items-center gap-2 text-small text-p-ink-3 transition-colors hover:text-p-primary"
         >
           <Arrow back />
           {t("backToIndex")}
@@ -128,7 +130,7 @@ export function BlogPostPage({
                 above it. */}
             <div dir="ltr">{children}</div>
 
-            <PostToc sections={sections ?? []} />
+            {section !== "case-studies" && <PostToc sections={sections ?? []} />}
 
             {(older || newer) && (
               <nav
@@ -137,7 +139,7 @@ export function BlogPostPage({
               >
                 {older && (
                   <Link href={`/${section}/${older.slug}`} className="group block">
-                    <span className="font-mono text-eyebrow text-p-ink-3">
+                    <span className="text-small text-p-ink-3">
                       <Arrow back /> {tBlog("previous")}
                     </span>
                     <span className="mt-1 block text-body font-bold leading-snug text-pretty text-p-ink transition-colors group-hover:text-p-primary">
@@ -150,7 +152,7 @@ export function BlogPostPage({
                     href={`/${section}/${newer.slug}`}
                     className="group block sm:col-start-2 sm:text-end"
                   >
-                    <span className="font-mono text-eyebrow text-p-ink-3">
+                    <span className="text-small text-p-ink-3">
                       {tBlog("next")} <Arrow />
                     </span>
                     <span className="mt-1 block text-body font-bold leading-snug text-pretty text-p-ink transition-colors group-hover:text-p-primary">

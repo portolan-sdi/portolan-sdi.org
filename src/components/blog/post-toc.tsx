@@ -57,9 +57,9 @@ export function PostToc({ sections }: PostTocProps) {
     <div className="pointer-events-none absolute inset-y-0 start-full z-10 ms-6 hidden w-72 xl:block">
       <nav
         aria-label={t("inThisArticle")}
-        className="pointer-events-auto sticky top-8 bg-p-bg/90 py-3"
+        className="pointer-events-auto sticky top-[calc(var(--p-bar)+2rem)] bg-p-bg/90 py-3"
       >
-        <p className="font-mono text-eyebrow text-p-ink-3">
+        <p className="text-small text-p-ink-3">
           {t("inThisArticle")}
         </p>
         {/* The headings are English, like the body, so the list stays

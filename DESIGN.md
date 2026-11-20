@@ -19,26 +19,26 @@ colors:
   danger: "#a3271f"
 typography:
   eyebrow:
-    fontFamily: "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
-    fontSize: "11px"
-    fontWeight: 400
-    lineHeight: 1.4
-    letterSpacing: "0.04em"
-  small:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
     fontSize: "13px"
+    fontWeight: 400
+    lineHeight: 1.4
+    letterSpacing: "normal"
+  small:
+    fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: "normal"
   body:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "15px"
+    fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.6
     letterSpacing: "normal"
   lead:
     fontFamily: "Hanken Grotesk, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(16px, 0.4vw + 14.5px, 18px)"
+    fontSize: "clamp(17px, 0.4vw + 15.5px, 19px)"
     fontWeight: 400
     lineHeight: 1.6
     letterSpacing: "normal"
@@ -76,7 +76,7 @@ spacing:
   pad-lg: "32px"
   pad-section-x: "clamp(20px, 5vw, 64px)"
   pad-section-y: "clamp(56px, 8vw, 104px)"
-  rail: "264px"
+  bar: "68px"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
@@ -143,7 +143,8 @@ tiers, and four state colors.
 ### Primary
 
 - **Portolan blue** (`#4163cc`): the only accent. Links, the logo fill,
-  figure strokes, and controls. Nothing else is blue.
+  figure strokes, controls, and the color fields listed under Elevation &
+  Depth. Nothing else is blue.
 - **Portolan blue ink** (`#2d4aa8`): the hover and active state of anything
   filled or colored with `#4163cc`. Also the text tier for blue-tinted tags,
   where it clears 4.5:1 on paper.
@@ -170,7 +171,8 @@ tiers, and four state colors.
   for warn, because `#b06e2a` does not clear 4.5:1 on paper.
 
 Two rules constrain color use. The accent appears on links, the logo, figure
-strokes, and controls, and nowhere else. There is no third rule tier: a rule
+strokes, controls, and the color fields, and nowhere else. There is no third
+rule tier: a rule
 that needs more weight takes a thicker border, not a lighter color.
 
 ## Typography
@@ -179,9 +181,16 @@ that needs more weight takes a thicker border, not a lighter color.
 **Mono:** JetBrains Mono, loaded at 400, 500, and 600.
 **Arabic:** Cairo, loaded at 400, 500, 600, 700, and 800.
 
-The split between sans and mono is a register split. Sans sets prose and
-headlines. Mono sets code, labels, eyebrows, kickers, data, statuses, paths,
-numbers, and controls. Never set a headline or a body paragraph in mono.
+Mono is for code only. It sets code blocks, inline code, typeable
+identifiers in prose, repository names, the text inside the two homepage
+figures, and arrows. Sans sets everything else, in sentence case: prose,
+headlines, kickers, labels, dates, captions, tags, buttons, and controls.
+Mono labels in capitals with wide tracking left in November 2026, because
+they read as agent output. Do not put a label or a button back in mono.
+
+Every link arrow comes from `DirArrow` in `src/components/ui/dir-arrow.tsx`,
+which sets `→` or `↗` in the mono face. The mono arrow has a body that is
+longer than its head. Do not type an arrow in the sans face.
 
 ### Hierarchy
 
@@ -190,10 +199,10 @@ such as `text-[13px]`.
 
 | Step | Size | Line height | Use |
 |---|---|---|---|
-| `text-eyebrow` | 11px | 1.4 | Mono kickers, tags, and labels |
-| `text-small` | 13px | 1.5 | Secondary text and button labels |
-| `text-body` | 15px | 1.6 | Body prose |
-| `text-lead` | clamp(16px, 0.4vw + 14.5px, 18px) | 1.6 | Supporting copy under a heading |
+| `text-eyebrow` | 13px | 1.4 | The license line in the footer |
+| `text-small` | 14px | 1.5 | Secondary text, kickers, tags, and labels |
+| `text-body` | 16px | 1.6 | Body prose |
+| `text-lead` | clamp(17px, 0.4vw + 15.5px, 19px) | 1.6 | Supporting copy under a heading |
 | `text-card-title` | 20px | 1.3 | Card and list-item titles |
 | `text-feature` | clamp(22px, 2vw + 15px, 26px) | 1.2 | Sub-section headings |
 | `text-section` | clamp(30px, 4vw + 8px, 46px) | 1.05 | Section headings |
@@ -202,15 +211,14 @@ such as `text-[13px]`.
 The scale was cut from thirteen steps in August 2026. Do not add a step back.
 The removed steps (`micro`, `body-lg`, `card-title-lg`, `section-sm`,
 `hero-sm`) each sat within 0.5px of a neighbor or inverted the heading
-hierarchy. `text-lead` caps at 18px so `text-card-title` outranks it at every
+hierarchy. `text-lead` caps at 19px so `text-card-title` outranks it at every
 width.
 
 Headings take negative tracking, from `-0.015em` at card title to `-0.03em`
-at section and hero. Mono labels take positive tracking, `0.04em` on kickers
-and `0.08em` on buttons.
+at section and hero. Labels and buttons take no tracking.
 
 Arabic never takes letterspacing. The script is connected, and tracking
-breaks it. Buttons neutralize their tracking with `rtl:tracking-normal`.
+breaks it. Headings neutralize their tracking with `rtl:tracking-normal`.
 Arabic always renders in Cairo, because Hanken Grotesk carries no Arabic
 glyphs. On RTL pages `--p-sans` re-points to Cairo, so body, headings, and
 the `font-sans` utility all resolve to Cairo.
@@ -225,19 +233,117 @@ Sections take `px-[var(--p-pad-section-x)]` and `py-[var(--p-pad-section-y)]`.
 Both are fluid `clamp()` values. Do not use the fixed `--p-pad-lg` for section
 padding.
 
-Primary navigation is a left side rail, `SiteShell` in `site-rail.tsx`. From
-`md` up the rail is pinned and content is inset by `--p-rail` (264px). Below
-`md` it is an off-canvas drawer, opened from a mono "Index" button in a slim
-sticky top bar. The word "Index" is the control, never a hamburger icon.
-Rail transforms are direction-aware: the rail hides toward its own
-inline-start edge.
+`SiteShell` in `site-rail.tsx` wraps every page. It renders a sticky top
+bar, which is the primary navigation and the one site header, and
+`SiteFooter` under the page content. The bar is solid `--p-bg` over one
+`#16170f` bottom rule. It has no blur or shadow. Its height is `--p-bar`
+(68px), and `html` sets `scroll-padding-top` to that token, so an anchor jump
+stops below the bar.
 
-Navigation lives only in the rail. There is no footer navigation, and no dead
-spans standing in for links.
+The bar shows the logo linking home on the inline-start side. The navigation and the locale control are together on the inline-end side. The navigation is the four groups of the site map in `src/lib/nav.ts`: Docs, Stories, Registry, and Community. The footer reads the same file, so the two never differ. Docs has Getting started, Guides & demos, FAQ, CLI docs, Specification, and GitHub. Stories has Case studies, Blog, and Talks. Community has Slack and the Google Group. Registry is one link, so it is a plain link with no menu. Each other group is a button with a small chevron, and it opens a menu under the bar. The menu opens when the pointer comes over the group, on a click, and on a key press. It fades in over 150ms. It is square, with one ink border and no shadow, and it starts at the rule of the bar. One menu is open at a time. The Escape key, a press outside, or a click on a link shuts it. A link that leaves the site shows the `↗` arrow from `DirArrow`. The locale control shows the translate mark (a character beside the letter A, the Lucide "languages" icon) beside the locale code. The globe icon left in November 2026. The bar has no other icon than the translate mark, the chevrons, and the menu button. It has no homepage section anchors, no scroll-spy, no tagline, no CTA, and no install button. The link for the current page takes `aria-current="page"` and `#4163cc`, and so does the button of its group. Below `md` the bar shows the logo and one button with three lines, which become a cross while the panel is open. The lines have square ends. The button opens a panel under the bar. The panel shows each group as a small head above its links, with the locale control at the end. The panel has no menus inside it. The roadmap and the ecosystem page left the navigation in November 2026, because both are in the GitHub organization. Every item is a real link, never a dead span.
 
-Every route except the homepage opens with `PageHero` in `page-hero.tsx`. That
-band owns the page `h1`, so the section below it sets no second `h1` and opens
-with `pt-[clamp(28px,3.5vw,48px)]` instead of full section padding.
+`SiteHeader` was removed in July 2026 and the collapsible left side rail in
+November 2026. Do not reintroduce the rail or a second header component.
+
+In the footer, the logo is at the top on the inline-start side, at 30px.
+The three link columns (Docs, Stories, Community) are at the top on the
+inline-end side, with their text end-aligned from `sm`. They come from
+`src/lib/nav.ts`, as the top bar does. The Registry link is in the Docs column. Each column head is sans in bold, with no rule,
+so it reads as a head and not as a link. The license line is at the bottom
+edge of the band, start-aligned, at `text-eyebrow`. It is short: "Site
+content CC BY 4.0 · Website source Apache-2.0".
+
+The homepage hero section takes the `graph-wash` class. From `lg` up it has
+two columns. The headline and the description are on the inline-start side.
+The hero has no buttons. `HeroFigure` in `src/components/home/hero-figure.tsx`
+is on the inline-end side. The figure has no frame. Below `lg` the hero is
+one column, and the figure is under the description.
+
+`HeroFigure` is a Canvas 2D figure. It is one of two moving elements on the
+site. The other is `PipelineFigure` in the solution section.
+It has two states that never show together. The first state is a turning
+globe. Land shows as points on a sphere with a thin outline and a faint graticule. Everything on the globe is `--p-primary`, with no gray or ink lines. The second state is a Portolan catalog, drawn as a directory tree under `s3://your-bucket/`. The tree is illustrative. It shows each kind of file once and is not a complete valid catalog. A role note beside each light file says what it
+is, such as "STAC catalog", "for people", and "for agents". The GeoParquet
+file and the COG each have a drawing, and both drawings show the world map.
+The GeoParquet drawing is a map of land outlines beside a table of row groups. The COG drawing is a pyramid of the same map as rasters. The drawings have no header or footer parts. `geometry` is the one label inside them. The PMTiles file is a plain row with a role note and no
+drawing. One transition moves the points from the globe to their own places
+on the two maps, and the same transition runs backward, on a loop. The
+figure has no phase words, no request lines, and no read step.
+
+The figure picks its form from its own width. The wide form has the tree
+beside the drawings, and the stacked form has each drawing under its file
+name. CSS reserves the height of each form, so the page does not shift when
+the land mask loads. The figure has no WebGL path and no added dependency.
+Its colors and its mono font come from the palette tokens, which the figure
+reads at runtime. Under `prefers-reduced-motion` it shows the static
+catalog. The loop pauses while the figure is off screen or the tab is
+hidden. The figure is `dir="ltr"` and never mirrors. It has an `sr-only`
+caption and no visible caption. The homepage hero does not use `GlyphMap` or
+`--hero-scrim`.
+
+The homepage sections run in this order: hero `#top`, `#challenge`,
+`#solution`, `#why`, `#cases`, `#network`, `#about`. A 1px `#16170f` rule
+opens each section. `#why` is an ink band with a night photograph of Buenos
+Aires, whose lights show in `#4163cc`. Case studies is one row of ink cards, one for each case study, that scrolls
+on the inline axis and runs to the inline-end edge of the window. The
+section does not render while the site has no study. Two drawn arrows beside its heading step the row. They have no box,
+and their size comes from the heading. `#network` is an ink band for the
+registry. Its text is on the inline-start side, and the words "Portolan
+registry" in it are a link. The live registry map is on the inline-end
+side, in a plain frame, 400px tall from `lg`. The map opens on the whole
+world. Two square icon buttons sit on its inline-start side: the one at the
+top opens `/registry`, and the one at the bottom shows the map on the full
+screen. `#about` has the about text with the "Join us on Slack" link, and
+the logos of the organizations that the text names. It has no eyebrow. The
+"Getting started" page at `/quickstart` has the install commands, an
+example prompt, and the four steps beside the recorded catalog build. It
+has no tool list. Each tool is a link in the text. The homepage plays no terminal
+recording.
+
+The solution section has `PipelineFigure` in
+`src/components/home/pipeline-figure.tsx`. From `lg` it sits beside the
+text of the section. Below `lg` it is under the text. The figure is one
+canvas, drawn by `pipeline-renderer.ts`, with a camera that only moves
+down and a 17.6 second loop. It tells three steps. In the first step,
+four sources sit at the top with the types of their endpoints as labels:
+Shapefile, GeoPackage, ArcGIS REST, and WFS. Each layer travels down its
+lane, crosses one `#4163cc` line, and lands with two labels, GeoParquet
+and PMTiles. In the second step, the plates drop into a catalog tree
+under `s3://your-bucket/`, inside a frame with a `#16170f` head that says
+`S3 BUCKET`. In the third step, the tree becomes a sample data portal.
+The camera then carries on down to a fresh start, so the loop never runs
+backward. The figure shows no row counts, no file sizes, and no request
+lines.
+
+The viewer steps through the figure. Under the canvas, after one rule,
+are three numbered step names and two arrow buttons. A step name plays
+its step and stops on the finished frame. The figure has no play button.
+It loops until the viewer uses a control. The current step is `#2d4aa8`.
+
+The portal is the one place on the site with another look. It uses the
+colors and the faces of the City of Philadelphia digital standards, with
+no logo and no name of a publisher: `#0f4d90` for the head, `#f0f0f0`
+cards with a `#2176d2` rule, a `#f3c613` button for QGIS, `#25cef7` for
+the send button, and `#444444` text, in Montserrat and Open Sans. The
+colors are canvas constants in the renderer, and only the figure loads
+the two faces. The portal has a featured layer, three smaller layers, and
+a chat panel named PhiLLM. By the owner's choice the figure is a second
+moving element, next to `HeroFigure`. The control styles are the `pipe-`
+block in `globals.css`, with no hex of their own. The figure is
+`dir="ltr"`, has fixed heights, shows the finished portal under reduced
+motion, and pauses off screen and in a hidden tab.
+
+Every route except the homepage opens with `PageHero` in `page-hero.tsx`.
+It is a picture band, with the treatment of the "Why Portolan" band: the
+grayscale night photograph of Buenos Aires on ink, with the brand blue
+multiplied over it. All text in the band is white, and one `#16170f` rule
+closes the band. That header owns
+the page `h1`, so the section below it sets no second `h1` and opens with
+`pt-[clamp(28px,3.5vw,48px)]` instead of full section padding.
+
+Content keeps a 1240px column. No homepage section runs media edge to edge.
+The case study row is the one exception: it runs past the column to the
+inline-end edge of the window.
 
 Shared UI uses logical properties (`ps`/`pe`, `ms`/`me`, `text-start`/`end`,
 `border-s`/`e`, `inset-s`/`e`), never physical ones. Prefer `gap-*` over
@@ -252,8 +358,33 @@ a shadow.
 Depth is carried by rules and by fill, not by raising a surface. Separate
 content with a `#16170f` rule. Do not introduce a card with a soft shadow, a
 glassy blur, or an alternating background band. There is no `--p-bg-soft`
-section band on the page. The talks section runs a solid `#4163cc` band
-instead, which is the one permitted full-bleed color field.
+section band on the page.
+
+The permitted full-bleed color fields are these.
+
+- **Challenge section** (homepage): `#16170f` with `#ffffff` text. It has no
+  large heading. Its eyebrow is its `h2`, its first paragraph is the
+  statement in bold, and its second paragraph supports it.
+- **Why Portolan** (homepage): `#16170f` with `#ffffff` text. A grayscale
+  NASA photograph of Buenos Aires at night sits on the ink, and a `#4163cc`
+  layer multiplies over it. The city lights are blue and the dark stays ink.
+- **Registry section** (homepage): `#16170f` with `#ffffff` text.
+- **Footer** (every page): a grayscale NASA astronaut photograph
+  multiplied over `#4163cc`, so it reads as one-color blue, with `#ffffff`
+  text. Multiply can only darken, so text contrast never drops below white
+  on `#4163cc`.
+- **Talks band** (`/talks` route): a `#4163cc` band behind the talk cards.
+
+The case study cards are `#16170f` with `#fcfcfa` text, on the page ground.
+Neither photograph shows a credit on the page. The credits are in
+`README.md`.
+
+No other section takes a color band.
+
+The class `graph-wash` in `src/app/globals.css` draws a faint blue 24px grid
+by mixing `--p-primary` into transparent, so it adds no token. It is used
+inside annotated figures and, at full width, behind the homepage hero and the
+homepage solution section.
 
 ## Shapes
 
@@ -268,37 +399,42 @@ Where a rule needs more weight, increase the border width. Do not lighten it
 to a pale hairline, and do not add a third color tier.
 
 Annotated figures are the sanctioned illustration motif: inline SVG in
-`#4163cc` strokes, tiny mono labels, dashed leader lines, a faint blue
-graph-paper wash, and a `Fig. N` caption row. See `PipelineFigure` in the
-how-it-works section. Figures never mirror in RTL, so they carry `dir="ltr"`,
+`#4163cc` strokes, tiny mono labels, dashed leader lines, and the
+`graph-wash` grid. See the two panels in
+`src/components/home/solution-section.tsx`. `HeroFigure` is not an annotated
+figure. It is the Canvas 2D figure described under Layout. A
+homepage figure has no `Fig. N` caption row. That row is the pattern for blog post
+figures. Figures never mirror in RTL, so they carry `dir="ltr"`,
 and format and tool names inside them stay in Latin.
 
 ## Components
 
 ### Buttons
 
-`Btn` in `src/components/ui/btn.tsx`. Three variants and three sizes.
+`Btn` in `src/components/ui/btn.tsx`. A call to action is a text link over a
+rule, not a filled block.
 
-- **Shape:** square (`rounded-[var(--p-r-md)]`, which is `0px`).
-- **Type:** mono, uppercase, `tracking-[0.08em]`, weight 500, neutralized
-  with `rtl:tracking-normal`.
-- **Sizes:** `sm` is `px-4 py-2` at `text-eyebrow`; `md` is `px-5 py-2.5` at
-  `text-small`; `lg` is `px-6 py-3` at `text-small`.
-- **Primary:** `#4163cc` fill, `#ffffff` text. Hover fills `#2d4aa8`.
-- **Secondary:** `#ffffff` fill, `#16170f` text, 1px `#16170f` border. Hover
-  fills `#f5f5f1`.
-- **Ghost:** no fill, no horizontal padding, a 2px bottom border in
-  `#16170f`. Hover thickens that border to 4px and removes 2px of bottom
-  padding, so the label does not move.
+- **Type:** sans, sentence case, weight 600, no tracking, in every variant.
+- **Link:** `text-body`, `#16170f` text, no fill, no horizontal padding, a
+  2px bottom rule in `#16170f`. On hover the text and the rule turn `#4163cc`
+  together. A link never changes only its rule or only its text. The
+  homepage and `/quickstart` use this variant only.
+- **On an ink card:** the same link in `#fcfcfa` over a `#fcfcfa` rule, with
+  the same hover.
+- **Arrow:** a link ends with `DirArrow`, `→` for a page of the site and `↗`
+  for a link that leaves it.
+- **Primary, secondary, ghost:** the filled and bordered variants remain for
+  a call to action inside a blog post (`PostCta`). Primary is a `#4163cc`
+  fill with `#ffffff` text. Do not use them on the homepage.
 - **Transition:** 150ms on background, border, and text color only.
 
-Never pull a filled button with a negative margin to align its label. The
-block edge is the alignment signal.
+The homepage had filled mono buttons in capitals. They left in November
+2026, because they read as agent output.
 
 ### Tags
 
-`Tag` in `src/components/ui/tag.tsx`. Mono, uppercase, `text-eyebrow`,
-`tracking-[0.02em]`, `px-2.5 py-1`, 1px border, square corners.
+`Tag` in `src/components/ui/tag.tsx`. Sans, sentence case, `text-small`,
+`px-2.5 py-1`, 1px border, square corners.
 
 - **Default:** `#f5f5f1` fill, `#3d3f33` text, `#16170f` border.
 - **Primary:** 12% `#4163cc` fill, `#2d4aa8` text, 25% `#4163cc` border.
@@ -315,10 +451,18 @@ inline-start side and supporting copy or a call to action on the inline-end
 side, bottom-aligned from `md` up. The grid is
 `minmax(0,1fr) minmax(0,46ch)` unless `wide` is set.
 
-The kicker is mono, `text-eyebrow`, `#74766a`, `tracking-[0.04em]`, and holds
-the label string only. It carries no `NN ·` index prefix, no `//` punctuation,
-no uppercase, and no wide tracking. Omit the kicker where the title below
-already names the section.
+The kicker is sans, `text-small`, `#74766a`, and holds the label string
+only. It carries no `NN ·` index prefix, no `//` punctuation, no uppercase,
+no mono, and no wide tracking. Omit the kicker where the title below already
+names the section.
+
+The homepage has exactly two eyebrows, and neither uses `SectionHead`. "The
+challenge" is above the challenge statement and "The solution" is above the
+solution heading (`challenge.eyebrow`, `solution.eyebrow`). Both are sans
+`text-small`, in sentence case. The challenge eyebrow is `#ffffff` on the
+ink band, and the solution eyebrow is `#74766a`. The about section has no
+eyebrow. Put no small label above any other homepage heading, card title, or
+figure.
 
 The title is `text-section`, weight 800, `tracking-[-0.03em]`,
 `leading-[1.05]`, and balanced.
@@ -328,6 +472,10 @@ The title is `text-section`, weight 800, `tracking-[-0.03em]`,
 `PortolanLogo` in `src/components/portolan-logo.tsx`. Two pennant paths on a
 32x32 viewBox, filled `var(--p-primary)`, with an optional wordmark set at
 0.85 of the mark size, weight 600, `-0.015em` tracking.
+
+On the blue footer field the logo takes a solid `var(--p-on-primary)` fill
+instead, because a `#4163cc` mark does not show on a
+`#4163cc` ground.
 
 The mark never mirrors in RTL. It never takes a gradient.
 
@@ -357,11 +505,16 @@ The mark never mirrors in RTL. It never takes a gradient.
 - **Don't** use an arbitrary font size such as `text-[13px]`.
 - **Don't** add a step back to the type scale.
 - **Don't** add a `border-p-line-strong` tier. Thicken the border instead.
-- **Don't** inline `<header>` or `<footer>` markup, or reintroduce
-  `SiteHeader` or `SiteFooter`. Navigation is the rail.
+- **Don't** inline `<header>` or `<footer>` markup in a page, or reintroduce
+  `SiteHeader` or the side rail. The top bar and `SiteFooter` both come from
+  `SiteShell`.
 - **Don't** use a compass rose or a rhumb line. The motif was tried
   repeatedly and rejected.
 - **Don't** add a terminal or code-session mockup.
+- **Don't** set a label, a kicker, or a button in mono, in capitals, or with
+  wide tracking.
+- **Don't** put a filled call-to-action block on the homepage. Use a text
+  link over a rule.
 - **Don't** add an emoji. The permitted Unicode marks are ↗, →, and ·.
 - **Don't** give every card in a grid the same anatomy. Ragged is deliberate.
 - **Don't** number a card grid that is not a real sequence.

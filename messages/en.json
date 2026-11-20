@@ -5,28 +5,31 @@
   },
   "nav": {
     "registry": "Registry",
-    "why": "Why Portolan",
     "homeAria": "Portolan home",
+    "mainAria": "Main",
     "languageAria": "Change language",
-    "index": "Index",
-    "who": "Who it's for",
-    "collapse": "Collapse the index",
-    "expand": "Index",
+    "index": "Menu",
     "faq": "FAQ",
-    "coverage": "Explore catalogs",
-    "overview": "Overview",
-    "resources": "Resources",
     "talks": "Talks",
-    "toggleGroup": "{section} links",
     "blog": "Blog",
-    "tutorials": "Guides & demos"
+    "tutorials": "Guides & demos",
+    "caseStudies": "Case studies",
+    "docs": "Docs",
+    "stories": "Stories",
+    "community": "Community",
+    "quickstart": "Getting started",
+    "cliDocs": "CLI docs",
+    "spec": "Specification",
+    "github": "GitHub",
+    "slack": "Slack",
+    "googleGroup": "Google Group"
   },
   "hero": {
-    "title": "Portolan makes geospatial data",
-    "titleAccent": "easy to share and use.",
-    "description": "Portolan is an open-source <spec>specification</spec> and <eco>toolkit</eco> that combines cloud-native file formats with clear metadata and documentation so that people and agents can publish and use data at any scale.",
-    "howItWorks": "How it works",
-    "browseRegistry": "Browse the catalog registry"
+    "title": "Publish geospatial data with no servers, databases, or custom APIs.",
+    "description": "Portolan is an open-source <spec>specification</spec> and <eco>toolkit</eco> for publishing geospatial data as files in S3-compatible cloud storage.",
+    "figure": {
+      "description": "An animated figure. Points draw the land on a turning globe. The points move into a catalog of files in a cloud storage bucket. The catalog is a STAC catalog with its documentation, a GeoParquet file drawn as a table of row groups beside a map of land outlines, and a COG drawn as a pyramid of the same map at three resolutions. Then the points move back onto the globe."
+    }
   },
   "involved": {
     "ariaLabel": "Users and supporters"
@@ -38,81 +41,55 @@
     "community": "Portolan is an open-source community project. We welcome new users and contributors. Join the <slack>Portolan channel on Slack</slack> and follow the <group>Portolan Google Group</group> for details on our weekly meetings."
   },
   "footer": {
-    "contentLicense": "Site content is licensed under <cc>CC BY 4.0</cc>.",
-    "sourceLicense": "Website source is licensed under <apache>Apache-2.0</apache>.",
-    "googleGroup": "Google Group",
-    "slack": "Slack",
-    "community": "Community",
-    "development": "Development",
-    "resources": "Resources",
-    "roadmap": "Roadmap",
-    "github": "GitHub"
-  },
-  "why": {
-    "cards": {
-      "open": {
-        "title": "Open and interoperable",
-        "description": "Portolan builds on open standards like <geoparquet>GeoParquet</geoparquet>, <pmtiles>PMTiles</pmtiles>, <cog>COG</cog>, and <stac>STAC</stac> so that data can be dropped right into tools like QGIS, ArcGIS, Pandas, or BigQuery."
-      },
-      "simple": {
-        "title": "Simple, cheap, scalable, sovereign",
-        "description": "With Portolan, your data are just files in a cloud bucket. Store them with any <s3>S3</s3>-compatible provider, in any jurisdiction you choose. Your only costs are storage and egress. Scale from megabytes to petabytes with no servers, databases, or custom APIs."
-      },
-      "agents": {
-        "title": "Built for people and agents",
-        "description": "Portolan catalogs are well-structured, well-formatted, and well-documented, so people and agents can find, understand, and use them. Browse the registry yourself to discover new data, or point an agent at the registry and see what it can do."
-      }
-    }
-  },
-  "whoFor": {
-    "title": "Who it's for",
-    "stories": {
-      "large": {
-        "title": "Large publishers",
-        "today": "Large archives, such as satellite imagery or national-scale geoportals, are expensive to store and hard to maintain.",
-        "change": "Portolan makes it straightforward to publish that data <cost>as cheaply as possible</cost>, without servers, databases, or APIs, while making it easier to discover and use."
-      },
-      "small": {
-        "title": "Small publishers",
-        "today": "Many city governments, NGOs, and other smaller data producers can't afford the cost or complexity of publishing data with tools like GeoServer or Esri.",
-        "change": "Portolan lowers the barrier to entry by letting you share your data with nothing more than a cloud storage bucket."
-      },
-      "users": {
-        "title": "Data users",
-        "today": "Most geospatial data is scattered, poorly documented, and stored in ways that make it hard to use.",
-        "change": "Portolan requires clear metadata and documentation, uses formats designed for direct access, and provides a <reg>central registry</reg> of public catalogs. You spend less time finding, downloading, and wrangling data, and more time putting it to work."
-      }
-    }
+    "contentLicense": "Site content <cc>CC BY 4.0</cc>",
+    "sourceLicense": "Website source <apache>Apache-2.0</apache>"
   },
   "howItWorks": {
-    "eyebrow": "How it works",
-    "title": "How it works",
-    "intro": "Use the <cli>Portolan CLI</cli> or <skills>agent skills</skills> to transform your existing data into a Portolan catalog.",
+    "meta": {
+      "title": "Getting started",
+      "description": "Convert existing geospatial data, catalog it, publish it to cloud storage, and use it, in four steps."
+    },
     "steps": {
       "convert": {
         "id": "01",
         "title": "Convert",
-        "description": "Whether you're working with Shapefiles and GeoPackages, a WFS endpoint, or an Esri server, your data end up as <geoparquet>GeoParquet</geoparquet> and <pmtiles>PMTiles</pmtiles> for vector and <cog>COG</cog> for raster."
+        "description": "The agent uses the <cli>Portolan CLI</cli> to extract the data from its upstream servers and convert it to cloud-optimized formats. Vector data end up as <geoparquet>GeoParquet</geoparquet> and <pmtiles>PMTiles</pmtiles>, and raster data as <cog>COG</cog>."
       },
       "catalog": {
         "id": "02",
         "title": "Catalog",
-        "description": "Your cloud-optimized data are organized as a <stac>STAC</stac> catalog with clear metadata and docs, making the catalog easy to find, understand, and use for people and agents."
+        "description": "The CLI organizes the data as a <stac>STAC</stac> catalog and enriches it with metadata from the original source. The agent adds docs, thumbnails, and map styles, then validates the catalog with <rashid>rashid</rashid>, the Portolan validator."
       },
       "publish": {
         "id": "03",
         "title": "Publish",
-        "description": "Your catalog is published to any S3-compatible storage, such as AWS, GCS, Hetzner, or MinIO, with no servers or APIs to set up."
+        "description": "The agent publishes the catalog, here to <coop>Source Cooperative</coop>. Any S3-compatible storage works, with no servers or APIs to set up. The agent can also add the catalog to the <reg>Portolan registry</reg>, which is always opt-in."
       },
       "use": {
         "id": "04",
         "title": "Use",
-        "description": "Your data can now be dropped directly into tools like QGIS, ArcGIS, or Python, or you can pass the catalog URL to an agent and let it get to work."
+        "description": "Open the catalog in the <browser>Portolan browser</browser>, drop the data directly into tools like QGIS, ArcGIS, Python, or DuckDB, or pass the catalog URL to an agent and let it get to work."
+      }
+    },
+    "quickstart": {
+      "title": "Getting started",
+      "step": "Step {n}",
+      "install": {
+        "title": "Install the skills",
+        "body": "Run these commands in your terminal to add the skills to Claude Code. The skills repository has <install>instructions for other agents</install>."
+      },
+      "start": {
+        "title": "Tell your agent to start",
+        "body": "Give it the URL of your data and the cloud storage bucket where you want the catalog to be published."
+      },
+      "nextSteps": {
+        "title": "Next steps",
+        "body": "For a deeper dive, follow the build of a real catalog. The guide takes the open data of East Hampton, New York, from its Esri server to a <catalog>published Portolan catalog</catalog>.",
+        "cta": "Read the East Hampton guide"
       }
     }
   },
   "demo": {
-    "navLabel": "Demo",
     "title": "A better way to work with geospatial data",
     "blurb": "Start with real questions, not a script. Watch an agent find relevant catalogs in the Portolan registry and answer complex, natural-language questions about flood risk in Moldova.",
     "captionPhiladelphia": "Making <catalog>a Portolan catalog</catalog> start to finish from Philadelphia housing data.",
@@ -124,63 +101,44 @@
     "exitFullscreen": "Leave full screen",
     "seek": "Seek in the demo"
   },
-  "ecosystem": {
-    "eyebrow": "Ecosystem",
-    "title": "Ecosystem",
-    "intro": "The Portolan specification can be implemented in a number of ways. Here is a list of core, community-contributed, and commercial tools to make publishing and working with Portolan data easy.",
-    "submit": "Submit a tool",
-    "filterLabel": "Filter tools by tier",
-    "filters": {
-      "all": "all",
-      "core": "core",
-      "community": "community",
-      "commercial": "commercial"
+  "cases": {
+    "title": "Case studies",
+    "readStudy": "Read the case study",
+    "costs": {
+      "municipality": {
+        "figure": "~€0.47",
+        "label": "A municipality, per month",
+        "line": "Vector data, ~2 GB."
+      },
+      "province": {
+        "figure": "~€75",
+        "label": "A province, per month",
+        "line": "Vector data and an orthophoto, ~3 TB."
+      },
+      "national": {
+        "figure": "~€6,006",
+        "label": "A national geoportal, per month",
+        "line": "PDOK scale, ~80 TB stored, ~2 PB transferred."
+      },
+      "caption": "Storage and egress on Leaseweb object storage, from the <cost>cost calculator</cost>. No server compute, licensing, or staffing costs."
     },
-    "empty": "No tools in this tier yet.",
-    "proprietary": "Commercial",
-    "pagination": {
-      "label": "Ecosystem pages",
-      "previous": "Previous page",
-      "next": "Next page",
-      "page": "Page {page}"
-    },
-    "commercial": {
-      "title": "Commercial products on the open core",
-      "body": "Portolan standardizes the published catalog, not the software around it, so companies can sell capabilities the open tools do not cover. <carto>CARTO SDI</carto> extends Portolan for organizations with private datasets, governance and audits, dataset commercialization, and writable datasets. If a product goes away, the catalog keeps working and another tool can take over."
-    },
-    "projects": {
-      "spec": "The specification that defines a Portolan catalog.",
-      "rashid": "The validator for checking whether a catalog conforms to the Portolan specification.",
-      "cli": "A command-line tool for creating, checking, and publishing Portolan catalogs.",
-      "registry": "A central registry of public Portolan catalogs.",
-      "browser": "A web interface for browsing and exploring Portolan catalogs.",
-      "skills": "Agent skills for creating and working with Portolan catalogs.",
-      "cartosdi": "A spatial data infrastructure for organizations, built on Portolan.",
-      "scout": "A geospatial ingestion platform that publishes Portolan-conformant catalogs and answers spatial questions with AI-generated maps and data."
-    }
+    "previous": "Previous case",
+    "next": "Next case"
+  },
+  "network": {
+    "title": "Toward a federated network",
+    "body": "Our long-term goal is for Portolan to become the default way of publishing geospatial data. The <reg>Portolan registry</reg> is the first step: a catalog of independently hosted catalogs. The underlying bytes never leave the publisher's storage, and users query them directly from the source.",
+    "link": "Open the full registry",
+    "fullscreen": "Full screen",
+    "exitFullscreen": "Exit full screen"
   },
   "coverage": {
-    "title": "Explore catalogs",
-    "blurb": "See independently hosted geospatial catalogs from publishers around the world.",
-    "cta": "Browse the registry",
-    "featuredLabel": "Featured catalogs",
-    "featured": {
-      "global-data": {
-        "title": "Agricultural field boundaries",
-        "publisher": "Fields of the World",
-        "place": "Worldwide"
-      },
-      "portolan-nl": {
-        "title": "Dutch national geodata",
-        "publisher": "Portolan NL",
-        "place": "Netherlands"
-      },
-      "trimet": {
-        "title": "Regional transit data",
-        "publisher": "TriMet",
-        "place": "Portland, Oregon"
-      }
+    "gestures": {
+      "windows": "Use Ctrl + scroll to zoom the map",
+      "mac": "Use ⌘ + scroll to zoom the map",
+      "mobile": "Use two fingers to move the map"
     },
+    "mapUnavailable": "The map did not load.",
     "about": "This map shows where data in the Portolan registry is available. Each hexagon is shaded by the number of distinct catalogs with at least one collection covering that area.",
     "cell": {
       "catalogs": "{count, plural, one {# catalog} other {# catalogs}}"
@@ -342,7 +300,6 @@
       "description": "Writing from the Portolan project on serverless spatial data infrastructure, the specification, and the tools that build on it."
     },
     "title": "Blog",
-    "intro": "Notes from the Portolan project on the specification, the tooling, and what we learn from publishing real catalogs.",
     "backToIndex": "All posts",
     "englishNotice": "This post is available in English only. The rest of the site is translated.",
     "figureLabel": "Fig. {n}",
@@ -353,6 +310,8 @@
       "failed": "Copy failed. Select and copy the text."
     },
     "by": "By",
+    "team": "The Portolan team",
+    "readingTime": "{minutes} min read",
     "feed": "RSS feed",
     "previous": "Previous",
     "next": "Next",
@@ -365,7 +324,6 @@
       "description": "Tutorials, demos, and walkthroughs for publishing and using Portolan catalogs."
     },
     "title": "Guides & demos",
-    "intro": "Tutorials, demos, and walkthroughs for publishing and using Portolan catalogs.",
     "backToIndex": "All guides & demos",
     "englishNotice": "This content is available in English only. The rest of the site is translated."
   },
@@ -413,5 +371,68 @@
         "alt": "The calculator, comparing monthly storage and egress costs across three providers."
       }
     }
+  },
+  "challenge": {
+    "eyebrow": "The challenge",
+    "p1": "For decades, publishing geospatial data has meant deploying and maintaining complex, expensive infrastructure, while using that data has required specialized tools and expertise.",
+    "p2": "This made sense when spatial files couldn't be queried efficiently over the network. As datasets grow larger and more complex, and agents generate query volumes that traditional serving infrastructure was never designed for, this model of Spatial Data Infrastructure is becoming less sustainable."
+  },
+  "solution": {
+    "eyebrow": "The solution",
+    "title": "An SDI can now be files in cloud storage.",
+    "p1": "Cloud-optimized file formats and STAC metadata make it possible to organize petabyte-scale datasets in object storage and efficiently access them with standard tools like QGIS and Python, or hand them to an agent.",
+    "p2": "Once users can query files directly, publishers don't need to maintain a service whose main job is to stand between users and the data.",
+    "cta": "Get started",
+    "figure": {
+      "steps": {
+        "extract": "Extract and convert",
+        "catalog": "Publish a catalog",
+        "build": "Build on top"
+      },
+      "previous": "Previous step",
+      "next": "Next step",
+      "description": "An animated figure in three steps. In the first step, four Philadelphia layers leave four existing systems, which are a Shapefile, a GeoPackage, an ArcGIS REST feature service, and a WFS service. Each layer becomes GeoParquet and PMTiles. In the second step, the four collections move into one catalog under s3://your-bucket/, beside catalog.json, README.md, and AGENTS.md. In the third step, the catalog becomes the data portal of a fictional publisher, served from the same bucket. The buttons under the figure play each step."
+    },
+    "blocks": {
+      "standards": {
+        "title": "A specification built on existing standards",
+        "body": "Portolan deliberately builds on existing standards rather than reinventing them. It uses <geoparquet>GeoParquet</geoparquet> and <pmtiles>PMTiles</pmtiles> for vector data, <cog>COG</cog> for raster, and <stac>STAC</stac> to organize them."
+      },
+      "docs": {
+        "title": "Documented for people and agents",
+        "body": "All Portolan catalogs must include READMEs and <m>AGENTS.md</m> files to make it easy for people and agents to understand and work with the data."
+      },
+      "sovereign": {
+        "title": "Simple, cheap, scalable, sovereign",
+        "body": "With Portolan, your data are just files in a cloud bucket. Store them with any S3-compatible provider, in any jurisdiction you choose. Your only costs are storage and egress. Scale from megabytes to petabytes."
+      }
+    },
+    "blocksTitle": "Why Portolan"
+  },
+  "practice": {
+    "title": "Portolan in practice",
+    "lead": "Because Portolan catalogs are built from existing standards, using them doesn't require any Portolan-specific tooling. You can explore the same data in the Portolan browser, query them directly from QGIS, ArcGIS, Python, or DuckDB, or hand the catalog to an agent.",
+    "items": {
+      "qgis": {
+        "caption": "IDE Pergamino and JRC GloFAS flood depth, loaded from the registry",
+        "description": "A screen recording of QGIS. The Portolan Registry plugin opens IDE Pergamino, adds the boundary of the Partido de Pergamino, then adds a global flood depth layer clipped to that boundary.",
+        "body": "Cloud-optimized formats permit much faster access than WFS endpoints or Esri servers ever could."
+      }
+    }
+  },
+  "about": {
+    "lead": "<line>Portolan is an open-source, community-driven project.</line><line><slack>Join us on Slack</slack> and get involved.</line>",
+    "logosLabel": "With contributions from"
+  },
+  "case-studies": {
+    "meta": {
+      "title": "Case studies",
+      "description": "How people publish and use geospatial data with Portolan."
+    },
+    "title": "Case studies",
+    "intro": "How people publish and use geospatial data with Portolan.",
+    "backToIndex": "All case studies",
+    "englishNotice": "This content is available in English only. The rest of the site is translated.",
+    "readStudy": "Read case study"
   }
 }

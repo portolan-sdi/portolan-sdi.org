@@ -17,15 +17,27 @@ const nextConfig: NextConfig = {
   // next-intl proxy so all three locales land on the right anchor.
   async redirects() {
     return [
+      // The quickstart page took the place of "How it works" and of the
+      // ecosystem page.
       {
-        source: "/quickstart",
-        destination: "/#quickstart",
-        permanent: true,
+        source: "/how-it-works",
+        destination: "/quickstart",
+        permanent: false,
       },
       {
-        source: "/:locale(es|ar)/quickstart",
-        destination: "/:locale#quickstart",
-        permanent: true,
+        source: "/:locale(es|ar)/how-it-works",
+        destination: "/:locale/quickstart",
+        permanent: false,
+      },
+      {
+        source: "/ecosystem",
+        destination: "/quickstart",
+        permanent: false,
+      },
+      {
+        source: "/:locale(es|ar)/ecosystem",
+        destination: "/:locale/quickstart",
+        permanent: false,
       },
     ];
   },

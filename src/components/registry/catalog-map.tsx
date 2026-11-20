@@ -16,6 +16,7 @@ import {
 import type { CollectionPoint, CoverageIndex, Viewport } from "@/lib/collection-points";
 import { neutralizeMarkerHosts } from "@/lib/marker-hosts";
 import { MapGeocoder } from "./map-geocoder";
+import { MapLoading } from "./map-loading";
 import type { GeocodeSuggestion } from "@/hooks/use-geocode";
 
 /**
@@ -86,7 +87,31 @@ interface CatalogMapProps {
   onMove: (state: MapState) => void;
   /** Where to open, restored from the URL. Null opens the whole world. */
   initialView: { longitude: number; latitude: number; zoom: number } | null;
+  /**
+   * The frame's height and rules. The default is the registry page's own
+   * frame. An embed passes its own, for example to run edge to edge.
+   */
+  frameClassName?: string;
+  /** The region search box. On by default. An embed can leave it off. */
+  geocoder?: boolean;
+  /**
+   * Turns on cooperative gestures, for a map that sits in a long page. The
+   * wheel then scrolls the page unless Ctrl or the command key is held, and
+   * one finger scrolls the page while two move the map. The strings are the
+   * hints MapLibre shows when it lets a gesture pass. Off by default, so the
+   * registry page keeps its plain wheel zoom and one-finger pan.
+   */
+  gestureHelp?: { windows: string; mac: string; mobile: string };
+  /**
+   * The view that shows the whole world. The map opens on it when
+   * `initialView` is null, and the globe button goes back to it. The
+   * default suits the frame of the registry page. A smaller frame passes
+   * a lower zoom.
+   */
+  worldView?: { longitude: number; latitude: number; zoom: number };
 }
+
+const DEFAULT_FRAME = "h-[440px] md:h-[540px] border border-p-line";
 
 function readState(map: MapRef): MapState {
   const bounds = map.getBounds();
@@ -148,14 +173,34 @@ export default function CatalogMap({
   onSelect,
   onMove,
   initialView,
+  frameClassName = DEFAULT_FRAME,
+  geocoder = true,
+  gestureHelp,
+  worldView = WORLD_VIEW,
 }: CatalogMapProps) {
   const t = useTranslations("registry");
 
   const mapRef = useRef<MapRef | null>(null);
   const [bounds, setBounds] = useState<[number, number, number, number] | null>(null);
-  const [zoom, setZoom] = useState(initialView?.zoom ?? WORLD_VIEW.zoom);
+  const [zoom, setZoom] = useState(initialView?.zoom ?? worldView.zoom);
   const [infoOpen, setInfoOpen] = useState(false);
   const [hover, setHover] = useState<Hover | null>(null);
+  // MapLibre fires `load` after the style and the first tiles render. The
+  // loading mark covers the canvas until then.
+  const [loaded, setLoaded] = useState(false);
+
+  // MapLibre reads the locale once, when the map is built.
+  const gestureLocale = useMemo(
+    () =>
+      gestureHelp
+        ? {
+            "CooperativeGesturesHandler.WindowsHelpText": gestureHelp.windows,
+            "CooperativeGesturesHandler.MacHelpText": gestureHelp.mac,
+            "CooperativeGesturesHandler.MobileHelpText": gestureHelp.mobile,
+          }
+        : undefined,
+    [gestureHelp]
+  );
 
   // A catalog with one place needs no rank. One with seven does, or its seven
   // squares all read the same.
@@ -311,18 +356,24 @@ export default function CatalogMap({
   return (
     <div
       dir="ltr"
-      className="relative h-[440px] md:h-[540px] border border-p-line overflow-hidden"
+      className={`relative overflow-hidden ${frameClassName}`}
       role="application"
       aria-label={t("map.label")}
     >
       <MapGL
         ref={mapRef}
-        initialViewState={initialView ?? WORLD_VIEW}
+        initialViewState={initialView ?? worldView}
+        minZoom={Math.min(0, worldView.zoom)}
         mapStyle={CARTO_STYLE}
         attributionControl={false}
         dragRotate={false}
         touchPitch={false}
-        onLoad={report}
+        cooperativeGestures={gestureHelp !== undefined}
+        locale={gestureLocale}
+        onLoad={() => {
+          report();
+          setLoaded(true);
+        }}
         onMoveEnd={report}
         onClick={handleMapClick}
         style={{ width: "100%", height: "100%" }}
@@ -346,7 +397,7 @@ export default function CatalogMap({
                   width: clusterSize(item.ids.length),
                   height: clusterSize(item.ids.length),
                 }}
-                className={`flex cursor-pointer items-center justify-center border font-mono text-eyebrow leading-none transition-colors ${
+                className={`flex cursor-pointer items-center justify-center border text-small leading-none transition-colors ${
                   item.selected
                     ? "border-p-ink bg-p-ink text-p-bg"
                     : "border-p-primary bg-p-primary text-p-on-primary hover:border-p-ink hover:bg-p-ink"
@@ -395,7 +446,7 @@ export default function CatalogMap({
             closeOnClick={false}
             className="registry-popup"
           >
-            <div dir="auto" className="max-w-[240px] font-mono text-small leading-snug">
+            <div dir="auto" className="max-w-[240px] text-small leading-snug">
               <p className="text-p-ink">{hover.heading}</p>
               {hover.names.map((name) => (
                 <p key={name} className="text-p-ink-2">
@@ -408,10 +459,20 @@ export default function CatalogMap({
         )}
       </MapGL>
 
+      {/* The same ground and mark as the placeholder before the map, so the
+          frame does not change until the basemap shows. */}
+      {!loaded && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-p-bg-soft">
+          <MapLoading label={t("map.loading")} />
+        </div>
+      )}
+
       {/* Region search (top-left) */}
-      <div className="absolute top-3 start-3 z-10">
-        <MapGeocoder onSelect={handleGeocode} />
-      </div>
+      {geocoder && (
+        <div className="absolute top-3 start-3 z-10">
+          <MapGeocoder onSelect={handleGeocode} />
+        </div>
+      )}
 
       {/* Zoom stack (top-right) */}
       <div className="absolute top-3 end-3 z-10 flex flex-col overflow-hidden border border-p-line">
@@ -445,8 +506,8 @@ export default function CatalogMap({
               // Spreading the view here would move the zoom and leave the
               // map wherever it already sat.
               mapRef.current?.easeTo({
-                center: [WORLD_VIEW.longitude, WORLD_VIEW.latitude],
-                zoom: WORLD_VIEW.zoom,
+                center: [worldView.longitude, worldView.latitude],
+                zoom: worldView.zoom,
                 duration: 600,
               })
             }
@@ -465,7 +526,7 @@ export default function CatalogMap({
           does not have to sit across the bottom of the map to be. */}
       <div className="absolute bottom-3 end-3 z-10 flex items-end gap-2">
         {infoOpen && (
-          <div className="w-[240px] max-w-[calc(100vw-2rem)] border border-p-line bg-p-paper p-3 text-small font-mono text-p-ink-2 leading-relaxed">
+          <div className="w-[240px] max-w-[calc(100vw-2rem)] border border-p-line bg-p-paper p-3 text-small text-p-ink-2 leading-relaxed">
             {"© "}
             <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-p-ink">
               CARTO
@@ -485,7 +546,7 @@ export default function CatalogMap({
           onClick={() => setInfoOpen((open) => !open)}
           aria-label={t("map.info")}
           aria-expanded={infoOpen}
-          className="flex h-6 w-6 shrink-0 items-center justify-center border border-p-line bg-p-paper font-mono text-small text-p-ink-3 transition-colors hover:text-p-ink cursor-pointer"
+          className="flex h-6 w-6 shrink-0 items-center justify-center border border-p-line bg-p-paper text-small text-p-ink-3 transition-colors hover:text-p-ink cursor-pointer"
         >
           i
         </button>

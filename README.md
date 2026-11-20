@@ -28,3 +28,32 @@ pnpm lint     # eslint
 
 - Website: [portolan-sdi.org](https://portolan-sdi.org)
 - Source: [github.com/portolan-sdi](https://github.com/portolan-sdi)
+
+## Image credit
+
+The footer image is astronaut photograph ISS075-E-70481. It is courtesy of
+the Earth Science and Remote Sensing Unit, NASA Johnson Space Center. The
+source is the NASA Earth Observatory article
+[Monterrey Amid Mountains](https://science.nasa.gov/earth/earth-observatory/monterrey-amid-mountains/).
+
+The image behind the "Why Portolan" band on the homepage is astronaut
+photograph ISS073-E-176299, Buenos Aires at night. It is courtesy of the
+Earth Science and Remote Sensing Unit, NASA Johnson Space Center. The file
+is from the
+[NASA Earth Observatory image library](https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/154000/154789/iss073e0176299_lrg.jpg).
+The site shows it in grayscale, cropped.
+
+Each case study lists the sources of its own media in
+`src/content/case-studies/<slug>.credits.md`.
+
+The figure in the solution section of the homepage uses three more items.
+The QGIS icon in `public/img/home/pipeline/qgis.svg` is from the
+[QGIS repository](https://github.com/qgis/QGIS/blob/master/images/icons/qgis_icon.svg).
+QGIS is a trademark of QGIS.ORG. The robot icon is the "bot" icon of
+[Lucide](https://lucide.dev/icons/bot), under the ISC license. The translate
+mark on the language control is the Lucide
+["languages"](https://lucide.dev/icons/languages) icon, under the same
+license. The sample
+portal uses the colors and the faces of the
+[City of Philadelphia digital standards](https://standards.phila.gov/).
+The City of Philadelphia did not make or approve the portal.

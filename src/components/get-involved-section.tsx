@@ -14,7 +14,7 @@ export function GetInvolvedSection() {
   // page belongs to SiteFooter, so this section does not draw one.
   return (
     <section
-      id="involved"
+      id="get-involved"
       className="border-t border-p-line px-[var(--p-pad-section-x)] py-[var(--p-pad-section-y)]"
     >
       <div className="mx-auto max-w-[1240px]">
@@ -47,7 +47,7 @@ export function GetInvolvedSection() {
           <p>
             {t.rich("priority", {
               publish: (chunks) => (
-                <Link href="/#how" className={proseLink}>
+                <Link href="/quickstart" className={proseLink}>
                   {chunks}
                 </Link>
               ),
@@ -80,3 +80,6 @@ export function GetInvolvedSection() {
     </section>
   );
 }
+
+/** The Slack mark in one color. It takes the text color of its button, and
+ *  it does not mirror in RTL. */

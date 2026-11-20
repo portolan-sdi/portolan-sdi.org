@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent }
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
-import { Ltr } from "./ui";
 
 // Native language names are always shown in their own language, so they are not
 // translated. Order follows routing.locales (en, es, ar).
@@ -100,15 +99,37 @@ export function LocaleSwitcher() {
         id={buttonId}
         type="button"
         aria-label={t("nav.languageAria")}
+        title={t("nav.languageAria")}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1 h-8 px-2 rounded-[var(--p-r-md)] text-small text-p-ink-2 transition-colors hover:bg-p-bg-soft hover:text-p-ink"
+        className="inline-flex items-center gap-1.5 h-8 px-2 rounded-[var(--p-r-md)] text-small text-p-ink-2 transition-colors hover:bg-p-bg-soft hover:text-p-ink"
       >
-        {/* No globe. Nav items in the rail carry no icons, and this control
-            sits among eight of them. The locale code names it. */}
-        <Ltr>{locale.toUpperCase()}</Ltr>
+        {/* The translate mark: a character beside the letter A. It is the
+            Lucide "languages" icon, and it marks the control as the
+            language menu. The control shows no locale code, because the
+            page text shows the current language. The aria-label names the
+            control, and the menu marks the current language. The mark
+            never mirrors. */}
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
+          aria-hidden="true"
+        >
+          <path d="m5 8 6 6" />
+          <path d="m4 14 6-6 2-3" />
+          <path d="M2 5h12" />
+          <path d="M7 2h1" />
+          <path d="m22 22-5-10-5 10" />
+          <path d="M14 18h6" />
+        </svg>
         <svg
           width="12"
           height="12"
@@ -125,12 +146,16 @@ export function LocaleSwitcher() {
         </svg>
       </button>
 
+      {/* In the top bar the menu drops under the control, from its inline-end
+          edge, so it stays inside the viewport. Below md the control sits at
+          the foot of the navigation panel, so the menu opens upward over the
+          links instead of past the panel's edge. */}
       {open ? (
         <div
           id={menuId}
           role="menu"
           aria-labelledby={buttonId}
-          className="absolute start-0 bottom-full mb-2 min-w-40 py-1 rounded-[var(--p-r-md)] border border-p-line-soft bg-p-bg shadow-[var(--p-shadow-md)] text-small z-50"
+          className="absolute start-0 bottom-full mb-2 md:start-auto md:end-0 md:bottom-auto md:top-full md:mb-0 md:mt-2 min-w-40 py-1 rounded-[var(--p-r-md)] border border-p-line-soft bg-p-bg shadow-[var(--p-shadow-md)] text-small z-50"
         >
           {routing.locales.map((loc, index) => {
             const isActive = loc === locale;

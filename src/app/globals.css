@@ -69,8 +69,9 @@
      defined and never spent. */
   --p-pad-lg: 32px;
 
-  /* Primary side rail width (see .site-rail / .site-main) */
-  --p-rail: 264px;
+  /* Height of the sticky top navigation bar (see SiteShell). The bar, the
+     scroll padding on html, and the blog margin list all read it. */
+  --p-bar: 68px;
 
   /* Shadows — flat editorial: no drop shadows, hairlines only */
   --p-shadow-sm: none;
@@ -120,13 +121,13 @@
      larger than a heading. Every adjacent ratio here lands between 1.15 and
      1.83, and `lead` caps at 18px so `card-title` outranks it at every
      width. */
-  --text-eyebrow: 11px;
+  --text-eyebrow: 13px;
   --text-eyebrow--line-height: 1.4;
-  --text-small: 13px;
+  --text-small: 14px;
   --text-small--line-height: 1.5;
-  --text-body: 15px;
+  --text-body: 16px;
   --text-body--line-height: 1.6;
-  --text-lead: clamp(16px, 0.4vw + 14.5px, 18px);
+  --text-lead: clamp(17px, 0.4vw + 15.5px, 19px);
   --text-lead--line-height: 1.6;
   --text-card-title: 20px;
   --text-card-title--line-height: 1.3;
@@ -148,6 +149,14 @@ html,
 body {
   margin: 0;
   padding: 0;
+}
+
+/* The top bar is sticky, so an anchor jump (`/#how`, `/faq#lockIn`, a post
+   heading) would land with its target under the bar. The padding stops the
+   scroll one bar height short. An element that wants air above it adds its
+   own `scroll-mt-*` on top. */
+html {
+  scroll-padding-top: var(--p-bar);
 }
 
 /* Element defaults live in the base layer so Tailwind utilities (which sit in
@@ -244,55 +253,6 @@ body {
   display: none;
 }
 
-/* --- Primary side rail navigation (replaces header + footer nav) ---------
-   The rail is off-canvas by default (mobile drawer, opened with .is-open).
-   From md up it is permanently pinned and content is inset by --p-rail.
-   Transforms are direction-aware so the rail hides toward its own
-   inline-start edge below md. */
-.site-rail {
-  transform: translateX(-100%);
-  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
-[dir="rtl"] .site-rail {
-  transform: translateX(100%);
-}
-.site-rail.is-open {
-  transform: translateX(0);
-}
-@media (min-width: 768px) {
-  .site-rail,
-  [dir="rtl"] .site-rail {
-    transform: translateX(0);
-  }
-
-  /* Collapsed: the rail slides off toward its own inline-start edge and the
-     content reclaims the 264px. */
-  .site-rail.is-collapsed {
-    transform: translateX(-100%);
-  }
-  [dir="rtl"] .site-rail.is-collapsed {
-    transform: translateX(100%);
-  }
-
-  /* The margin is not animated. Only the rail's transform is, which the
-     compositor handles on its own layer. Easing the margin instead would
-     relayout <main> on every frame for 280ms, and <main> holds the MapLibre
-     canvas and the hero glyph map, both of which resize on reflow. The
-     content reflows once, then the rail slides away over it. */
-  .site-main {
-    margin-inline-start: var(--p-rail);
-  }
-  .site-rail.is-collapsed ~ .site-main {
-    margin-inline-start: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-rail {
-    transition: none;
-  }
-}
-
 /* Who it's for: each story's rule wipes in from its inline-start edge, then
    the story rises under it, once, when the section scrolls into view.
    `data-in` is set by the section's IntersectionObserver. The rules stay at
@@ -334,63 +294,6 @@ body {
   animation: wf-story-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* --- Talks & demos source wall -------------------------------------------
-   The band wipes in from its inline-start edge and the cards fade up into
-   place, once, when the section first scrolls into view. `data-in` is set by
-   the section's IntersectionObserver.
-
-   The reveal animates the `translate` property, not `transform`, so the hover
-   lift below stays free to use `transform` even after the animation settles on
-   its final frame. */
-@keyframes tk-band-in {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-@keyframes tk-card-in {
-  from {
-    opacity: 0;
-    translate: 0 28px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-.tk-wall[data-in="false"] .tk-band,
-.tk-wall[data-in="false"] .tk-card {
-  opacity: 0;
-}
-.tk-wall[data-in="true"] .tk-band {
-  transform-origin: left;
-  animation: tk-band-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-[dir="rtl"] .tk-wall[data-in="true"] .tk-band {
-  transform-origin: right;
-}
-.tk-wall[data-in="true"] .tk-card {
-  opacity: 0;
-  animation: tk-card-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Hover and keyboard focus lift the card off the page, onto a hard blue
-   offset. Same ink-and-offset language as the ecosystem cards, in reverse. */
-.tk-card {
-  transition:
-    transform 0.16s ease,
-    box-shadow 0.16s ease,
-    border-color 0.16s ease;
-}
-.tk-card:hover,
-.tk-card:focus-visible {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 0 var(--p-primary);
-  border-color: var(--p-line);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .wf-set .wf-rule,
   .wf-set .wf-body {
@@ -399,19 +302,6 @@ body {
   }
   .wf-story {
     transition: none;
-  }
-  .tk-wall .tk-band,
-  .tk-wall .tk-card {
-    opacity: 1;
-    animation: none;
-  }
-  .tk-card {
-    transition: border-color 0.16s ease;
-  }
-  .tk-card:hover,
-  .tk-card:focus-visible {
-    transform: none;
-    box-shadow: none;
   }
 }
 
@@ -435,6 +325,14 @@ body {
 .logo-strip:hover .logo-mono,
 .logo-strip:focus-within .logo-mono {
   background-color: var(--p-primary);
+}
+/* The about section shows its logos in ink, at rest. The hover rule below
+   still turns one logo blue. */
+.logo-grid .logo-mono {
+  background-color: var(--p-ink);
+}
+.logo-grid .logo-word {
+  color: var(--p-ink);
 }
 .logo-link:hover .logo-mono,
 .logo-link:focus-visible .logo-mono {
@@ -529,8 +427,19 @@ body {
     transform: translateX(-50%);
   }
 }
+/* In RTL the track overflows toward the left, so the strip travels right.
+   It has its own keyframes. A reversed `logo-scroll` held the paused strip
+   on its last frame, which put every logo off screen. */
 [dir="rtl"] .logo-marquee {
-  animation-direction: reverse;
+  animation-name: logo-scroll-rtl;
+}
+@keyframes logo-scroll-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
 }
 
 /* --- Demo video frame ---------------------------------------------------- */
@@ -805,5 +714,262 @@ body {
   .faq-row::details-content {
     transition: none;
     opacity: 1;
+  }
+}
+
+/* Graph-paper wash. The owner turned it off in November 2026 as a trial.
+   The class stays on its elements and draws nothing. To turn the wash on
+   again, restore the two gradients from git history. */
+.graph-wash {
+  background-image: none;
+}
+
+/* The cost scale in the case studies section. One annotated figure: a log
+   axis in euros for each month, with the three costs marked where they
+   fall. Four orders of magnitude read as a distance. The axis stands on a
+   phone and lies down from 900px. Each `--f` is a position from 0 to 1. */
+.cost-scale {
+  position: relative;
+  height: 700px;
+  margin: 0 clamp(16px, 3vw, 40px);
+}
+.cost-axis {
+  position: absolute;
+  left: 72px;
+  top: 28px;
+  bottom: 28px;
+  width: 2px;
+  background: var(--p-primary);
+}
+.cost-tick {
+  position: absolute;
+  left: -6px;
+  width: 14px;
+  height: 1px;
+  background: var(--p-primary);
+  top: calc(var(--f) * 100%);
+}
+.cost-tick span {
+  position: absolute;
+  right: 22px;
+  top: -8px;
+  white-space: nowrap;
+}
+.cost-mark {
+  position: absolute;
+  left: 72px;
+  top: calc(28px + (100% - 56px) * var(--f));
+  right: 0;
+}
+/* The point on the axis. */
+.cost-mark::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  width: 14px;
+  height: 14px;
+  background: var(--p-primary);
+}
+/* The dashed leader to the label. */
+.cost-mark::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 0;
+  width: 22px;
+  border-top: 1px dashed var(--p-primary);
+}
+.cost-lab {
+  position: absolute;
+  left: 44px;
+  top: -26px;
+  max-width: 30ch;
+}
+.cost-mark-end .cost-lab {
+  top: auto;
+  bottom: -22px;
+}
+@media (min-width: 900px) {
+  .cost-scale {
+    height: 230px;
+  }
+  .cost-axis {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 64px;
+    width: auto;
+    height: 2px;
+  }
+  .cost-tick {
+    left: calc(var(--f) * 100%);
+    top: -6px;
+    width: 1px;
+    height: 14px;
+  }
+  .cost-tick span {
+    right: auto;
+    left: 0;
+    top: 22px;
+    transform: translateX(-50%);
+  }
+  .cost-tick:first-child span {
+    transform: none;
+  }
+  .cost-tick:last-child span {
+    transform: translateX(-100%);
+  }
+  .cost-mark {
+    top: auto;
+    bottom: 65px;
+    left: calc(var(--f) * 100%);
+    right: auto;
+    width: 0;
+  }
+  .cost-mark::before {
+    left: -7px;
+    top: auto;
+    bottom: -8px;
+  }
+  .cost-mark::after {
+    display: none;
+  }
+  .cost-lab,
+  .cost-mark-end .cost-lab {
+    top: auto;
+    bottom: 12px;
+    left: 0;
+    width: max-content;
+    max-width: 46ch;
+    padding: 0 0 4px 14px;
+    border-left: 1px dashed var(--p-primary);
+  }
+  /* A label hangs on the other side of its mark when the first side has
+     no room. The figure is LTR in every locale, so the sides are physical. */
+  .cost-mark-flip .cost-lab {
+    left: auto;
+    right: 0;
+    padding: 0 14px 4px 0;
+    border-left: 0;
+    border-right: 1px dashed var(--p-primary);
+    text-align: right;
+  }
+}
+
+/* ======================================================================
+   Pipeline figure (`pipe-`)
+   The figure in the homepage solution section, in
+   `src/components/home/pipeline-figure.tsx`. One canvas, drawn by
+   `pipeline-renderer.ts`, with the controls under it. The figure is LTR
+   in every locale. Only the controls follow the page direction.
+   ====================================================================== */
+.pipe-fig {
+  /* The fixed height of the scene. It is taller from `lg`, where the
+     figure sits beside the text of the section. */
+  --pipe-scene-h: 540px;
+}
+
+/* The scene. The canvas paints its own ground in --p-bg, so the
+   graph-paper wash of the section stops at its edge. */
+.pipe-scene {
+  position: relative;
+  min-width: 0;
+  height: var(--pipe-scene-h);
+  overflow: hidden;
+}
+.pipe-scene canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The controls under the scene. The three steps are text buttons in one
+   row, each with its number. Two arrow buttons at the end of the row go
+   one step back and one step on. */
+.pipe-ctl {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  border-top: 1px solid var(--p-line);
+  padding-top: 10px;
+}
+.pipe-steps {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 2px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pipe-steps button,
+.pipe-nav button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: var(--p-sans);
+  font-size: var(--text-small);
+  line-height: 22px;
+  color: var(--p-ink-3);
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+.pipe-steps button {
+  display: flex;
+  gap: 7px;
+  text-align: start;
+}
+.pipe-steps button:hover,
+.pipe-steps button:focus-visible,
+.pipe-nav button:hover,
+.pipe-nav button:focus-visible {
+  color: var(--p-ink);
+}
+/* The arrows do not wrap. At the first step the back arrow does nothing,
+   and at the last step the forward arrow does nothing. Each stays
+   focusable and takes the faint ink. */
+.pipe-nav button[aria-disabled="true"] {
+  color: var(--p-line-soft);
+  cursor: default;
+}
+.pipe-steps button[aria-current="step"] {
+  color: var(--p-primary-ink);
+  font-weight: 600;
+}
+.pipe-nav {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+/* The two arrows stay in the mono face, for its long arrow. Each button is
+   28px square with no visible box, so the tap target is above the 24px
+   minimum of WCAG 2.2 and the arrows keep their look. */
+.pipe-nav button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+  color: var(--p-ink);
+  font-family: var(--p-mono);
+  font-size: var(--text-body);
+}
+
+@media (min-width: 64rem) {
+  .pipe-fig {
+    --pipe-scene-h: 560px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .post-figure.post-figure-wide {
+    display: block;
+    width: min(1240px, calc(100vw - 2 * var(--p-pad-section-x)));
   }
 }
