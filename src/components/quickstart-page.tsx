@@ -120,10 +120,10 @@ export function QuickstartPage() {
           {/* What the agent then does, beside the recording of it. */}
           <HowSteps />
 
-          {/* Next steps, at the bottom of the page, after one rule. One
-              text link opens the East Hampton guide. */}
-          <div className="mt-[clamp(3rem,6vw,5rem)] border-t border-p-line pt-[clamp(28px,3.5vw,48px)]">
-            <div className="max-w-[68ch]">
+          {/* Next steps, centered at the bottom of the page, with no rule.
+              One text link opens the East Hampton guide. */}
+          <div className="mt-[clamp(3rem,6vw,5rem)] text-center">
+            <div className="mx-auto max-w-[68ch]">
               <h2 className="text-feature font-bold leading-[1.15] tracking-[-0.02em] rtl:tracking-normal">
                 {t("howItWorks.quickstart.nextSteps.title")}
               </h2>
