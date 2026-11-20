@@ -7,6 +7,7 @@ import { PageHero } from "./page-hero";
 import { SiteShell } from "./site-rail";
 import { DirArrow, PROSE_LINK } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
+import { MapLoading } from "./registry/map-loading";
 import type { MapState } from "./registry/catalog-map";
 import type { Catalog } from "@/lib/catalogs";
 import { formatDate } from "@/lib/catalogs";
@@ -109,7 +110,7 @@ function MapSkeleton() {
     // The frame does not pulse. A pulse fades the text with the frame, and a
     // contrast check then reads a different value on each run.
     <div className="h-[440px] md:h-[540px] border border-p-line bg-p-bg-soft flex items-center justify-center">
-      <span className="text-small text-p-ink-2">{t("map.loading")}</span>
+      <MapLoading label={t("map.loading")} />
     </div>
   );
 }

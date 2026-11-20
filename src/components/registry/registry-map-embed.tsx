@@ -11,6 +11,7 @@ import {
 } from "@/lib/collection-points";
 import { explorerParamString } from "@/lib/explorer-url";
 import type { MapState } from "./catalog-map";
+import { MapLoading } from "./map-loading";
 
 /**
  * The registry map on its own, for a page that is not the registry.
@@ -49,16 +50,20 @@ function Placeholder({ frame, failed = false }: { frame: string; failed?: boolea
   const t = useTranslations();
   return (
     <div className={`flex items-center justify-center bg-p-bg-soft ${frame}`}>
-      <span className="text-small text-p-ink-2">
-        {failed ? t("coverage.mapUnavailable") : t("registry.map.loading")}
-      </span>
+      {failed ? (
+        <span className="text-small text-p-ink-2">{t("coverage.mapUnavailable")}</span>
+      ) : (
+        <MapLoading label={t("registry.map.loading")} />
+      )}
     </div>
   );
 }
 
-// The chunk is requested on the first render of `CatalogMap`, which happens
-// only once the frame is near and the index has arrived.
-const CatalogMap = dynamic(() => import("./catalog-map"), { ssr: false });
+// The embed requests the chunk together with the coverage, once the frame is
+// near. It renders `CatalogMap` only after both arrive, so the placeholder
+// holds the frame for the whole wait and the frame is never empty.
+const loadCatalogMap = () => import("./catalog-map");
+const CatalogMap = dynamic(loadCatalogMap, { ssr: false });
 
 interface RegistryMapEmbedProps {
   /** The height and the rules of the frame. */
@@ -97,8 +102,8 @@ export function RegistryMapEmbed({ frameClassName = FRAME }: RegistryMapEmbedPro
   useEffect(() => {
     if (!near) return;
     const controller = new AbortController();
-    fetchCoverage(controller.signal)
-      .then((data) => setIndex(buildIndex(data)))
+    Promise.all([fetchCoverage(controller.signal), loadCatalogMap()])
+      .then(([data]) => setIndex(buildIndex(data)))
       .catch((err) => {
         if (err instanceof DOMException && err.name === "AbortError") return;
         console.error("Failed to load collection extents:", err);

@@ -16,6 +16,7 @@ import {
 import type { CollectionPoint, CoverageIndex, Viewport } from "@/lib/collection-points";
 import { neutralizeMarkerHosts } from "@/lib/marker-hosts";
 import { MapGeocoder } from "./map-geocoder";
+import { MapLoading } from "./map-loading";
 import type { GeocodeSuggestion } from "@/hooks/use-geocode";
 
 /**
@@ -184,6 +185,9 @@ export default function CatalogMap({
   const [zoom, setZoom] = useState(initialView?.zoom ?? worldView.zoom);
   const [infoOpen, setInfoOpen] = useState(false);
   const [hover, setHover] = useState<Hover | null>(null);
+  // MapLibre fires `load` after the style and the first tiles render. The
+  // loading mark covers the canvas until then.
+  const [loaded, setLoaded] = useState(false);
 
   // MapLibre reads the locale once, when the map is built.
   const gestureLocale = useMemo(
@@ -366,7 +370,10 @@ export default function CatalogMap({
         touchPitch={false}
         cooperativeGestures={gestureHelp !== undefined}
         locale={gestureLocale}
-        onLoad={report}
+        onLoad={() => {
+          report();
+          setLoaded(true);
+        }}
         onMoveEnd={report}
         onClick={handleMapClick}
         style={{ width: "100%", height: "100%" }}
@@ -451,6 +458,14 @@ export default function CatalogMap({
           </Popup>
         )}
       </MapGL>
+
+      {/* The same ground and mark as the placeholder before the map, so the
+          frame does not change until the basemap shows. */}
+      {!loaded && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-p-bg-soft">
+          <MapLoading label={t("map.loading")} />
+        </div>
+      )}
 
       {/* Region search (top-left) */}
       {geocoder && (
