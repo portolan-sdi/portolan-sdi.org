@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent }
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
-import { Ltr } from "./ui";
 
 // Native language names are always shown in their own language, so they are not
 // translated. Order follows routing.locales (en, es, ar).
@@ -100,6 +99,7 @@ export function LocaleSwitcher() {
         id={buttonId}
         type="button"
         aria-label={t("nav.languageAria")}
+        title={t("nav.languageAria")}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
@@ -108,8 +108,10 @@ export function LocaleSwitcher() {
       >
         {/* The translate mark: a character beside the letter A. It is the
             Lucide "languages" icon, and it marks the control as the
-            language menu. The locale code beside it stays, so the current
-            language is readable. The mark never mirrors. */}
+            language menu. The control shows no locale code, because the
+            page text shows the current language. The aria-label names the
+            control, and the menu marks the current language. The mark
+            never mirrors. */}
         <svg
           width="18"
           height="18"
@@ -128,7 +130,6 @@ export function LocaleSwitcher() {
           <path d="m22 22-5-10-5 10" />
           <path d="M14 18h6" />
         </svg>
-        <Ltr>{locale.toUpperCase()}</Ltr>
         <svg
           width="12"
           height="12"
