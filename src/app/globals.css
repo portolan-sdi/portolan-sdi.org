@@ -294,63 +294,6 @@ html {
   animation: wf-story-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* --- Talks & demos source wall -------------------------------------------
-   The band wipes in from its inline-start edge and the cards fade up into
-   place, once, when the section first scrolls into view. `data-in` is set by
-   the section's IntersectionObserver.
-
-   The reveal animates the `translate` property, not `transform`, so the hover
-   lift below stays free to use `transform` even after the animation settles on
-   its final frame. */
-@keyframes tk-band-in {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-@keyframes tk-card-in {
-  from {
-    opacity: 0;
-    translate: 0 28px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-.tk-wall[data-in="false"] .tk-band,
-.tk-wall[data-in="false"] .tk-card {
-  opacity: 0;
-}
-.tk-wall[data-in="true"] .tk-band {
-  transform-origin: left;
-  animation: tk-band-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-[dir="rtl"] .tk-wall[data-in="true"] .tk-band {
-  transform-origin: right;
-}
-.tk-wall[data-in="true"] .tk-card {
-  opacity: 0;
-  animation: tk-card-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Hover and keyboard focus lift the card off the page, onto a hard blue
-   offset. Same ink-and-offset language as the ecosystem cards, in reverse. */
-.tk-card {
-  transition:
-    transform 0.16s ease,
-    box-shadow 0.16s ease,
-    border-color 0.16s ease;
-}
-.tk-card:hover,
-.tk-card:focus-visible {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 0 var(--p-primary);
-  border-color: var(--p-line);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .wf-set .wf-rule,
   .wf-set .wf-body {
@@ -359,19 +302,6 @@ html {
   }
   .wf-story {
     transition: none;
-  }
-  .tk-wall .tk-band,
-  .tk-wall .tk-card {
-    opacity: 1;
-    animation: none;
-  }
-  .tk-card {
-    transition: border-color 0.16s ease;
-  }
-  .tk-card:hover,
-  .tk-card:focus-visible {
-    transform: none;
-    box-shadow: none;
   }
 }
 
