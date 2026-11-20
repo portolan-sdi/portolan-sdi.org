@@ -377,6 +377,7 @@
     "title": "Una SDI ya puede ser archivos en almacenamiento en la nube.",
     "p1": "Los formatos de archivo optimizados para la nube y los metadatos STAC permiten organizar conjuntos de datos a escala de petabytes en almacenamiento de objetos y acceder a ellos de forma eficiente con herramientas estándar como QGIS y Python, o entregárselos a un agente.",
     "p2": "Cuando los usuarios pueden consultar los archivos directamente, los publicadores no necesitan mantener un servicio cuya función principal es situarse entre los usuarios y los datos.",
+    "cta": "Empieza",
     "figure": {
       "steps": {
         "extract": "Extraer y convertir",

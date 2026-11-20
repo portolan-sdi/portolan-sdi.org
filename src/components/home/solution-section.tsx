@@ -14,7 +14,6 @@ import { PipelineFigure } from "./pipeline-figure";
 // shows the same file tree.
 export function SolutionSection() {
   const t = useTranslations("solution");
-  const tHow = useTranslations("howItWorks");
 
   return (
     <section
@@ -39,7 +38,7 @@ export function SolutionSection() {
             <div className="mt-2 flex flex-wrap items-center gap-x-8 gap-y-3">
               <Btn asChild variant="link">
                 <Link href="/quickstart" data-track="solution-quickstart">
-                  {tHow("quickstart.title")} <DirArrow />
+                  {t("cta")} <DirArrow />
                 </Link>
               </Btn>
             </div>

@@ -377,6 +377,7 @@
     "title": "An SDI can now be files in cloud storage.",
     "p1": "Cloud-optimized file formats and STAC metadata make it possible to organize petabyte-scale datasets in object storage and efficiently access them with standard tools like QGIS and Python, or hand them to an agent.",
     "p2": "Once users can query files directly, publishers don't need to maintain a service whose main job is to stand between users and the data.",
+    "cta": "Get started",
     "figure": {
       "steps": {
         "extract": "Extract and convert",
