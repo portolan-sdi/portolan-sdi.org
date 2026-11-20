@@ -5,10 +5,9 @@ import { useTranslations } from "next-intl";
 import {
   STILL,
   buildScene,
-  buildWorld,
-  decodeLand,
   stageAt,
-  type LandMaskFile,
+  worldFromBaked,
+  type BakedWorld,
   type World,
 } from "./hero-points";
 import { createRenderer, type Palette, type Renderer } from "./hero-renderer";
@@ -41,18 +40,19 @@ function readPalette(style: CSSStyleDeclaration): Palette {
   };
 }
 
-// The land mask loads once per page, and the map geometry derives from it
-// once. A failed load clears the promise, so a later mount tries again.
+// The baked world loads once per page. `pnpm bake:hero-world` writes it from
+// the land mask. A failed load clears the promise, so a later mount tries
+// again.
 let worldRequest: Promise<World> | null = null;
 
 function loadWorld(): Promise<World> {
   if (!worldRequest) {
-    worldRequest = fetch("/data/land-mask.json")
+    worldRequest = fetch("/data/hero-world.json")
       .then((res) => {
-        if (!res.ok) throw new Error(`land mask failed: ${res.status}`);
-        return res.json() as Promise<LandMaskFile>;
+        if (!res.ok) throw new Error(`hero world failed: ${res.status}`);
+        return res.json() as Promise<BakedWorld>;
       })
-      .then((file) => buildWorld(decodeLand(file)))
+      .then(worldFromBaked)
       .catch((err) => {
         worldRequest = null;
         throw err;
@@ -69,14 +69,14 @@ function loadWorld(): Promise<World> {
  * shows the world map. Then the same move runs backward, on a loop.
  *
  * The math is in `hero-points.ts` and the drawing in `hero-renderer.ts`.
- * This component owns the lifecycle: it loads the land mask, sizes the
+ * This component owns the lifecycle: it loads the baked world, sizes the
  * canvas, and runs the clock.
  *
  * The figure picks its form from its own width. The wide form has the tree
  * on the left and the drawings on the right. The stacked form has each
  * drawing under its file name. Each form has a fixed height, which the
- * container query below reserves, so the page does not shift when the land
- * mask arrives. The heights and the query width match the layout
+ * container query below reserves, so the page does not shift when the baked
+ * world arrives. The heights and the query width match the layout
  * in `hero-points.ts`, so change both together.
  *
  * The loop stops while the figure is off screen or the tab is hidden. Under

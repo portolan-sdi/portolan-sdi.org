@@ -21,7 +21,7 @@ const proseLink =
  * it with no frame.
  *
  * The figure sets its own height from its own width, in CSS alone, so the
- * page does not shift when the land mask arrives. It needs a column of
+ * page does not shift when the baked world arrives. It needs a column of
  * 520px or more to put its tree beside its drawings. A narrower figure
  * stacks them, which is the form a phone gets.
  *

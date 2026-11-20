@@ -8,25 +8,11 @@
  * groups. The COG shows the same map as a pyramid of rasters. Then the same
  * move runs backward, on a loop.
  *
- * This module decodes the land mask, derives the map geometry from it, lays
- * out the tree and both drawings, and reports where the loop stands. It
- * touches no DOM, so a test harness can run it alone.
+ * This module reads the baked world, lays out the tree and both drawings,
+ * and reports where the loop stands. `hero-bake.ts` derives the baked world
+ * from the land mask before the build. This module touches no DOM, so a
+ * test harness can run it alone.
  */
-
-/** The run-length land mask written by scripts/bake-land-mask.mjs. */
-export interface LandMaskFile {
-  step: number;
-  width: number;
-  height: number;
-  rle: number[][];
-}
-
-/** The decoded land mask, one byte per cell. */
-export interface Land {
-  mask: Uint8Array;
-  w: number;
-  h: number;
-}
 
 const RAD = Math.PI / 180;
 
@@ -42,10 +28,11 @@ export function smooth(a: number, b: number, v: number): number {
 
 /* --- Timeline ------------------------------------------------------------ */
 
-const HOLD_GLOBE = 3.2;
+/** The globe holds briefly. The move to the catalog is the main part. */
+const HOLD_GLOBE = 1.6;
 const MOVE = 4.6;
 const HOLD_CATALOG = 4.4;
-const MOVE_BACK = 3.2;
+const MOVE_BACK = 1.6;
 const LOOP = HOLD_GLOBE + MOVE + HOLD_CATALOG + MOVE_BACK;
 
 /** The globe turns this far each second, in radians. */
@@ -76,15 +63,14 @@ export interface Stage {
  * Where the loop stands at a given time.
  *
  * The move back is the same move with `p` running from 1 to 0. The globe
- * angle steps back while the catalog is on screen and no globe shows, so
- * every loop shows the same stretch of the Earth.
+ * turns on through every loop, also while the catalog is on screen. Each
+ * loop starts about 110 degrees further on, so three loops show every
+ * longitude, New Zealand and Indonesia among them.
  */
 export function stageAt(seconds: number): Stage {
   const t = ((seconds % LOOP) + LOOP) % LOOP;
-  const restAt = HOLD_GLOBE + MOVE;
-  const backAt = restAt + HOLD_CATALOG;
-  const lon =
-    LON_START - SPIN * (t < restAt + HOLD_CATALOG / 2 ? t : t - LOOP);
+  const backAt = HOLD_GLOBE + MOVE + HOLD_CATALOG;
+  const lon = LON_START - SPIN * seconds;
   let p = 0;
   if (t >= backAt) p = 1 - (t - backAt) / MOVE_BACK;
   else if (t >= HOLD_GLOBE) p = clamp01((t - HOLD_GLOBE) / MOVE);
@@ -139,53 +125,17 @@ export function globeAlpha(p: number, wide: boolean): number {
   return wide ? 1 - smooth(0.32, 0.62, p) : 1 - smooth(0.14, 0.4, p);
 }
 
-/* --- Land ---------------------------------------------------------------- */
-
-/**
- * Decode the land mask at half resolution, one byte per cell.
- *
- * Each row holds run lengths that alternate ocean, land, ocean. The first
- * run is ocean and may be zero long. Half resolution is 0.2 degrees, which
- * is finer than anything the figure draws.
- */
-export function decodeLand(file: LandMaskFile): Land {
-  const w = file.width >> 1;
-  const h = file.height >> 1;
-  const mask = new Uint8Array(w * h);
-  const row = new Uint8Array(file.width);
-  for (let r = 0; r < h; r++) {
-    let c = 0;
-    let land = 0;
-    for (const run of file.rle[r * 2]) {
-      row.fill(land, c, c + run);
-      c += run;
-      land ^= 1;
-    }
-    const base = r * w;
-    for (let x = 0; x < w; x++) mask[base + x] = row[x * 2];
-  }
-  return { mask, w, h };
-}
-
-function isLand(land: Land, lon: number, lat: number): boolean {
-  const r = Math.floor(((90 - lat) / 180) * land.h);
-  if (r < 0 || r >= land.h) return false;
-  let c = Math.floor(((lon + 180) / 360) * land.w);
-  c = ((c % land.w) + land.w) % land.w;
-  return land.mask[r * land.w + c] === 1;
-}
-
-/* --- The world, derived once from the land mask -------------------------- */
+/* --- The world, baked from the land mask --------------------------------- */
 
 /** Both drawings show the same window of the world, 78 N to 57 S. */
-const LAT_TOP = 78;
-const LAT_SPAN = 135;
+export const LAT_TOP = 78;
+export const LAT_SPAN = 135;
 
-function uOf(lon: number): number {
+export function uOf(lon: number): number {
   return (lon + 180) / 360;
 }
 
-function vOf(lat: number): number {
+export function vOf(lat: number): number {
   return (LAT_TOP - lat) / LAT_SPAN;
 }
 
@@ -224,173 +174,60 @@ export const REGIONS: Array<[number, number]> = [
   [uOf(60), uOf(180)],
 ];
 
-type Edge = "T" | "R" | "B" | "L";
-
-/** The edges each marching squares case joins. Bits are TL, TR, BR, BL. */
-const CASES: Array<Array<[Edge, Edge]>> = [
-  [],
-  [["L", "B"]],
-  [["B", "R"]],
-  [["L", "R"]],
-  [["T", "R"]],
-  [
-    ["T", "L"],
-    ["B", "R"],
-  ],
-  [["T", "B"]],
-  [["T", "L"]],
-  [["T", "L"]],
-  [["T", "B"]],
-  [
-    ["T", "R"],
-    ["L", "B"],
-  ],
-  [["T", "R"]],
-  [["L", "R"]],
-  [["B", "R"]],
-  [["L", "B"]],
-  [],
-];
-
-interface Segment {
-  keys: [number, number];
-  ends: [[number, number], [number, number]];
-  used: boolean;
+/**
+ * The world as `scripts/bake-hero-world.mts` writes it to
+ * `public/data/hero-world.json`.
+ */
+export interface BakedWorld {
+  /** The number of lattice points over the whole sphere. */
+  lattice: number;
+  /**
+   * The lattice points in the order of `forEachLatticePoint`, as run lengths
+   * that alternate ocean and land. The first run is ocean and may be zero.
+   */
+  land: number[];
+  /** Land outlines as closed rings of `u, v` pairs, in units of 1/RING_UNIT. */
+  rings: number[][];
+  /** The raster at full resolution, then two overviews. */
+  levels: RasterLevel[];
 }
+
+/** Ring coordinates are integers in this many parts of the map window. */
+export const RING_UNIT = 10000;
 
 /**
- * Trace the land outlines.
+ * Visit every point of a lattice of `count` points over the sphere.
  *
- * The land share on a 3 degree grid is smoothed a little, then contoured at
- * one half with marching squares. The segments chain into closed rings. The
- * border of the grid is ocean, so every ring closes.
+ * The points are on rings of equal latitude. Each ring holds as many points
+ * as its length allows, so the points space evenly. `lonHalf` and `latHalf`
+ * give the half size of the cell around each point, in degrees.
  */
-function buildRings(land: Land): Float32Array[] {
-  const step = 3;
-  const nx = 360 / step;
-  const ny = LAT_SPAN / step;
-  const w = nx + 1;
-  const raw = new Float32Array(w * (ny + 1));
-  for (let j = 1; j < ny; j++) {
-    for (let i = 1; i < nx; i++) {
-      let hit = 0;
-      for (let a = -2; a <= 2; a++) {
-        for (let b = -2; b <= 2; b++) {
-          const lon = -180 + i * step + a * 0.6;
-          const lat = LAT_TOP - j * step + b * 0.6;
-          if (isLand(land, lon, lat)) hit++;
-        }
-      }
-      raw[j * w + i] = hit / 25;
+export function forEachLatticePoint(
+  count: number,
+  visit: (
+    lon: number,
+    lat: number,
+    ring: number,
+    lonHalf: number,
+    latHalf: number,
+  ) => void,
+): void {
+  const spacing = Math.sqrt((4 * Math.PI) / count);
+  const rings = Math.round(Math.PI / spacing);
+  const latHalf = 90 / rings;
+  for (let ring = 0; ring < rings; ring++) {
+    const lat = 90 - ((ring + 0.5) * 180) / rings;
+    const around = Math.max(
+      1,
+      Math.round((2 * Math.PI * Math.cos(lat * RAD)) / spacing),
+    );
+    const lonHalf = 180 / around;
+    for (let k = 0; k < around; k++) {
+      const lon = ((k + (ring % 2) * 0.5) / around) * 360 - 180;
+      visit(lon, lat, ring, lonHalf, latHalf);
     }
   }
-  const f = new Float32Array(raw.length);
-  for (let j = 1; j < ny; j++) {
-    for (let i = 1; i < nx; i++) {
-      const k = j * w + i;
-      f[k] = (raw[k] * 6 + raw[k - 1] + raw[k + 1] + raw[k - w] + raw[k + w]) / 10;
-    }
-  }
-
-  const cross = (a: number, b: number) => (0.5 - a) / (b - a);
-  const segments: Segment[] = [];
-  const byKey = new Map<number, Segment[]>();
-  // An edge key is unique per grid edge. Horizontal edges are even.
-  const hKey = (i: number, j: number) => (j * w + i) * 2;
-  const vKey = (i: number, j: number) => (j * w + i) * 2 + 1;
-
-  for (let j = 0; j < ny; j++) {
-    for (let i = 0; i < nx; i++) {
-      const tl = f[j * w + i];
-      const tr = f[j * w + i + 1];
-      const bl = f[(j + 1) * w + i];
-      const br = f[(j + 1) * w + i + 1];
-      const index =
-        (tl >= 0.5 ? 8 : 0) |
-        (tr >= 0.5 ? 4 : 0) |
-        (br >= 0.5 ? 2 : 0) |
-        (bl >= 0.5 ? 1 : 0);
-      const edge = (e: Edge): [number, [number, number]] => {
-        if (e === "T") return [hKey(i, j), [i + cross(tl, tr), j]];
-        if (e === "B") return [hKey(i, j + 1), [i + cross(bl, br), j + 1]];
-        if (e === "L") return [vKey(i, j), [i, j + cross(tl, bl)]];
-        return [vKey(i + 1, j), [i + 1, j + cross(tr, br)]];
-      };
-      for (const [from, to] of CASES[index]) {
-        const a = edge(from);
-        const b = edge(to);
-        const segment: Segment = {
-          keys: [a[0], b[0]],
-          ends: [a[1], b[1]],
-          used: false,
-        };
-        segments.push(segment);
-        for (const key of segment.keys) {
-          const list = byKey.get(key);
-          if (list) list.push(segment);
-          else byKey.set(key, [segment]);
-        }
-      }
-    }
-  }
-
-  const rings: Float32Array[] = [];
-  for (const first of segments) {
-    if (first.used) continue;
-    first.used = true;
-    const ring: number[] = [...first.ends[0], ...first.ends[1]];
-    let key = first.keys[1];
-    for (;;) {
-      const next = byKey.get(key)?.find((s) => !s.used);
-      if (!next) break;
-      next.used = true;
-      const far = next.keys[0] === key ? 1 : 0;
-      ring.push(...next.ends[far]);
-      key = next.keys[far];
-    }
-    // Drop specks of a cell or two.
-    if (ring.length <= 10) continue;
-    const out = new Float32Array(ring.length);
-    for (let k = 0; k < ring.length; k += 2) {
-      out[k] = ring[k] / nx;
-      out[k + 1] = ring[k + 1] / ny;
-    }
-    rings.push(out);
-  }
-  return rings;
 }
-
-/** Sample the land into a raster of `nx` columns over the map window. */
-function buildLevel(land: Land, nx: number): RasterLevel {
-  const ny = (nx * LAT_SPAN) / 360;
-  const runs: Array<[number, number, number]> = [];
-  for (let r = 0; r < ny; r++) {
-    let start = -1;
-    for (let c = 0; c <= nx; c++) {
-      let cell = false;
-      if (c < nx) {
-        let hit = 0;
-        for (let a = 0; a < 3; a++) {
-          for (let b = 0; b < 3; b++) {
-            const lon = -180 + ((c + (a + 0.5) / 3) * 360) / nx;
-            const lat = LAT_TOP - ((r + (b + 0.5) / 3) * LAT_SPAN) / ny;
-            if (isLand(land, lon, lat)) hit++;
-          }
-        }
-        cell = hit >= 4;
-      }
-      if (cell && start < 0) start = c;
-      if (!cell && start >= 0) {
-        runs.push([start, r, c - start]);
-        start = -1;
-      }
-    }
-  }
-  return { nx, ny, runs };
-}
-
-/** Lattice points over the whole sphere. About three in ten fall on land. */
-const LATTICE = 15000;
 
 function unit(lon: number, lat: number): [number, number, number] {
   const c = Math.cos(lat * RAD);
@@ -419,37 +256,35 @@ function buildGraticule(): Float32Array[] {
 }
 
 /**
- * Derive everything the figure draws from the land mask. This runs once.
+ * Build what the figure draws from the baked world. This runs once.
  *
- * The land points are on rings of equal latitude. Each ring holds as many
- * points as its length allows, so the points space evenly over the sphere.
- * Alternate rings go to the vector map and to the raster, so each drawing
- * receives the whole world and every point has its own place in it.
+ * Alternate lattice rings go to the vector map and to the raster, so each
+ * drawing receives the whole world and every point has its own place in it.
  */
-export function buildWorld(land: Land): World {
+export function worldFromBaked(baked: BakedWorld): World {
+  const isLand = new Uint8Array(baked.lattice + 1);
+  let at = 0;
+  baked.land.forEach((run, i) => {
+    if (i % 2 === 1) isLand.fill(1, at, at + run);
+    at += run;
+  });
   const lon: number[] = [];
   const lat: number[] = [];
   const which: number[] = [];
-  const spacing = Math.sqrt((4 * Math.PI) / LATTICE);
-  const rings = Math.round(Math.PI / spacing);
-  for (let ring = 0; ring < rings; ring++) {
-    const pointLat = 90 - ((ring + 0.5) * 180) / rings;
-    const around = Math.max(
-      1,
-      Math.round((2 * Math.PI * Math.cos(pointLat * RAD)) / spacing),
-    );
-    for (let k = 0; k < around; k++) {
-      const pointLon = ((k + (ring % 2) * 0.5) / around) * 360 - 180;
-      if (!isLand(land, pointLon, pointLat)) continue;
+  let index = 0;
+  forEachLatticePoint(baked.lattice, (pointLon, pointLat, ring) => {
+    if (isLand[index++]) {
       lon.push(pointLon);
       lat.push(pointLat);
       which.push(ring % 2);
     }
-  }
+  });
   const count = lon.length;
   const world: World = {
-    rings: buildRings(land),
-    levels: [64, 32, 16].map((nx) => buildLevel(land, nx)),
+    rings: baked.rings.map((ring) =>
+      Float32Array.from(ring, (value) => value / RING_UNIT),
+    ),
+    levels: baked.levels,
     count,
     gx: new Float32Array(count),
     gy: new Float32Array(count),
