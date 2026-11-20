@@ -5,9 +5,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { getDirection } from "@/i18n/direction";
 import { portalBody, portalHead } from "./pipeline-fonts";
 import {
-  HOLD_AT,
   ASSETS,
-  LOOP,
+  END,
   STEPS,
   createPipelineRenderer,
   stepAt,
@@ -53,7 +52,7 @@ const STEP_KEYS = ["extract", "catalog", "build"] as const;
 interface Controls {
   /** Play step k from its start, then stop on its finished frame. */
   goTo(k: number): void;
-  /** Go one step back (-1) or one step on (1), around the three. */
+  /** Go one step back (-1) or one step on (1). The ends do not wrap. */
   move(by: number): void;
 }
 
@@ -66,18 +65,22 @@ interface Controls {
  * existing systems, and each one crosses a line and lands as GeoParquet
  * and PMTiles. Publish a catalog: the four plates drop into the catalog
  * tree under `s3://your-bucket/`. Build on top: the tree becomes the data
- * portal of a fictional publisher. The camera then carries on down to a
- * fresh start, so the loop never runs backward.
+ * portal of a fictional publisher.
+ *
+ * The story runs one way, from the existing systems to cloud storage, so
+ * the figure plays once and stops on the finished portal. It never starts
+ * over by itself, because a return to the start reads as a move away from
+ * cloud storage.
  *
  * The viewer steps through the figure. Each step label is a button that
- * plays its step and stops on the finished frame, and two arrow buttons
- * go one step back and one step on. Until the viewer uses a control, the
- * figure loops. After that it stays on the step the viewer chose.
+ * plays its step and stops on the finished frame. Two arrow buttons go one
+ * step back and one step on. The back arrow is how a viewer returns to the
+ * start. Neither arrow wraps, so each is disabled at its end.
  *
  * The drawing is in `pipeline-renderer.ts`. This component owns the
  * lifecycle and the clock. The thumbnails load when the figure comes near
- * the viewport. The canvas paints once they and the fonts are in. The loop
- * stops while the figure is off screen or the tab is hidden. Under reduced
+ * the viewport. The canvas paints once they and the fonts are in. The clock
+ * pauses while the figure is off screen or the tab is hidden. Under reduced
  * motion the clock never runs. The figure shows the finished portal, and
  * a step button shows the finished frame of its step.
  *
@@ -109,8 +112,8 @@ export function PipelineFigure() {
     let built = false;
     let frame = 0;
     let clock = 0;
-    /** Where the clock stops next, or null while the figure loops. */
-    let stopAt: number | null = null;
+    /** Where the clock stops next. The first play runs to the end. */
+    let stopAt = END;
     let run = true;
     let shown = -1;
     let lastStamp = 0;
@@ -120,14 +123,14 @@ export function PipelineFigure() {
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let reduced = motion.matches;
-    if (reduced) clock = HOLD_AT;
+    if (reduced) clock = END;
 
     function setRun(next: boolean) {
       run = next;
     }
     setRun(!reduced);
 
-    // In development, `?pipe=<seconds>` holds the loop at that second, so a
+    // In development, `?pipe=<seconds>` holds the figure at that second, so a
     // screenshot can catch any state. Production builds drop this branch.
     const pinned =
       process.env.NODE_ENV === "development"
@@ -137,7 +140,7 @@ export function PipelineFigure() {
 
     function paint() {
       if (!renderer || !built) return;
-      const at = held ? ((pinned % LOOP) + LOOP) % LOOP : clock;
+      const at = held ? Math.min(Math.max(pinned, 0), END) : clock;
       const step = stepAt(at);
       if (step !== shown) {
         shown = step;
@@ -149,20 +152,18 @@ export function PipelineFigure() {
     function tick(now: number) {
       clock += Math.min(0.1, (now - lastStamp) / 1000);
       lastStamp = now;
-      if (stopAt !== null && clock >= stopAt) {
+      if (clock >= stopAt) {
         clock = stopAt;
-        stopAt = null;
         frame = 0;
         setRun(false);
         paint();
         return;
       }
-      clock %= LOOP;
       paint();
       frame = requestAnimationFrame(tick);
     }
 
-    /** Start or stop the loop to match what the page can see. */
+    /** Start or stop the clock to match what the page can see. */
     function sync() {
       const go = built && run && !reduced && !held && onScreen && !document.hidden;
       if (go && !frame) {
@@ -245,15 +246,16 @@ export function PipelineFigure() {
         sync();
       },
       move(by) {
-        this.goTo((stepAt(clock) + by + STEPS.length) % STEPS.length);
+        const k = stepAt(clock) + by;
+        if (k >= 0 && k < STEPS.length) this.goTo(k);
       },
     };
 
     const onMotion = () => {
       reduced = motion.matches;
       if (reduced) {
-        stopAt = null;
         clock = STEPS[stepAt(clock)].hold;
+        stopAt = clock;
       }
       setRun(!reduced);
       paint();
@@ -346,10 +348,20 @@ export function PipelineFigure() {
           ))}
         </ol>
         <div className="pipe-nav">
-          <button type="button" aria-label={t("previous")} onClick={() => controlsRef.current?.move(-1)}>
+          <button
+            type="button"
+            aria-label={t("previous")}
+            aria-disabled={active === 0}
+            onClick={() => controlsRef.current?.move(-1)}
+          >
             <span aria-hidden="true" className="inline-block rtl:-scale-x-100">←</span>
           </button>
-          <button type="button" aria-label={t("next")} onClick={() => controlsRef.current?.move(1)}>
+          <button
+            type="button"
+            aria-label={t("next")}
+            aria-disabled={active === STEPS.length - 1}
+            onClick={() => controlsRef.current?.move(1)}
+          >
             <span aria-hidden="true" className="inline-block rtl:-scale-x-100">→</span>
           </button>
         </div>

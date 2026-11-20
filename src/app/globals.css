@@ -931,6 +931,13 @@ html {
 .pipe-nav button:focus-visible {
   color: var(--p-ink);
 }
+/* The arrows do not wrap. At the first step the back arrow does nothing,
+   and at the last step the forward arrow does nothing. Each stays
+   focusable and takes the faint ink. */
+.pipe-nav button[aria-disabled="true"] {
+  color: var(--p-line-soft);
+  cursor: default;
+}
 .pipe-steps button[aria-current="step"] {
   color: var(--p-primary-ink);
   font-weight: 600;

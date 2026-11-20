@@ -10,7 +10,8 @@
  *   s3://your-bucket/                    (the catalog tree)
  *   the portal                           (one frame tall)
  *
- * and then the systems again, so the loop restarts by carrying on down.
+ * The story runs one way, from the existing systems to cloud storage. The
+ * clock plays it once and stops on the portal. It never wraps.
  * Four real thumbnails are the objects that travel. Each source has its own
  * lane, and every object moves straight down its lane.
  *
@@ -23,10 +24,6 @@
    catalog, build on top.
    =================================================================== */
 
-/** The length of one loop, in seconds. */
-export const LOOP = 17.6;
-/** The frame that reduced motion holds first: the finished portal. */
-export const HOLD_AT = 13;
 
 export const T = {
   /** Step 1. One start per source. Each layer leaves its system and
@@ -44,9 +41,6 @@ export const T = {
   dropDur: 1.0,
   /** Step 3. The tree becomes the portal. */
   morph: 9.6,
-  /** The camera carries on down into a fresh start. */
-  reset: 16.0,
-  resetDur: 1.5,
 };
 
 /**
@@ -59,9 +53,11 @@ export const STEPS = [
   { start: T.morph, hold: 12.4 },
 ];
 
+/** The last frame: the finished portal. The clock never runs past it. */
+export const END = STEPS[STEPS.length - 1].hold;
+
 /** Which of the three steps is current at time t. */
 export function stepAt(t: number): number {
-  if (t >= T.reset) return 0;
   if (t >= STEPS[2].start) return 2;
   if (t >= STEPS[1].start) return 1;
   return 0;
@@ -260,7 +256,6 @@ interface Layout {
   c0: number;
   cT: number;
   c2: number;
-  Pd: number;
   P: Portal;
 }
 
@@ -347,7 +342,7 @@ export function createPipelineRenderer(
 
     L = {
       wide, cw, kick, text0, lineH, src, boundary, land, lab, landBottom,
-      tree, fold: foldR, c0, cT, c2, Pd: c2 + H,
+      tree, fold: foldR, c0, cT, c2,
       P: portalLayout(wide, c2),
     };
   }
@@ -527,26 +522,24 @@ export function createPipelineRenderer(
     let c = L.c0;
     c = lerp(c, L.cT, inOut(prog(t, T.cat, T.camDur)));
     c = lerp(c, L.c2, inOut(prog(t, T.morph, 1.45)));
-    c = lerp(c, L.Pd, inOut(prog(t, T.reset, T.resetDur)));
     return c;
   }
 
   /* ------------------------------------------------ 1. the outside world */
-  function drawOutside(off: number, t: number, live: boolean) {
+  function drawOutside(t: number) {
     const wide = L.wide;
     const x0 = L.src[0].x;
     // The line that every layer crosses. Above it, each system has its own
     // form. Below it, every layer has the same form.
-    hline(0, W, off + L.boundary, C.primary, 1, 2);
-    text("Existing systems", x0, off + L.kick, C.ink3, wide ? 11 : 10.5);
-    text("Cloud-optimized files", x0, off + L.boundary + (wide ? 19 : 17), C.ink3, wide ? 11 : 10.5);
+    hline(0, W, L.boundary, C.primary, 1, 2);
+    text("Existing systems", x0, L.kick, C.ink3, wide ? 11 : 10.5);
+    text("Cloud-optimized files", x0, L.boundary + (wide ? 19 : 17), C.ink3, wide ? 11 : 10.5);
     // empty places below the line, waiting for the data
     for (let i = 0; i < 4; i++) {
-      const a = live ? 1 - smooth(0.8, 1, extP(i, t)) : 1;
-      const r = L.land[i];
-      dashRect({ x: r.x, y: off + r.y, w: r.w, h: r.h }, C.ink3, a * 0.7);
+      const a = 1 - smooth(0.8, 1, extP(i, t));
+      dashRect(L.land[i], C.ink3, a * 0.7);
     }
-    for (let i = 0; i < 4; i++) drawSource(i, off, live ? t : -1);
+    for (let i = 0; i < 4; i++) drawSource(i, 0, t);
   }
 
   /** One existing system, drawn as the thing it is, with its data inside. */
@@ -698,7 +691,7 @@ export function createPipelineRenderer(
     return lerpRect(L.fold[i], portalImg(i), inOut(mp));
   }
   function drawTravel(i: number, t: number) {
-    if (dropP(i, t) <= 0 || t >= T.reset + T.resetDur) return;
+    if (dropP(i, t) <= 0) return;
     const r = travelRect(i, t);
     plate(i, r);
     // the plate's frame belongs to the tree, the portal's images run clean
@@ -947,9 +940,7 @@ export function createPipelineRenderer(
 
     const portalOn = t >= T.morph;
     // Station one: the existing systems, and the converted files below.
-    if (cam < L.landBottom + 20) drawOutside(0, t, true);
-    // The fresh start below the portal, reached at the end of the loop.
-    if (cam + H > L.Pd) drawOutside(L.Pd, 0, false);
+    if (cam < L.landBottom + 20) drawOutside(t);
 
     for (let i = 0; i < 4; i++) drawExtract(i, t);
     if (portalOn) drawPortalBack(t);
