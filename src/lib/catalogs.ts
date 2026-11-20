@@ -354,7 +354,9 @@ export interface RegistryTotals {
  * match the catalog cards. A catalog with no reported size adds nothing to
  * the bytes.
  */
-export function registryTotals(catalogs: Catalog[]): RegistryTotals {
+export function registryTotals(
+  catalogs: Pick<Catalog, "collection_count" | "feature_count" | "total_size_bytes">[]
+): RegistryTotals {
   const totals = { catalogs: catalogs.length, collections: 0, features: 0, bytes: 0 };
   for (const catalog of catalogs) {
     totals.collections += catalog.collection_count;

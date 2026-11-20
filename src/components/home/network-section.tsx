@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { RegistryMapEmbed } from "@/components/registry/registry-map-embed";
+import { RegistryCounts } from "@/components/registry/registry-counts";
+import type { MapState } from "@/components/registry/catalog-map";
+import type { CoverageIndex } from "@/lib/collection-points";
+import { catalogsInView, type CountedCatalog } from "@/lib/registry-view";
 
 // The registry, between the case studies and the about section. Its one
 // job is to send the reader to `/registry`.
@@ -24,10 +28,30 @@ const MAP_BTN =
 /** The answer of the browser does not change, so nothing subscribes. */
 const NEVER_CHANGES = () => () => {};
 
-export function NetworkSection() {
+interface NetworkSectionProps {
+  /** The registry listing, cut to the fields of the count line. */
+  catalogs: CountedCatalog[];
+}
+
+export function NetworkSection({ catalogs }: NetworkSectionProps) {
   const t = useTranslations("network");
   const frameRef = useRef<HTMLDivElement>(null);
   const [full, setFull] = useState(false);
+
+  // The count line under the map follows the map view, as it does on
+  // `/registry`. Before the map loads, it counts every catalog.
+  const [view, setView] = useState<{
+    index: CoverageIndex;
+    state: MapState | null;
+  } | null>(null);
+  const handleView = useCallback(
+    (index: CoverageIndex, state: MapState | null) => setView({ index, state }),
+    []
+  );
+  const inView = useMemo(
+    () => catalogsInView(catalogs, view?.index ?? null, view?.state?.viewport ?? null),
+    [catalogs, view]
+  );
   // Some phones cannot show one element on the full screen. The button
   // shows only where the browser can.
   const canFull = useSyncExternalStore(
@@ -78,6 +102,7 @@ export function NetworkSection() {
           <div ref={frameRef} className="relative bg-p-bg">
             <RegistryMapEmbed
               frameClassName={full ? "h-screen" : "h-[320px] sm:h-[360px] lg:h-[400px]"}
+              onView={handleView}
             />
             {/* Two square controls, in the style of the zoom buttons of
                 the map. The one at the top opens the registry. The one at
@@ -111,6 +136,19 @@ export function NetworkSection() {
               </button>
             )}
           </div>
+          {/* The same count line as under the map on `/registry`, in
+              `--p-on-primary` on the ink band. A failed fetch leaves no
+              catalogs, and then the line does not render. */}
+          {catalogs.length > 0 && (
+            <RegistryCounts
+              catalogs={inView}
+              geoActive={inView.length < catalogs.length}
+              index={view?.index ?? null}
+              all={catalogs}
+              onInk
+              className="mt-3"
+            />
+          )}
         </div>
       </div>
     </section>

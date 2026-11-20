@@ -2,15 +2,16 @@
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { PageHero } from "./page-hero";
 import { SiteShell } from "./site-rail";
 import { DirArrow, PROSE_LINK } from "./ui";
 import { CatalogCard } from "./registry/catalog-card";
 import { MapLoading } from "./registry/map-loading";
+import { RegistryCounts } from "./registry/registry-counts";
 import type { MapState } from "./registry/catalog-map";
 import type { Catalog } from "@/lib/catalogs";
-import { formatBytes, formatCount, formatDate, registryTotals } from "@/lib/catalogs";
+import { catalogsInView } from "@/lib/registry-view";
 import {
   EMPTY_EXPLORER_STATE,
   explorerParamString,
@@ -18,7 +19,6 @@ import {
 } from "@/lib/explorer-url";
 import {
   buildIndex,
-  catalogsInViewport,
   fetchCoverage,
   type CoverageIndex,
 } from "@/lib/collection-points";
@@ -138,7 +138,6 @@ export function RegistryPage({
   initial = EMPTY_EXPLORER_STATE,
 }: RegistryPageProps) {
   const t = useTranslations();
-  const locale = useLocale();
 
   const [index, setIndex] = useState<CoverageIndex | null>(null);
   const [mapState, setMapState] = useState<MapState | null>(null);
@@ -172,34 +171,15 @@ export function RegistryPage({
     return () => controller.abort();
   }, []);
 
-  // Catalogs the crawl could place. The rest are named under the map.
-  const locatedIds = useMemo(
-    () => new Set((index?.catalogs ?? []).map((catalog) => catalog.id)),
-    [index]
-  );
-
   const titles = useMemo(
     () => new Map(catalogs.map((catalog) => [catalog.id, catalog.title])),
     [catalogs]
   );
 
   // viewport -> collection bbox overlap -> unique catalogs.
-  const geoIds = useMemo(() => {
-    if (!index || !mapState) return null;
-    return catalogsInViewport(index, mapState.viewport);
-  }, [index, mapState]);
-
-  // A catalog the crawl could not place cannot be ruled out by geography, so
-  // the viewport never hides it. A global catalog answers here through its own
-  // bboxes, which overlap every view, even though the map draws no point for it.
   const inView = useMemo(
-    () =>
-      geoIds
-        ? catalogs.filter(
-            (catalog) => geoIds.has(catalog.id) || !locatedIds.has(catalog.id)
-          )
-        : catalogs,
-    [catalogs, geoIds, locatedIds]
+    () => catalogsInView(catalogs, index, mapState?.viewport ?? null),
+    [catalogs, index, mapState]
   );
 
   // The opening view holds every catalog, so it reads as no filter at all.
@@ -218,10 +198,6 @@ export function RegistryPage({
         Object.keys(catalog.licenses).some((id) => id.toLowerCase().includes(query))
     );
   }, [inView, searchQuery]);
-
-  // The collections, features, and bytes of the catalogs the count names.
-  const totals = useMemo(() => registryTotals(filteredCatalogs), [filteredCatalogs]);
-  const totalSize = formatBytes(totals.bytes, locale);
 
   const pageCount = Math.max(1, Math.ceil(filteredCatalogs.length / CARDS_PER_PAGE));
   // Filtering can shrink the list under the current page.
@@ -283,16 +259,6 @@ export function RegistryPage({
     }, URL_DEBOUNCE_MS);
     return () => window.clearTimeout(id);
   }, [mapState, searchQuery, page]);
-
-  const crawledAt = formatDate(catalogs[0]?.last_crawled ?? null, locale);
-
-  // Catalogs the map draws no point for. Either every extent is too broad to
-  // stand for a place, or the crawl found no extent at all. Both still answer
-  // the viewport filter and both still appear in the results.
-  const offMapCount = useMemo(() => {
-    const drawn = new Set(index?.points.map((point) => point.catalogId) ?? []);
-    return catalogs.filter((catalog) => !drawn.has(catalog.id)).length;
-  }, [catalogs, index]);
 
   const handleSubmitCatalog = async () => {
     if (!canSubmit || submitState === "submitting") return;
@@ -373,47 +339,13 @@ export function RegistryPage({
             {/* What matches, how much data it holds, what the map cannot
                 draw, and when the registry last read the catalogs. The
                 counts follow the map and the search. */}
-            <p className="mt-3 flex flex-wrap items-center gap-x-1.5 text-small text-p-ink-3">
-              <span className="text-p-primary">
-                {geoActive
-                  ? t("registry.results.inView", { count: filteredCatalogs.length })
-                  : t("registry.results.all", { count: filteredCatalogs.length })}
-              </span>
-              {totals.catalogs > 0 && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>
-                    {t("registry.card.collections", {
-                      count: formatCount(totals.collections, locale),
-                    })}
-                  </span>
-                  <span aria-hidden="true">·</span>
-                  <span>
-                    {t("registry.card.features", {
-                      count: formatCount(totals.features, locale),
-                    })}
-                  </span>
-                  {totalSize && (
-                    <>
-                      <span aria-hidden="true">·</span>
-                      <span>{totalSize}</span>
-                    </>
-                  )}
-                </>
-              )}
-              {index && offMapCount > 0 && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>{t("registry.results.global", { count: offMapCount })}</span>
-                </>
-              )}
-              {crawledAt && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>{t("registry.lastChecked", { date: crawledAt })}</span>
-                </>
-              )}
-            </p>
+            <RegistryCounts
+              catalogs={filteredCatalogs}
+              geoActive={geoActive}
+              index={index}
+              all={catalogs}
+              className="mt-3"
+            />
 
             {/* Results */}
             <div className="mt-10 border-t border-p-line pt-8">

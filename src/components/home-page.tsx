@@ -8,9 +8,15 @@ import { SolutionSection } from "./home/solution-section";
 import { WhySection } from "./home/why-section";
 import { CaseStudiesSection } from "./home/case-studies-section";
 import { NetworkSection } from "./home/network-section";
+import type { CountedCatalog } from "@/lib/registry-view";
+
+interface HomePageProps {
+  /** The registry listing for the count line under the registry map. */
+  catalogs?: CountedCatalog[];
+}
 
 /** The homepage. The sections follow a challenge, solution, impact order. */
-export function HomePage() {
+export function HomePage({ catalogs = [] }: HomePageProps) {
   return (
     <SiteShell>
       {/* Hero. The figure beside the headline is the one moving element on
@@ -30,7 +36,7 @@ export function HomePage() {
       <CaseStudiesSection />
 
       {/* The registry: the text, and a small map of its coverage. */}
-      <NetworkSection />
+      <NetworkSection catalogs={catalogs} />
 
       {/* Who supports the project, and the way in to the community. */}
       <AboutSection />

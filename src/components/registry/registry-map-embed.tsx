@@ -68,9 +68,15 @@ const CatalogMap = dynamic(loadCatalogMap, { ssr: false });
 interface RegistryMapEmbedProps {
   /** The height and the rules of the frame. */
   frameClassName?: string;
+  /**
+   * Called with the coverage index when it arrives, with no map state. Then
+   * called with the index and the map state when the map loads and after
+   * each move. The page uses it to count the catalogs in the view.
+   */
+  onView?: (index: CoverageIndex, state: MapState | null) => void;
 }
 
-export function RegistryMapEmbed({ frameClassName = FRAME }: RegistryMapEmbedProps) {
+export function RegistryMapEmbed({ frameClassName = FRAME, onView }: RegistryMapEmbedProps) {
   const t = useTranslations("coverage.gestures");
   const router = useRouter();
 
@@ -130,9 +136,18 @@ export function RegistryMapEmbed({ frameClassName = FRAME }: RegistryMapEmbedPro
     [width]
   );
 
-  const handleMove = useCallback((state: MapState) => {
-    stateRef.current = state;
-  }, []);
+  useEffect(() => {
+    if (index) onView?.(index, stateRef.current);
+  }, [index, onView]);
+
+  // The map renders only after the index arrives, so a move always has one.
+  const handleMove = useCallback(
+    (state: MapState) => {
+      stateRef.current = state;
+      if (index) onView?.(index, state);
+    },
+    [index, onView]
+  );
 
   // A click on a point. Empty ground reports null, which means nothing here.
   const handleSelect = useCallback(
