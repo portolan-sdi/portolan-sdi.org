@@ -32,7 +32,7 @@ export function smooth(a: number, b: number, v: number): number {
 const HOLD_GLOBE = 1.6;
 const MOVE = 4.6;
 const HOLD_CATALOG = 4.4;
-const MOVE_BACK = 1.6;
+const MOVE_BACK = 3.2;
 const LOOP = HOLD_GLOBE + MOVE + HOLD_CATALOG + MOVE_BACK;
 
 /** The globe turns this far each second, in radians. */
@@ -64,7 +64,7 @@ export interface Stage {
  *
  * The move back is the same move with `p` running from 1 to 0. The globe
  * turns on through every loop, also while the catalog is on screen. Each
- * loop starts about 110 degrees further on, so three loops show every
+ * loop starts about 124 degrees further on, so two loops show every
  * longitude, New Zealand and Indonesia among them.
  */
 export function stageAt(seconds: number): Stage {
