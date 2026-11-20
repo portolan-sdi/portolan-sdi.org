@@ -340,6 +340,30 @@ export function formatCount(value: number, locale: string): string {
   }).format(value);
 }
 
+export interface RegistryTotals {
+  catalogs: number;
+  collections: number;
+  features: number;
+  /** The sum of the sizes that the catalogs report. */
+  bytes: number;
+}
+
+/**
+ * The size of the whole registry, from the counts of each catalog. The
+ * registry reads these counts from each catalog when it crawls, so the sums
+ * match the catalog cards. A catalog with no reported size adds nothing to
+ * the bytes.
+ */
+export function registryTotals(catalogs: Catalog[]): RegistryTotals {
+  const totals = { catalogs: catalogs.length, collections: 0, features: 0, bytes: 0 };
+  for (const catalog of catalogs) {
+    totals.collections += catalog.collection_count;
+    totals.features += catalog.feature_count;
+    totals.bytes += catalog.total_size_bytes ?? 0;
+  }
+  return totals;
+}
+
 // Fixed to UTC so the server and the client agree on the day. Without it a
 // timestamp near midnight formats differently in each and React reports a
 // hydration mismatch.

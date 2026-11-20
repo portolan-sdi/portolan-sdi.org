@@ -10,7 +10,7 @@ import { CatalogCard } from "./registry/catalog-card";
 import { MapLoading } from "./registry/map-loading";
 import type { MapState } from "./registry/catalog-map";
 import type { Catalog } from "@/lib/catalogs";
-import { formatDate } from "@/lib/catalogs";
+import { formatBytes, formatCount, formatDate, registryTotals } from "@/lib/catalogs";
 import {
   EMPTY_EXPLORER_STATE,
   explorerParamString,
@@ -219,6 +219,10 @@ export function RegistryPage({
     );
   }, [inView, searchQuery]);
 
+  // The collections, features, and bytes of the catalogs the count names.
+  const totals = useMemo(() => registryTotals(filteredCatalogs), [filteredCatalogs]);
+  const totalSize = formatBytes(totals.bytes, locale);
+
   const pageCount = Math.max(1, Math.ceil(filteredCatalogs.length / CARDS_PER_PAGE));
   // Filtering can shrink the list under the current page.
   const page = Math.min(rawPage, pageCount - 1);
@@ -366,14 +370,37 @@ export function RegistryPage({
               <MapSkeleton />
             )}
 
-            {/* What matches, what the map cannot draw, and when the registry
-                last read the catalogs. The count follows the map. */}
+            {/* What matches, how much data it holds, what the map cannot
+                draw, and when the registry last read the catalogs. The
+                counts follow the map and the search. */}
             <p className="mt-3 flex flex-wrap items-center gap-x-1.5 text-small text-p-ink-3">
               <span className="text-p-primary">
                 {geoActive
                   ? t("registry.results.inView", { count: filteredCatalogs.length })
                   : t("registry.results.all", { count: filteredCatalogs.length })}
               </span>
+              {totals.catalogs > 0 && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>
+                    {t("registry.card.collections", {
+                      count: formatCount(totals.collections, locale),
+                    })}
+                  </span>
+                  <span aria-hidden="true">·</span>
+                  <span>
+                    {t("registry.card.features", {
+                      count: formatCount(totals.features, locale),
+                    })}
+                  </span>
+                  {totalSize && (
+                    <>
+                      <span aria-hidden="true">·</span>
+                      <span>{totalSize}</span>
+                    </>
+                  )}
+                </>
+              )}
               {index && offMapCount > 0 && (
                 <>
                   <span aria-hidden="true">·</span>
