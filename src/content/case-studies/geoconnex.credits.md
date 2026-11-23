@@ -1,11 +1,18 @@
 # Media credits
 
-The Lincoln Institute logo is the unmodified horizontal color PNG from its
-[official brand kit](https://www.lincolninst.edu/app/uploads/2024/09/lilp-brand-manual-and-logos.zip).
-The mark belongs to the Lincoln Institute of Land Policy.
+The logo is a lockup of two marks, placed side by side at the same height
+with a gray rule between them. The marks are cropped to their visible edges
+and scaled. They are not otherwise changed.
+
+- The Lincoln Institute mark is the horizontal color PNG from its
+  [official brand kit](https://www.lincolninst.edu/app/uploads/2024/09/lilp-brand-manual-and-logos.zip).
+  The mark belongs to the Lincoln Institute of Land Policy.
+- The Center for Geospatial Solutions mark is `CGS-Logo-Horizontal-Color.png`
+  from the [CGS design skill](https://github.com/cgs-earth/cgs-design-skill/tree/main/cgs-design).
+  The mark belongs to the Center for Geospatial Solutions.
 
 The Explorer image is the [screenshot published by the Internet of Water Coalition](https://internetofwater.org/hubfs/Screenshot%202025-07-15%20173341.png)
-on its [GeoConnex page](https://internetofwater.org/geoconnex/). It is cropped
+on its [Geoconnex page](https://internetofwater.org/geoconnex/). It is cropped
 slightly at the top to fit 16:9 and encoded as WebP. The Mapbox/OpenStreetMap
 attribution remains visible. No separate image license is stated; Colton must
 confirm permission for publication. The [Explorer source code](https://github.com/internetofwater/explorer.geoconnex.us)
@@ -31,9 +38,9 @@ or improvements caused by Portolan.
 
 ## Editorial sources
 
-- [GeoConnex overview and Explorer](https://internetofwater.org/geoconnex/)
+- [Geoconnex overview and Explorer](https://internetofwater.org/geoconnex/)
 - [The community effort and naming problem](https://internetofwater.org/blog/uncategorized/geoconnex-community-system-for-water-data-management-usgs), published 2024-04-23
-- [The GeoConnex advantage](https://internetofwater.org/blog/the-geoconnex-advantage-making-water-data-sharing-smarter-and-simpler), published 2024-11-05
+- [The Geoconnex advantage](https://internetofwater.org/blog/the-geoconnex-advantage-making-water-data-sharing-smarter-and-simpler), published 2024-11-05
 - [USGS and the Internet of Water](https://internetofwater.org/blog/unlocking-the-full-potential-of-water-data-usgs-and-the-internet-of-water), published 2023-05-24
 - [Access to reference features and the graph](https://docs.geoconnex.us/access/overview/)
 - [Portolan catalog construction in the scheduler](https://github.com/internetofwater/scheduler/blob/main/userCode/lib/stac_catalog.py)
