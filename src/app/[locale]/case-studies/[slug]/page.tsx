@@ -81,13 +81,16 @@ export default async function CaseStudy({ params }: PageProps) {
       post={study}
       section="case-studies"
       heading={
+        // The header is the dark picture band, so the mark is white. The
+        // filter makes any mark one light color, as on the homepage card,
+        // and `cardLogo` replaces the mark when the filter gives a poor shape.
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={study.logo}
+          src={study.cardLogo ?? study.logo}
           alt={study.title}
           width={2500}
           height={600}
-          className={`h-16 w-auto max-w-full object-contain sm:h-20${study.inkLogo ? " brightness-0" : ""}`}
+          className="h-16 w-auto max-w-full object-contain brightness-0 invert sm:h-20"
         />
       }
     >

@@ -66,6 +66,7 @@ export function BlogPostPage({
   const index = entries.findIndex((entry) => entry.slug === post.slug);
   const older = entries[index + 1];
   const newer = index > 0 ? entries[index - 1] : undefined;
+  const isCaseStudy = section === "case-studies";
 
   return (
     <SiteShell>
@@ -117,8 +118,10 @@ export function BlogPostPage({
             same edge the headline above it uses. Centring it instead left the
             body indented from its own title. */}
         <div className="mx-auto max-w-[1240px]">
-          {/* Relative, so the contents box can hang off its inline-end edge. */}
-          <div className="relative max-w-[68ch]">
+          {/* Relative, so the contents box can hang off its inline-end edge.
+              In a case study, `case-study-body` keeps every figure at the
+              width of the text (globals.css). */}
+          <div className={`relative max-w-[68ch]${isCaseStudy ? " case-study-body" : ""}`}>
             {locale !== "en" && (
               <p className="mb-10 border border-p-line bg-p-bg-soft p-4 text-small leading-[1.6] text-p-ink-2">
                 {t("englishNotice")}
@@ -130,7 +133,7 @@ export function BlogPostPage({
                 above it. */}
             <div dir="ltr">{children}</div>
 
-            {section !== "case-studies" && <PostToc sections={sections ?? []} />}
+            {!isCaseStudy && <PostToc sections={sections ?? []} />}
 
             {(older || newer) && (
               <nav

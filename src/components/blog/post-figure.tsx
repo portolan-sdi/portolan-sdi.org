@@ -31,6 +31,12 @@ interface PostFigureProps {
   href?: string;
   /** What belongs here. Shown in the placeholder only. */
   pending?: string;
+  /**
+   * Show the picture with no frame: no rule, no fill, and no offset block.
+   * Use it for a screenshot that has its own shape, such as a window with
+   * rounded corners on a transparent ground.
+   */
+  bare?: boolean;
 }
 
 export function PostFigure({
@@ -43,12 +49,19 @@ export function PostFigure({
   ratio = "16 / 9",
   href,
   pending,
+  bare = false,
 }: PostFigureProps) {
   const t = useTranslations("blog");
 
   return (
     <figure dir="ltr" className={`post-figure my-10${wide ? " post-figure-wide" : ""}`}>
-      <div className="post-media-frame relative overflow-hidden border border-p-line bg-p-paper">
+      <div
+        className={
+          bare
+            ? "relative min-w-0 overflow-hidden"
+            : "post-media-frame relative overflow-hidden border border-p-line bg-p-paper"
+        }
+      >
         {href && (
           <a
             href={href}

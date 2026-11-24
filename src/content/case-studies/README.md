@@ -102,7 +102,11 @@ Rules for the body:
 - Each `##` heading must be different from the others in the same study.
 - Use `PostFigure` for each picture and each embedded viewer. Number the
   figures from 1.
-- Give `wide` to a figure that must run the full content column.
+- Every figure takes the width of the text, with the caption beside it.
+  A study page ignores `wide`.
+- Give `bare` to a screenshot that has its own shape, such as a window with
+  rounded corners on a transparent ground. The figure then has no frame.
+  Set `ratio` to the ratio of the picture, so the crop keeps the corners.
 - Each number needs a source that a reader can open.
 - A quote needs the name and the role of the person, and their approval.
 

@@ -972,4 +972,12 @@ html {
     display: block;
     width: min(1240px, calc(100vw - 2 * var(--p-pad-section-x)));
   }
+
+  /* In a case study, a wide figure has the layout of every other figure.
+     The picture takes the width of the text, and the caption sits beside
+     it, as in a tutorial. */
+  .case-study-body .post-figure.post-figure-wide {
+    display: grid;
+    width: min(calc(68ch + 18rem + 1.5rem), calc(100vw - 2 * var(--p-pad-section-x)));
+  }
 }
