@@ -35,7 +35,7 @@ Traditional [OGC API](https://ogcapi.ogc.org/) servers worked but had a series o
 
 Prior to adopting Portolan, the Geoconnex project was already rearchitecting its data pipeline to provide bulk downloads in cloud-native formats like [GeoParquet](https://geoparquet.org/) and [PMTiles](https://docs.protomaps.com/pmtiles/). Compared to a centralized, monolithic database, these files are easier to version, host, and export, all of which is central to Geoconnex's goal of improving open hydrology data.
 
-Portolan was thus a natural choice for the catalog since it prioritized cloud-native formats as the foundation of the data catalog. It gave the project an interoperable, opinionated specification like an OGC API would, but built around the throughput and scalability requirements of agentic data workflows. 
+Portolan was thus a natural choice for the catalog since it prioritized cloud-native formats as the foundation of the data catalog. It gave the project an interoperable, opinionated standard like an OGC API would, but built around the throughput and scalability requirements of agentic data workflows. 
 
 Currently Geoconnex hosts over 8 million geospatial features with hydrologic relevance in the [Portolan catalog](/registry?q=geoconnex), totaling over 20 gigabytes in size. All of it is served as static files from a [single Google Cloud Storage bucket](https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json), with no database or API server to monitor.
 
