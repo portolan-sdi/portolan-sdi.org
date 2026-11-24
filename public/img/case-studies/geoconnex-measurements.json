@@ -1,0 +1,40 @@
+{
+  "ref:mainstems": {
+    "rows": 852673,
+    "url": "https://storage.googleapis.com/harvest-geoconnex-us/summoned/structured/ref:mainstems.parquet"
+  },
+  "ref:gages": {
+    "rows": 203525,
+    "url": "https://storage.googleapis.com/harvest-geoconnex-us/summoned/structured/ref:gages.parquet"
+  },
+  "ref:pws": {
+    "rows": 49346,
+    "url": "https://storage.googleapis.com/harvest-geoconnex-us/summoned/structured/ref:pws.parquet"
+  },
+  "river_example": [
+    [
+      "MIDDLE FORK WILLAMETTE RIVER TRIB, NR OAKRIDGE, OR",
+      "https://geoconnex.us/ref/mainstems/1426120"
+    ],
+    [
+      "WILLAMETTE RIVER BELOW FALLS, AT OREGON CITY, OR",
+      "https://geoconnex.us/ref/mainstems/1426120"
+    ],
+    [
+      "WILLAMETTE RIVER ABOVE FALLS, AT OREGON CITY, OR",
+      "https://geoconnex.us/ref/mainstems/1426120"
+    ],
+    [
+      "MIDDLE FORK WILLAMETTE RIVER NEAR DEXTER, OR",
+      "https://geoconnex.us/ref/mainstems/1426120"
+    ]
+  ],
+  "willamette_linked_gages": 718,
+  "willamette_uri": "https://geoconnex.us/ref/mainstems/1426120",
+  "measured_at": "2026-11-18",
+  "method": "DuckDB count(*) over the published GeoParquet exports. These are record counts, not active-station or outcome counts.",
+  "query": "SELECT count(*) FROM read_parquet(?);",
+  "willamette_query": "SELECT count(*) FROM read_parquet('https://storage.googleapis.com/harvest-geoconnex-us/summoned/structured/ref:gages.parquet') WHERE mainstem_uri = 'https://geoconnex.us/ref/mainstems/1426120';",
+  "catalog_url": "https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json",
+  "top_level_collections": 38
+}

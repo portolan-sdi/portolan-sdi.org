@@ -11,14 +11,14 @@ export type CaseStudyMeta = Omit<BlogPost, "slug"> & {
   image: string;
   imageAlt: string;
   /**
-   * The mark of the publisher, in its own colors. It is the heading of the
-   * study. It shows on the light page ground, so use the version of the
-   * mark for a light background.
+   * The mark of the publisher, in its own colors, for a light background.
+   * The index page shows it in color. The heading of the study and the
+   * homepage card are dark, so they show it in one light color.
    */
   logo: string;
   /**
-   * Set this only for a mark that exists in white alone. The site then
-   * shows it in `--p-ink`. A color mark is always better.
+   * Set this only for a mark that exists in white alone. The index page
+   * then shows it in `--p-ink`. A color mark is always better.
    */
   inkLogo?: boolean;
   /**
@@ -27,9 +27,10 @@ export type CaseStudyMeta = Omit<BlogPost, "slug"> & {
    */
   cardTitle?: string;
   /**
-   * A mark for the homepage card, which is dark. The card shows `logo` in
-   * one light color by default. Set this only when that result is poor,
-   * for example for a mark with a solid background.
+   * A mark for the dark places: the homepage card and the heading of the
+   * study. They show `logo` in one light color by default. Set this only
+   * when that result is poor, for example for a mark with a solid
+   * background.
    */
   cardLogo?: string;
 };

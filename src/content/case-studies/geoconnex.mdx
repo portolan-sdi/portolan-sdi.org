@@ -1,0 +1,82 @@
+import { PostFigure } from "@/components/blog/post-figure";
+
+_By [Colton Loftus](https://github.com/C-Loftus), Software Engineer at The [Lincoln Institute of Land Policy](https://www.lincolninst.edu/)'s [Center for Geospatial Solutions](https://www.lincolninst.edu/centers-initiatives/center-geospatial-solutions/)_
+
+## Background
+
+Government agencies, universities, and many other types of organizations all publish water data. However, due to the scale and diverse access patterns of these datasets, it can be difficult for researchers to access them and synthesize hydrology insights across providers.
+
+[Geoconnex](https://docs.geoconnex.us) gives organizations and researchers a shared, persistent way to identify hydrologic features and connect their data.
+
+The [Lincoln Institute of Land Policy](https://www.lincolninst.edu/)'s [Center for Geospatial Solutions](https://www.lincolninst.edu/centers-initiatives/center-geospatial-solutions/) develops Geoconnex alongside the [US Geological Survey](https://www.usgs.gov/) and the [Internet of Water Coalition](https://internetofwater.org/). Publishers keep responsibility for their source data. Geoconnex harvests it and builds the links that make it discoverable across organizational boundaries. The [Geoconnex Explorer](https://explorer.geoconnex.us/) maps the datasets and monitoring locations linked to each mainstem river.
+
+<PostFigure
+  n={1}
+  wide
+  src="/img/case-studies/geoconnex-explorer.webp"
+  alt="The Geoconnex Explorer showing the Mississippi River highlighted through a network of rivers, with orange clusters of datasets associated with the river"
+  caption="A screenshot of the Geoconnex Explorer highlighting the Mississippi River and its associated datasets."
+  href="https://explorer.geoconnex.us/"
+/>
+
+## Challenge
+
+To link water data across agencies, Geoconnex maintains a graph database which provides [an API](https://graph.geoconnex.us/) for expressive linked relationships. To supplement the graph, stakeholders at the USGS wanted a formal data catalog to:
+
+1. Stage and visualize all datasets within the system before synthesizing them into the graph database.
+2. Publish tiles for datasets like watershed boundaries and allow for simple integration into a GIS application like QGIS.
+
+Traditional [OGC API](https://ogcapi.ogc.org/) servers worked but had a series of challenges:
+
+1. Deployment and infrastructure management took up developer time. Someone needed to monitor cloud services if something went wrong and optimize the tradeoff between autoscaling and the project budget.
+2. OGC API servers were generally not designed for data workflows with high throughput requirements. Complex ETL jobs, machine learning pipelines, and agent-driven analysis needed a catalog which allowed for bulk exports and highly concurrent queries.
+
+## Choosing Portolan
+
+Prior to adopting Portolan, the Geoconnex project was already rearchitecting its data pipeline to provide bulk downloads in cloud-native formats like [GeoParquet](https://geoparquet.org/) and [PMTiles](https://docs.protomaps.com/pmtiles/). Compared to a centralized, monolithic database, these files are easier to version, host, and export, all of which is central to Geoconnex's goal of improving open hydrology data.
+
+Portolan was thus a natural choice for the catalog since it prioritized cloud-native formats as the foundation of the data catalog. It gave the project an interoperable, opinionated standard like an OGC API would, but built around the throughput and scalability requirements of agentic data workflows. 
+
+Currently Geoconnex hosts over 8 million geospatial features with hydrologic relevance in the [Portolan catalog](/registry?q=geoconnex), totaling over 20 gigabytes in size. All of it is served as static files from a [single Google Cloud Storage bucket](https://storage.googleapis.com/harvest-geoconnex-us/stac/catalog.json), with no database or API server to monitor.
+
+## Improving geospatial workflows
+
+Portolan has made it easier to build new features and applications which build upon Geoconnex data. Since there is a consistent schema and metadata standard, both humans and agents can find data more efficiently.
+
+### User interfaces
+
+A general-purpose [STAC](https://stacspec.org/) catalog can sometimes be hard to build a UI on, because it can hold many kinds of data in many different shapes. Portolan narrows that down. With the [Portolan Skills](https://github.com/portolan-sdi/portolan-skills) and the `README.md` that documents each dataset, building a custom visualization is much easier. The Geoconnex team used them to build a river view that shows the dams and monitoring locations along a mainstem, with every linked PMTiles file available as a layer. 
+
+<PostFigure
+  n={2}
+  wide
+  src="/img/case-studies/geoconnex-feature-ui.png"
+  alt="A Custom Geoconnex Mainstem Feature Association Visualizer"
+  caption="A custom mainstem association visualizer built upon data within the Portolan catalog"
+/>
+
+### Agent context
+
+Portolan has also made agent harnesses more efficient. Geoconnex publishes an [AI agent skill](https://github.com/internetofwater/geoconnex.us/blob/master/skills/geoconnex-querying/SKILL.md) for AI tools to more efficiently discover and query data within the system. Since Portolan catalogs the specific skills for each dataset in the catalog, the central Geoconnex skill can focus on the high-level architecture of the system. The Portolan catalog tracks any dataset-specific intricacies to keep the core agent context slim.
+
+### GIS analysis
+
+A GIS analyst doesn't need to know which bucket holds a dataset or which service to call. In QGIS, the [Portolan Registry plugin](https://plugins.qgis.org/plugins/portolan_registry_qgis/) lists Geoconnex as one catalog among other publishers. Selecting a collection like the HUC04 hydrologic regions shows its description and a preview map. One click streams it as vector tiles in the style Geoconnex published. Another loads the full GeoParquet for analysis, and an area of interest or a SQL query trims it to one basin instead of the whole country.
+
+<PostFigure
+  n={3}
+  wide
+  bare
+  ratio="2090 / 1144"
+  src="/img/case-studies/geoconnex-portolan-qgis.png"
+  alt="The Portolan Registry plugin in QGIS showing the Geoconnex Spatial Data Catalog with the HUC04 Hydrologic Regions collection selected and its map preview, description, and load options"
+  caption="Adding Geoconnex data from the Portolan catalog to a QGIS project"
+/>
+
+
+## Next steps
+
+Hydrologic data can change significantly over time and these changes drive real-world policy decisions. For instance, gages are added or retired and watershed boundaries are redrawn as mapping improves. For a water allocation decision, a flood model, or a habitat assessment, tracking change over time is critical.
+
+[Apache Iceberg](https://iceberg.apache.org/) records each update to a table as a snapshot and is likely to be useful in helping to answer these sorts of provenance questions. Geoconnex is exploring using the [STAC Iceberg extension](https://github.com/portolan-sdi/stac-iceberg-extension) published by the Portolan GitHub organization to track versioned geospatial vector data. 
+
