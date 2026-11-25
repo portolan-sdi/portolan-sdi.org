@@ -24,6 +24,7 @@ const CONTRIBUTORS: readonly Org[] = [
   { name: "Epoch", href: "https://epoch.blue/", file: "epoch-blue.svg", h: 28, aspect: 4.167 },
   // The Geomermaids logo is a full-color drawing beside a red wordmark. The
   // file here is a one-color mask of the dark lines and of the wordmark.
+  { name: "Multivers.io", href: "https://multivers.io/", file: "multivers.svg", h: 44, aspect: 1.673 },
   { name: "Geomermaids", href: "https://geomermaids.com/", file: "geomermaids.png", h: 36, aspect: 3.824 },
 ];
 
