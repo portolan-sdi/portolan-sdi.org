@@ -42,6 +42,8 @@ export interface BlogPost {
    * shows it on the card of the post. Choose one that the post itself shows.
    */
   image?: string;
+  /** CSS object-position for the index card crop. Defaults to top, centered. */
+  imagePosition?: string;
 }
 
 /** Newest first. The index renders this order as written. */
@@ -52,6 +54,8 @@ export const POSTS: BlogPost[] = [
     subtitle: "Meeting geospatial data where it already lives",
     date: "2026-11-18",
     author: "Cayetano Benavent",
+    image: "/img/blog/spec-v0-3-release.webp",
+    imagePosition: "left top",
     summary:
       "Portolan v0.3 accepts native geospatial Parquet, makes rasters easier to display and understand, and starts incubating a GeoParquet catalog index, a Zarr profile, and an Iceberg convention.",
   },

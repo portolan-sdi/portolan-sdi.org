@@ -99,6 +99,11 @@ export function BlogIndexPage({
                         loading="lazy"
                         decoding="async"
                         className="h-full w-full object-cover object-top"
+                        style={
+                          post.imagePosition
+                            ? { objectPosition: post.imagePosition }
+                            : undefined
+                        }
                       />
                     )}
                   </div>
