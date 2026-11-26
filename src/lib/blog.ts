@@ -52,6 +52,7 @@ export const POSTS: BlogPost[] = [
     subtitle: "Meeting geospatial data where it already lives",
     date: "2026-11-18",
     author: "Cayetano Benavent",
+    image: "/img/blog/spec-v0-3-release.webp",
     summary:
       "Portolan v0.3 accepts native geospatial Parquet, makes rasters easier to display and understand, and starts incubating a GeoParquet catalog index, a Zarr profile, and an Iceberg convention.",
   },
