@@ -973,6 +973,20 @@ html {
     width: min(1240px, calc(100vw - 2 * var(--p-pad-section-x)));
   }
 
+  /* A live page (PostEmbed) with `span` takes the whole page column. The
+     frame takes two thirds or three quarters of the row, and the caption
+     takes the rest. This holds in a case study too. */
+  .post-figure.post-embed-span-2-3,
+  .post-figure.post-embed-span-3-4 {
+    width: min(1240px, calc(100vw - 2 * var(--p-pad-section-x)));
+  }
+  .post-figure.post-embed-span-2-3 {
+    grid-template-columns: minmax(0, 2fr) minmax(14rem, 1fr);
+  }
+  .post-figure.post-embed-span-3-4 {
+    grid-template-columns: minmax(0, 3fr) minmax(14rem, 1fr);
+  }
+
   /* In a case study, a wide figure has the layout of every other figure.
      The picture takes the width of the text, and the caption sits beside
      it, as in a tutorial. */

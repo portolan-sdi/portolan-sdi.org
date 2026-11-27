@@ -304,6 +304,10 @@
     "englishNotice": "هذه المقالة متاحة بالإنجليزية فقط. بقية الموقع مترجمة.",
     "figureLabel": "شكل {n}",
     "figurePending": "الملف غير متوفر بعد",
+    "embed": {
+      "fullScreen": "ملء الشاشة",
+      "exitFullScreen": "الخروج من ملء الشاشة"
+    },
     "codeBlock": {
       "copy": "نسخ",
       "copied": "تم النسخ",

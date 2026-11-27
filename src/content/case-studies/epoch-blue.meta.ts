@@ -5,10 +5,10 @@ const meta: CaseStudyMeta = {
   subtitle: "Making public forest data usable",
   date: "2026-11-18",
   summary:
-    "Jake Wilkins republishes forest data on Source Cooperative with Portolan and builds a browser explorer on top.",
+    "How Epoch used Portolan to open up public forest data and check supplier forest claims in hours.",
   image: "/img/case-studies/epoch-explorer.jpg",
   imageAlt:
-    "Jake Wilkins's viewer showing ForTy forest types over South Papua.",
+    "Epoch's forest explorer showing ForTy forest types over South Papua.",
   logo: "/img/case-studies/epoch-logo.svg",
   cardLogo: "/img/case-studies/epoch-logo-light.svg",
 };

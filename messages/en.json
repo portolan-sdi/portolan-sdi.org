@@ -304,6 +304,10 @@
     "englishNotice": "This post is available in English only. The rest of the site is translated.",
     "figureLabel": "Fig. {n}",
     "figurePending": "Asset pending",
+    "embed": {
+      "fullScreen": "Full screen",
+      "exitFullScreen": "Exit full screen"
+    },
     "codeBlock": {
       "copy": "Copy",
       "copied": "Copied",

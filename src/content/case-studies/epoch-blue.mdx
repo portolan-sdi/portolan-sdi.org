@@ -1,21 +1,20 @@
-import { PostFigure } from "@/components/blog/post-figure";
+import { PostEmbed } from "@/components/blog/post-embed";
 import { PostLoopFigure } from "@/components/blog/post-loop-figure";
+import { PostQuote } from "@/components/blog/post-quote";
 
-## Epoch datasets on Source
-
-- [Forest Typology (ForTy)](https://source.coop/epoch/forest-typology-2020), from Nature Trace · 2020 baseline and 2017–2025 v2 beta
-- [Global Drivers of Forest Loss](https://source.coop/epoch/global-forest-loss-drivers)
-- [Global Natural and Planted Forests](https://source.coop/epoch/global-natural-planted-forests)
-- [JRC Global Forest Cover 2020](https://source.coop/epoch/jrc-global-forest-cover-2020)
-- [JRC Global Forest Types 2020](https://source.coop/epoch/jrc-global-forest-types-2020)
-- [JRC Tropical Moist Forests](https://source.coop/epoch/jrc-tmf)
-- [JRC Global Surface Water Monthly](https://source.coop/epoch/jrc-global-surface-water-monthly)
+_By [Jake Wilkins](https://github.com/jakenotjay), Founding Engineer at [Epoch](https://epoch.blue/)_
 
 ## Introducing Epoch
 
 [Epoch](https://epoch.blue/about) provides the data needed to make the first mile of supply chains visible to platforms, companies and suppliers. Its mission is to de-commoditise supply chains through first-mile data, supporting decisions on deforestation, legality, labour rights and carbon disclosure.
 
 Epoch's open data programme focuses on opening up the fundamental datasets needed to meet the obligations of regulations like the EUDR. Until now, these datasets were locked behind commercial platforms or manual downloads from clunky websites. By publishing them in cloud-native formats with agent-ready discovery, anyone with a coding agent can start assessing the landscape around sourcing locations, and Epoch's own infrastructure benefits from the same open formats.
+
+<PostQuote
+  quote="Data can only be considered open if it's actually usable. With Portolan and Source, we guarantee that anyone can see and use it as we do, without the expertise that used to be required to simply use it."
+  name="Jake Wilkins"
+  role="Founding Engineer at Epoch"
+/>
 
 ## Uncovering "ghost" forests with Portolan
 
@@ -35,27 +34,33 @@ We pointed an agent at the [Forest Typology Portolan catalog](https://source.coo
 
 The certificate made a claim, and open data let us check it. We went from a single supplier screenshot to a result we'd stand behind in hours: no supplier questionnaires and no self-reported answers. The baseline is public, so anyone can check our work.
 
-## Looking forward
-
-Epoch will continue to lead on making supply chain sourcing data open, and more accessible than before. Our next focus is on bringing in explicit commodity maps, particularly those mapping tropical perennials like cocoa, palm, coffee and rubber.
-
 ## Why Portolan
 
 Publishing open data is only the first step; making it discoverable, usable and scalable is still not well defined. Portolan sets out best practices for building a catalog: cloud-native files, STAC metadata and an AGENTS.md, so humans and agents alike can use the data. Our explorer takes advantage of each of these to read from Source with no backend.
 
-<PostFigure n={2} wide caption="Epoch's open data explorer, reading the Portolan catalogs with deck.gl-raster. Opens over South Papua.">
-  <iframe
-    src="https://jakenotjay.github.io/me/explorer/#v=140.7672,-7.1737,9.81"
-    title="Epoch open data explorer"
-    loading="lazy"
-    allow="fullscreen"
-    allowFullScreen
-    className="block h-[560px] w-full border-0 md:h-[680px]"
-  />
-</PostFigure>
+<PostEmbed
+  n={2}
+  src="https://jakenotjay.github.io/me/explorer/#v=140.7672,-7.1737,9.41"
+  href="https://jakenotjay.github.io/me/explorer/#v=140.7672,-7.1737,9.81"
+  title="Epoch open data explorer"
+  linkLabel="Open the explorer"
+  span="3/4"
+  width={720}
+  height={480}
+  caption="Epoch's open data explorer, reading the Portolan catalogs with deck.gl-raster. Opens over South Papua. Built by Jake Wilkins."
+/>
 
-[Open the explorer in a new tab](https://jakenotjay.github.io/me/explorer/#v=140.7672,-7.1737,9.81). Built by Jake Wilkins.
+## Looking forward
 
-> "Data can only be considered open if it's actually usable. With Portolan and Source, we guarantee that anyone can see and use it as we do, without the expertise that used to be required to simply use it."
->
-> Jake Wilkins, Founding Engineer at Epoch
+Epoch will continue to lead on making supply chain sourcing data open, and more accessible than before. Our next focus is on bringing in explicit commodity maps, particularly those mapping tropical perennials like cocoa, palm, coffee and rubber.
+
+## Epoch datasets in Portolan
+
+The following Epoch datasets are hosted on [Source Cooperative](https://source.coop/epoch) and available in the [Portolan registry](/registry?q=epoch).
+
+- [Forest Typology (ForTy)](https://source.coop/epoch/forest-typology-2020), from Nature Trace · 2020 baseline and 2017–2025 v2 beta
+- [Global Drivers of Forest Loss](https://source.coop/epoch/global-forest-loss-drivers)
+- [Global Natural and Planted Forests](https://source.coop/epoch/global-natural-planted-forests)
+- [JRC Global Forest Cover 2020](https://source.coop/epoch/jrc-global-forest-cover-2020)
+- [JRC Global Forest Types 2020](https://source.coop/epoch/jrc-global-forest-types-2020)
+- [JRC Tropical Moist Forests](https://source.coop/epoch/jrc-tmf)

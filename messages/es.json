@@ -304,6 +304,10 @@
     "englishNotice": "Esta entrada está disponible solo en inglés. El resto del sitio está traducido.",
     "figureLabel": "Fig. {n}",
     "figurePending": "Recurso pendiente",
+    "embed": {
+      "fullScreen": "Pantalla completa",
+      "exitFullScreen": "Salir de pantalla completa"
+    },
     "codeBlock": {
       "copy": "Copiar",
       "copied": "Copiado",
