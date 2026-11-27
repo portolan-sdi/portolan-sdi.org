@@ -10,9 +10,7 @@ const meta: CaseStudyMeta = {
   imageAlt:
     "Jake Wilkins's viewer showing ForTy forest types over South Papua.",
   logo: "/img/case-studies/epoch-logo.svg",
-  // The mark from Epoch is white. Replace it with a color mark and remove
-  // this line.
-  inkLogo: true,
+  cardLogo: "/img/case-studies/epoch-logo-light.svg",
 };
 
 export default meta;
