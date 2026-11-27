@@ -100,15 +100,22 @@ Optional.
 Rules for the body:
 
 - Each `##` heading must be different from the others in the same study.
-- Use `PostFigure` for each picture and each embedded viewer. Number the
-  figures from 1.
+- Use `PostFigure` for each picture. Number the figures from 1.
+- Use `PostEmbed` for a live page, such as a map explorer. Give it a
+  `linkLabel` for the link out, such as "Open the explorer". Do not put
+  a bare iframe in the body.
 - A figure is as wide as the text, and its caption sits beside it. A
-  study page ignores `wide`.
+  study page ignores `wide`. A `PostEmbed` can take `span="3/4"` or
+  `span="2/3"`. From 1024px it then takes that share of the page
+  column, and the caption takes the rest.
 - Give `bare` to a screenshot of a window with rounded corners on a
   transparent ground. The figure then has no frame. Set `ratio` to the
   ratio of the picture. Otherwise the crop cuts the corners.
 - Each number needs a source that a reader can open.
 - A quote needs the name and the role of the person, and their approval.
+  Use `PostQuote` from `@/components/blog/post-quote` for the one quote
+  that the study puts forward. Give it `quote`, `name`, and `role`, and
+  put no quotation marks in `quote`.
 
 ## The credits file
 

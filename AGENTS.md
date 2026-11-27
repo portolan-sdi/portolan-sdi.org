@@ -117,6 +117,22 @@ JavaScript plugin function.
 - **Calls to action** use `PostCta` in `src/components/blog/post-cta.tsx`:
   one primary button centered in the text column, with no text around it.
   Use a few per piece, not one per section.
+- **Live pages** such as a map explorer use `PostEmbed` in
+  `src/components/blog/post-embed.tsx`, not a bare iframe. The figure
+  has the width of the text. The page renders at a desktop size, 1200
+  by 800 by default, and scales down as one piece to fit the frame. Two
+  square controls sit in the top-left corner of the frame, in the style
+  of the buttons on the homepage registry map. One shows the page on the
+  full screen, and it shows only where the browser has element full
+  screen, so an iPhone gets the link alone. The other opens the page in
+  a new tab. The frame has no bar under it. With `span`, the figure is
+  as wide as the page column from 1024px. The frame takes 3/4 or 2/3 of
+  it, and the caption the rest. A frame wider than the render size shows
+  the page at its real size, with no scale.
+- **Pull quotes** use `PostQuote` in `src/components/blog/post-quote.tsx`.
+  The quote sets in `text-feature` bold between two 1px ink rules, under
+  one large `--p-primary` quotation mark, with the name and the role under
+  it. Use one per piece. A Markdown `>` quote stays the quiet form.
 - **Navigation:** the route reads the body's `##` headings with
   `extractHeadings` in `src/lib/headings.ts`, and the `h2` in
   `src/mdx-components.tsx` sets the matching id. `PostToc` pins them as an
@@ -127,7 +143,7 @@ JavaScript plugin function.
 - **Measure:** a post body runs `max-w-[68ch]`, narrower than the 1240px
   content column the rest of the site uses. A lead or intro paragraph under a
   page title takes no measure cap and runs the full column.
-- **Case studies** use the same English-only MDX pipeline at `/case-studies`, separate from the blog feed. Each study is a set of files with one name, the slug: the body `src/content/case-studies/<slug>.mdx`, the metadata `<slug>.meta.ts` beside it, and the media credits `<slug>.credits.md`. `src/lib/case-studies.ts` builds the list from the `*.meta.ts` files with `import.meta.glob`, so a new study adds files and edits no shared file. Keep it that way: one study is one pull request, and two studies must not conflict. Do not add a study to a list by hand, and do not put a study-specific branch in a shared component. The layout, the index page (`case-studies-index-page.tsx`), and the route are shared, so every study looks the same. Change the look there, never in one study. Each study also gets a card in the homepage row, with no extra file. `cardTitle` sets the card title, and `cardLogo` replaces the mark on the dark card when the one-color filter gives a poor shape. The top bar and the footer show the "Case studies" link only when a study exists. A study page has no "In this article" list. Its heading is the mark of the publisher, in one light color on the header band, like the homepage card. The index page shows the mark in its own colors. A study sets `inkLogo` only when its mark exists in white alone, and the index page then shows it in `--p-ink`. A study page has the measure of a tutorial: every figure takes the width of the text, with its caption beside it, and the page ignores `wide`. On the index page, the "Read the case study" link follows the summary on the same line, in the text link style of the homepage. The file names, the section order, and a template are in `src/content/case-studies/README.md`. Section chrome lives in all three `messages/` files. A test that runs outside the bundler reads the folder with `fs`, because `import.meta.glob` exists only in Turbopack.
+- **Case studies** use the same English-only MDX pipeline at `/case-studies`, separate from the blog feed. Each study is a set of files with one name, the slug: the body `src/content/case-studies/<slug>.mdx`, the metadata `<slug>.meta.ts` beside it, and the media credits `<slug>.credits.md`. `src/lib/case-studies.ts` builds the list from the `*.meta.ts` files with `import.meta.glob`, so a new study adds files and edits no shared file. Keep it that way: one study is one pull request, and two studies must not conflict. Do not add a study to a list by hand, and do not put a study-specific branch in a shared component. The layout, the index page (`case-studies-index-page.tsx`), and the route are shared, so every study looks the same. Change the look there, never in one study. Each study also gets a card in the homepage row, with no extra file. `cardTitle` sets the card title, and `cardLogo` replaces the mark on the dark card when the one-color filter gives a poor shape. The top bar and the footer show the "Case studies" link only when a study exists. A study page has no "In this article" list. Its heading is the mark of the publisher, in one light color on the header band, like the homepage card. The index page shows the mark in its own colors. A study sets `inkLogo` only when its mark exists in white alone, and the index page then shows it in `--p-ink`. A study page has the measure of a tutorial: every figure takes the width of the text, with its caption beside it, and the page ignores `wide`. The one exception is a `PostEmbed` with `span`, which takes 3/4 or 2/3 of the page column. On the index page, the "Read the case study" link follows the summary on the same line, in the text link style of the homepage. The file names, the section order, and a template are in `src/content/case-studies/README.md`. Section chrome lives in all three `messages/` files. A test that runs outside the bundler reads the folder with `fs`, because `import.meta.glob` exists only in Turbopack.
 - **Tutorials** use the same pipeline under Resources. Bodies live at
   `src/content/tutorials/<slug>.mdx` and metadata in `src/lib/tutorials.ts`.
   The routes under `src/app/[locale]/tutorials/` render through the blog

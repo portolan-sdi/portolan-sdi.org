@@ -1,0 +1,66 @@
+import { PostEmbed } from "@/components/blog/post-embed";
+import { PostLoopFigure } from "@/components/blog/post-loop-figure";
+import { PostQuote } from "@/components/blog/post-quote";
+
+_By [Jake Wilkins](https://github.com/jakenotjay), Founding Engineer at [Epoch](https://epoch.blue/)_
+
+## Introducing Epoch
+
+[Epoch](https://epoch.blue/about) provides the data needed to make the first mile of supply chains visible to platforms, companies and suppliers. Its mission is to de-commoditise supply chains through first-mile data, supporting decisions on deforestation, legality, labour rights and carbon disclosure.
+
+Epoch's open data programme focuses on opening up the fundamental datasets needed to meet the obligations of regulations like the EUDR. Until now, these datasets were locked behind commercial platforms or manual downloads from clunky websites. By publishing them in cloud-native formats with agent-ready discovery, anyone with a coding agent can start assessing the landscape around sourcing locations, and Epoch's own infrastructure benefits from the same open formats.
+
+<PostQuote
+  quote="Data can only be considered open if it's actually usable. With Portolan and Source, we guarantee that anyone can see and use it as we do, without the expertise that used to be required to simply use it."
+  name="Jake Wilkins"
+  role="Founding Engineer at Epoch"
+/>
+
+## Uncovering "ghost" forests with Portolan
+
+One of our customers sources poplar plywood from eastern China. Their supplier declared its harvest area as 8 pins on a Google Earth screenshot, covering over 30,000 hectares. Its FSC certificate says the villages inside hold 6,500 hectares of poplar plantation, under a forest plan running from 2017 to 2026, and that certificate is audited every year. Going by the paperwork alone, you'd think you were in the clear!
+
+We pointed an agent at the [Forest Typology Portolan catalog](https://source.coop/epoch/forest-typology-2020), an open 10 m forest-type map we publish, and found no more than 70 hectares of trees in any year of the plan. [Meta and WRI's 1 m canopy height map](https://registry.opendata.aws/dataforgood-fb-forests/) tells the same story: just 482 hectares of anything over 5 metres, mostly roadside and village trees. That's an order of magnitude short of what was certified, in a region where poplar is typically grown in distinct plantation grids.
+
+<PostLoopFigure
+  n={1}
+  webm="/video/epoch-ghost-forest.webm"
+  mp4="/video/epoch-ghost-forest.mp4"
+  poster="/video/epoch-ghost-forest.webp"
+  ratio="16 / 9"
+  caption="The supplier's declared FSC forest on Sentinel-2, then Forest Typology v2 for each year of its 2017–2026 forest plan."
+  description="A globe zooms in to eastern China, where a dashed red outline marks the supplier's declared forest on Sentinel-2 imagery of fields, villages and canals. The map switches to Forest Typology v2 and steps through each year from 2017 to 2025, with almost no trees inside the outline. A final card compares 6,495 hectares of certified poplar plantation with 70 hectares mapped as trees at 10 m in the best year, and 482 hectares of trees over 5 m at 1 m."
+/>
+
+The certificate made a claim, and open data let us check it. We went from a single supplier screenshot to a result we'd stand behind in hours: no supplier questionnaires and no self-reported answers. The baseline is public, so anyone can check our work.
+
+## Why Portolan
+
+Publishing open data is only the first step; making it discoverable, usable and scalable is still not well defined. Portolan sets out best practices for building a catalog: cloud-native files, STAC metadata and an AGENTS.md, so humans and agents alike can use the data. Our explorer takes advantage of each of these to read from Source with no backend.
+
+<PostEmbed
+  n={2}
+  src="https://jakenotjay.github.io/me/explorer/#v=140.7672,-7.1737,9.41"
+  href="https://jakenotjay.github.io/me/explorer/#v=140.7672,-7.1737,9.81"
+  title="Epoch open data explorer"
+  linkLabel="Open the explorer"
+  span="3/4"
+  width={720}
+  height={480}
+  caption="Epoch's open data explorer, reading the Portolan catalogs with deck.gl-raster. Opens over South Papua. Built by Jake Wilkins."
+/>
+
+## Looking forward
+
+Epoch will continue to lead on making supply chain sourcing data open, and more accessible than before. Our next focus is on bringing in explicit commodity maps, particularly those mapping tropical perennials like cocoa, palm, coffee and rubber.
+
+## Epoch datasets in Portolan
+
+The following Epoch datasets are hosted on [Source Cooperative](https://source.coop/epoch) and available in the [Portolan registry](/registry?q=epoch).
+
+- [Forest Typology (ForTy)](https://source.coop/epoch/forest-typology-2020), from Nature Trace · 2020 baseline and 2017–2025 v2 beta
+- [Global Drivers of Forest Loss](https://source.coop/epoch/global-forest-loss-drivers)
+- [Global Natural and Planted Forests](https://source.coop/epoch/global-natural-planted-forests)
+- [JRC Global Forest Cover 2020](https://source.coop/epoch/jrc-global-forest-cover-2020)
+- [JRC Global Forest Types 2020](https://source.coop/epoch/jrc-global-forest-types-2020)
+- [JRC Tropical Moist Forests](https://source.coop/epoch/jrc-tmf)
