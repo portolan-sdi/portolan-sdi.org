@@ -1,0 +1,80 @@
+import { PostFigure } from "@/components/blog/post-figure";
+
+*Draft for Isaac Corley's review. The account of publishing with Portolan needs his input, along with a personal quote and future plans.*
+
+## Background
+
+[Fields of the World](https://taylorgeospatial.org/innovation/fields-of-the-world/) brings together agricultural field-boundary research, open training data, models, and tools. Taylor Geospatial sponsors the work with research partners including Arizona State University, WashU, Ai2, and Microsoft.
+
+Field maps support food security assessment, crop analysis, and land-use monitoring. FTW uses satellite imagery and machine learning to make those maps available where existing coverage is incomplete.
+
+> All data, models, and code are published freely with permissible licenses on public platforms in cloud-native geospatial formats.
+
+— [Taylor Geospatial's description of FTW](https://taylorgeospatial.org/innovation/fields-of-the-world/).
+
+## The challenge
+
+Producing field boundaries is only part of the work. Researchers need to find the right year and region and use the files in their own tools. The release also needs to explain how predictions were made.
+
+FTW's [Global Data second edition](https://source.coop/ftw/global-data-2e) has yearly vector boundaries and raster probabilities spanning 2017–2025. Processing and coverage vary by year, so the documentation needs to record those differences.
+
+*Isaac — describe the publishing workflow before Portolan, the main constraint, and why the team chose this approach.*
+
+## The solution
+
+FTW publishes a Portolan catalog on Source Cooperative. [STAC](https://stacspec.org/en/) metadata organizes the years and products. [GeoParquet](https://geoparquet.org/) holds vector boundaries, [COG](https://cogeo.org/) holds raster probabilities, and [PMTiles](https://docs.protomaps.com/pmtiles/) supports web maps.
+
+The files can be read directly from object storage. The catalog's `README.md` explains access and limitations for people, and `AGENTS.md` provides guidance for agents. The metadata and processing pipeline are maintained in the [catalog's source repository](https://github.com/fieldsoftheworld/ftw-global-data-catalog).
+
+One publication supports several ways to use it. The [catalog browser](https://browser.portolan-sdi.org/#/external/data.source.coop/ftw/global-data-2e/catalog.json) and interactive map provide visual entry points. Readers can also [get the files](https://source.coop/ftw/global-data-2e).
+
+<PostFigure n={1} wide caption="The unofficial Global FTW 2nd Edition preview, linked from the catalog. It reads field boundaries and imagery from Source Cooperative. Its interface and data are maintained outside this site.">
+  <iframe
+    src="https://research.taylorgeospatial.org/global-ftw-2e/"
+    title="Global FTW 2nd Edition interactive preview"
+    loading="lazy"
+    allow="fullscreen"
+    allowFullScreen
+    className="block h-[560px] w-full border-0 md:h-[680px]"
+  />
+</PostFigure>
+
+[Open the interactive preview in a new tab](https://research.taylorgeospatial.org/global-ftw-2e/).
+
+## Results and impact
+
+The published 2025 collections show the scale of this release, as checked on November 18, 2026.
+
+- **225,519,173 predicted fields** in **60 GeoParquet files**, totaling **109.7 GiB**, in the [2025 vector collection](https://data.source.coop/ftw/global-data-2e/vector/2025/collection.json).
+- **14,590 probability COGs**, totaling about **5.79 TB**, in the [2025 raster collection](https://data.source.coop/ftw/global-data-2e/raster/2025/collection.json).
+
+These are publication measurements. Isaac can add a concrete example of how someone uses the data. Useful measures include publishing time or operating cost, with a baseline for comparison.
+
+<PostFigure n={2} wide caption="Matopiba, Brazil, in 2018 Q3 (first) and 2025 Q3 (second). Copernicus Sentinel imagery from the TGE Labs quarterly mosaics with FTW predictions. These historical catalog illustrations predate the updated processing and are selected examples, not an accuracy assessment.">
+  <div className="grid grid-cols-1 sm:grid-cols-2">
+    <img
+      src="https://data.source.coop/ftw/global-data-2e/assets/readme/change-matopiba-2018.jpg"
+      alt="Matopiba, Brazil, 2018 Q3 imagery with 2018 predicted field outlines."
+      loading="lazy"
+      className="block h-auto w-full"
+    />
+    <img
+      src="https://data.source.coop/ftw/global-data-2e/assets/readme/change-matopiba-2025.jpg"
+      alt="Matopiba, Brazil, 2025 Q3 imagery with 2025 predicted field outlines and additional rectangular blocks."
+      loading="lazy"
+      className="block h-auto w-full"
+    />
+  </div>
+</PostFigure>
+
+The boundaries are model predictions of agricultural field units, not legal parcels. Coverage and processing differences affect comparisons between years. Read the [catalog's limitations](https://data.source.coop/ftw/global-data-2e/README.md) before using the data to assess change.
+
+## What's next
+
+*Isaac — add the team's next plans for publishing with Portolan and a quote about the experience. Confirm the figures and visuals, and include your preferred attribution.*
+
+## Sources
+
+- [Taylor Geospatial — Fields of the World](https://taylorgeospatial.org/innovation/fields-of-the-world/)
+- [Global Data second edition on Source Cooperative](https://source.coop/ftw/global-data-2e)
+- [Catalog metadata and processing pipeline](https://github.com/fieldsoftheworld/ftw-global-data-catalog)
