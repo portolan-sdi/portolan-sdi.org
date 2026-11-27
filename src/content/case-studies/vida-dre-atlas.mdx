@@ -1,0 +1,75 @@
+import { PostFigure } from "@/components/blog/post-figure";
+
+**Draft for VIDA review.** An approved quote and measured outcomes are pending. Giorgio needs to confirm the reasons for choosing Portolan and the next steps before publication.
+
+[VIDA](https://vida.place/) builds geospatial software that helps governments, investors, and development banks plan and monitor infrastructure. Its work includes identifying communities that could benefit from new electricity access.
+
+VIDA produced the [Distributed Renewable Energy (DRE) Atlas](https://dre.energydata.info/). The Energy Sector Management Assistance Program (ESMAP), the World Bank, and the International Finance Corporation (IFC) commissioned and funded it. The atlas brings settlement boundaries together with estimates of energy demand, electricity access, roads, and social infrastructure. Its [technical documentation](https://dre.energydata.info/static/DRE-Atlas-Technical-Documentation.pdf) explains the data sources and methods.
+
+<PostFigure
+  n={1}
+  wide
+  src="/img/case-studies/vida-dre-atlas-map.png"
+  ratio="7 / 4"
+  alt="Red settlement markers in VIDA's atlas preview, concentrated across Sub-Saharan Africa, Pakistan, Bangladesh, and Myanmar, with additional coverage in the Caribbean and Pacific."
+  caption="VIDA's published DRE Atlas preview. Settlement data produced by VIDA for ESMAP, the World Bank, and IFC, licensed CC BY 4.0. Basemap © OpenStreetMap contributors © CARTO."
+/>
+
+## The challenge
+
+Energy access planners need to locate buildings and estimate how much electricity a community might use. They also need to know how far that community is from the grid. The [atlas guide](https://dre.energydata.info/static/DRE-Atlas-Technical-Documentation.pdf#page=4) describes how planners can combine these indicators to identify potential investments.
+
+Sharing the underlying analysis extends its use beyond the map interface. In its [public announcement](https://www.linkedin.com/company/vida-place), VIDA describes republishing the atlas on Source Cooperative to reach more users and make the data easier to process at scale.
+
+## The approach
+
+VIDA publishes a separate, open data collection alongside the planning platform. Its [agent guide](https://data.source.coop/vida/dre-atlas/AGENTS.md) describes this as a Portolan-aligned STAC collection. Portolan provides a shared structure for publishing geospatial data as files in object storage, with documentation for people and agents.
+
+The [published collection](https://data.source.coop/vida/dre-atlas/collection.json) brings together three ways to use the data:
+
+- [GeoParquet](https://geoparquet.org/) files partitioned by country support analysis with tools such as DuckDB. A country filter lets a reader select the relevant files.
+- [PMTiles](https://docs.protomaps.com/pmtiles/) archives support interactive maps directly from storage, without a tile server. A combined archive covers the atlas, and country archives are also available.
+- [STAC](https://stacspec.org/en/) metadata describes the countries and assets. A data dictionary, README, and agent guide explain fields and access patterns.
+
+These are the publication choices visible in the catalog. **For Giorgio:** explain why the team chose Portolan. Name the tools used and describe the previous publishing workflow.
+
+{ /* Add a quote only after the speaker approves the exact wording, name, and role. Ask Giorgio about the move from a planning platform to directly reusable data. Do not turn the draft questions into a testimonial. */ }
+
+## The catalog
+
+- [Browse the DRE Atlas on Source Cooperative](https://source.coop/vida/dre-atlas).
+- [Inspect the STAC collection](https://data.source.coop/vida/dre-atlas/collection.json).
+- [Read the data dictionary](https://data.source.coop/vida/dre-atlas/data_dictionary.csv).
+- [Open the planning platform](https://dre.energydata.info/).
+
+<PostFigure
+  n={2}
+  wide
+  caption="Explore the combined settlement archive in the PMTiles viewer. This viewer reads VIDA's published file directly; it is separate from the DRE Atlas planning platform. Basemap attribution appears inside the viewer."
+>
+  <iframe
+    src="https://pmtiles.io/#url=https://data.source.coop/vida/dre-atlas/dre_atlas.pmtiles&map=2.5/4/34"
+    title="Interactive map of the DRE Atlas settlement archive"
+    className="block h-[520px] w-full sm:h-[640px]"
+    loading="lazy"
+    referrerPolicy="no-referrer"
+    sandbox="allow-scripts allow-same-origin"
+    allow="fullscreen"
+  />
+</PostFigure>
+
+[Open the interactive map in its own tab](https://pmtiles.io/#url=https://data.source.coop/vida/dre-atlas/dre_atlas.pmtiles&map=2.5/4/34) to explore with more room or if the embedded viewer is unavailable.
+
+## The result
+
+The [public dataset](https://source.coop/vida/dre-atlas) covers **over 1.9 million settlements across 58 countries**. As one example, the [Nigeria item](https://data.source.coop/vida/dre-atlas/by_country/country_iso=NGA/NGA.json) records **154,319 settlements**. These figures describe the dataset's coverage.
+
+An analyst can now take a country's files into their own analysis, while a developer can build a map from the published archive. The release is available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), which permits reuse and adaptation with attribution.
+
+For energy planners, the intended benefit is a shared evidence base for comparing communities and prioritizing further investigation. The [technical guide](https://dre.energydata.info/static/DRE-Atlas-Technical-Documentation.pdf#page=6) also identifies limits in the source data. VIDA models energy demand, grid data can be incomplete, and nightlight detection is an indicator of access. Project feasibility requires further investigation beyond the atlas screening results.
+
+**For Giorgio:** add an example of downstream use. Include measured changes in publication time or maintenance cost, if available. Electricity connections delivered and investment mobilized need their own evidence and attribution.
+
+## What comes next
+
+**For Giorgio:** describe any planned datasets or updates and whether they use Portolan. Confirm scope and timing before replacing this note with a roadmap.
